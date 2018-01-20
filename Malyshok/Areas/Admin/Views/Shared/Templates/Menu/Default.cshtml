@@ -1,0 +1,43 @@
+﻿@{
+    Layout = null;
+    string ActiveClass = "";
+}
+
+
+@if (Model != null)
+{
+    foreach (cmsMenuModel menuGroup in Model)
+    {
+        if (menuGroup.GroupItems != null)
+        {
+            <div class="admin-menu @menuGroup.Alias">
+                @foreach (cmsMenuItem Item in menuGroup.GroupItems)
+                {
+                    string Url = "/Admin/" + Item.Alias + "/";
+
+                    try
+                    {
+                        if (Request.Url.Segments[2].ToString().ToLower() == Item.Alias.ToLower() + "/")
+                        {
+                            ActiveClass = "selected";
+                        }
+                    }
+                    catch
+                    {
+                        if (Item.Alias.ToLower() == "main")
+                        {
+                            ActiveClass = "selected";
+                        }   
+                    }
+
+                    <div class="admin-menu_item @ActiveClass">
+                        <a class="@Item.Class" href="@Url">@Item.Title</a>
+                    </div>
+
+                    ActiveClass = String.Empty;
+                }
+                <hr />
+            </div>
+        }
+    }
+}

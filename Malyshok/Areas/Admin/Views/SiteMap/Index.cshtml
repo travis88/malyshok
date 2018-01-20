@@ -1,0 +1,113 @@
+﻿@model SiteMapViewModel
+
+@{
+    string groupMenu = ViewBag.Group;
+    string urlParam = "/Admin/Services/ChangePermit?group=SiteMap";
+    urlParam += !string.IsNullOrEmpty(groupMenu) ? "&menuSort=" + groupMenu : string.Empty;
+}
+
+@if (Model.UserResolution.Read)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+
+        @if (string.IsNullOrEmpty(groupMenu))
+        {
+            <ol class="breadcrumb">
+                <li><a href="/admin/sitemap/">Главная</a></li>
+            </ol>
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <h4 class="nesting_title">Список вложенностей</h4>
+                </div>
+                <div class="col-sm-7">
+                    <div class="bubble_but">
+                        @if (Model.UserResolution.Write)
+                        {
+                            <a class="button icon-create green" href="/admin/sitemap/item/@Guid.NewGuid()/">Добавить</a>
+                        }
+                        @if (Model.List != null && Model.List.Data != null && Model.List.Data.Count() > 1)
+                        {
+                            <a class="button icon-sort" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-sm-5"></div>
+                <div class="col-sm-7">
+                    <div class="bubble_but">
+                        @if (Model.List != null && Model.List.Data != null && Model.List.Data.Count() > 1)
+                        {
+                            <a class="button icon-sort" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.List != null)
+        {
+            <div class="sort_list">
+                <table id="sm_list" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="map_site_title">Название</th>
+                            <th class="map_site_title"></th>
+                            <th class="map_site_attach">Вложения</th>
+                        </tr>
+                    </thead>
+                    <tbody data-service="@urlParam">
+                        @foreach (var item in Model.List.Data)
+                        {
+                            <tr class="ui-sortable-handle" data-id="@item.Id">
+                                @if (item.Alias != " ")
+                                {
+                                    string disabled = item.Disabled ? "disabled" : String.Empty;
+
+                                    string _class = String.Empty;
+                                    if (!String.IsNullOrEmpty(item.Url))
+                                    {
+                                        _class = "icon-site-link";
+                                    }
+                                    else if (item.CountSibling == 0)
+                                    {
+                                        _class = "icon-site-page";
+                                    }
+                                    else
+                                    {
+                                        _class = "icon-site-folder";
+                                    }
+
+                                    <td class="@_class @disabled"><a href="/admin/sitemap/item/@item.Id">@item.Title</a></td>
+                                    <td>
+                                        @if (item.Blocked)
+                                        {
+                                            <span title="Удаление страницы не разрешено!" class="icon-attention-circled"></span>
+                                        }
+                                    </td>
+                                    <td class="sort-element @disabled">@item.CountSibling</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Фильтр</div>
+        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Группы меню", @Alias = "group", @Icon = "icon-th-list-3", @Url = "/admin/services/sitemapmenu/", @BtnName = "Новая группа меню", @Items = Model.MenuTypes, @readOnly = true }); }
+    </div>
+}
+else
+{
+    <div class="content">
+        <p>У вас недостаточно прав.</p>
+    </div>
+}

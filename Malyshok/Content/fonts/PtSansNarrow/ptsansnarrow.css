@@ -1,0 +1,18 @@
+﻿@font-face {font-family: 'PtSansNarrow';
+	src: url('/Content/fonts/PtSansNarrow/ptn57f_w.eot');
+	src: local('PT Sans Narrow'),         
+        url('/Content/fonts/PtSansNarrow/PTN57F_W.eot?#iefix') format('embedded-opentype'), 
+        url('/Content/fonts/PtSansNarrow/PTN57F_W.woff') format('woff'),
+        url('/Content/fonts/PtSansNarrow/PTN57F_W.ttf') format('truetype'), 
+        url('/Content/fonts/PtSansNarrow/PTN57F_W.svg#PTSans-Narrow') format('svg');}
+
+@font-face {font-family: 'PT Sans Narrow';
+	font-weight: bold; 
+	src: url('/Content/fonts/PtSansNarrow/ptn77f_w.eot');
+	src: local('PT Sans Narrow Bold'), 
+        url('/Content/fonts/PtSansNarrow/PTN77F_W.eot?#iefix') format('embedded-opentype'), 
+        url('/Content/fonts/PtSansNarrow/PTN77F_W.woff') format('woff'),
+        url('/Content/fonts/PtSansNarrow/PTN77F_W.ttf') format('truetype'), 
+        url('/Content/fonts/PtSansNarrow/PTN77F_W.svg#PTSans-NarrowBold') format('svg');}
+
+

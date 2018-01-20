@@ -1,0 +1,31 @@
+﻿@model cmsMenuViewModel
+
+<div class="content">
+    <h1>@ViewBag.Title</h1>
+    <div class="cms_menu-list">
+        @if (Model.List != null)
+        {
+            foreach (cmsMenuModel menuGroup in Model.List)
+            {
+                if (menuGroup.GroupItems != null)
+                {
+                    <div class="cms_menu-title">@menuGroup.GroupName</div>
+                    <div class="sortable ui-sortable" data-service="/Admin/Services/ChangePermit?group=cmsMenu">
+                        @foreach (cmsMenuItem Item in menuGroup.GroupItems)
+                        {
+                            <div class="cms_menu-item ui-sortable-handle" data-id="@Item.id">
+                                @Html.ActionLink(@Item.Title, "Item", new { area = "Admin", controller = "cmsMenu", id = @Item.id })
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>
+
+<div class="dop_info-block"></div>
+
+<div class="buttons">
+    <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+</div>

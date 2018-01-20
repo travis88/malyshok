@@ -1,0 +1,119 @@
+﻿@model UserSiteLinkModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
+}
+
+<div>
+    @if (Model != null)
+    {
+        <div class="col-lg-12 content">
+            <div class="alert alert-info">
+                <p><span class="icon-info"></span> Выберите сайты, к которым необходимо привязать запись.</p>
+            </div>
+        </div>
+        <div class="scrollbar modal-site-list">
+            @if (Model.Sites != null && Model.Sites.Count() > 0)
+            {
+                <table id="modal-userSite-table" class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Название сайта</th>
+                            <th>Алиас</th>
+                            <th>Тип сайта</th>
+                            <th>url</th>
+                            <th>Отметить</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.Sites)
+                    {
+                            <tr class="userSite-item-row">
+                                <td class="site-item-html">
+                                    <a>@item.Title</a>
+                                </td>
+                                <td class="td-bold">
+                                    @item.Alias
+                                </td>
+                                <td>
+                                    @item.Type
+                                </td>
+                                <td>
+                                    @if (item.DomainList != null)
+                                    {
+                                        <ul>
+                                            @foreach (var domain in item.DomainList)
+                                            {
+                                                <li>@domain.DomainName</li>
+                                            }
+                                        </ul>
+                                    }
+                                </td>
+                                <td class="td-center">
+                                    <span class="userSite-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                    <input type="checkbox" class="userSite-item-chkbx iCheck" data-object-id="@Model.UserId" data-object-type="user" data-link-id="@item.Id" data-link-type="site" data-init="false" @(item.Checked ? "checked" : null) />
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+        </div>
+
+    }
+    else
+    {
+        <div id="log-list_title">
+            <div class="alert alert-danger" role="alert">Список сайтов пуст или не доступен.</div>
+        </div>
+    }
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#modal-userSite-table .iCheck").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'icheckbox_square-blue'
+            //increaseArea: '%' //optional
+        });
+        $('#modal-userSite-table').DataTable(
+            {
+                searching: true,
+                ordering: true,
+                columns: [
+                    null,
+                    null,
+                    null,
+                    { "orderable": false },
+                    { "searchable": false, "orderable": false }
+                ],
+                //paging: false
+                language: {
+                    "processing": "Подождите...",
+                    "search": "Поиск:",
+                    "lengthMenu": "Показать _MENU_ записей",
+                    "info": "Записи с _START_ по _END_ из _TOTAL_ ",
+                    "infoEmpty": "Записи с 0 по 0 из 0",
+                    "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                    "infoPostFix": "",
+                    "loadingRecords": "Загрузка записей...",
+                    "zeroRecords": "Записи отсутствуют.",
+                    "emptyTable": "В таблице отсутствуют данные",
+                    "paginate": {
+                        "first": "<<",
+                        "previous": "<",
+                        "next": ">",
+                        "last": ">>"
+                    },
+                    "aria": {
+                        "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                        "sortDescending": ": активировать для сортировки столбца по убыванию"
+                    }
+                }
+            });
+    });
+</script>

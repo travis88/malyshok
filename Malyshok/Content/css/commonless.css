@@ -1,0 +1,18 @@
+.navbar-toggle[aria-expanded=true] .icons-bar {
+  -webkit-transform: translateY(0) rotate(0);
+  -ms-transform: translateY(0) rotate(0);
+  transform: translateY(0) rotate(0);
+}
+.navbar-toggle[aria-expanded=true] .icons-bar:nth-child(2) {
+  -webkit-transform: translateY(3px) rotate(45deg);
+  -ms-transform: translateY(3px) rotate(45deg);
+  transform: translateY(3px) rotate(45deg);
+}
+.navbar-toggle[aria-expanded=true] .icons-bar:nth-child(3) {
+  opacity: 0;
+}
+.navbar-toggle[aria-expanded=true] .icons-bar:nth-child(4) {
+  -webkit-transform: translateY(-3px) rotate(-45deg);
+  -ms-transform: translateY(-3px) rotate(-45deg);
+  transform: translateY(-3px) rotate(-45deg);
+}

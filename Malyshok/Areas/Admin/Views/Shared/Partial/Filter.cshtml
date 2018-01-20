@@ -1,0 +1,71 @@
+﻿@model FilterViewModel
+@{
+    string controller = "/" + @ViewBag.ControllerName + "/";
+    string controllerName = @ViewBag.ControllerName;
+    var alias = ViewBag.HttpKeys;
+    var query = ViewBag.Query;
+}
+
+@Html.Partial("Partial/Frame")
+
+@if (Model.Sections != null)
+{
+    <div class="filtr-block">
+    @foreach (SectionGroupModel Section in Model.Sections)
+    {
+        if (Section.Filtr == true)
+        {
+            <div class="GroupList">
+	            <div class="TreeRoot">
+                    <div class="TreeLink Now">
+                        @if (Section.ReadOnly == false)
+                        {
+                            @Html.ActionLink(" ", "SectionGroupItem", "Services", new { @sectionId = @ViewBag.ControllerName, @groupId = @Section.Alias, @ItemId = @Guid.NewGuid() }, new { @class = "treeBtn PopUpFrame New", @title = "Добавить фильтр" })
+                            @*<a title="Добавить фильтр" class="treeBtn PopUpFrame New" href="/FilterItem/CreateSectionGroupItem/?sectionId=@ViewBag.ControllerName&groupId=@Section.Alias&ItemId=@Guid.NewGuid()"></a>*@
+                        }
+                        <span class="treeIcon"></span>
+                        @{ 
+                            string param = RequestUrl.DeleteParams(Section.Alias);
+                        }
+
+                        @*@Html.ActionLink(Section.Title, "Index", ViewBag.ControllerName, new { @sec = @param }, new { @class = "treeUrl" } )*@
+                        @Html.ActionLink(Section.Title, "Index", @controllerName, new { @sec = @param, @area="admin" }, new { @class = "treeUrl" } )
+                        @*<a class="treeUrl" href="@(controller + RequestUrl.DeleteParams(Section.Alias))">@Section.Title</a>*@
+                    </div>
+                </div>
+                <div class="TreeBranch Sortable ui-sortable" data-service="/Admin/Services/ChangePermit?group=sectionGroupItem">
+                    @if (Section.Items != null)
+                    {
+                        foreach (SectionGroupItemsModel Item in Section.Items)
+                        {
+                            if (Item.GroupId == Section.Alias)
+                            {
+                                var urlparams = RequestUrl.AddParams(Section.Alias, Item.Alias);
+                                var now_class = (RequestUrl.UrlParam(Section.Alias) == Item.Alias) ? "TreeLink Now" : "TreeLink ";
+
+                                <div class="TreeItem" data-id="@Item.Guid">
+
+                                    <div class="@now_class">
+                                        @if (Section.ReadOnly == false)
+                                        {
+                                            @Html.ActionLink(" ", "SectionGroupItem", "Services", new { @sectionId = @Item.SectionId, @groupid = @Item.GroupId, @Id = @Item.Guid, @area = "admin" }, new { @class = "treeBtn PopUpFrame Edit", @title = "Редактировать фильтр" })
+                                            @*<a title="Редактировать фильтр" class="treeBtn PopUpFrame Edit" href="/FilterItem/EditSectionGroupItem/?sectionId=@ViewBag.ControllerName&ItemId=@Item.Guid"></a>*@
+                                        }
+                                        <span class="treeIcon" title=""></span>
+                                        @Html.ActionLink(Item.Title, null, new { @controller = @controllerName, @area = "admin" }, new { @class = "treeUrl" })
+                                        @*<a class="treeUrl" href="@(controller + urlparams)">@Item.Title</a>*@
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        }
+    }
+    @if (ViewBag.Message != null)
+    {
+        @Html.Partial("Partial/modal")
+    }
+    </div>
+}

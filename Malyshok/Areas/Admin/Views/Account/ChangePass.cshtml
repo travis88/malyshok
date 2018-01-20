@@ -1,0 +1,34 @@
+﻿@model PasswordModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_login.cshtml";
+}
+
+<div class="WelcomeContentLeft">
+    <div class="LoginCaption">Изменение пароля</div>
+    @using (Html.BeginForm("ChangePass", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <div class="WelcomePass">
+                @Html.PasswordFor(m => Model.Password, new { @class = "RegField", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Новый пароль", @placeholder = "Новый пароль" })
+                <span class="wel-pass icon-lock"></span>
+            </div>
+            <div class="WelcomePass">
+                @Html.PasswordFor(m => Model.PasswordConfirm, new { @class = "RegField", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Подтверждение пароля", @placeholder = "Подтверждение пароля" })
+                <span class="wel-pass icon-lock"></span>
+            </div>
+            <p>&nbsp;</p>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+            <div class="WelcomeBtn">
+                <input id="LoginButton" class="RegButton" type="submit" value="Изменить пароль" />
+                <span class="icon-right-4"></span>
+            </div>
+        </div>
+    }
+</div>
+<div class="WelcomeContentRight">
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>Пароль должен содержать от 6 до 16 символов.</p>
+    <p>В нем должны содержаться строчные и прописные латинские буквы, цифры, а так же разрешено использовать спецсимволы.</p>
+</div>

@@ -1,0 +1,53 @@
+﻿@model NewsViewModel
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+        <h1>Rss лента</h1>
+        <div class="col-md-4">
+            @if (Model.Group != null)
+            {
+                <div class="form-group">
+                    <label>Тип</label>
+                    <select class="form-control rss_param" id="rss_param_group">
+                        <option value="">Все</option>
+                        @foreach (var item in Model.Group)
+                        {
+                            <option value="@item.Alias">@item.Title</option>
+                        }
+                    </select>
+                </div>
+            }
+        </div>
+        @*<div class="col-md-2">
+            <div class="form-group">
+                <label class="label_filtr" for="data_start">Дата начала</label>
+                <div class='input-group date' id="date-begin">
+                    <input id="rss_param_start" type='text' class="form-control rss_param rss_date" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label_filtr" for="data_fin">Дата конца</label>
+                <div class='input-group date' id="date-end">
+                    <input id="rss_param_end" type='text' class="form-control rss_param rss_date" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
+                </div>
+            </div>
+        </div>*@
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label_filtr" for="data_fin">Количество</label>
+                <div class='input-group date' id="date-end">
+                    <input id="rss_param_size" type='number' class="form-control rss_param" name="size" value="@ViewBag.Filter.Size" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            Ссылка на RSS: <a id="rss_param_link" data-domain="@ViewBag.SiteUrl" href="http://@ViewBag.SiteUrl/press/rss" target="_blank">http://@ViewBag.SiteUrl/press/rss</a>
+        </div>
+
+        
+
+    </div>
+</div>

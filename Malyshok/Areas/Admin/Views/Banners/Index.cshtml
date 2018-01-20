@@ -1,0 +1,145 @@
+﻿@model BannersViewModel
+@using System.Text.RegularExpressions;
+
+@{
+    int maxChars = 70;
+}
+
+@if (Model.UserResolution.Read)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+
+        @if (Model.Sections != null)
+        {
+            <h4 class="nesting_title">Секции баннеров</h4>
+            <div class="sort_list">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Кол-во баннеров</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Sections)
+                        {
+                            <tr class="ui-sortable-handle" data-id="@item.Id">
+                                <td class="sort-element">
+                                    <a href="/admin/banners/index/@item.Id">@item.Title</a>
+                                </td>
+                                <td class="sort-element">@item.CountBanners</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        @if (Model.SectionItem != null)
+        {
+            <div class="row">
+                <div class="col-sm-5">
+                    <h4 class="nesting_title">@Model.SectionItem.Title</h4>
+                </div>
+                <div class="col-sm-7">
+                    <div class="bubble_but">
+                        @if (Model.UserResolution.Write && Model.SectionItem != null)
+                        {
+                            <a class="button icon-create green" href="/admin/banners/item/@Guid.NewGuid()/?section=@Model.SectionItem.Id">Добавить</a>
+                        }
+                        @if (Model.SectionItem.CountBanners > 1)
+                        {
+                            <a class="button icon-sort" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                        }
+                    </div>
+                </div>
+            </div>
+            if (Model.SectionItem.BannerList != null && Model.SectionItem.BannerList.Data != null)
+            {
+                <div class="sort_list">
+                    <div class="sort_parent" data-service="/admin/services/changepermit?group=banners">
+                        @foreach (var item in Model.SectionItem.BannerList.Data)
+                        {
+                            string imgUrl = (!string.IsNullOrEmpty(item.Photo.Url) && File.Exists(Server.MapPath(item.Photo.Url))) ? item.Photo.Url : "/Content/img/nophoto.jpg";
+                            string disabled = (item.Disabled) ? "disabled" : string.Empty;
+                            string text = string.Empty;
+
+                            if (!string.IsNullOrEmpty(item.Text))
+                            {
+                                text = Regex.Replace(item.Text, @"<[^>]*>", String.Empty);
+                                text = text.Length > maxChars ? text.Substring(0, maxChars) + " ..." : text;
+                            }
+
+                            <div class="row list-item ui-sortable-handle @disabled" data-id="@item.Id">
+                                <div class="list-item @disabled">
+                                    <div class="col-md-3">
+                                        <a href="/admin/banners/item/@item.Id" class="li-image">
+                                            <img src="@imgUrl" alt="@item.Title" class="list_img_preview" />
+                                        </a>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="li-desc">
+                                            @if (item.Locked || item.Site != Model.DomainName)
+                                            {
+                                                <span class="icon-lock" title="Заблокировано администратором портала"></span>
+                                            }
+                                            <a href="/admin/banners/item/@item.Id" class="li-caption">@item.Title</a><br />
+                                            <span>Дата публикации: </span>@item.Date.ToString("dd MMMM yyyy")<br />
+                                            <span>Текст: </span>@text<br />
+                                            <span>Кол-во переходов: </span>@item.CountClick
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">Не найдено ни одной записи.</div>
+            }
+        }
+    </div>
+    <div class="dop_info-block">
+        @if (Model.Sections != null)
+        {
+            <div class="alert alert-info">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Секция</th>
+                            <th>Размеры</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Sections)
+                        {
+                            string width = item.Width.Equals(0) ? "auto" : item.Width.ToString();
+                            string height = item.Height.Equals(0) ? "auto" : item.Height.ToString();
+
+                            string size = width + " x " + height;
+                            <tr>
+                                <td>@item.Title</td>
+                                <td>
+                                    @size
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <div class="buttons">
+        @if (Model.SectionItem != null)
+        {
+            <a href="/admin/banners" class="button icon-cancel">Назад</a>
+        }
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}

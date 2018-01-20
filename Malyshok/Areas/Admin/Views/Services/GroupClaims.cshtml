@@ -1,0 +1,132 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
+}
+@model GroupModel
+
+@using (Html.BeginForm( "GroupClaims", "/services/", FormMethod.Post, new { @enctype = "multipart/form-data"}))
+{
+    <div class="row">
+        <div class="buttons">
+            <button type="submit" name="action" value="save-group-btn" class="button icon-save">Сохранить</button>
+            @if (Model != null)
+            {
+                <button type="submit" name="action" value="delete-group-btn" class="button icon-delete">Удалить</button>
+            }
+        </div>
+    </div>
+    <div class="alert alert-success" role="alert" style="display:none;"></div>
+
+    if (ViewBag.SuccesAlert != null)
+    {
+        <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+    }
+    if (ViewBag.DankerAlert != null)
+    {
+        <div class="alert alert-danger">@ViewBag.DankerAlert</div>
+    }
+
+    @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+
+    <div class="row form-group">
+        <div class="col-xs-3">
+            @if (Model == null)
+            {
+                @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input form-control", @title = "Название группы (на английском)" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.Alias, new { @class = "uc_input form-control", @title = "Название группы (на английском)", @readonly = "readonly" })
+            }
+        </div>
+        <div class="col-xs-4">
+            @Html.TextBoxFor(m => m.GroupName, new { @class = "uc_input form-control", @title = "Отображаемое имя" })
+        </div>
+    </div>
+    <div class="scrollbar modal-userGroupResolutions-list">
+        @if (Model != null && Model.GroupResolutions != null)
+        {
+            <table class="table table-striped" cellspacing="0" width="100%" id="modal-userGroupResolutions-table">
+                <thead>
+                    <tr>
+                        <th width="70%"> Раздел CMS</th>
+                        <th>Просмотр</th>
+                        <th>Создание</th>
+                        <th>Изменение</th>
+                        <th>Удаление</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.GroupResolutions)
+                    {
+                        <tr>
+                            <td>
+                                @item.Title
+                            </td>
+                            <td class="groupClaim-item td-center">
+                                <span class="groupClaim-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="read" checked="@item.Read">
+                            </td>
+                            <td class="groupClaim-item td-center">
+                                <span class="groupClaim-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="write" checked="@item.Write">
+                            </td>
+                            <td class="groupClaim-item td-center">
+                                <span class="groupClaim-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="change" checked="@item.Change">
+                            </td>
+                            <td class="groupClaim-item td-center">
+                                <span class="groupClaim-item-tooltip" data-toggle="tooltip" data-placement="left" title="Сохранено"></span>
+                                <input type="checkbox" class="iCheck" data-init="false" data-group="@Model.Alias" data-url="@item.MenuId" data-action="delete" checked="@item.Delete">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $("#modal-userGroupResolutions-table .iCheck").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'icheckbox_square-blue'
+            //increaseArea: '%' //optional
+        });
+        $('#modal-userGroupResolutions-table').DataTable(
+            {
+                searching: true,
+                ordering: true,
+                columns: [
+                    null,
+                    { "searchable": false, "orderable": false },
+                    { "searchable": false, "orderable": false },
+                    { "searchable": false, "orderable": false },
+                    { "searchable": false, "orderable": false }
+                ],
+                //paging: false,
+                language: {
+                        "processing": "Подождите...",
+                        "search": "Поиск:",
+                        "lengthMenu": "Показать _MENU_ записей",
+                        "info": "Записи с _START_ по _END_ из _TOTAL_ ",
+                        "infoEmpty": "Записи с 0 по 0 из 0",
+                        "infoFiltered": "(отфильтровано из _MAX_ записей)",
+                        "infoPostFix": "",
+                        "loadingRecords": "Загрузка записей...",
+                        "zeroRecords": "Записи отсутствуют.",
+                        "emptyTable": "В таблице отсутствуют данные",
+                        "paginate": {
+                            "first": "<<",
+                            "previous": "<",
+                            "next": ">",
+                            "last": ">>"
+                        },
+                        "aria": {
+                            "sortAscending": ": активировать для сортировки столбца по возрастанию",
+                            "sortDescending": ": активировать для сортировки столбца по убыванию"
+                        }
+                }
+            });
+    });
+</script>

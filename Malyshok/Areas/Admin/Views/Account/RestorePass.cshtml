@@ -1,0 +1,33 @@
+﻿@model RestoreModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_login.cshtml";
+}
+
+<div class="WelcomeContentLeft">
+    <div class="LoginCaption">Напомнить пароль</div>
+    @using (Html.BeginForm("RestorePass", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <div class="WelocomeLogin">
+                @Html.TextBoxFor(m => Model.Email, new { @class = "RegField", @placeholder = "E-Mail" })
+                <span class="wel-login icon-user-3"></span>
+            </div>
+            <div class="WelcomeRemember">
+                @Html.ActionLink("Авторизация", "LogIn", new { area = "Admin", controller = "Account" }, new { @class = "NewPassword" })
+            </div>
+            <div class="WelcomeBtn">
+                <input id="LoginButton" class="RegButton" type="submit" value="Напомнить пароль" />
+                <span class="icon-right-4"></span>
+            </div>
+            <p>&nbsp;</p>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+        </div>
+    }
+</div>
+<div class="WelcomeContentRight">
+    Восстановление пароля производится по адресу электронной почты.<br />
+    <br /> Чтобы восстановить пароль, введите в поле адрес электронной почты, с помощью которого Вы раньше входили в систему. Если адрес введен правильно, ситема сгенирирует Вам персональную ссылку для смены пароля и отправит её на указанный адрес электронной почты.<br />
+    <br /> В случае утраты адреса почты, или невозможности зайти в неё, обратитесь к администратору.
+
+</div>

@@ -1,0 +1,38 @@
+﻿@{
+    string isOpen = (@Model.ErrorInfo != null) ? "true" : "false";
+    string _title = String.Empty;
+    string _info = String.Empty;
+
+    if (Model.ErrorInfo != null)
+    {
+        _title = @Model.ErrorInfo.title;
+        _info = @Model.ErrorInfo.info;
+    }
+}
+
+<div class="modal fade" data-show="@isOpen" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">@_title</h4>
+            </div>
+            <div class="modal-body">@Html.Raw(@_info)</div>
+            <div class="modal-footer">
+                @if (Model.ErrorInfo != null)
+                {
+                    if (Model.ErrorInfo.buttons != null)
+                    {
+                        foreach (ErrorMassegeBtn btn in Model.ErrorInfo.buttons)
+                        {
+                            var btn_style = (@btn.style == null) ? "default" : btn.style;
+                            var btn_action = (@btn.action == null) ? "default" : @btn.action;
+
+                            <a href="@btn.url" class="btn btn-@btn_style" data-action="@btn_action">@btn.text</a>
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

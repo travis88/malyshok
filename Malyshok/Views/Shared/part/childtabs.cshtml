@@ -1,0 +1,19 @@
+﻿@model PageViewModel
+
+@if (Model.Child != null && Model.Child.Count() > 0)
+{
+    <ul class="nav nav-pills tabs">
+        @foreach (var item in Model.Child)
+        {
+        string _class = (Model.CurrentPage != null && item.Alias == Model.CurrentPage.Alias) ? "class=active" : "";
+
+        string _href = item.Path;
+        _href += item.Alias;
+        if (item.FrontSection.ToLower().Equals("vote"))
+        {
+        _href = "/vote";
+        }
+        <li @_class><a href="@_href">@item.Title</a></li>
+        }
+    </ul>
+}

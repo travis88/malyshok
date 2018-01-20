@@ -1,0 +1,858 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3D10B354-F5AD-4568-B4EC-65381A50B8F6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Disly</RootNamespace>
+    <AssemblyName>Disly</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <UseGlobalApplicationHostFile />
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Imaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="linq2db, Version=1.0.7.3, Culture=neutral, PublicKeyToken=f19f8aed7feff67e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Bin\linq2db.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.4.4.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Account\MsgFailRestore.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Admin\Views\Account\MsgSendMail.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\commonless.css" />
+    <Content Include="Content\css\iframe_tinymce.css" />
+    <Content Include="Content\css\print.css" />
+    <Content Include="Content\css\spec_style.css" />
+    <Content Include="Content\css\styles_popUp.css" />
+    <Content Include="Content\css\styles.css" />
+    <Content Include="Content\css\styles_login.css" />
+    <Content Include="Content\css\styles_old.css" />
+    <Content Include="Content\css\theme\blue.css" />
+    <Content Include="Content\css\theme\green.css" />
+    <Content Include="Content\css\theme\green_portal.css" />
+    <Content Include="Content\css\theme\purple.css" />
+    <Content Include="Content\css\theme\turquoise.css" />
+    <Content Include="Content\decor\chuvashia\bg.png" />
+    <Content Include="Content\decor\chuvashia\chuvashia-logo.png" />
+    <Content Include="Content\decor\chuvashia\favicon.ico" />
+    <Content Include="Content\decor\chuvashia\map.css" />
+    <Content Include="Content\decor\chuvashia\styles.css" />
+    <Content Include="Content\decor\first\color.css" />
+    <Content Include="Content\decor\first\main.css" />
+    <Content Include="Content\favicon.ico" />
+    <Content Include="Content\fonts\fontello\fontello.css" />
+    <Content Include="Content\fonts\fontello\fontello.svg" />
+    <Content Include="Content\fonts\OpenSans\opensans.css" />
+    <Content Include="Content\fonts\PtSansNarrow\PTN57F_W.svg" />
+    <Content Include="Content\fonts\PtSansNarrow\PTN77F_W.svg" />
+    <Content Include="Content\fonts\PtSansNarrow\ptsansnarrow.css" />
+    <Content Include="Content\fonts\PtSans\ptsans.css" />
+    <Content Include="Content\fonts\PtSerif\ptserif.css" />
+    <Content Include="Content\fonts\raleway\raleway-regular-webfont.svg" />
+    <Content Include="Content\fonts\raleway\raleway-semibold-webfont.svg" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslab.css" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslabbold-webfont.svg" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslablight-webfont.svg" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslabregular-webfont.svg" />
+    <Content Include="Content\fonts\Roboto\roboto-italic_4-webfont.svg" />
+    <Content Include="Content\fonts\Roboto\roboto-mediumitalic_4-webfont.svg" />
+    <Content Include="Content\fonts\Roboto\roboto-medium_4-webfont.svg" />
+    <Content Include="Content\fonts\Roboto\roboto-regular_4-webfont.svg" />
+    <Content Include="Content\fonts\Roboto\roboto.css" />
+    <Content Include="Content\fonts\themify\themify-icons.css" />
+    <Content Include="Content\fonts\themify\themify.svg" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300.svg" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300italic.svg" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500.svg" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500italic.svg" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700.svg" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.svg" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
+    <Content Include="Content\img\asoft_logo.png" />
+    <Content Include="Content\img\calendar-logo.png" />
+    <Content Include="Content\img\doctor.png" />
+    <Content Include="Content\img\favicon.ico" />
+    <Content Include="Content\img\foot_logo.png" />
+    <Content Include="Content\img\gosuslugi.png" />
+    <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\MapRF.svg" />
+    <Content Include="Content\img\metrica1.png" />
+    <Content Include="Content\img\metrica2.png" />
+    <Content Include="Content\img\minzdrav-logo.png" />
+    <Content Include="Content\img\nophoto.jpg" />
+    <Content Include="Content\img\no_avatar.png" />
+    <Content Include="Content\img\obr-project.png" />
+    <Content Include="Content\img\portal_bg.jpg" />
+    <Content Include="Content\img\preloader_planet.svg" />
+    <Content Include="Content\img\preloader.svg" />
+    <Content Include="Content\img\present-ico.png" />
+    <Content Include="Content\img\share-arrow.png" />
+    <Content Include="Content\img\special\image.jpg" />
+    <Content Include="Content\img\special\museum.png" />
+    <Content Include="Content\img\special\sand-blind-panel\a1.png" />
+    <Content Include="Content\img\special\sand-blind-panel\a2.png" />
+    <Content Include="Content\img\special\sand-blind-panel\a3.png" />
+    <Content Include="Content\img\special\sand-blind-panel\access.png" />
+    <Content Include="Content\img\special\sand-blind-panel\c1.png" />
+    <Content Include="Content\img\special\sand-blind-panel\c2.png" />
+    <Content Include="Content\img\special\sand-blind-panel\c3.png" />
+    <Content Include="Content\img\special\sand-blind-panel\f1.png" />
+    <Content Include="Content\img\special\sand-blind-panel\f2.png" />
+    <Content Include="Content\img\special\sand-blind-panel\f3.png" />
+    <Content Include="Content\img\special\sand-blind-panel\sel.png" />
+    <Content Include="Content\img\special\sand-blind-panel\w_normal.png" />
+    <Content Include="Content\img\temporal.jpg" />
+    <Content Include="Content\img\youtube-ico.png" />
+    <Content Include="Content\js\menu.js" />
+    <Content Include="Content\js\script.js" />
+    <Content Include="Content\js\spec.js" />
+    <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.css" />
+    <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="Content\plugins\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\plugins\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\plugins\bootstrap\css\bootstrap-select.css" />
+    <Content Include="Content\plugins\bootstrap\js\bootstrap-select.js" />
+    <Content Include="Content\plugins\bootstrap\js\bootstrap-toggle.js" />
+    <Content Include="Content\plugins\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\plugins\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\plugins\datatables\dataTables.bootstrap.min.css" />
+    <Content Include="Content\plugins\datatables\dataTables.bootstrap.min.js" />
+    <Content Include="Content\plugins\datatables\datatables.css" />
+    <Content Include="Content\plugins\datatables\datatables.js" />
+    <Content Include="Content\plugins\datatables\datatables.min.css" />
+    <Content Include="Content\plugins\datatables\datatables.min.js" />
+    <Content Include="Content\plugins\Disly\DislyControls.js" />
+    <Content Include="Content\plugins\Disly\DislyControls.css" />
+    <Content Include="Content\plugins\icheck\icheck.js" />
+    <Content Include="Content\plugins\icheck\icheck.min.js" />
+    <Content Include="Content\plugins\icheck\skins\all.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\aero%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\aero.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\aero.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\blue%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\blue.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\blue.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\flat%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\flat.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\flat.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\green%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\green.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\green.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\grey%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\grey.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\grey.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\orange%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\orange.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\orange.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\pink%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\pink.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\pink.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\purple%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\purple.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\purple.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\red%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\red.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\red.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\yellow%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\yellow.css" />
+    <Content Include="Content\plugins\icheck\skins\flat\yellow.png" />
+    <Content Include="Content\plugins\icheck\skins\flat\_all.css" />
+    <Content Include="Content\plugins\icheck\skins\futurico\futurico%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\futurico\futurico.css" />
+    <Content Include="Content\plugins\icheck\skins\futurico\futurico.png" />
+    <Content Include="Content\plugins\icheck\skins\line\aero.css" />
+    <Content Include="Content\plugins\icheck\skins\line\blue.css" />
+    <Content Include="Content\plugins\icheck\skins\line\green.css" />
+    <Content Include="Content\plugins\icheck\skins\line\grey.css" />
+    <Content Include="Content\plugins\icheck\skins\line\line%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\line\line.css" />
+    <Content Include="Content\plugins\icheck\skins\line\line.png" />
+    <Content Include="Content\plugins\icheck\skins\line\orange.css" />
+    <Content Include="Content\plugins\icheck\skins\line\pink.css" />
+    <Content Include="Content\plugins\icheck\skins\line\purple.css" />
+    <Content Include="Content\plugins\icheck\skins\line\red.css" />
+    <Content Include="Content\plugins\icheck\skins\line\yellow.css" />
+    <Content Include="Content\plugins\icheck\skins\line\_all.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\aero%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\aero.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\aero.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\blue%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\blue.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\blue.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\green%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\green.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\green.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\grey%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\grey.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\grey.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\minimal%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\minimal.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\minimal.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\orange%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\orange.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\orange.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\pink%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\pink.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\pink.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\purple%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\purple.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\purple.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\red%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\red.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\red.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\yellow%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\yellow.css" />
+    <Content Include="Content\plugins\icheck\skins\minimal\yellow.png" />
+    <Content Include="Content\plugins\icheck\skins\minimal\_all.css" />
+    <Content Include="Content\plugins\icheck\skins\polaris\polaris%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\polaris\polaris.css" />
+    <Content Include="Content\plugins\icheck\skins\polaris\polaris.png" />
+    <Content Include="Content\plugins\icheck\skins\square\aero%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\aero.css" />
+    <Content Include="Content\plugins\icheck\skins\square\aero.png" />
+    <Content Include="Content\plugins\icheck\skins\square\blue%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\blue.css" />
+    <Content Include="Content\plugins\icheck\skins\square\blue.png" />
+    <Content Include="Content\plugins\icheck\skins\square\green%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\green.css" />
+    <Content Include="Content\plugins\icheck\skins\square\green.png" />
+    <Content Include="Content\plugins\icheck\skins\square\grey%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\grey.css" />
+    <Content Include="Content\plugins\icheck\skins\square\grey.png" />
+    <Content Include="Content\plugins\icheck\skins\square\orange%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\orange.css" />
+    <Content Include="Content\plugins\icheck\skins\square\orange.png" />
+    <Content Include="Content\plugins\icheck\skins\square\pink%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\pink.css" />
+    <Content Include="Content\plugins\icheck\skins\square\pink.png" />
+    <Content Include="Content\plugins\icheck\skins\square\purple%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\purple.css" />
+    <Content Include="Content\plugins\icheck\skins\square\purple.png" />
+    <Content Include="Content\plugins\icheck\skins\square\red%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\red.css" />
+    <Content Include="Content\plugins\icheck\skins\square\red.png" />
+    <Content Include="Content\plugins\icheck\skins\square\square%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\square.css" />
+    <Content Include="Content\plugins\icheck\skins\square\square.png" />
+    <Content Include="Content\plugins\icheck\skins\square\yellow%402x.png" />
+    <Content Include="Content\plugins\icheck\skins\square\yellow.css" />
+    <Content Include="Content\plugins\icheck\skins\square\yellow.png" />
+    <Content Include="Content\plugins\icheck\skins\square\_all.css" />
+    <Content Include="Content\plugins\jquery\jquery-3.2.1.min.js" />
+    <Content Include="Content\plugins\jquery\jquery.history.js" />
+    <Content Include="Content\plugins\jquery\jquery.cookie.js" />
+    <Content Include="Content\plugins\jquery\jquery.js" />
+    <Content Include="Content\plugins\jquery\jquery.mask.min.js" />
+    <Content Include="Content\plugins\jquery\jquery.maskedinput.js" />
+    <Content Include="Content\plugins\jquery\jquery.ui.js" />
+    <Content Include="Content\plugins\mCustomScrollbar\jquery.mCustomScrollbar.css" />
+    <Content Include="Content\plugins\mCustomScrollbar\jquery.mCustomScrollbar.js" />
+    <Content Include="Content\plugins\mobileGallery\img\icons.png" />
+    <Content Include="Content\plugins\mobileGallery\img\icons.svg" />
+    <Content Include="Content\plugins\mobileGallery\img\loader.gif" />
+    <Content Include="Content\plugins\mobileGallery\ios-orientationchange-fix.js" />
+    <Content Include="Content\plugins\mobileGallery\js\jquery-2.1.0.min.js" />
+    <Content Include="Content\plugins\mobileGallery\js\jquery.swipebox.js" />
+    <Content Include="Content\plugins\mobileGallery\swipebox.css" />
+    <Content Include="Content\plugins\tinymce\jquery.tinymce.min.js" />
+    <Content Include="Content\plugins\tinymce\langs\ru.js" />
+    <Content Include="Content\plugins\tinymce\license.txt" />
+    <Content Include="Content\plugins\tinymce\plugins\advlist\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\anchor\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\autolink\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\autoresize\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\autosave\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\bbcode\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\charmap\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\codesample\css\prism.css" />
+    <Content Include="Content\plugins\tinymce\plugins\codesample\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\code\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\colorpicker\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\contextmenu\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\directionality\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-cool.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-cry.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-embarassed.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-foot-in-mouth.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-frown.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-innocent.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-kiss.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-laughing.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-money-mouth.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-sealed.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-smile.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-surprised.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-tongue-out.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-undecided.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-wink.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\img\smiley-yell.gif" />
+    <Content Include="Content\plugins\tinymce\plugins\emoticons\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\fullpage\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\fullscreen\plugin.min.js" />
+    <Content Include="Content\css\theme\green_portal.less" />
+    <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
+    <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
+    <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\hr\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\imagetools\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\image\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\importcss\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\insertdatetime\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\legacyoutput\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\link\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\lists\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\media\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\nonbreaking\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\noneditable\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\pagebreak\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\paste\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\preview\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\print\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\save\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\searchreplace\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\spellchecker\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\tabfocus\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\table\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\template\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\textcolor\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\textpattern\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\toc\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\visualblocks\css\visualblocks.css" />
+    <Content Include="Content\plugins\tinymce\plugins\visualblocks\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\visualchars\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\plugins\wordcount\plugin.min.js" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\content.inline.min.css" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\content.min.css" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.svg" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.svg" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\img\anchor.gif" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\img\gallery_bg.png" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\img\loader.gif" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\img\object.gif" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\img\trans.gif" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\skin.min.css" />
+    <Content Include="Content\plugins\tinymce\themes\inlite\theme.min.js" />
+    <Content Include="Content\plugins\tinymce\themes\modern\theme.min.js" />
+    <Content Include="Content\plugins\tinymce\tinymce.min.js" />
+    <Content Include="Content\portal\img\bg.jpg" />
+    <Content Include="Content\portal\img\browse_press.jpg" />
+    <Content Include="Content\portal\img\e-reg.jpg" />
+    <Content Include="Content\portal\img\event_calendar.jpg" />
+    <Content Include="Content\portal\img\logo.png" />
+    <Content Include="Content\portal\img\med_logo_footer.jpg" />
+    <Content Include="Content\portal\img\mini-logo-med.png" />
+    <Content Include="Content\portal\img\online-consultation.jpg" />
+    <Content Include="Content\portal\img\smi-for-med-chuvashia.jpg" />
+    <Content Include="Content\portal\img\tv-radio-plot.jpg" />
+    <Content Include="Content\portal\img\your-opinion.jpg" />
+    <Content Include="Content\portal\img\youtube-med-chuv.jpg" />
+    <Content Include="Content\portal\style.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Web.config" />
+    <Content Include="Areas\Admin\Views\Account\LogIn.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\LogOff.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\RestorePass.cshtml" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_login.cshtml" />
+    <Content Include="Content\fonts\raleway\raleway-regular-webfont.woff" />
+    <Content Include="Content\fonts\raleway\raleway-regular-webfont.woff2" />
+    <Content Include="Content\fonts\raleway\raleway-semibold-webfont.woff" />
+    <Content Include="Content\fonts\raleway\raleway-semibold-webfont.woff2" />
+    <Content Include="Areas\Admin\Views\Shared\Templates\Menu\Default.cshtml" />
+    <Content Include="Content\plugins\select2\css\select2_custom.css" />
+    <Content Include="Content\plugins\select2\css\select2.css" />
+    <Content Include="Content\plugins\select2\css\select2.min.css" />
+    <Content Include="Content\plugins\select2\i18n\af.js" />
+    <Content Include="Content\plugins\select2\i18n\ar.js" />
+    <Content Include="Content\plugins\select2\i18n\az.js" />
+    <Content Include="Content\plugins\select2\i18n\bg.js" />
+    <Content Include="Content\plugins\select2\i18n\bs.js" />
+    <Content Include="Content\plugins\select2\i18n\ca.js" />
+    <Content Include="Content\plugins\select2\i18n\cs.js" />
+    <Content Include="Content\plugins\select2\i18n\da.js" />
+    <Content Include="Content\plugins\select2\i18n\de.js" />
+    <Content Include="Content\plugins\select2\i18n\dsb.js" />
+    <Content Include="Content\plugins\select2\i18n\el.js" />
+    <Content Include="Content\plugins\select2\i18n\en.js" />
+    <Content Include="Content\plugins\select2\i18n\es.js" />
+    <Content Include="Content\plugins\select2\i18n\et.js" />
+    <Content Include="Content\plugins\select2\i18n\eu.js" />
+    <Content Include="Content\plugins\select2\i18n\fa.js" />
+    <Content Include="Content\plugins\select2\i18n\fi.js" />
+    <Content Include="Content\plugins\select2\i18n\fr.js" />
+    <Content Include="Content\plugins\select2\i18n\gl.js" />
+    <Content Include="Content\plugins\select2\i18n\he.js" />
+    <Content Include="Content\plugins\select2\i18n\hi.js" />
+    <Content Include="Content\plugins\select2\i18n\hr.js" />
+    <Content Include="Content\plugins\select2\i18n\hsb.js" />
+    <Content Include="Content\plugins\select2\i18n\hu.js" />
+    <Content Include="Content\plugins\select2\i18n\hy.js" />
+    <Content Include="Content\plugins\select2\i18n\id.js" />
+    <Content Include="Content\plugins\select2\i18n\is.js" />
+    <Content Include="Content\plugins\select2\i18n\it.js" />
+    <Content Include="Content\plugins\select2\i18n\ja.js" />
+    <Content Include="Content\plugins\select2\i18n\km.js" />
+    <Content Include="Content\plugins\select2\i18n\ko.js" />
+    <Content Include="Content\plugins\select2\i18n\lt.js" />
+    <Content Include="Content\plugins\select2\i18n\lv.js" />
+    <Content Include="Content\plugins\select2\i18n\mk.js" />
+    <Content Include="Content\plugins\select2\i18n\ms.js" />
+    <Content Include="Content\plugins\select2\i18n\nb.js" />
+    <Content Include="Content\plugins\select2\i18n\nl.js" />
+    <Content Include="Content\plugins\select2\i18n\pl.js" />
+    <Content Include="Content\plugins\select2\i18n\ps.js" />
+    <Content Include="Content\plugins\select2\i18n\pt-BR.js" />
+    <Content Include="Content\plugins\select2\i18n\pt.js" />
+    <Content Include="Content\plugins\select2\i18n\ro.js" />
+    <Content Include="Content\plugins\select2\i18n\ru.js" />
+    <Content Include="Content\plugins\select2\i18n\sk.js" />
+    <Content Include="Content\plugins\select2\i18n\sl.js" />
+    <Content Include="Content\plugins\select2\i18n\sr-Cyrl.js" />
+    <Content Include="Content\plugins\select2\i18n\sr.js" />
+    <Content Include="Content\plugins\select2\i18n\sv.js" />
+    <Content Include="Content\plugins\select2\i18n\th.js" />
+    <Content Include="Content\plugins\select2\i18n\tr.js" />
+    <Content Include="Content\plugins\select2\i18n\uk.js" />
+    <Content Include="Content\plugins\select2\i18n\vi.js" />
+    <Content Include="Content\plugins\select2\i18n\zh-CN.js" />
+    <Content Include="Content\plugins\select2\i18n\zh-TW.js" />
+    <Content Include="Content\plugins\select2\select2.full.js" />
+    <Content Include="Content\plugins\select2\select2.full.min.js" />
+    <Content Include="Content\plugins\select2\select2.js" />
+    <Content Include="Content\plugins\select2\select2.min.js" />
+    <Content Include="gulpfile.js" />
+    <Content Include="test.html" />
+    <Content Include="scripts\cms\disly_5_popup.js" />
+    <Content Include="scripts\cms\disly_5_login.js" />
+    <Content Include="scripts\cms\disly_5.js" />
+    <Content Include="scripts\Script_old.js" />
+    <Content Include="scripts\popUp_script.js" />
+    <Content Include="scripts\uc_script _old.js" />
+    <Content Include="scripts\uc_script.js" />
+    <Content Include="UC_params.txt" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BannersController.cs" />
+    <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SiteSectionController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SiteSettingsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\MainController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\Admin\Controllers\MaterialsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PortalUsersController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ServicesController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ImageController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SiteMapController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SitesController.cs" />
+    <Compile Include="Areas\Admin\Controllers\TemplatesController.cs" />
+    <Compile Include="Areas\Admin\Models\AccountModel.cs" />
+    <Compile Include="Areas\Admin\Controllers\CoreController.cs" />
+    <Compile Include="Areas\Admin\Models\BannersViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\DocumentsViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ModalViewModels\SitesModalViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\PhotoViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SiteSectionViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\UsersViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\FiltrModel.cs.cs" />
+    <Compile Include="Areas\Admin\Models\FrontModulesModel.cs" />
+    <Compile Include="Areas\Admin\Models\MainViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\MaterialsViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ServicesViewsModel.cs" />
+    <Compile Include="Areas\Admin\Models\PortalUsersViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SiteMapViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SitesViewModel.cs" />
+    <Compile Include="Areas\Admin\Service\Transliteration.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\PressController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\_RootController.cs" />
+    <Compile Include="Controllers\PageController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\base\ErrorViewModel.cs" />
+    <Compile Include="Models\TypePageViewModel.cs" />
+    <Compile Include="Models\NewsViewModel.cs" />
+    <Compile Include="Models\HomePageViewModel.cs" />
+    <Compile Include="Models\base\PageViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Cripto.cs" />
+    <Compile Include="Properties\Files.cs" />
+    <Compile Include="Properties\ReCaptcha.cs" />
+    <Compile Include="Properties\Mailer.cs" />
+    <Compile Include="Properties\RequestUserInfo.cs" />
+    <Compile Include="Properties\SiteLogger.cs" />
+    <Compile Include="Properties\SiteSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="packages.config" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Content\fonts\fontello\fontello.eot" />
+    <Content Include="Content\fonts\fontello\fontello.ttf" />
+    <Content Include="Content\fonts\fontello\fontello.woff" />
+    <Content Include="Content\plugins\bootstrap\config.json" />
+    <Content Include="Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\plugins\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Areas\Admin\Views\Main\Index.cshtml" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300.eot" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300.ttf" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300.woff" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300.woff2" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300italic.eot" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300italic.ttf" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300italic.woff" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_300italic.woff2" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500.eot" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500.ttf" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500.woff" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500.woff2" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500italic.eot" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500italic.ttf" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500italic.woff" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_500italic.woff2" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700.eot" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700.ttf" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700.woff" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700.woff2" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.eot" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.ttf" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.woff" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.woff2" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_italic.eot" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_italic.ttf" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_italic.woff" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_italic.woff2" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_regular.eot" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_regular.ttf" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_regular.woff" />
+    <Content Include="Content\fonts\Ubuntu\ubuntu_regular.woff2" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\Modal.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\Filter.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Page\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="UsersView\_ViewStart.cshtml" />
+    <Content Include="UsersView\web.config" />
+    <Content Include="Views\Shared\footer.cshtml" />
+    <Content Include="Views\Shared\menu.cshtml" />
+    <Content Include="Views\Error\CustomError.cshtml" />
+    <Content Include="Views\Error\InDevelopment.cshtml" />
+    <Content Include="Areas\Admin\Views\cmsMenu\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\cmsMenu\Item.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\ChangePass.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\Log.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\UserResolutions.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\GroupClaims.cshtml" />
+    <Content Include="Areas\Admin\Views\Sites\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Sites\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Sites\Master.cshtml" />
+    <Content Include="Areas\Admin\Views\PortalUsers\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\PortalUsers\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Templates\Filtr\Default.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_popUp.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\LogUser.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Templates\Pager\Default.cshtml" />
+    <Content Include="Areas\Admin\Views\Image\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\GetFile.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\ChangePass.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\MsgResult.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteMap\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteMap\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\BreadCrumbSiteMap.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\SiteMapMenuGroup.cshtml" />
+    <Content Include="Areas\Admin\Views\Banners\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Banners\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\Orgs.cshtml" />
+    <Content Include="Areas\Admin\Views\Materials\OrgsSaved.cshtml" />
+    <Content Include="Content\fonts\PtSansNarrow\PTN57F_W.eot" />
+    <Content Include="Content\fonts\PtSansNarrow\PTN57F_W.ttf" />
+    <Content Include="Content\fonts\PtSansNarrow\PTN57F_W.woff" />
+    <Content Include="Content\fonts\PtSansNarrow\PTN77F_W.eot" />
+    <Content Include="Content\fonts\PtSansNarrow\PTN77F_W.ttf" />
+    <Content Include="Content\fonts\PtSansNarrow\PTN77F_W.woff" />
+    <Content Include="Content\fonts\PtSans\pts55f.woff" />
+    <Content Include="Content\fonts\PtSans\pts55f.woff2" />
+    <Content Include="Content\fonts\PtSans\pts56f.woff" />
+    <Content Include="Content\fonts\PtSans\pts56f.woff2" />
+    <Content Include="Content\fonts\PtSans\pts75f.woff" />
+    <Content Include="Content\fonts\PtSans\pts75f.woff2" />
+    <Content Include="Content\fonts\PtSans\pts76f.woff" />
+    <Content Include="Content\fonts\PtSans\pts76f.woff2" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslabbold-webfont.woff" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslabbold-webfont.woff2" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslablight-webfont.woff" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslablight-webfont.woff2" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslabregular-webfont.woff" />
+    <Content Include="Content\fonts\RobotoSlab\robotoslabregular-webfont.woff2" />
+    <Content Include="Content\fonts\Roboto\roboto-italic_4-webfont.woff" />
+    <Content Include="Content\fonts\Roboto\roboto-italic_4-webfont.woff2" />
+    <Content Include="Content\fonts\Roboto\roboto-mediumitalic_4-webfont.woff" />
+    <Content Include="Content\fonts\Roboto\roboto-mediumitalic_4-webfont.woff2" />
+    <Content Include="Content\fonts\Roboto\roboto-medium_4-webfont.woff" />
+    <Content Include="Content\fonts\Roboto\roboto-medium_4-webfont.woff2" />
+    <Content Include="Content\fonts\Roboto\roboto-regular_4-webfont.woff" />
+    <Content Include="Content\fonts\Roboto\roboto-regular_4-webfont.woff2" />
+    <Content Include="Content\fonts\PtSerif\ptf55f-webfont.woff" />
+    <Content Include="Content\fonts\PtSerif\ptf55f-webfont.woff2" />
+    <Content Include="Content\fonts\PtSerif\ptf56f-webfont.woff" />
+    <Content Include="Content\fonts\PtSerif\ptf56f-webfont.woff2" />
+    <Content Include="Content\fonts\PtSerif\ptf75f-webfont.woff" />
+    <Content Include="Content\fonts\PtSerif\ptf75f-webfont.woff2" />
+    <Content Include="Content\fonts\PtSerif\ptf76f-webfont.woff" />
+    <Content Include="Content\fonts\PtSerif\ptf76f-webfont.woff2" />
+    <Content Include="Areas\Admin\Views\SiteSettings\Index.cshtml" />
+    <Content Include="Content\fonts\themify\themify.ttf" />
+    <Content Include="Content\fonts\themify\themify.woff" />
+    <Content Include="Content\fonts\themify\themify.eot" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Orgs.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Success.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Events.cshtml" />
+    <Content Include="Areas\Admin\Views\Services\UserSites.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Error.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteSection\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SiteSection\Item.cshtml" />
+    <Content Include="Content\fonts\OpenSans\opensans-bold-webfont.ttf" />
+    <Content Include="Content\fonts\OpenSans\opensans-bold-webfont.woff" />
+    <Content Include="Content\fonts\OpenSans\opensans-bold-webfont.woff2" />
+    <Content Include="Content\fonts\OpenSans\opensans-bolditalic-webfont.woff" />
+    <Content Include="Content\fonts\OpenSans\opensans-bolditalic-webfont.woff2" />
+    <Content Include="Content\fonts\OpenSans\opensans-italic-webfont.ttf" />
+    <Content Include="Content\fonts\OpenSans\opensans-italic-webfont.woff" />
+    <Content Include="Content\fonts\OpenSans\opensans-italic-webfont.woff2" />
+    <Content Include="Content\fonts\OpenSans\opensans-light-webfont.woff" />
+    <Content Include="Content\fonts\OpenSans\opensans-light-webfont.woff2" />
+    <Content Include="Content\fonts\OpenSans\opensans-lightitalic-webfont.woff" />
+    <Content Include="Content\fonts\OpenSans\opensans-lightitalic-webfont.woff2" />
+    <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.ttf" />
+    <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.woff" />
+    <Content Include="Content\fonts\OpenSans\opensans-regular-webfont.woff2" />
+    <Content Include="Areas\Admin\Views\Documents\Index.cshtml" />
+    <Content Include="Content\css\theme\turquoise.less" />
+    <Content Include="Content\css\theme\blue.less" />
+    <Content Include="Areas\Admin\Views\PhotoAlbums\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\PhotoAlbums\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
+    <Content Include="Content\css\commonless.less" />
+    <Content Include="Content\css\theme\green.less" />
+    <Content Include="Content\css\theme\purple.less" />
+    <None Include="Content\plugins\datatables\i18n\ru.json" />
+    <Content Include="Content\plugins\tinymce\langs\readme.md" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.ttf" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce-small.woff" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.eot" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.ttf" />
+    <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
+    <Content Include="package.json" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\services\Pager.cshtml" />
+    <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
+    <Content Include="Views\Press\Rss.cshtml" />
+    <Content Include="Views\Press\Index.cshtml" />
+    <Content Include="Views\Press\part\Item.cshtml" />
+    <Content Include="Views\Home\part\media.cshtml" />
+    <Content Include="Views\Shared\part\childlist.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Shared\part\childtabs.cshtml" />
+    <Content Include="Views\Service\Photo.cshtml" />
+    <Content Include="Views\Press\RssSettings.cshtml" />
+    <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
+    <Content Include="Views\Shared\part\nav.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\temp\" />
+    <Folder Include="Userfiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\cms.dbase\cms.dbase.csproj">
+      <Project>{ff945c70-81bf-4972-aa80-fae920c0e028}</Project>
+      <Name>cms.dbase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\cms.dbModel\cms.dbModel.csproj">
+      <Project>{194e3f69-a5f5-49a4-b2a8-b11366633d1c}</Project>
+      <Name>cms.dbModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

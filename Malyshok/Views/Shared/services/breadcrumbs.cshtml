@@ -1,0 +1,15 @@
+﻿@model PageViewModel
+<div>
+@if (Model.Breadcrumbs != null)
+{
+    <ol class="breadcrumb noprint">
+        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+        @foreach (var item in Model.Breadcrumbs)
+        {
+            <li class="breadcrumb-item"><a href="@item.Url">@item.Title</a></li>
+        }
+    </ol>
+}
+</div>
+
+

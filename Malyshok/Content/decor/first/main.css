@@ -1,0 +1,710 @@
+﻿@import url('/Content/fonts/PtSans/ptsans.css');
+@import url('/Content/fonts/PtSerif/ptserif.css');
+@import url('/Content/fonts/themify/themify-icons.css');
+@import url('/Content/fonts/fontello/fontello.css');
+@import url('/Content/fonts/OpenSans/opensans.css');
+
+body {
+    font-family: PtSans;
+    color: #000;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+
+@media (min-width: 1200px){
+    .container {
+        width: 1110px !important;
+        /*padding: 0;*/
+    }
+}
+
+
+
+/*.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}*/
+
+.module-main-page {
+    margin-bottom: 30px;
+}
+
+/* шапка */
+.head {
+    padding: 15px 0;   
+    border-bottom: 1px solid #ccc;
+}
+
+    .head .media-heading {
+        font-family: 'PT Serif';
+        font-size: 22px;
+    }
+
+    .head .right_section {
+        font-size: 14px !important;
+    }
+
+    .head .media-left {
+        padding-right: 20px;
+    }
+
+    .head .media-body {
+        vertical-align: middle !important;
+    }
+
+    .head a.media {
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+
+    .head li > a {
+        background-color: transparent !important;
+        padding-right: 5px !important;
+    }
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+/*  */
+
+/* главное меню */
+.main-menu {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+    .main-menu li > a {
+        background-color: transparent !important;
+        padding: 10px 25px !important;
+        padding-left: 0 !important;
+        font-size: 14px;
+    }
+
+.icon-search {
+    text-decoration: none !important;
+}
+
+    .icon-search:before {
+        font-size: 16px;
+        font-weight: 100;
+    }
+
+.top-icon {
+    font-size: 10px;
+    margin-right: 4px;
+}
+
+.spec-info {
+    font-weight: bold;
+    margin-right: 4px;
+}
+/*  */
+
+/* нижние баннеры */
+.bottom-banners {
+    padding: 30px 0;
+}
+
+    .bottom-banners a {
+        text-decoration: none !important;
+    }
+
+.bottom-banner-item {
+    border-top: 1px dotted;
+    width: 160px;
+}
+
+    .bottom-banner-item:active,
+    .bottom-banner-item:focus {
+        border-top: 2px solid;
+        font-weight: bold;
+    }
+
+.bottom-banner-inner:active,
+.bottom-banner-inner:focus {
+    padding-top: 14px;
+}
+
+.bottom-banner-inner {
+    padding-top: 15px;
+}
+/*  */
+
+/* подвал */
+.logo-small {
+    width: 33px;
+}
+
+.footer {
+    padding: 25px 0;
+    border-top: 1px solid #ddd;
+}
+
+.small_address {
+    font-size: 14px;
+    padding-top: 15px;
+}
+
+.search-form {
+    padding: 5px 13px;
+    width: 100%;
+}
+
+.bottom-search {
+    position: relative;
+    bottom: 30px;
+    float: right;
+    right: 15px;
+}
+
+.footer .bottom_menu.navbar-left {
+    /*margin-right: -15px;*/
+}
+
+.footer .navbar-left li > a {
+    font-size: 14px;
+    background-color: transparent !important;
+    padding-left: 0 !important;
+}
+
+.footer .bottom_menu.navbar-left li > a {
+    padding-bottom: 10px !important;
+}
+
+.footer .versions.navbar-left li > a {
+    padding-top: 0px !important;
+}
+
+.social_network_list a {
+    font-size: 18px;
+    text-decoration: none !important;
+}
+
+.metrica-block {
+    padding-top: 20px;
+    padding-left: 50px;
+}
+
+.metrica {
+    display: inline-block;
+    padding-right: 10px;
+}
+
+.footer-copyright {
+    color: #999;
+    font-size: 14px;
+    padding: 20px 0;
+    border-top: 1px solid #ddd;
+}
+
+.asoft_logo:before {
+    content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD0AAAAOCAMAAACrUuTYAAAB3VBMVEXMzMz////MzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMz5kuwYAAAAnnRSTlMAAAIDBAUGCAkLDQ4PEBITFBUXGBkaHh8gJigqKywtLjEyMzQ1Njg6PD0/QEJDSEtMT1BRUlRXWFpcXWRlZ2hqbG1yc3R1dnd/gIOGh4mKi42Oj5GTlJWWmJmbnKCkpqerrrCxsrO0tba3uLq7v8HDxMXHyMrMzc/Q0dLT1NbX2Nnc3d/h4+Tl5ujp6uvs7e7v8PHz9PX29/j5+vv8/k7kp8oAAAHISURBVHgBndDpV8xRHMfxzzVJgyyRQpbsEbLvkSVKliwlNESIlCWklEaapoxlmF+Zhnn/re79/SbHs87xenK/5577fvC9yrnxaTQeP6GZmX8psB5n9D/rXnxFmjavUDkLZ6z34judJ9+ixv7UZLRtl7TjXmwq1laeuz7zPtq13Ebno4PO0Bv5xnFqFSj/ju+hGgiskXSgewqnt9JkyZFzEue6VLZaUtgDvn5IZ+avBcYHgLtShL+2tfeNwO++vjpZ4QzWS6mCDkm1QMMcLVisjzCcrwfwSueAx0l4PQktxjTA09zeTVjpQrd9IiT1QFTOOqBaugCP8n9B3aw02dl3IGLMc7gU1CU4+7QTq0pzPbgo5xiwSuqExhWAtsCAXsA1U5CCg0HdgdWtKpyI3MNDcurhS0hKweEyYNkpqN8MbDcbgZV+vQmnRBVHfgITKgKuyLkMSeksUFoAJBIwnIUuY47C5zy/fofVKqsda4OwuiIdveE9wLNWYFC6ybTOfGOa3KdZqsYpllWD9UTNBCpF4EeppOM9GWDs/n5jDcFVv3474Xlei5wlMTuOhNSctOfYrWJt7bfDt9tL5avxvMGQjBWOe95uY/0Bzab0J366KKIAAAAASUVORK5CYII=);
+}
+/*  */
+
+/* слайдер */
+.top-slider {
+    height: 220px;
+}
+
+.top-slider-shadow {
+    -webkit-box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
+    -moz-box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
+    box-shadow: 0px 20px 26px -10px rgba(0,0,0,0.47);
+}
+
+.slider-message:hover {
+    -webkit-box-shadow: 0px 20px 20px -15px rgba(0,0,0,0.47);
+    -moz-box-shadow: 0px 20px 20px -15px rgba(0,0,0,0.47);
+    box-shadow: 0px 20px 20px -15px rgba(0,0,0,0.47);
+}
+
+.slider {
+    max-width: 825px;
+}
+
+.slider-item {
+    display: table;
+}
+
+.top-slider-wrapper {
+    height: 290px;
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+
+.slider-img {
+    display: table-cell;
+}
+
+.slider-text-block {
+    padding: 30px 25px;
+    display: table-cell;
+    width: 285px;
+}
+
+.slider-text {
+    font-family: OpenSans;
+    font-size: 18px;
+    line-height: 1.7;
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+    bottom: 70px;
+}
+
+.slider-controls {
+    position: relative;
+    font-size: 15px;
+    bottom: 70px;
+}
+
+    .slider-controls a {
+        margin-right: 5px;
+        text-decoration: none !important;
+    }
+
+.slider-message-block {
+    float: right;
+}
+
+    .slider-message-block a {
+        text-decoration: none !important;
+    }
+
+.slider-message {
+    width: 255px;
+    padding: 13px 30px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.slider-message-title {
+    text-transform: uppercase;
+}
+
+.slider-message-full {
+    display: table-cell;
+}
+
+.icon-slider-message {
+    display: table-cell;
+    font-size: 17px;
+    position: relative;
+    right: 8px;
+    top: 2px;
+}
+/*  */
+
+/* карта сайта плиткой */
+.sitemap-plate {
+    padding: 15px;
+    height: 70px;
+    width: 265px;
+    margin-bottom: 15px;
+}
+
+    .sitemap-plate:hover:after {
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        border-bottom-left-radius: 2px;
+        display: block;
+        border-right: 10px solid rgb(255, 255, 255);
+    }
+/*  */
+
+/* баннеры полезные ресурсы */
+.imglink-benefit-block {
+    height: 290px;
+    padding-top: 25px;
+}
+
+.module-title {
+    font-family: 'Open Sans';
+    font-weight: bold;
+    font-size: 20px;
+}
+
+    .module-title > span {
+        font-size: 10px;
+        margin-left: 20px;
+        position: relative;
+        bottom: 1px;
+        color:#afafb1;
+    }
+
+.link-to-archive {
+    font-size: 14px;
+    font-weight: 100;
+    margin-left: 7px;
+}
+
+.imglink-item {
+    height: 190px;
+    width: 255px;
+    padding: 20px 15px;
+    font-size: 18px;
+}
+
+.imglink-pic {
+    margin-bottom: 15px;
+}
+
+.imglink-title {
+    line-height: 1.1;
+}
+
+.imglink-controlls > a {
+    font-size: 26px;
+    position: relative;
+    bottom: 105px;
+    text-decoration: none;
+}
+
+.ti-angle-left.prev {
+    float: left;
+    right: 42px;
+}
+
+.ti-angle-right.next {
+    float: right;
+    left: 42px;
+}
+/*  */
+
+/* модуль новостей на главной */
+.news-module {
+    padding: 25px 0;
+}
+
+.module-material-item {
+    width: 254px;
+    height: 170px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.module-material-item:hover:after {
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-bottom-left-radius: 2px;
+        display: block;
+        border-right: 10px solid rgb(255, 255, 255);
+    }
+
+.module-material-item-day {
+    font-family: 'Open Sans';
+    font-size: 30px;
+    display: table-cell;
+}
+
+.module-material-item-otherdate {
+    display: table-cell;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #666666;
+    position: relative;
+    bottom: 13px;
+    left: 5px;
+    line-height: 1.1;
+}
+
+.module-material-item-group-link {
+    position: relative;
+    bottom: 42px;
+    float: right;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.event-item-module {
+    position: relative;
+}
+
+    .event-item-module img {
+        width: 100%;
+    }
+
+.event-item-module-opacity {
+    height: 50px;
+    background: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    width: 100%;
+}
+
+.top-op {
+    padding: 5px 15px;
+    top: 0;
+}
+
+.bottom-op {
+    padding: 12px 15px;
+    bottom: 0;
+    font-size:18px;
+}
+
+.event-item-module-opacity > .module-material-item-date,
+.event-item-module-opacity .module-material-item-otherdate,
+.event-item-module-opacity a {
+    color: #fff;
+}
+
+.img-person-list{
+    max-width:80px;
+}
+/*  */
+.breadcrumb {
+    padding: 10px 0 6px !important;
+    background-color: #fff;
+}
+
+    .breadcrumb > li a {
+        text-decoration: underline;
+        font-size: 12px;
+        color: #4d6bbc;
+    }
+
+.child {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 0 0 10px;
+    margin: 15px 0 20px;
+}
+
+.child_link {
+    margin-bottom: 24px;
+}
+
+.child span {
+    margin-right: 5px;
+    float: left;
+}
+
+.child a {
+    margin-bottom: 24px;
+    text-decoration: underline;
+    display: block;
+    padding-left: 20px;
+}
+
+    .child a:hover {
+        text-decoration: none;
+    }
+
+.news_list .item_news {
+    padding-bottom: 22px;
+    margin-bottom: 21px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.news_list .news-list_date {
+    padding: 0;
+}
+
+.news-list_date {
+    font-size: 14px;
+    color: #808080;
+}
+
+.item_news .news-list_date {
+    float: left;
+    margin-right: 30px;
+}
+
+.news-list_title {
+    display: table;
+    color: #333;
+}
+
+
+/* Календарь */
+.ui-datepicker {
+    margin: 3px 0 0;
+    padding: 5px;
+    font-size: 14px;
+    border: solid 1px #d9d9d9;
+    background: #ffffff;
+    box-shadow: 3px 3px 5px rgba(0,0,0,.1);
+    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,.1);
+    -moz-box-shadow: 3px 3px 5px rgba(0,0,0,.1);
+    z-index: 999 !important;
+}
+
+.ui-datepicker-header {
+    overflow: hidden;
+    color: #3456af;
+}
+
+    .ui-datepicker-header:hover {
+        text-decoration: none;
+    }
+
+.ui-datepicker-prev,
+.ui-datepicker-next {
+    display: block;
+    width: 24px;
+    padding: 5px 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+    .ui-datepicker-prev:hover,
+    .ui-datepicker-next:hover {
+        text-decoration: none;
+        color: #3456af;
+    }
+
+.ui-datepicker-prev {
+    float: left;
+}
+
+.ui-datepicker-next {
+    float: right;
+}
+
+.ui-datepicker-title {
+    overflow: hidden;
+    padding: 5px 0;
+    text-align: center;
+}
+
+.ui-datepicker-calendar {
+    border-collapse: collapse;
+}
+
+    .ui-datepicker-calendar th {
+        padding: 6px;
+        text-align: center;
+        color: #999999;
+        font-weight: normal;
+    }
+
+    .ui-datepicker-calendar td {
+        text-align: center;
+        width: 24px;
+        padding: 6px;
+        border: none;
+        color: #212121;
+    }
+
+        .ui-datepicker-calendar td a {
+            color: #212121;
+        }
+
+            .ui-datepicker-calendar td a:hover {
+                text-decoration: none;
+            }
+
+        .ui-datepicker-calendar td.ui-datepicker-today {
+            background: #e6e6e6;
+            color: #212121;
+        }
+
+        .ui-datepicker-calendar td.ui-datepicker-current-day {
+            background: #4d6bbc;
+            color: #ffffff;
+        }
+
+            .ui-datepicker-calendar td.ui-datepicker-current-day a {
+                color: #ffffff;
+            }
+
+        .ui-datepicker-calendar td.ui-datepicker-other-month,
+        .ui-datepicker-calendar td.ui-datepicker-other-month a {
+            color: #e6e6e6;
+        }
+
+.filtr_news input, .filtr_news select {
+    border-radius: 0;
+    border: 1px solid #e6e6e6;
+    font-size: 14px;
+    box-shadow: none;
+}
+
+.filtr_news label {
+    font-size: 14px;
+    color: #808080;
+    margin-bottom: 2px;
+    font-weight: normal;
+}
+
+.reset:before {
+    content: '\ed87';
+    font-family: fontello;
+    font-size: 20px;
+    position: relative;
+    top: 4px;
+    left: 15px;
+    color: #abadac;
+}
+
+.boss img {
+    max-width: 100%;
+}
+
+.contact_info h2 {
+    margin-top: 0;
+    font-weight: bold;
+    font-size: 24px;
+    color: #262626;
+}
+
+.contact_info_it {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.filals-list {
+    margin: 20px 0;
+}
+
+.filals-list_it {
+    padding: 6px 0 20px;
+}
+
+    .filals-list_it a {
+        text-decoration: underline;
+        color: #4d6bbc;
+    }
+
+.filals-list_it_title {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.department_name {
+    font-size: 17px;
+    margin-top: 10px;
+}
+
+
+/*vote*/
+.vote_stat_load_wr {
+    width: 100%;
+    background-color: #ddd;
+}
+
+.vote_stat_load_wr {
+    margin-bottom: 5px;
+}
+
+.vote_stat_load {
+    height: 20px;
+    text-align: right;
+    line-height: 21px;
+    color: white;
+    background-color: #2196F3;
+}

@@ -1,0 +1,89 @@
+﻿@model SitesViewModel
+
+@if (Model.UserResolution.Change)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+        <div class="alert alert-info">
+            Сайт @ViewBag.ContentType <a href="@ViewBag.ContentLink" target="_blank">@ViewBag.ContentTitle</a>
+        </div>       
+        <div class="row">
+            <div class="col-xs-8">
+                @Html.TextBoxFor(m => Model.Item.Title, new { @class = "uc_input", @required = "", @title = "Название сайта", @placeholder = "Название сайта", @MaxLength = "512", @data_help = "Наименование организации." })                
+            </div>
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => Model.Item.Alias, new { @class = "uc_input", @required = "", @title = "Идентификатор сайта", @placeholder = "Название сайта", @MaxLength = "64", @data_help = "Название сайта в адресной строке.", @readonly="" })
+            </div>
+        </div>
+        @Html.TextAreaFor(m => Model.Item.Scripts, new { @class = "uc_input", @title = "Подключаемые скрипты", @placeholder = "Подключаемые скрипты", @rows = "6" })
+
+    @if (Model.Item != null)
+    {
+        <div class="group-block open" title="Доменные имена">
+            <div class="row">
+                <div class="alert alert-info" role="alert">Чтобы сайт отображался на другом домене, в его настройках DNS необходимо прописать запись типа А указав ip: @Request.ServerVariables["LOCAL_ADDR"] и добавить домен:</div>
+
+                @if (Model.Item.DomainList != null)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Доменное имя</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                       @foreach (var item in Model.Item.DomainList)
+                        {
+                                <tr>
+                                    <td>@item.DomainName</td>
+                                    <td class="text-right">
+                                        <span id="domain_@(item.DomainName)" data-container="body" data-toggle="popover" data-placement="left" data-content=""></span>
+                                        <a class="del_domain" data-id="@item.id" data-domain-name="@item.DomainName" data-url="/admin/orgs/DelPhoneDepart" data-init="false"></a>
+                                    </td>
+                                </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+
+                @Html.HiddenFor(m => m.Item.Id)
+                <div class="col-md-4">
+                    <input type="text" title="Домен" name="new_domain" placeholder="example.ru" />
+                </div>
+                <div class="col-md-4">
+                    <button style="margin-top: 23px;" class="button icon-create green pull-right" type="submit" name="action" value="add-new-domain">Добавить</button>
+                </div>
+            </div>
+        </div>
+    }
+    
+
+    </div>
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Доп. параметры</div>
+        <div class="group-block contact open" title="Контакты">
+            @*@Html.TextBoxFor(m => Model.Item.Adress, new { @class = "uc_input", @title = "Адрес", @placeholder = "Адрес", @MaxLength = "512" })*@
+            @Html.TextBoxFor(m => Model.Item.Phone, new { @class = "uc_input", @title = "Телефон", @placeholder = "Телефон", @MaxLength = "64" })
+            @Html.TextBoxFor(m => Model.Item.Fax, new { @class = "uc_input", @title = "Факс", @placeholder = "Факс", @MaxLength = "64" })
+            @Html.TextBoxFor(m => Model.Item.Email, new { @class = "uc_input", @title = "Адрес Email", @placeholder = "Адрес Email", @MaxLength = "64" })
+            @Html.TextBoxFor(m => Model.Item.Site, new { @class = "uc_input", @title = "Адрес сайта", @placeholder = "Адрес сайта", @MaxLength = "128" })
+            @Html.TextBoxFor(m => Model.Item.Worktime, new { @class = "uc_input", @title = "Режим работы", @placeholder = "Режим работы", @MaxLength = "512" })
+        </div>
+        @Html.CheckBoxFor(m => m.Item.SiteOff, new { @class = "checkbox", @title = "Состояние сайта", @data_toggle = "toggle", @data_off = "Включен", @data_on = "Отключен", @data_onstyle = "danger", @data_offstyle = "success", @data_width = "270" })
+        @if (Model.Item != null)
+        {            
+            @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+        }
+    </div>
+
+    <div class="buttons">
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+        @if (Model.Item != null)
+        {
+            <button type="submit" name="action" value="delete-btn"  data-action="delete" class="button icon-delete">Удалить</button>
+        }
+        <button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+    </div>
+}

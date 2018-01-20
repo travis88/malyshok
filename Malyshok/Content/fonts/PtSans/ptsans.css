@@ -1,0 +1,32 @@
+
+@font-face {
+    font-family: PtSans;
+    src: url('pts55f.woff2') format('woff2'),
+         url('pts55f.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: PtSans;
+    src: url('pts56f.woff2') format('woff2'),
+         url('pts56f.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: PtSans;
+    src: url('pts75f.woff2') format('woff2'),
+         url('pts75f.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: PtSans;
+    src: url('pts76f.woff2') format('woff2'),
+         url('pts76f.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+
+}

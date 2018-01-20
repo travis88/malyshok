@@ -1,0 +1,10 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_login.cshtml";
+}
+
+<div class="WelcomeContentLeft">
+    <div class="LoginCaption">@Model.Title.ToString() @Model.HttpCode.ToString()</div>
+</div>
+<div class="WelcomeContentRight">
+    @Html.Raw(Model.Message)
+</div>

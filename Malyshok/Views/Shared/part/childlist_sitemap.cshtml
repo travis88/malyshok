@@ -1,0 +1,30 @@
+﻿@model PageViewModel
+@if (Model.Child != null)
+{
+    if (Model.Child.Length > 0)
+    {
+        <div class="child_sitemap">
+            @foreach (var item in Model.Child)
+            {
+                string fullPath = "/";
+
+                if (!string.IsNullOrEmpty(item.Url))
+                {
+                    fullPath = item.Url;
+                }
+                else if (item.FrontSection.ToLower().Equals("page"))
+                {
+                    fullPath = item.Path + item.Alias;
+                }
+                else
+                {
+                    fullPath = "/" + item.FrontSection;
+                }
+
+                <div class="child_sitemap_link">
+                    <span><a href="@fullPath">@item.Title</a></span>
+                </div>
+            }
+        </div>
+    }
+}

@@ -1,0 +1,74 @@
+﻿@model MaterialsViewModel
+@{Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";}
+
+<link href="~/Content/plugins/bonsai/css/jquery.bonsai.css" rel="stylesheet" />
+@*<link href="~/Content/plugins/icheck/skins/all.css" rel="stylesheet" />*@
+<div>
+    @if (Model != null)
+    {
+        <div class="buttons">
+            <button type="submit" name="action" value="save-org-btn" class="btn btn-primary icon-create">СОХРАНИТЬ</button>
+        </div>
+
+        <div class="scrollbar log-list">
+            <ol id="checkboxes">
+                @for (int i = 0; i < Model.OrgsByType.Count(); i++)
+                {
+                    <li>
+                        @Html.CheckBoxFor(m => Model.OrgsByType[i].Check, new { type = "checkbox", @data_init = "false" })
+                        @Html.LabelFor(m => Model.OrgsByType[i].Check, Model.OrgsByType[i].Title)
+                        @Html.HiddenFor(m => Model.OrgsByType[i].Id)
+                        @Html.HiddenFor(m => Model.OrgsByType[i].Sort)
+                        @Html.HiddenFor(m => Model.OrgsByType[i].Title)
+
+                        @if (Model.OrgsByType[i].Orgs != null)
+                        {
+                            <ol>
+                                @for (int j = 0; j < Model.OrgsByType[i].Orgs.Count(); j++)
+                                {
+                                    <li>
+                                        <div class="row">
+                                            <div class="check_sm col-sm-1">
+                                                @Html.CheckBoxFor(m => Model.OrgsByType[i].Orgs[j].Check, new { type = "checkbox", @data_init = "false" })
+                                            </div>
+                                            <div class="check_sm_title col-sm-11">
+                                                @Html.LabelFor(m => Model.OrgsByType[i].Orgs[j].Check, Model.OrgsByType[i].Orgs[j].Title)
+                                            </div>
+                                        </div>
+                                        @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Id)
+                                        @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Sort)
+                                        @Html.HiddenFor(m => Model.OrgsByType[i].Orgs[j].Title)
+                                    </li>
+                                }
+                            </ol>
+                        }
+                    </li>
+                }
+            </ol>
+        </div>
+        @Html.HiddenFor(m => m.Item.Id)
+        @*@Html.HiddenFor(m => m.Item.Group)*@
+        @Html.HiddenFor(m => m.Item.ContentLink)
+    }
+    else
+    {
+        <div id="log-list_title">
+            <div class="alert alert-danger" role="alert">Список организаций для этой записи пуст.</div>
+        </div>
+    }
+</div>
+
+<script src="~/Content/plugins/bonsai/js/jquery.bonsai.js"></script>
+<script src="~/Content/plugins/bonsai/js/jquery.qubit.js"></script>
+@*<script src="~/Content/plugins/icheck/icheck.min.js"></script>*@
+<script>
+    $('#checkboxes').bonsai({
+        expandAll: false,
+        checkboxes: true, // depends on jquery.qubit plugin
+        handleDuplicateCheckboxes: true // optional
+    });
+    //$('input').iCheck({
+    //    checkboxClass: 'icheckbox_flat-blue',
+    //    radioClass: 'iradio_flat-blue'
+    //});
+</script>

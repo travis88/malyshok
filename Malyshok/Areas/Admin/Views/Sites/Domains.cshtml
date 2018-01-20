@@ -1,0 +1,51 @@
+﻿@model SitesViewModel
+@{
+    Layout = null;
+    var controller = "/" + @ViewBag.ControllerName + "/";
+}
+
+@using (Html.BeginForm())
+{
+    <div id="UpFrame">
+        @if (ViewBag.SuccesAlert != null)
+        {
+            <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+        }
+        else if (@ViewBag.FailAlert != null)
+        {
+            <div class="alert alert-danger" role="alert">@ViewBag.FailAlert</div>
+        }
+        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+
+        <div>
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => m.Domain.Domain, new { @class = "uc_input ", @placeholder = "Доменное имя", @required = "" })
+                @*<input id="SiteId" type="hidden" value = @Model.Domain.SiteId />
+                <input id="Id" type="hidden" value = @Model.Domain.Id />*@
+                @Html.HiddenFor(m => m.Domain.Id, new { @value = @Model.Domain.Id })
+                @Html.HiddenFor(m => m.Domain.SiteId, new { @value = @Model.Domain.SiteId })
+            </div>
+            <div class="col-xs-8">
+                <div id="Buttons" class="ButtonsFrame">
+                    <button type="submit" name="action" value="create-btn-group" class="BtnCreate">Добавить</button>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Domains != null)
+        {
+            <table class="table table-striped">
+                @foreach(SitesDomainModel dom in Model.Domains)
+                {
+                    <tr>
+                        <td>@dom.Domain</td>
+                        <td class="delete-domain"><span class="icon-icon-trash-2" data-delete="@dom.Id"></span></td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+}
+@Styles.Render("~/bundles/popUp_css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/popUp_js")

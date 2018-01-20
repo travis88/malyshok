@@ -1,0 +1,41 @@
+﻿общие
+	@required = ""			- обязательно для заполнения
+	@Title = ""				- Заголовок поля (label)
+	@placeholder = ""		- описание внутри поля (когда поле пустое)
+	@MaxLength = ""			- максимальное кол-во символов
+	@data_help = ""			- Всрлывающая подсказака (возможно размещение html)
+	@data-mask = "99.99"	- маска ввода
+	@data-type = "date"		- тип данных (используется для даты, чтобы применить маску и вызывать datepicker)
+	@data-type = "datetime"	- тип данных (используется для даты и времени, чтобы применить маску и вызывать datepicker)
+	@Width = ""				- ширина
+	@Height = ""			- высота
+	@ReadOnly = ""			- только для чтения
+
+checkbox (документация на сайте http://www.bootstraptoggle.com/)
+	@data_init="false"      - не инициализировать обёртку
+	@data_off = ""			- текст чекбокса  (возможно размещение html)
+	@data_on = ""			- текст выбранного чекбокса (возможно размещение html)
+	@data_max = "true"		- чекбокс примет ширину родителя
+	@data_size = "large,normal,small,mini"	- Размер кнопки (по умолчанию - small)
+	@data_width = "" 
+	@data_height = ""
+	@data_offstyle = "primary,success,info,warning,danger,default"	- Цвет чекбокса 
+	@data_onstyle = "primary,success,info,warning,danger,default"	- Цвет выбранного checkbox (по умолчанию - default)
+
+select (документация на сайте https://silviomoreto.github.io/bootstrap-select/)
+	при добавление атрибута required необходимо обернуть в div.required
+
+input type=text
+	@data_focus = false		- отменяет получене фокуса при загрузке страницы
+
+button
+	data-primary = "true"	- кнопка будет реагировать на правильность заполнения формы
+	//value = "no-preloader-btn" 
+	data-action = "noPreloader-accept" - нажатие по кнопке не вызывает прелоадер
+	data-primary = "true"	- кнопка будет реагировать на правильность заполнения формы
+	data-action = "delete,cancel"        - кнопка перед выполнением своего события будет выводит всплывающее окно()
+
+swipebox (документация на сайте http://brutaldesign.github.io/swipebox/)
+	<a href="big/image.jpg" class="swipebox" title="My Caption">
+		<img src="small/image.jpg" alt="image">
+	</a>

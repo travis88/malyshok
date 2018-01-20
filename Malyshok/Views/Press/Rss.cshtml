@@ -1,0 +1,59 @@
+﻿@using System.Globalization
+@model NewsViewModel
+@{
+    Layout = null;
+    string site = "http://"+ViewBag.Domain;    
+}
+
+@functions {
+        public string Replace(string str)
+        {
+            return str.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\'", "&apos;").Replace("\"", "&quot;");
+        }
+}
+
+<rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
+    <channel>
+        <title>@ViewBag.SiteInfo : Пресс центр</title>
+        @Html.Raw("<link>")@site@Html.Raw("</link>")
+
+        <description>@ViewBag.SiteInfo</description>
+        <yandex:logo>@site@Model.SitesInfo.Logo.Url</yandex:logo>
+        <yandex:logo type="square">@site@Model.SitesInfo.Logo.Url</yandex:logo>
+        <language>ru</language>
+        <copyright>Copyright 2010 — @DateTime.Today.Year, @Model.SitesInfo.Title</copyright>
+        @if (ViewBag.LastDatePublish != null)
+        {
+            <lastbuilddate>@ViewBag.LastDatePublish.ToString("ddd, dd MMM yyyy HH:mm:ss +0300", CultureInfo.CreateSpecificCulture("en-US"))</lastbuilddate>
+        }
+        
+
+        @if (Model.List != null)
+        {
+            foreach (var m in Model.List.Data)
+            {
+                <item>
+                    <title>@m.Title</title>
+                    @Html.Raw("<link>")@(site + "/press/" + m.Year + "/" + m.Month + "/" + m.Day + "/" + m.Alias)@Html.Raw("</link>")
+                    <description>@m.Desc</description>
+                    @if (m.PreviewImage.Url != null)
+                    {
+                        <enclosure url="@(site + Replace(m.PreviewImage.Url))" type="image/jpeg" />
+                    }
+                    @*<category>@m.Category</category>
+
+                        @if (m.Video != null)
+                        {
+                            <enclosure url="@(site + Replace(m.Video))" type="video" />
+                        }*@
+                    <pubDate>@m.Date.ToString("ddd, dd MMM yyyy HH:mm:ss +0300", CultureInfo.CreateSpecificCulture("en-US"))</pubDate>
+                    <yandex:full-text>@m.Text</yandex:full-text>
+                    <yandex:genre>message</yandex:genre>
+                    @*<category>@m.Rubric</category>*@
+                </item>
+            }
+        }        
+    </channel>
+</rss>
+
+

@@ -1,0 +1,48 @@
+﻿@model PhotoModel[]
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title </title>
+</head>
+<body>
+    <div class="gallery__list">
+        @foreach (var item in Model)
+        {
+            if (item.PhotoImage != null && !string.IsNullOrEmpty(item.PhotoImage.Url) && (File.Exists(Server.MapPath(item.PhotoImage.Url))))
+            {
+                //item.PhotoImage = (File.Exists(Server.MapPath(item.PhotoImage.Url))) ? item.PhotoImage : null;
+                <a class="swipebox" title="@item.Title" href="@item.PhotoImage.Url" data-original="@item.PhotoOriginal" data-preview="@item.PreviewImage.Url" target="_parent"></a>
+            }
+
+        }
+    </div>
+    <script src="~/Content/plugins/jquery/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var frameUrl = window.location.pathname;
+            var ParentFrame = window.top.$("iframe[src='" + frameUrl + "']");
+            var _div = $("<div class='gallery__list' />");
+            $(".gallery__list .swipebox").each(function () {
+                var obj = $(this);
+                var src = obj.attr('href');
+                var preview = obj.attr('data-preview');
+                var original = obj.attr('data-original');
+                _div.append("<div class='swip_wr'><div class='swip_wr1'><a class='swipebox' data-original='" + original + "' title='" + obj.attr('title') + "' style='background-image:url(" + preview + ")'  href='" + src + "'></a></div></div>");
+            });
+            ParentFrame.after(_div);
+            try
+            {
+                window.top.PhGall();
+            }
+            catch (ex) {
+                //console.log("В админке эта функция не определена, т.к. просмотра фотогалереи тут не требуется" + ex);
+            };
+           
+        });
+    </script>
+</body>
+</html>

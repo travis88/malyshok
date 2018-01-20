@@ -1,0 +1,42 @@
+﻿@model SitesViewModel
+
+@if (Model.UserResolution.Read)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+        @if (Model.List != null)
+        {
+            foreach (SitesModel Item in Model.List.Data)
+            {
+                string disabled = (Item.SiteOff) ? "disabled" : "";
+                <div class="list-item @disabled">
+                    <a title="" class="li-caption" href="/admin/sites/item/@Item.Id/@ViewBag.urlQuery">@Item.Title</a>
+                    <div class="li-desc">@(Item.Alias).@Settings.BaseURL</div>
+                </div>
+            }
+            Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
+        }
+    </div>
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Фильтр</div>
+        @Html.TextBox("filter", Request.QueryString["filter"], new { @class = "uc_input", @title = "Поиск", @placeholder = "Поиск по названию или домену", @MaxLength = "512" })
+        @Html.CheckBox("disabled", String.IsNullOrEmpty(Request.QueryString["disabled"]), new { @class = "uc_input", @title = "Отображать", @data_on = "Все сайты", @data_off = "Только отключенные", @data_width = "270" })
+        <div class="row">
+            <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
+            <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
+        </div>
+        <p>&nbsp;</p>
+    </div>
+
+    <div class="buttons">
+        @if (Model.UserResolution.Write)
+        {
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+        }
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}

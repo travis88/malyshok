@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
+}
+@model PortalUsersViewModel
+@using (Html.BeginForm())
+{
+    <div>
+        <div class="change-pass_form">
+            <div>
+                <div id="user-info">
+                    <div class="list-item">
+                        <a class="li-caption">@Model.Item.FullName</a>
+                        <div class="li-desc">
+                            <span>E-Mail: </span> @Model.Item.EMail
+                        </div>
+                    </div>
+                </div>
+                @if (ViewBag.SuccesAlert != null)
+                {
+                    <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+                }
+                @if (ViewBag.DankerAlert != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.DankerAlert</div>
+                }
+                @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    @Html.TextBoxFor(m => Model.Password.Password, new { @class = "uc_input", type = "password", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Новый пароль" })
+                </div>
+                <div class="col-xs-6">
+                    @Html.TextBoxFor(m => Model.Password.PasswordConfirm, new { @class = "uc_input", type = "password", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Подтверждение пароля" })
+                </div>
+            </div>
+            <div>
+                <p>Пароль должен содержать от 6 до 16 символов.</p>
+                <p>В нем должны содержаться строчные и прописные латинские буквы, цифры, а так же разрешено использовать спецсимволы.</p>
+            </div>
+            <div>
+                <button type="submit" name="action" value="password-update" class="button icon-save">Изменить</button>
+            </div>
+            @*@if (Model.UserResolution.Read)
+                {
+                }
+                else
+                {
+                    <p>У вас недостаточно прав</p>
+                }*@
+        </div>
+    </div>
+}
+

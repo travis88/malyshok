@@ -1,0 +1,36 @@
+﻿@model FiltrModel
+@{
+    Layout = null;
+}
+
+<div class="" style="margin-bottom: 20px;">
+    <div class="dop-caption @Model.Icon">@Model.Title</div>
+    <div class="filte-map">
+        @{string active = (Request.QueryString[Model.Alias] == null) ? "now" : String.Empty;}
+        <div class="filtr-root">
+            <div class="filtr-item @active">
+                <div class="filtr-item_link">
+                    <a href="@Model.Link">Все</a>
+                </div>
+            </div>
+        </div>
+        <div class="filtr-list">
+            @foreach (Catalog_list Item in Model.Items)
+            {
+                <div class="filtr-item @Item.selected">
+                    <div class="filtr-item_link">
+                        @if (!Model.ReadOnly || Model.AccountGroup.ToLower().Equals("developer"))
+                        {
+                            <a class="tree-btn pop-up_frame edit" href="@Item.url" title="Редактирование @Model.Title.ToLower()"> </a>
+                        }
+                        <a href="@Item.link">@Item.text</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @if (Model.AccountGroup.ToLower().Equals("developer"))
+    {
+        <a class="button pop-up_frame" href="@Model.Url" title="@Model.BtnName">@Model.BtnName</a>
+    }
+</div>

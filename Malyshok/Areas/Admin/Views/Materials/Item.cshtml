@@ -1,0 +1,187 @@
+﻿@model MaterialsViewModel
+@{
+    //string fileName = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Name : null;
+    //string fileSize = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Size : null;
+    string fileUrl = (Model.Item != null && Model.Item.PreviewImage != null) ? Model.Item.PreviewImage.Url : null;
+}
+
+@if (Model.Item != null && Model.Item.Id != Guid.Empty)
+{
+    if (!Model.Item.Locked || Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            <div class="row">
+                <div class="col-lg-7">@Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "128", title = "Заголовок" })</div>
+                <div class="col-lg-5">@Html.TextBoxFor(m => m.Item.Alias, new { type = "text", title = "Название страницы", placeholder = "news-name", MaxLength = "128", data_help = "описание" })</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                   @Html.TextBoxFor(m => m.Item.PreviewImage.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", data_help = "Размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3", accept = ".jpg,.jpeg,.png,.gif" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.TextBoxFor(m => m.Item.PreviewImage.Source, new { type = "text", title = "Источник фото/картинки", placeholder = "Фото с сайта www.shutterstock.com", MaxLength = "128" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300",data_dir= ViewBag.DataPath })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5">
+                    @Html.TextBoxFor(m => m.Item.UrlName, new { type = "text", title = "Название первоисточника" })
+                </div>
+                <div class="col-lg-offset-1 col-lg-6">
+                    @Html.TextBoxFor(m => m.Item.Url, new { type = "text", title = "Ссылка на первоисточник", placeholder = "http://", MaxLength = "128" })
+                </div>
+            </div>
+
+            @*
+                Если новость существует в базе, то у нее гарантированно есть alias
+                Нельзя добавить связи к несуществующей записи.
+            *@
+            @if (!string.IsNullOrEmpty(Model.Item.Alias))
+            {
+                if ((Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator")))
+                {
+
+                    <div class="group-block open topIndent-20" title="Привязка к организациям">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul id="model-linksToOrgs-ul">
+                                    @if (Model.Item.Links != null && Model.Item.Links.Orgs != null)
+                                    {
+                                        foreach (var org in Model.Item.Links.Orgs)
+                                        {
+                                            <li id="org_@org.Id" class="icon-location-5">
+                                                <a href="/Admin/orgs/item/@org.Id/" target="_blank"> @org.Title</a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+
+                            <div class="col-lg-offset-9 col-lg-3">
+                                @*Для объекта типа "Материалы" ищем список организаций (поэтому передаем тип объекта и id)*@
+                                @Html.ActionLink("Привязать", "orgsListModal", "orgs", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group-block open topIndent-20" title="Привязка к персонам">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                Новость не привязана ни к одной персоне
+                            </div>
+                            <div class="col-lg-offset-9 col-lg-3">
+                                @Html.ActionLink("Привязать", "personsListModal", "persons", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group-block open topIndent-20" title="Привязка к событиям">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul id="model-linksToEvent-ul">
+                                    @if (Model.Item.Links != null && Model.Item.Links.Events != null)
+                                    {
+                                        foreach (var evnt in Model.Item.Links.Events)
+                                        {
+                                            <li id="evnt_@evnt.Id" class="icon-calendar">
+                                                @evnt.DateBegin.ToShortDateString() <a href="/Admin/events/item/@evnt.Id/" target="_blank"> @evnt.Title</a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            <div class="col-lg-offset-9 col-lg-3">
+                                @*Для объекта типа "Материалы" ищем список n последних событий (поэтому передаем тип объекта и id)*@
+                                @Html.ActionLink("Привязать", "eventsListModal", "events", new { @objId = Model.Item.Id, @objType = ContentType.MATERIAL }, new { @id = "LogLists", @class = "button pop-up_frame icon-location-5", @data_class = "LogList", @title = "Организации для размещения" })
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info topIndent-20">
+                    <p><span class="icon-info"></span> Привязка к другим объектам доступна только после сохранения записи.</p>
+                </div>
+            }
+        </div>
+
+        <div class="dop_info-block">
+            <div class="dop-caption">Настройки</div>
+            @Html.TextBoxFor(m => m.Item.Date, new { required = "", data_type = "datetime", title = "Дата публикации", value = ViewBag.Date })
+
+            @*@Html.DropDownListFor(m => m.Item.GroupsId, (MultiSelectList)ViewBag.GroupsValues, new { @title = "Группа", @class = "selectpicker", @multiple = "multiple" })*@
+            <div class="form-group">
+                <label for="itemGroups-select">Категория новости:</label>
+                <select name="Item.GroupsId" id="itemGroups-select" class="form-control select2" multiple>
+                    @if (Model.Item != null)
+                    {
+                        foreach (var group in ViewBag.AllGroups)
+                        {
+                            <option value="@group.Id" @(Model.Item != null && Model.Item.Groups != null && Model.Item.Groups.Any(s => s.Id == group.Id) ? "selected" : null)>@group.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+            @Html.CheckBoxFor(m => m.Item.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })
+
+            <div class="group-block open topIndent-20" title="Мета теги">
+                @Html.TextAreaFor(m => m.Item.Keyw, new { type = "text", title = "Ключевые слова", data_help = "Данный тег используется при создании краткого описания страницы, используется поисковыми системами для индексации, а также при создании аннотации в выдаче по запросу. При отсутствии тега поисковые системы выдают в аннотации первую строку документа или отрывок, содержащий ключевые слова." })
+                @Html.TextAreaFor(m => m.Item.Desc, new { type = "text", title = "Краткое описание", data_help = "Данный метатег поисковые системы используют для того, чтобы определить релевантность ссылки. При формировании данного тега необходимо использовать только те слова, которые содержатся в самом документе. Использование тех слов, которых нет на странице, не рекомендуется. Рекомендованное количество слов в данном теге — не более десяти." })
+            </div>
+
+            @if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+            {
+                @Html.CheckBoxFor(m => m.Item.Locked, new { type = "checkbox", title = "Запретить редактирование", data_toggle = "toggle", data_on = "запретить редактирование", data_onstyle = "danger", data_off = "разрешить редактирование", data_offstyle = "success", data_width = "248" })
+            }
+
+            @*@Html.ActionLink("Документы", "index", "documents", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-attach", @data_class = "LogList", @title = "Документы" })*@
+            @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+
+
+            <br />
+            <div class="alert alert-info">Кол-во просмотров: <strong>@Model.Item.CountSee</strong></div>
+
+        </div>
+    }
+    else
+    {
+        <div class="content">
+            <div class="alert alert-danger">
+                <strong>У вас недостаточно прав!</strong>
+                <p>Возможно запись была заблокирована администратором портала.</p>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="content">
+        <div class="alert alert-danger">
+            <strong>Ошибка!</strong>
+            <p>Не действительный Id записи.</p>
+        </div>
+    </div>
+}
+
+<div class="buttons">
+    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    @if (Model.Item != null && Model.UserResolution.Delete)
+    {
+        if (!string.IsNullOrEmpty(Model.Item.Alias))
+        {
+        <button type="submit" name="action" data-action="delete" value="delete-btn" class="button icon-delete">Удалить</button>
+        }
+    }
+    <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+</div>

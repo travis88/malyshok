@@ -1,0 +1,42 @@
+﻿@{Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";}
+@model ServicesViewsModel
+
+
+<div>
+    @if (Model.getLogList != null)
+    {
+        <div id="log-list_title">
+            <div class="log-item_head">
+                <div class="date-col head-block">
+                    Дата
+                </div>
+                <div class="action-col head-block">
+                    Действие
+                </div>
+                <div class="user-col head-block">
+                    Пользователь
+                </div>
+            </div>
+        </div>
+    <div class="scrollbar log-list">
+        @foreach (cmsLogModel ItemLog in Model.getLogList)
+        {
+            <div class="log-item">
+                <div class="date-col">
+                    @ItemLog.Date
+                </div><div class="action-col">
+                    @ItemLog.Action
+                </div><div class="user-col">
+                    <a target="_blank" title="" href="/Users/edit/@ItemLog.UserId">@ItemLog.Surname @ItemLog.Name</a>
+                </div>
+            </div>
+        }
+    </div>
+    }
+    else
+    {
+        <div id="log-list_title">
+            <div class="alert alert-danger" role="alert">Журнал изменений для данного пользователя пуст.</div>
+        </div>
+    }
+</div>

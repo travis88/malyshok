@@ -1,0 +1,75 @@
+﻿@model UsersViewModel
+
+@using (Html.BeginForm())
+{
+    <div>
+        <div class="col-xs-12">
+            <div id="UserInfo">
+                <div class="ListItem User">
+                    <a class="LI_Caption">@Model.User.C_Surname  @Model.User.C_Name</a>
+                    <div class="LI_Desc">
+                        <span>E-Mail: </span> @Model.User.C_EMail
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (ViewBag.ActionName != "reate")
+        {
+            <div class="col-xs-12">
+                <div id="UserResolutions">
+                    <div id="PagesListTitle">
+                        <div class="HeadItem">
+                            <div class="CB_Block HeadBlock">
+                                Удаление
+                            </div><div class="CB_Block HeadBlock">
+                                Изменение
+                            </div><div class="CB_Block HeadBlock">
+                                Создание
+                            </div><div class="CB_Block HeadBlock">
+                                Просмотр
+                            </div><div class="PageName HeadBlock">
+                                Раздел CMS
+                            </div>
+                        </div>
+                    </div>
+                    <div id="PagesList" class="Scrollbar">
+                        @foreach (ResolutionsModel Resolut in Model.ResolutionsList)
+                        {
+                            <div class="TableItem">
+                                <div class="CB_Block">
+                                    <span data-user="@Resolut.UserId" data-url="@Resolut.MenuId" data-action="delete">
+                                        <input type="checkbox" checked="@Resolut.Delete" }>
+                                    </span>
+                                </div>
+                                <div class="CB_Block">
+                                    <span data-user="@Resolut.UserId" data-url="@Resolut.MenuId" data-action="change">
+                                        <input type="checkbox" checked="@Resolut.Change" }>
+                                    </span>
+                                </div>
+                                <div class="CB_Block">
+                                    <span data-user="@Resolut.UserId" data-url="@Resolut.MenuId" data-action="write">
+                                        <input type="checkbox" checked="@Resolut.Write" }>
+                                    </span>
+                                </div>
+                                <div class="CB_Block">
+                                    <span data-user="@Resolut.UserId" data-url="@Resolut.MenuId" data-action="read">
+                                        <input type="checkbox" checked="@Resolut.Read" }>
+                                    </span>
+                                </div>
+                                <div class="PageName HeadBlock">@Resolut.MenuTitle</div>
+                            </div>
+
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@Styles.Render("~/bundles/popUp_css")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/popUp_js")
+

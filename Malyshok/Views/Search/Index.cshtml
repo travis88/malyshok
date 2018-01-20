@@ -1,0 +1,22 @@
+﻿@model TypePageViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
+<div class="type-page">
+    <div class="container">
+        @Html.Partial("services/breadcrumbs")
+        <h1>@ViewBag.Title</h1>
+        @Html.Partial("part/childlist")    
+        <div>            
+            <form class="searchform_dop">                
+                <button class="searchform_btn_dop" type="submit">Найти</button>
+                <div class="searchform_input_wr_dop"><input id="search_focus_dop" class="search-input_dop" type="search" value="@ViewBag.SearchText" name="q" placeholder="Поиск по сайту" /></div>
+            </form>
+            <div id="ya-site-results" onclick="return {'tld': 'ru','language': 'ru','encoding': '','htmlcss': '1.x','updatehash': true}"></div>
+            <script type="text/javascript">(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0];s.type='text/javascript';s.async=true;s.charset='utf-8';s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){Ya.Site.Results.init();})})(window,document,'yandex_site_callbacks');</script>
+        </div>
+    </div>
+</div>

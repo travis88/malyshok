@@ -1,0 +1,62 @@
+﻿html {
+}
+body {
+    background: #e6e8ec url("bg.png");
+    font: 12px;
+}
+
+.top-info {
+    padding:12px 0;
+}
+.top-info {
+
+}
+.date-info {
+    padding: 0 30px;
+}
+.for-user {
+    text-align: right;
+}
+.for-user a {
+    margin-right: 40px;
+    color: #262626;
+    text-decoration: underline;
+}
+
+.body-block {
+    overflow: hidden;
+    margin-bottom: 40px;
+    background: #ffffff;
+    border: #c2c5cc;
+    box-shadow: 3px 3px 1px rgba(194,197,204,0.5);
+}
+
+header {
+    overflow: hidden;
+    padding-bottom:30px;
+}
+.site-gid {
+    padding: 8px 15px;
+    background: #283959;
+}
+.logo-block a {
+    padding: 0 30px;
+}
+
+.main-menu-block {
+    padding: 7px 30px;
+    background: #f7f8fa;
+    border-top: solid 1px #c2c5cc;
+    border-bottom: solid 1px #c2c5cc;
+}
+
+.content-block {
+    padding: 20px 30px 100px;
+}
+
+
+footer {
+    padding: 40px 70px 60px;
+    background: #283959;
+    color: #c2c5cc;
+}

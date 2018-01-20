@@ -1,0 +1,21 @@
+﻿@rotate-first: translateY(3px) rotate(45deg);
+@rotate-middl: translateY(0) rotate(0);    
+@rotate-lsat: translateY(-3px) rotate(-45deg);
+.navbar-toggle[aria-expanded=true] .icons-bar {
+    -webkit-transform: @rotate-middl;
+    -ms-transform: @rotate-middl;
+    transform: @rotate-middl;
+    &:nth-child(2) {
+        -webkit-transform: @rotate-first;
+        -ms-transform: @rotate-first;
+        transform: @rotate-first;
+    }
+    &:nth-child(3) {
+        opacity: 0;
+    }
+    &:nth-child(4) {
+        -webkit-transform: @rotate-lsat;
+        -ms-transform: @rotate-lsat;
+        transform: @rotate-lsat;
+    }
+}

@@ -1,0 +1,82 @@
+﻿@model PhotoViewModel
+@{
+    string fileName = (Model.Album!= null && Model.Album.PreviewImage != null) ? Model.Album.PreviewImage.Name : null;
+    string fileSize = (Model.Album != null && Model.Album.PreviewImage != null) ? Model.Album.PreviewImage.Size : null;
+    string fileUrl = (Model.Album != null && Model.Album.PreviewImage != null) ? Model.Album.PreviewImage.Url : null;
+}
+
+    @if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            @Html.TextBoxFor(m => m.Album.Title, new { required = "", type = "text", maxlength = "128", title = "Заголовок" })
+            <div class="row">
+                <div class="col-lg-12">
+                    @*@Html.TextBox("upload", null, new { type = "file", title = "Картинка для предпросмотра", data_name = fileName, data_size = fileSize, data_url = fileUrl, data_help = "Размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3", accept = ".jpg,.jpeg,.png,.gif" })
+                    @Html.TextBoxFor(m => m.Album.PreviewImage.Url, new { type = "hidden", value = fileUrl })*@
+
+                    @Html.TextBoxFor(m => m.Album.PreviewImage.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", accept = ".jpg,.jpeg,.png,.gif" })
+
+                </div>
+            </div>
+            <div class="group-block" title="Описание фотогаллереи">
+                @Html.TextAreaFor(m => m.Album.Text, new { type = "editor", title = "Текст", height = "300",data_dir= ViewBag.DataPath })
+            </div>   
+            
+            <div class="form-group">
+                <label for="Item_Desc">Фотографии фотоальбома (.jpg, .jpeg, .png, .gif):</label>
+                <input name="uploadPhoto" type="file" class="noplagin" multiple="" accept="image/*" />
+            </div>
+
+            @if (Model.Album != null && Model.Album.Photos != null)
+            {     
+                <div class="row">
+                    <div class="col-sm-7"><h3 class="nesting_title">Фотогорафии</h3></div>
+                    <div class="col-sm-5"><a class="button icon-sort pull-right" id="sorting_photo" data-action = "noPreloader-accept" title="Добавляет возможность сортировки элементов списка">Сортировать</a></div>
+                </div>               
+
+                <ul class="photoalbum" data-service="/Admin/Services/ChangePermit?group=photos" data-album="@Model.Album.Id">
+                    @foreach (PhotoModel photo in Model.Album.Photos)
+                    {
+                        <li>
+                            <img title="123" src="@photo.PreviewImage.Url" alt="@photo.Title" />
+                            <div class="delPhoto" data-id="@photo.Id"></div>                            
+                        </li>
+                    }
+                </ul>
+            }
+
+        </div>
+
+        <div class="dop_info-block">
+            <div class="dop-caption">Настройки</div>
+            @Html.TextBoxFor(m => m.Album.Date, new { required = "", data_type = "datetime", title = "Дата публикации", value = ViewBag.Date })            
+            @Html.CheckBoxFor(m => m.Album.Disabled, new { type = "checkbox", title = "Запретить просмотр", data_toggle = "toggle", data_on = "запретить просмотр", data_onstyle = "danger", data_off = "показывать на сайте", data_offstyle = "success", data_width = "248" })                       
+            @if (Model.Album != null)
+            {
+                @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Album.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })                
+            }
+        </div>
+    }
+    else
+    {
+        <div class="content">
+            <div class="alert alert-danger">
+                <strong>У вас недостаточно прав!</strong>
+                <p>Возможно запись была заблокирована администратором портала.</p>
+            </div>
+        </div>
+    }
+
+
+<div class="buttons">
+    @if ((Model.Album != null && Model.UserResolution.Change) || (Model.Album == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    @if (Model.Album != null && Model.UserResolution.Delete)
+    {
+        <button type="submit" name="action" data-action="delete" value="delete-btn" class="button icon-delete">Удалить</button>
+    }
+    <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+</div>

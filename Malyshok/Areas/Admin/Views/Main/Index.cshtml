@@ -1,0 +1,166 @@
+﻿@model MainViewModel
+
+<form>
+    <div class="content">
+        <h1>Последние действия</h1>
+        <div>
+
+            <div id="log-list_title">
+                <div class="log-item_head">
+                    <div class="date-col head-block">
+                        Дата
+                    </div>
+                    <div class="action-col head-block">
+                        Действие
+                    </div>
+                    <div class="action-col head-block">
+                        Имя записи
+                    </div>
+                    <div class="user-col head-block">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="scrollbar log-list">
+                @foreach (cmsLogModel ItemLog in Model.AccountLog)
+                {
+                    <div class="log-item">
+                        <div class="date-col"> 
+                            @ItemLog.Date
+                        </div>
+                        <div class="action-col">
+                            @ItemLog.Action
+                        </div>
+                        <div class="action-col">
+                            @ItemLog.PageName
+                        </div>
+                        <div class="user-col">
+                            @if (ItemLog.Site!=String.Empty) { @ItemLog.Site<br /> }
+                            <a target="_blank" title="" href="/admin/@ItemLog.Section/item/@ItemLog.PageId">@ItemLog.PageName</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        @*<div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Ср, 17:00 20.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>Создан базовый функционал для загруженных видеоматериалов на сервер. Данные записываются в базу, выводится список материалов, разбитый постранично в хронологическом порядке.</li>
+                    <li>Реализована загрузка фотографий на сервер. Добавлен функционал удаления фото.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Вт, 17:00 19.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>Реализована функция смены пароля пользователя с e-mail оповещением.</li>
+                    <li>Создан раздел "Фотоальбомы": выводится список фотоматериалов. Добавлена возможность создания, редактирования, удаления записей. Выводится список материалов, разбитый постранично в хронологическом порядке.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Пн, 17:00 18.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>Добавлена функция логирования на события происходящие в конструкторе — Журнал изменений. Создан шаблон жарнала для быстрого добавления во все новые разделы CMS. Реализован вывод логов по отдельным страницам в админке.</li>
+                    <li>Реализована возможность отправлять оповещения на e-mail.</li>
+                    <li>Создан шаблон фильтра по разделу CMS, заполняемый в разделе "Структура CMS". В разделе "Материалы" выведен фильтр покатегориям и типам.</li>
+                </ol>
+            </div>
+        </div>
+
+
+        <div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Чт, 17:01 15.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>Налажена работа секций и подсекций фильтров. Фильтры выводятся в модальном окне. Добавлено логирование на создание, добавление, удаление секций и подсекций. Добавлены фильтры на страницы Новости, Карта сайта, Сайты</li>
+                </ol>
+            </div>
+        </div>
+
+        <div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Чт, 17:01 14.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>Выводятся секции и подсекции фильтра. Создание, редактирование, удаление подсекций на данный момент выводятся в отдельном окне (не обернуты в модальное окно).</li>
+                </ol>
+            </div>
+        </div>
+
+        <div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Ср, 17:00 13.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>Добавлено частичное представление для фильтра. Выводятся секции фильтра. Созданы функции создания, редактирования, удаления подсекций. </li>
+                    <li>Добавлен функционал по правам пользователей и правам групп пользователей (создание, изменение). Изменение прав пользователя при изменении его группы.</li>
+                    <li>Использование прав на страницах: Карта сайта, новости, шаблоны.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Ср, 17:05 07.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>Устранены ошибки в разделе "Пользователи".</li>
+                    <li>Создан и автоматизирован раздел "Сайты" (список, просмотр, создание, редактирование, удаление).</li>
+                    <li>Автоматизирован раздел "Структура CMS" (список, просмотр, создание, редактирование, удаление).</li>
+                    <li>Создан и автоматизирован раздел "Представления" (список, просмотр, создание, редактирование, удаление).</li>
+                    <li>Добавлены скрипты для вывода модальных окон с информацией о статусе записи</li>
+                </ol>
+            </div>
+        </div>
+
+        <div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Ср, 17:05 06.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>В разделе "Пользователи" добавлены недостающие поля, в разработке обновление информации о пользователе (обновление записи в базе данных готово, в процессе - валидация формы).</li>
+                    <li>Выведен список новостей</li>
+                    <li>Добавлен функционал Добавления и редактирования новостей</li>
+                </ol>
+            </div>
+        </div>
+
+
+        <div style="border-bottom:solid 1px #2072aa;padding:5px 10px;margin:7px 0px;">
+            <div style="font-family:Verdana; font-size:11px; color:#965d0a; line-height:16px; padding-left:20px; margin:7px 0px;background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA61pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcFJpZ2h0czpNYXJrZWQ9IkZhbHNlIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6QzIyQUMwREY2M0MzRTIxMUExMjRFODUyMkFFNDJCNjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTg5QzZEQzcxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTg5QzZEQzYxNkU3MTFFMzk1QjFBMDZDMkYyNzkyNjQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTMyBXaW5kb3dzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InV1aWQ6NDZEMUI0MDkxODAyRTMxMUEyNDRBNTZFNkMwRkNGRTYiIHN0UmVmOmRvY3VtZW50SUQ9InV1aWQ6MjZCMTFCRDlEODAxRTMxMUEyNDRBNTZFNkMwRkNGRTYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6JhJLSAAAAj0lEQVR42qRTWw7AIAgT41m9k16WSTIcIj7ImvjDaK1lACIGC7VW/QFyzlMfaAEm6uZWt4VIgE8pBU+gnnY6x0W2RNxkLRKDAyKHD9btntrSvqzvetLKLo2KLVvzZ6Tdm3dEBoUIZjh3gUIMPxFfmy4XfDs/of/jNyKSPCyTIB+XSYY8bKNyMK2zNaFHgAEAJClT0jDHQEwAAAAASUVORK5CYII=') no-repeat left center;">Ср, 08:15 06.04.2016</div>
+            <div style="font-family:Verdana; font-size:12px; margin:5px 0px;">
+                <ol>
+                    <li>Был добавлен раздел  "Пользователи", в котором выводится список всех пользователей CMS, есть возможность проссмлтреть каждого в режиме редактирования.</li>
+                    <li>Добавлены скрипты в разделе "Карта сайта" для проссмотра дочерних элементов при помощи подгрузки данных по средствам AJAX. Продуманы механизмы позиционирования записей после перемещения и удаления элементов карты сайта</li>
+                </ol>
+            </div>
+        </div>*@
+    </div>
+
+    @*<div class="dop_info-block"></div>*@
+
+    @* Блок кнопок *@
+    <div class="buttons"></div>
+    @* //Блок кнопок *@
+</form>
+
+
+
+@*
+    Атрибуты полей
+
+
+    @class = "uc_input" - обязательный класс для инициализации
+    @title              - Название поля
+    @placeholder        - Надпись по умолчанию в пустом поле
+    @required           - обязательно для заполнения
+    @readonly           - поле только для чтения
+    @type               - тип поля
+    @max-length         - максимальное кол-во вводимых символов
+    @data_help          - всплывающая подсказка
+    @data_mask          - маска ввода
+
+*@

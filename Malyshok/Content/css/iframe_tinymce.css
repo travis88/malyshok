@@ -1,0 +1,14 @@
+﻿span[data-mce-p-class="photo-gallery"] {
+    width: 100%;
+    border: 1px solid #808080;
+    background-color: #cdcdcd;
+}
+iframe{
+    border: none;
+    outline: none;
+    background-color:#cdcdcd;
+    width:100%;
+    background-image: url('/Content/plugins/tinymce/skins/lightgray/img/gallery_bg.png');
+    background-repeat:no-repeat;
+    background-position:center center;
+}

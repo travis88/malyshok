@@ -1,0 +1,151 @@
+﻿/*Цветовая схема*/
+.color01 {
+    background: #fff !important;
+    color: #000 !important;
+}
+
+    .color01 .special_block a {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .color01 .special_block p {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+.color02 {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+    .color02 .special_block a {
+        background: #000 !important;
+        color: #fff !important;
+    }
+
+    .color02 .special_block p {
+        background: #000 !important;
+        color: #fff !important;
+    }
+
+    .color02 .main_menu {
+        border-top: 1px solid #fff !important;
+        border-bottom: 1px solid #fff !important;
+    }
+
+    .color02 .navbar-nav > li > a:hover {
+        border-color: #fff !important;
+    }
+
+    .color02 .form-control {
+        background-color: #000 !important;
+        color: #fff !important;
+    }
+
+    .color02 .btn-default {
+        background-color: #000 !important;
+        color: #fff !important;
+    }
+
+    .color02 .content_info td {
+        border: 1px solid #fff !important;
+    }
+
+    .color02 .content_info th {
+        border: 1px solid #fff !important;
+    }
+
+    .color02 .ProgressLine {
+        background-color: #808080 !important;
+    }
+
+    .color02 .PersentLine {
+        background-color: #fff !important;
+    }
+
+    .color02 hr {
+        border-top: 1px solid #fff !important;
+    }
+
+    .color02 .btn_up {
+        color: #fff;
+    }
+
+.color03 {
+    background: #0957b6 !important;
+    color: #000 !important;
+}
+
+    .color03 .special_block a {
+        background: #0957b6 !important;
+        color: #000 !important;
+    }
+
+    .color03 .special_block p {
+        background: #0957b6 !important;
+        color: #000 !important;
+    }
+
+    .color03 .main_menu {
+        border-top: 1px solid #000 !important;
+        border-bottom: 1px solid #000 !important;
+    }
+
+    .color03 .navbar-nav > li > a:hover {
+        border-color: #000 !important;
+    }
+
+    .color03 .form-control {
+        background-color: #0957b6 !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+    }
+
+    .color03 .btn-default {
+        background-color: #0957b6 !important;
+        color: #000 !important;
+        border-color: #000;
+    }
+
+    .color03 .content_info td {
+        border: 1px solid #000 !important;
+    }
+
+    .color03 .content_info th {
+        border: 1px solid #000 !important;
+    }
+
+    .color03 blockquote {
+        border-left: 5px solid #000;
+    }
+
+    .color03 .ProgressLine {
+        background-color: #808080 !important;
+    }
+
+    .color03 .PersentLine {
+        background-color: #000 !important;
+    }
+
+    .color03 hr {
+        border-top: 1px solid #000 !important;
+    }
+
+/*Изображения*/
+.foto02 .special_block img, .foto02 #highslide-wrapper-0 img, .foto02 .special_block input[type="image"] {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+}
+
+.foto03 .special_block img, .foto03 .special_block input[type="image"] {
+    display: none;
+}
+.slider-message-full{text-transform:uppercase;}
+.module{margin-bottom:30px;}
+.module-title{text-transform:uppercase;}
+.module-material-item{margin-bottom:30px;}

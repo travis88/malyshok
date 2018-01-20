@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";}
+@{    
+    var controller = "/" + @ViewBag.ControllerName + "/";
+    string actionName = ViewBag.ActionName;
+}
+
+@using (Html.BeginForm(actionName, "Documents", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div id="UpFrame">
+        @if (ViewBag.SuccesAlert != null)
+        {
+            <div class="alert alert-success" role="alert">@ViewBag.SuccesAlert</div>
+        }
+        else if (@ViewBag.FailAlert != null)
+        {
+            <div class="alert alert-danger" role="alert">@ViewBag.FailAlert</div>
+        }
+        @*@Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })*@
+
+        <div>
+            <div class="col-xs-4">
+                <div class="form-group">
+                    <label for="Item_Desc">Документы:</label>
+                    <input name="upload" type="file" multiple/>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div id="Buttons" class="ButtonsFrame" style="margin-top:28px;">
+                    <button type="submit" name="action" value="create-btn-files" class="BtnCreate">Добавить</button>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.List != null)
+        {
+            <table class="table table-striped ">
+                <tbody class="Sortable ui-sortable" data-service="/Admin/Services/ChangePermit?group=Documents">
+
+
+                    @foreach (DocumentsModel item in Model.List)
+                    {
+                        <tr class="ui-sortable-handle" data-id="@item.id">
+                            <td>@item.Title</td>
+                            <td>@Path.GetExtension(item.FilePath)</td>
+                            <td class="delete-document"><span class="icon-icon-trash-2" data-delete="@item.id"></span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+}

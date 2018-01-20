@@ -1,0 +1,46 @@
+﻿@model UsersViewModel
+
+@if (Model.UserResolution.Read)
+{   
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+        @if (Model.List != null)
+        {
+            foreach (UsersModel Item in Model.List.Data)
+            {
+                string disabled = (Item.Disabled) ? "disabled" : String.Empty;
+                <div class="list-item @disabled">
+                    <a title="" class="li-caption" href="/admin/Users/item/@Item.Id/@ViewBag.urlQuery">@Item.FullName</a>
+                    <div class="li-desc"><span>Группа:</span> @Item.GroupName</div>
+                    <div class="li-desc"><span>E-mail:</span> @Item.EMail</div>
+                </div>
+            }
+            Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
+        }
+        else
+        {
+            <div class="alert alert-info">Не найдено ни одной записи.</div>
+        }
+    </div>
+
+    <div class="dop_info-block">
+        <div class="dop-caption">Фильтр</div>
+        @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск", @placeholder = "Поиск по ФИО и E-Mail", @MaxLength = "512" })
+        @Html.CheckBox("disabled", Convert.ToBoolean(Request.QueryString["disabled"]), new { @title = "Отображать", @data_on = "Только запрещенные", @data_onstyle = "danger", @data_off = "Все записи", @data_width = "270" })
+        <div class="row">
+            <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
+            <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
+        </div>
+    </div>
+    
+    <div class="buttons">
+        @if (Model.UserResolution.Write)
+        {
+            <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
+        }
+    </div>
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}

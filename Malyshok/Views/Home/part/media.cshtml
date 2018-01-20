@@ -1,0 +1,62 @@
+﻿@model HomePageViewModel
+@{ 
+    var photo = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("photo")) : null;
+    var photo_it = (photo != null && photo.Count() > 0) ? photo.FirstOrDefault() : null;
+    var video = (Model.Materials != null) ? Model.Materials.Where(w => w.GroupAlias.Equals("video")) : null;
+    var video_it = (video != null) ? video.FirstOrDefault() : null;
+}
+<div class="module-main-page module-media">
+    <div class="container">
+        <div class="cil-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    @if (photo_it != null)
+                    {
+                        string _img = photo_it.Photo;
+                        <div class="module-media_item module-media">
+                            <p class="module-title">Фото<span class="ti-folder"></span><a class="link-to-archive" href="/press/photo">Архив</a></p>
+                            <a href="/press/@photo_it.Date.Year/@photo_it.Date.Month/@photo_it.Date.Day/@photo_it.Alias" class="media_item_link" style="background-image:url(@_img);">
+                                
+                                <div class="media_item_info">      
+                                    <div class="media_item_circle media_item_circle__photo">
+                                        <span class="ico"></span>                                        
+                                    </div>
+                                    <div class="media_item_title">@photo_it.Title</div>                                    
+                                </div>                                
+                            </a>
+                        </div>
+                    }                    
+                </div>
+                <div class="col-md-4">
+                    @if (video_it != null)
+                    {
+                        string _img = video_it.Photo;
+                        <div class="module-media_item module-media">
+                            <p class="module-title">Видео<span class="ti-folder"></span><a class="link-to-archive" href="/press/video">Архив</a></p>
+                            <a href="/press/@video_it.Date.Year/@video_it.Date.Month/@video_it.Date.Day/@video_it.Alias" class="media_item_link"  style="background-image:url(@_img);">                                
+                                <div class="media_item_info">
+                                    <div class="media_item_circle media_item_circle__video">
+                                        <span class="ico"></span>                                        
+                                    </div>
+                                    <div class="media_item_title">@video_it.Title</div>
+                                </div>
+                            </a>
+                        </div>
+                    } 
+                </div>
+                <div class="col-md-4">
+                    <div class="media_link">
+                        <div class="media_link_item media_link-present">
+                            <img src="~/Content/img/present-ico.png"/>
+                            <span>Презентации о медицине</span>
+                            <a href="#" class="btn btn-primary btn-round btn_play" target="_blank">Смотреть</a>
+                        </div>
+                        <a class="media_link_item media_link-yotube" href="https://www.youtube.com/channel/UCjpuskOiIp7Ns8CY2bobP0g" target="_blank">
+                            <img src="~/Content/img/youtube-ico.png" />                                                        
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

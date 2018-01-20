@@ -1,0 +1,26 @@
+﻿@model RestoreModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_login.cshtml";
+}
+
+<div class="WelcomeContentLeft">
+    <div class="LoginCaption">Напомнить пароль</div>
+    @using (Html.BeginForm("LogIn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <div class="WelcomeInfo">
+                <p>&nbsp;</p>
+            </div>
+            <div class="WelcomeBtn">
+                <input id="LoginButton" class="RegButton" type="submit" value="Перейти к авторизации" />
+                <span class="icon-right-4"></span>
+            </div>
+        </div>
+    }
+</div>
+<div class="WelcomeContentRight">
+    На указанный адрес электронной почты отправлено сообщение со специальной ссылкой для восстановления пароля. <br /><br />
+    При переходе по этой ссылке, вам будет представлена форма, где вы сможете ввести новый пароль для вашего пользователя. <br /><br />
+    Если у вас нет доступа к электронной почте пользователя или если по какой-либо причине письмо вам не приходит, обратитесь к администратору.
+</div>

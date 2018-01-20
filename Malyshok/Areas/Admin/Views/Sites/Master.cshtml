@@ -1,0 +1,47 @@
+﻿@model SitesViewModel
+
+@if (Model.UserResolution.Write)
+{
+    <div class="content">
+        <h1>Создать новый сайт <span></span></h1>
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.TextBoxFor(m => Model.Item.Title, new { @class = "uc_input", @required = "", @title = "Название сайта", @placeholder = "Название сайта", @MaxLength = "512" })
+            </div>
+            <div class="col-xs-6"></div>
+        </div>
+        <div style="overflow:hidden">
+            <div style="width: 235px; margin-right: 2px; float:left;">@Html.TextBoxFor(m => Model.Item.Alias, new { @class = "uc_input", @required = "", @title = "Доменное имя (идентификатор сайта)", @placeholder = "domain", @MaxLength = "64" })</div>
+            <div style="overflow: hidden; font: 14px Verdana; margin: 37px 0 0;">.@Settings.BaseURL</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.DropDownListFor(m => m.Item.Type, Model.TypeList, new { @title = "Тип сайта", @class = "selectpicker", id = "site_type", @value = @ViewBag.OrgType, @required = "" })
+            </div>
+            <div class="col-xs-6">
+                <div id="contid_wr">
+                    <div id="site_org">@Html.DropDownList("s_orgs", Model.OrgsList, new { @title = "Выберите организацию", @class = "selectpicker", @data_live_search = "true" })</div>
+                    <div id="site_spec">@Html.DropDownList("s_people", Model.MainSpecialistList, new { @title = "Выберите гл. специалиста", @class = "selectpicker", @data_live_search = "true" })</div>
+                    <div id="site_event">@Html.DropDownList("s_event", Model.EventsList, new { @title = "Выберите событие", @class = "selectpicker", @data_live_search = "true" })</div>
+                </div>
+                @Html.HiddenFor(m => m.Item.ContentId, new { @Value = @ViewBag.ContentId })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="alert alert-info">
+                    <strong>Дополнительные доменные имена должны быть разделены символом";"</strong>
+                </div>
+                @Html.TextAreaFor(m => Model.Item.DomainListString, new { @class = "uc_input", @title = "Список дополнительных доменных имен", @MaxLength = "512", @rows = "6", @data_help = "доменные имена должны разделяться запятой" })
+            </div>
+            <div class="col-xs-6"></div>
+        </div>
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-save">Создать сайт</button>
+    </div>
+
+
+
+    <div class="buttons">
+        @*<button type="submit" name="action" value="cancel-btn" class="button icon-cancel">Закрыть</button>*@
+    </div>
+}

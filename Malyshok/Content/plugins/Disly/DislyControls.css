@@ -1,0 +1,518 @@
+﻿/* ----------- Элементы формы ----------- */
+.form-group {
+    margin: 5px 0;
+}
+
+    .form-group > label {
+        font: 11px Verdana;
+        font-weight: normal;
+        margin: 7px 0 3px;
+        color: #999999;
+    }
+
+input.form-control,
+textarea.form-control,
+select.form-control {
+    font: 13px Verdana;
+    width: 100%;
+    padding: 6px 14px;
+    resize: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: solid 1px #dae1e6;
+    outline: none;
+    background: #fff;
+}
+
+input:focus, textarea:focus {
+    border-color: #66afe9;
+    outline: 0;
+}
+
+.form-group:last-child {
+    margin-bottom: 10px;
+}
+
+.form-control {
+    height: 30px;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+    .form-control:focus {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+
+.tooltip-inner {
+    width: 400px;
+}
+
+.checkbox-inline input {
+    margin-top: 2px !important;
+}
+/* Поля обязательные для заполнения, не имеющие значения */
+input[required]:invalid {
+    background: #fcf8e3;
+}
+
+.invalid .dropdown-toggle{background: #fcf8e3;}
+/* --- Подсказка к полям --- */
+.icon-help-circled:before {
+    content: '\e84c';
+    display: block;
+    font-size: 16px;
+    line-height: 16px;
+    color: #dae1e6;
+    cursor: pointer;
+    margin: 7px 0 0 7px;
+}
+
+.popover {
+    min-width: 300px;
+}
+
+.input-group .form-control:first-child,
+.input-group-addon:first-child,
+.input-group-btn:first-child > .btn,
+.input-group-btn:first-child > .btn-group > .btn,
+.input-group-btn:first-child > .dropdown-toggle,
+.input-group-btn:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+.input-group-btn:last-child > .btn-group:not(:last-child) > .btn {
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.input-group-addon {
+    padding: 0;
+    background: none;
+    border: none;
+}
+
+.input-group-addon {
+    vertical-align: top;
+}
+
+input.form-control.input-validation-error {
+    border-color: #edaab5;
+}
+
+input.form-control.page_size {
+    padding: 16px 0px;
+    text-align: center;
+    width: 50px;
+}
+
+/* Календарь */
+.ui-datepicker {
+    margin: 3px 0 0;
+    padding: 5px;
+    font-size: 14px;
+    border: solid 1px #d9d9d9;
+    background: #ffffff;
+    box-shadow: 3px 3px 5px rgba(0,0,0,.1);
+    -webkit-box-shadow: 0 3px 5px rgba(0,0,0,.1);
+    -moz-box-shadow: 3px 3px 5px rgba(0,0,0,.1);
+    z-index: 999 !important;
+}
+
+.ui-datepicker-header {
+    overflow: hidden;
+    color: #3456af;
+}
+
+    .ui-datepicker-header:hover {
+        text-decoration: none;
+    }
+
+.ui-datepicker-prev,
+.ui-datepicker-next {
+    display: block;
+    width: 24px;
+    padding: 5px 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+    .ui-datepicker-prev:hover,
+    .ui-datepicker-next:hover {
+        text-decoration: none;
+        color: #3456af;
+    }
+
+.ui-datepicker-prev {
+    float: left;
+}
+
+.ui-datepicker-next {
+    float: right;
+}
+
+.ui-datepicker-title {
+    overflow: hidden;
+    padding: 5px 0;
+    text-align: center;
+}
+
+.ui-datepicker-calendar {
+    border-collapse: collapse;
+}
+
+    .ui-datepicker-calendar th {
+        padding: 6px;
+        text-align: center;
+        color: #999999;
+        font-weight: normal;
+    }
+
+    .ui-datepicker-calendar td {
+        text-align: center;
+        width: 24px;
+        padding: 6px;
+        border: none;
+        color: #212121;
+    }
+
+        .ui-datepicker-calendar td a {
+            color: #212121;
+        }
+
+            .ui-datepicker-calendar td a:hover {
+                text-decoration: none;
+            }
+
+        .ui-datepicker-calendar td.ui-datepicker-today {
+            background: #e6e6e6;
+            color: #212121;
+        }
+
+        .ui-datepicker-calendar td.ui-datepicker-current-day {
+            background: #4d6bbc;
+            color: #ffffff;
+        }
+
+            .ui-datepicker-calendar td.ui-datepicker-current-day a {
+                color: #ffffff;
+            }
+
+        .ui-datepicker-calendar td.ui-datepicker-other-month,
+        .ui-datepicker-calendar td.ui-datepicker-other-month a {
+            color: #e6e6e6;
+        }
+
+
+/* Чекбоксы */
+.checkbox label .toggle, .checkbox-inline .toggle {
+    margin-left: -20px;
+    margin-right: 5px;
+}
+
+.toggle {
+    position: relative;
+    overflow: hidden;
+}
+
+    .toggle input[type=checkbox] {
+        display: none;
+    }
+
+.toggle-group {
+    position: absolute;
+    width: 200%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: left .35s;
+    -webkit-transition: left .35s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.toggle.off .toggle-group {
+    left: -100%;
+}
+
+.toggle-on {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 50%;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+}
+
+.toggle-off {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+}
+
+.toggle-handle {
+    position: relative;
+    margin: 0 auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 100%;
+    width: 0;
+    border-width: 0 1px;
+}
+
+.toggle.btn {
+    min-width: 60px;
+    min-height: 28px;
+}
+
+.toggle-on.btn {
+    padding-right: 24px;
+}
+
+.toggle-off.btn {
+    padding-left: 24px;
+}
+
+.toggle.btn-lg {
+    min-width: 79px;
+    min-height: 45px;
+}
+
+.toggle-on.btn-lg {
+    padding-right: 31px;
+}
+
+.toggle-off.btn-lg {
+    padding-left: 31px;
+}
+
+.toggle-handle.btn-lg {
+    width: 40px;
+}
+
+.toggle.btn-sm {
+    min-width: 50px;
+    min-height: 30px;
+}
+
+.toggle-on.btn-sm {
+    padding-right: 20px;
+}
+
+.toggle-off.btn-sm {
+    padding-left: 20px;
+}
+
+.toggle.btn-xs {
+    min-width: 35px;
+    min-height: 22px;
+}
+
+.toggle-on.btn-xs {
+    padding-right: 12px;
+}
+
+.toggle-off.btn-xs {
+    padding-left: 12px;
+}
+
+/* Поля со списком */
+.selsect-group {
+    position: relative;
+}
+
+.uc_select {
+    cursor: pointer;
+    overflow: hidden;
+    font: 13px 'Verdana';
+    line-height: 28px;
+    resize: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 0 0 14px;
+    border-radius: 4px;
+    border: solid 1px #dae1e6;
+    outline: none;
+    background: #fff;
+}
+
+.uc_select-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9;
+}
+
+    .uc_select-btn:before {
+        content: '\e8cd';
+        display: block;
+        float: right;
+        font: 14px 'fontello';
+        line-height: 28px;
+        margin-left: 5px;
+        padding: 0 5px;
+        border-left: solid 1px #dae1e6;
+    }
+
+.uc_select.open {
+    border-radius: 4px 4px 0 0;
+}
+
+    .uc_select.open:before {
+        content: '\e8cc';
+    }
+
+.uc_select-list {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    overflow-y: auto;
+    max-height: 250px;
+    padding: 6px 0;
+    border: solid 1px #dae1e6;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 5px 5px rgba(0,0,0,.075);
+    background: #ffffff;
+}
+
+.uc_list-item {
+    margin-bottom: 1px;
+    cursor: pointer;
+    font: 13px verdana;
+    line-height: 13px;
+    padding: 5px;
+}
+
+    .uc_list-item.sel,
+    .uc_list-item:hover {
+        background: #0081c2;
+        color: #ffffff;
+    }
+
+.uc_select-help {
+    right: 30px;
+}
+
+
+/* Выбор файла */
+.fileupload .preview {
+    background-color: #f5f8fa;
+    display: inline-block;
+    padding: 20px 9px 17px 11px;
+    border: 1px solid #dae1e6;
+    border-radius: 3px;
+    width: 100%;
+    min-height: 100px;
+}
+
+.fileupload .preview_img {
+    float: left;
+    overflow: hidden;
+    width: 150px;
+    height:110px;
+    overflow:hidden;
+    margin-right: 10px;
+    text-align: center;
+    vertical-align: middle;
+    background: #F2F3F4;
+}
+
+.fileupload .preview_img img {
+    max-width: 150px;
+    vertical-align: middle;
+    border:1px solid #ccc;
+}
+
+.preview_size{
+    margin-bottom:20px;
+}
+
+.fileupload .preview_info {
+    float: left;
+}
+
+.fileupload .preview_del {
+    cursor: pointer;
+    z-index: 9;
+    width:160px;
+}
+
+.preview_del{
+
+}
+
+.fileupload .preview_name {
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+.fileupload .file_help {
+    font-size: 11px;
+    font-style: italic;
+    color: #737a80;
+    overflow: hidden;
+}
+
+.fileupload .btn_load {
+    overflow: hidden;
+    display: block;
+    position: relative;
+    float: left;
+    padding: 7px 18px 7px 2px;
+    background: #005c99;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    color: #fff;
+    font-size: 12px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+    .fileupload .btn_load:before {
+        font-family: 'fontello';
+        padding: 5px 9px;
+        font-size: 16px;
+        color: #85afcc;
+        content: '\e83d';
+    }
+
+.fileupload .wrap_info {
+    min-width: 300px;
+    margin-bottom:20px;
+    padding-left:5px;
+}
+
+.fileupload input {
+    opacity: 0;
+    z-index: 9999;
+    height:0;
+}
+
+.readonly {
+    background-color: #eee;
+}
+/*.uc-select_serch { display:block; margin: 0; padding:0 5px; line-height: 12px; font-size: 12px; border: none; width: 100%; }
+
+
+
+.form-group select[multiple=multiple] + .uc_Result{padding:4px;height:auto;}
+.form-group select[multiple=multiple] + .uc_Result:before{content:''}
+.form-group select[multiple=multiple] + .uc_Result:after{content:'\e8d5';display:block;font:14px 'fontello';line-height:20px;text-align:center;}
+.uc_ResultItem{ font:13px verdana;line-height:13px;margin:2px;border:solid 1px #dae1e6;padding:2px 5px;border-radius:3px;border:solid 1px #aaa;background:#f0f0f0;color:#333;background-image: linear-gradient(to bottom, #fff, #d9d9d9);}
+.uc_ResultItemClose:before{content:'\e840';display:block;float:left;font-family:"fontello";font-size:14px;line-height:14px;margin-right:5px;cursor:pointer;}
+
+*/

@@ -1,0 +1,62 @@
+﻿@model SiteSectionViewModel
+@if (Model.Item != null && Model.Item.Id != Guid.Empty)
+{
+    if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+    {
+        if (Model.UserResolution.Write)
+        {
+            <div class="content">
+                <h1>@ViewBag.Title</h1>
+                <div class="row">
+                    <div class="col-lg-7">@Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "128", title = "Заголовок" })</div>
+                    <div class="col-lg-5">@Html.TextBoxFor(m => m.Item.Alias, new { required = "", type = "text", title = "Название страницы", placeholder = "controller", MaxLength = "128", data_help = "Совпадает с названием контроллера внешней части" })</div>
+                </div>
+                @Html.TextBoxFor(m => m.Item.Url, new { required = "", type = "text", maxlength = "128", title = "Сылка на вьюху" })
+            </div>
+
+            <div class="dop_info-block">
+                <div class="dop-caption">Настройки</div>
+                @Html.DropDownListFor(m => m.Item.SiteId, new SelectList(Model.SiteType, "Value", "Text", "org"), new { @title = "Тип сайта", @class = "selectpicker",  @required = "" })
+                @Html.ActionLink("Журнал изменений", "log", "services", new { @id = Model.Item.Id }, new { @id = "LogLists", @class = "button pop-up_frame icon-archive", @data_class = "LogList", @title = "Журнал изменений" })
+            </div>
+        }
+        else
+        {
+            <div class="content">
+                <div class="alert alert-danger">
+                    <strong>У вас недостаточно прав!</strong>
+                    <p>Возможно запись была заблокирована администратором портала.</p>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="content">
+            <div class="alert alert-danger">
+                <strong>У вас недостаточно прав!</strong>
+                <p>Возможно запись была заблокирована администратором портала.</p>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="content">
+        <div class="alert alert-danger">
+            <strong>Ошибка!</strong>
+            <p>Не действительный Id записи.</p>
+        </div>
+    </div>
+}
+<div class="buttons">
+    @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+    {
+        <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+    }
+    @if (Model.Item != null && Model.UserResolution.Delete)
+    {
+        <button type="submit" name="action" data-action="delete" value="delete-btn" class="button icon-delete">Удалить</button>
+    }
+    <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+</div>

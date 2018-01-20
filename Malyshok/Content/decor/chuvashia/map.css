@@ -1,0 +1,25 @@
+﻿.js-map {
+    position: relative;
+    background: #006394;
+    margin: auto;
+    text-align: center;
+}
+
+.js-map svg {
+    
+    margin: 50px;
+}
+.js-map svg path:hover {
+    fill: #c1a367;
+    cursor: pointer;
+}
+.active {
+    fill: #c1a367;
+}
+.js-map_toltip {
+    position:absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+    padding: 2px 4px;
+}

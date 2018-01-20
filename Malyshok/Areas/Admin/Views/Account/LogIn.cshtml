@@ -1,0 +1,46 @@
+﻿@model LogInModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_login.cshtml";
+}
+
+<div class="WelcomeContentLeft">
+    <div class="LoginCaption">Учетные данные</div>
+    @using (Html.BeginForm("LogIn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <div class="WelocomeLogin">
+                @Html.TextBoxFor(m => Model.Login, new { @class = "RegField", @placeholder = "Логин" })
+                <span class="wel-login icon-user-3"></span>
+            </div>
+            <div class="WelcomePass">
+                @Html.PasswordFor(m => Model.Pass, new { @class = "RegField", @placeholder = "Пароль" })
+                <span class="wel-pass icon-lock"></span>
+            </div>
+            <div class="WelcomeRemember">
+                @Html.CheckBoxFor(m => m.RememberMe)
+                <label for="RememberMe" title="Запомнить меня">Запомнить меня</label>
+                @Html.ActionLink("Забыли пароль?", "RestorePass", new { area = "Admin", controller = "Account" }, new { @class = "NewPassword" })
+            </div>
+            <div class="WelcomeBtn">
+                <input id="LoginButton" class="RegButton" type="submit" value="Войти в систему" />
+                <span class="icon-right-4"></span>
+            </div>
+            <p>&nbsp;</p>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+        </div>
+    }
+</div>
+
+<div class="WelcomeContentRight">
+    <span class="Disly">@Settings.SiteTitle <span>@Settings.SiteDesc</span></span> — это основа сайта — простой и удобный рабочий инструмент для специалистов организаций, разработанный <a href="http://web.it-serv.ru/">ГК «ИСЕРВ».</a><br />
+    <br /> Система ориентирована на непрофессионального пользователя. Обладает гибкими возможностями структуры сайта и не ограничивает работы администратора по расширению его разделов.
+    <table class="DislyInfo">
+        <tr>
+            <td><span class="airplane icon-paper-plane-3"></span><br /><br />Простота и легкость <br />в использовании</td>
+            <td><span class="airplane icon-camera-7"></span><br /><br />Удобство работы<br />с медиафайлами</td>
+            <td><span class="airplane icon-pencil-7"></span><br /><br />Оперативность<br />информационного<br />наполнения сайта</td>
+            <td><span class="airplane icon-cog-6"></span><br /><br />Возможность<br />последующего<br />наращивания сайта</td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,90 @@
+﻿@model NewsViewModel
+@{
+    if (Model.SitesInfo.Alias == "main")
+    {
+        Layout = "/views/_portal/shared/_layout.cshtml";
+    }
+}
+<div class="type-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Partial("services/breadcrumbs")
+                <h1>@ViewBag.Title</h1>
+                @if (!String.IsNullOrEmpty(ViewBag.Alias))
+                {
+                    @Html.Partial("part/Item")
+                }
+                else
+                {
+                    <ul class="nav nav-pills tabs">
+                        @{
+                            string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
+                        }
+                        <li @_allactiv><a href="/press">Все</a></li>
+                        @foreach (var item in Model.Group)
+                        {
+                            string _class = (item.Alias == ViewBag.CurrentCategory) ? "class=active" : "";
+                            <li @_class><a href="/press/@item.Alias">@item.Title</a></li>
+                        }
+                    </ul>
+
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-md-3 col-md-push-9">
+                            <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/@ViewBag.Filter.Category/">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group search_news">
+                                            <label class="label_filtr" for="search_news">Ключевые слова</label>
+                                            <input type="text" class="filtr_data form-control" name="searchtext" id="search_news" value="@ViewBag.Filter.SearchText" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6 col-md-6 data_start_wr">
+                                        <label class="label_filtr" for="data_start">Дата начала</label>
+                                        <div class='input-group date' id="date-begin">
+                                            <input type='text' class="form-control" name="date" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.Date" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6 col-md-6 date-end_wr">
+                                        <label class="label_filtr" for="data_fin">Дата конца</label>
+                                        <div class='input-group date' id="date-end">
+                                            <input type='text' class="form-control" name="dateend" data-type="date" data-mask="99.99.9999" placeholder="дд.мм.гггг" value="@ViewBag.Filter.DateEnd" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 control-filter">
+                                        <a class="btn btn-default pull-right" href="/@ViewBag.ControllerName">Очистить</a>
+                                        <button class="btn sub btn-primary" type="submit">Применить</button>
+                                    </div>
+                                </div>
+                                <br />
+                            </form>
+                        </div>
+                        <div class="col-md-8 col-md-pull-3">
+                            <div class="news_list">
+                                @if (Model.List != null)
+                                {
+                                    if (Model.List.Data != null)
+                                    {
+                                        foreach (var item in Model.List.Data)
+                                        {
+                                            <div class="col-md-12">
+                                                <div class="item_news">
+                                                    <div class="news-list_date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
+                                                    <a class="news-list_title" href="/press/@item.Year/@item.Month/@item.Day/@item.Alias">@Html.Raw(item.Title)</a>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                                }
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                            }
+            </div>
+        </div>
+    </div>
+</div>

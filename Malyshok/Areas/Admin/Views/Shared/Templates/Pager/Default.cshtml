@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+    string size = ViewBag.PagerSize;
+}
+
+<div style="overflow:hidden">
+    <div style="float: right; width: 50px; padding: 15px 0;">
+        @Html.TextBox("size", size, new { @class = "uc_input page_size", @data_focus = false, @MaxLength = "3", @Width = "55", @data_mask = "9999" })
+    </div>
+    <div style="float: right; width: 160px; padding: 30px 5px; text-align: right;">
+        Показывать по:
+    </div>
+    @if (Model != null)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @foreach (PagerModel item in Model)
+                {
+                    string active = (@item.isChecked) ? "PagerNow active" : "";
+                    <li class="@active"><a href="@item.url">@item.text</a></li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

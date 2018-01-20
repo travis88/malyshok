@@ -1,0 +1,23 @@
+﻿@model SiteMapMenu
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_popUp.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @*<button type="submit" name="action" value="save-group-sitemapmenu" class="button icon-save">Сохранить</button>*@
+
+    <div class="buttons">
+        <button type="submit" name="action" value="save-menugroup-btn" data-primary="true" class="button icon-create">Сохранить</button>
+        <button type="submit" name="action" value="delete-menugroup-btn" data-action="delete" class="button icon-delete">Удалить</button>
+    </div>
+    <div class="row topIndent-20">
+        <div class="col-sm-4">
+            @Html.HiddenFor(m => m.Id)
+            @Html.TextBoxFor(m => m.Value, new { type = "text", title = "Алиас группы", @readonly = "readonly", @class = "form-control" })
+        </div>
+        <div class="col-sm-5">
+            @Html.TextBoxFor(m => m.Text, new { type = "text", title = "Название группы", @required = "", @class = "form-control" })
+        </div>
+    </div>
+}

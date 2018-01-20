@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{194E3F69-A5F5-49A4-B2A8-B11366633D1C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>cms.dbModel</RootNamespace>
+    <AssemblyName>cms.dbModel</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="linq2db">
+      <HintPath>..\packages\linq2db.1.0.7.3\lib\net40\linq2db.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="entity\cms\BannersModel.cs" />
+    <Compile Include="entity\cms\ContentLinkModel.cs" />
+    <Compile Include="entity\cms\PhotoModel.cs" />
+    <Compile Include="entity\cms\SiteSectionModel.cs" />
+    <Compile Include="entity\cms\ObjectLinksModel.cs" />
+    <Compile Include="entity\cms\LogModel.cs" />
+    <Compile Include="entity\cms\AccountModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="entity\cms\ServiceModels.cs" />
+    <Compile Include="entity\cms\cmsLogModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="entity\cms\cmsMenuModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="entity\cms\MaterialsModel.cs" />
+    <Compile Include="entity\DocumentsModel.cs" />
+    <Compile Include="entity\Filter\PeopleFilter.cs" />
+    <Compile Include="entity\Filter\Enum.cs" />
+    <Compile Include="entity\Filter\AnketaFilter.cs" />
+    <Compile Include="entity\Filter\SiteFilter.cs" />
+    <Compile Include="entity\Filter\OrgTypeFilter.cs" />
+    <Compile Include="entity\Filter\VacancyFilter.cs" />
+    <Compile Include="entity\Filter\EventFilter.cs" />
+    <Compile Include="entity\Filter\MaterialFilter.cs" />
+    <Compile Include="entity\Filter\OrgFilter.cs" />
+    <Compile Include="entity\Filter\FilterParams.cs" />
+    <Compile Include="entity\Photo.cs" />
+    <Compile Include="entity\SettingsModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="entity\Pager.cs" />
+    <Compile Include="entity\SiteMapModel.cs" />
+    <Compile Include="entity\SitesModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="entity\cms\UsersModel.cs" />
+    <Compile Include="Repository\cmsRepository.cs" />
+    <Compile Include="Repository\FrontRepository.cs" />
+    <Compile Include="Repository\AccountRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

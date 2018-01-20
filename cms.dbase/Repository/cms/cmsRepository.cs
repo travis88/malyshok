@@ -731,18 +731,18 @@ namespace cms.dbase
             if (filtr.RelId.HasValue && filtr.RelId.Value != Guid.Empty)
             {
                 //В таблице ищем связи оранизация - контент (новость/событие)
-                var objctLinks = db.content_content_links
-                    .Where(s => s.f_content == filtr.RelId.Value)
-                    .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower())
-                    .Where(s => s.f_link_type == ContentLinkType.SITE.ToString().ToLower());
+                //var objctLinks = db.content_content_links
+                //    .Where(s => s.f_content == filtr.RelId.Value)
+                //    .Where(s => s.f_content_type == filtr.RelType.ToString().ToLower())
+                //    .Where(s => s.f_link_type == ContentLinkType.SITE.ToString().ToLower());
 
-                if (!objctLinks.Any())
-                    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
-                else
-                {
-                    var objctsId = objctLinks.Select(o => o.f_link);
-                    query = query.Where(o => objctsId.Contains(o.id));
-                }
+                //if (!objctLinks.Any())
+                //    query = query.Where(o => o.id == Guid.Empty); //Делаем заранее ложный запрос
+                //else
+                //{
+                //    var objctsId = objctLinks.Select(o => o.f_link);
+                //    query = query.Where(o => objctsId.Contains(o.id));
+                //}
             }
 
 
@@ -951,7 +951,7 @@ namespace cms.dbase
                                 domain_source = "template-site-event";
                                 break;
                         }
-                        db.dublicate_content_sitemap(domain_source, ins.Alias);                        
+                        //db.dublicate_content_sitemap(domain_source, ins.Alias);                        
                         var sitemap_val = db.content_sitemaps.Where(w => w.f_site == domain_source && w.uui_parent==null).ToArray();                        
                         #endregion
 
@@ -1240,36 +1240,36 @@ namespace cms.dbase
                 {
                     using (var tran = db.BeginTransaction())
                     {
-                        var link = db.content_content_links
-                                                .Where(w => w.f_content == data.ObjctId)
-                                                .Where(w => w.f_link == data.LinkId);
+                        //var link = db.content_content_links
+                        //                        .Where(w => w.f_content == data.ObjctId)
+                        //                        .Where(w => w.f_link == data.LinkId);
 
-                        if(link.Any())
-                        {
-                            if(!data.Checked)
-                            {
-                                //delete
-                                db.content_content_links
-                                                .Where(w => w.f_content == data.ObjctId)
-                                                .Where(w => w.f_link_type == data.LinkType.ToString().ToLower())
-                                                .Where(w => w.f_link == data.LinkId)
-                                                .Where(w => w.b_origin != true)
-                                                .Delete();
-                            }
-                        }
-                        else
-                        {
-                            if (data.Checked)
-                            {
-                                //insert
-                                db.content_content_links
-                                           .Value(v => v.f_content, data.ObjctId)
-                                           .Value(v => v.f_content_type, data.ObjctType.ToString().ToLower())
-                                           .Value(v => v.f_link, data.LinkId)
-                                           .Value(v => v.f_link_type, data.LinkType.ToString().ToLower())
-                                           .Insert();
-                            }
-                        }
+                        //if(link.Any())
+                        //{
+                        //    if(!data.Checked)
+                        //    {
+                        //        //delete
+                        //        db.content_content_links
+                        //                        .Where(w => w.f_content == data.ObjctId)
+                        //                        .Where(w => w.f_link_type == data.LinkType.ToString().ToLower())
+                        //                        .Where(w => w.f_link == data.LinkId)
+                        //                        .Where(w => w.b_origin != true)
+                        //                        .Delete();
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    if (data.Checked)
+                        //    {
+                        //        //insert
+                        //        db.content_content_links
+                        //                   .Value(v => v.f_content, data.ObjctId)
+                        //                   .Value(v => v.f_content_type, data.ObjctType.ToString().ToLower())
+                        //                   .Value(v => v.f_link, data.LinkId)
+                        //                   .Value(v => v.f_link_type, data.LinkType.ToString().ToLower())
+                        //                   .Insert();
+                        //    }
+                        //}
 
                         tran.Commit();
                         return true;

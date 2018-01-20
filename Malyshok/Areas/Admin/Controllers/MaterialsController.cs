@@ -77,8 +77,6 @@ namespace Disly.Areas.Admin.Controllers
                     Date = DateTime.Now
                 };
             }
-
-            
             
             if (model.Item.PreviewImage != null && model.Item.PreviewImage != null && !string.IsNullOrEmpty(model.Item.PreviewImage.Url))
             {
@@ -161,7 +159,6 @@ namespace Disly.Areas.Admin.Controllers
 
                 // добавление необходимых полей перед сохранением модели
                 bindData.Item.Id = Id;
-                bindData.Item.ContentLink = SiteInfo.Id;
 
                 #region Сохранение изображения
                 var width = 0;
@@ -223,8 +220,6 @@ namespace Disly.Areas.Admin.Controllers
                 else
                 {
                     userMessage.info = "Запись добавлена";
-                    bindData.Item.ContentLink = SiteInfo.ContentId;
-                    bindData.Item.ContentLinkType = SiteInfo.Type;
                     res = _cmsRepository.insertCmsMaterial(bindData.Item);
                 }
                 //Сообщение пользователю

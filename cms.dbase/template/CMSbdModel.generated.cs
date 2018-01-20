@@ -47,7 +47,6 @@ namespace cms.dbase.models
 		public ITable<cms_users_group>                      cms_users_groups                      { get { return this.GetTable<cms_users_group>(); } }
 		public ITable<content_banner_sections>              content_banner_sectionss              { get { return this.GetTable<content_banner_sections>(); } }
 		public ITable<content_banners>                      content_bannerss                      { get { return this.GetTable<content_banners>(); } }
-		public ITable<content_content_link>                 content_content_links                 { get { return this.GetTable<content_content_link>(); } }
 		public ITable<content_documents>                    content_documentss                    { get { return this.GetTable<content_documents>(); } }
 		public ITable<content_materials>                    content_materialss                    { get { return this.GetTable<content_materials>(); } }
 		public ITable<content_materials_groups>             content_materials_groupss             { get { return this.GetTable<content_materials_groups>(); } }
@@ -685,17 +684,6 @@ namespace cms.dbase.models
 		#endregion
 	}
 
-	[Table(Schema="dbo", Name="content_content_link")]
-	public partial class content_content_link
-	{
-		[PrimaryKey, NotNull] public Guid   id             { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid   f_content      { get; set; } // uniqueidentifier
-		[Column,     NotNull] public string f_content_type { get; set; } // nvarchar(16)
-		[Column,     NotNull] public Guid   f_link         { get; set; } // uniqueidentifier
-		[Column,     NotNull] public string f_link_type    { get; set; } // nvarchar(16)
-		[Column,     NotNull] public bool   b_origin       { get; set; } // bit
-	}
-
 	[Table(Schema="dbo", Name="content_documents")]
 	public partial class content_documents
 	{
@@ -719,27 +707,21 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_materials")]
 	public partial class content_materials
 	{
-		[PrimaryKey, NotNull    ] public Guid     id                    { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public DateTime d_date                { get; set; } // datetime
-		[Column,     NotNull    ] public string   c_title               { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_preview             { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_text                { get; set; } // varchar(max)
-		[Column,        Nullable] public string   c_url                 { get; set; } // varchar(1024)
-		[Column,        Nullable] public string   c_url_name            { get; set; } // varchar(512)
-		[Column,        Nullable] public string   c_desc                { get; set; } // varchar(1024)
-		[Column,        Nullable] public string   c_keyw                { get; set; } // varchar(512)
-		[Column,     NotNull    ] public int      n_year                { get; set; } // int
-		[Column,     NotNull    ] public int      n_month               { get; set; } // int
-		[Column,     NotNull    ] public int      n_day                 { get; set; } // int
-		[Column,     NotNull    ] public string   c_alias               { get; set; } // varchar(512)
-		[Column,     NotNull    ] public bool     b_disabled            { get; set; } // bit
-		[Column,     NotNull    ] public bool     b_important           { get; set; } // bit
-		[Column,     NotNull    ] public Guid     f_content_origin      { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string   c_content_type_origin { get; set; } // varchar(64)
-		[Column,     NotNull    ] public bool     b_locked              { get; set; } // bit
-		[Column,     NotNull    ] public int      n_count_see           { get; set; } // int
-		[Column,        Nullable] public string   c_preview_source      { get; set; } // varchar(128)
-		[Column,        Nullable] public int?     n_old_id              { get; set; } // int
+		[PrimaryKey, NotNull    ] public Guid     id          { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public DateTime d_date      { get; set; } // datetime
+		[Column,     NotNull    ] public string   c_title     { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_preview   { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_text      { get; set; } // varchar(max)
+		[Column,        Nullable] public string   c_url       { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_url_name  { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_desc      { get; set; } // varchar(1024)
+		[Column,        Nullable] public string   c_keyw      { get; set; } // varchar(512)
+		[Column,     NotNull    ] public int      n_year      { get; set; } // int
+		[Column,     NotNull    ] public int      n_month     { get; set; } // int
+		[Column,     NotNull    ] public int      n_day       { get; set; } // int
+		[Column,     NotNull    ] public string   c_alias     { get; set; } // varchar(512)
+		[Column,     NotNull    ] public bool     b_disabled  { get; set; } // bit
+		[Column,     NotNull    ] public bool     b_important { get; set; } // bit
 
 		#region Associations
 
@@ -1305,17 +1287,6 @@ namespace cms.dbase.models
 
 	public static partial class CMSdbStoredProcedures
 	{
-		#region dublicate_content_sitemap
-
-		public static int dublicate_content_sitemap(this DataConnection dataConnection, string @domain, string @new_domain)
-		{
-			return dataConnection.ExecuteProc("[dbo].[dublicate_content_sitemap]",
-				new DataParameter("@domain",     @domain,     DataType.VarChar),
-				new DataParameter("@new_domain", @new_domain, DataType.VarChar));
-		}
-
-		#endregion
-
 		#region sp_alterdiagram
 
 		public static int sp_alterdiagram(this DataConnection dataConnection, string @diagramname, int? @owner_id, int? @version, byte[] @definition)
@@ -1497,12 +1468,6 @@ namespace cms.dbase.models
 		}
 
 		public static content_banners Find(this ITable<content_banners> table, Guid id)
-		{
-			return table.FirstOrDefault(t =>
-				t.id == id);
-		}
-
-		public static content_content_link Find(this ITable<content_content_link> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);

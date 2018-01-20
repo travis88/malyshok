@@ -40,14 +40,9 @@
                         <img src="@ImgUrl" alt="@Item.Title" class="li-image" />
                     </a>
                     <div class="li-desc">
-                        @if (Item.Locked)
-                        {
-                            <span class="icon-lock" title="Заблокировано администратором портала"></span>
-                        }
                         <a href="/admin/materials/item/@Item.Id/@ViewBag.urlQuery" title="@Item.Title" class="li-caption">@Item.Title</a><br />
                         <span>Дата: </span>@Convert.ToDateTime(Item.Date).ToString("dd.MM.yyyy")<br />
                         <span>Текст: </span>@text<br />
-                        <span>Кол-во просмотров: </span>@Item.CountSee
                     </div>
                 </div>
             }
@@ -78,7 +73,6 @@
         @if (Model.UserResolution.Write)
         {
             <button type="submit" name="action" value="insert-btn" class="button icon-create">Создать</button>
-            @*<button type="submit" name="action" value="rssimport-btn" class="button icon-create green">Импорт с других сайтов</button>*@
         }
     </div>
 }

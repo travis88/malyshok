@@ -97,33 +97,13 @@ namespace cms.dbModel.entity
         /// </summary>
         [Required]
         public bool Important { get; set; }
-
-        /// <summary>
-        /// Кол-во просмотров
-        /// </summary>
-        public int CountSee { get; set; }
-
+        
         /// <summary>
         /// Флаг запрещённости отображения во внешней части
         /// </summary>
         [Required]
         public bool Disabled { get; set; }
-
-        /// <summary>
-        /// ссылка на организацию/событие/персону по умолчанию
-        /// </summary>
-        public Guid ContentLink { get; set; }
-
-        /// <summary>
-        /// Тип (организация/событие/персона) по умолчанию
-        /// </summary>
-        public string ContentLinkType { get; set; }
-
-        /// <summary>
-        /// Отключено для редактирования администратором портала, даже тем кто создал
-        /// </summary>
-        public bool Locked { get; set; }
-        //-------------------------------------------------------------
+        
         /// <summary>
         /// Группа
         /// </summary>

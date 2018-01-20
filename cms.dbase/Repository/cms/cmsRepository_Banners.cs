@@ -241,16 +241,16 @@ namespace cms.dbase
 
 
                         var siteId = currentSiteId();
-                        var siteBanners = new content_content_link()
-                        {
-                            id = Guid.NewGuid(),
-                            f_content = id,
-                            f_content_type = ContentType.BANNER.ToString().ToLower(),
-                            f_link = siteId,
-                            f_link_type = ContentLinkType.SITE.ToString().ToLower(),
-                            b_origin = true
-                        };
-                        db.Insert(siteBanners);
+                        //var siteBanners = new content_content_link()
+                        //{
+                        //    id = Guid.NewGuid(),
+                        //    f_content = id,
+                        //    f_content_type = ContentType.BANNER.ToString().ToLower(),
+                        //    f_link = siteId,
+                        //    f_link_type = ContentLinkType.SITE.ToString().ToLower(),
+                        //    b_origin = true
+                        //};
+                        //db.Insert(siteBanners);
 
                         // логирование
                         var log = new LogModel()
@@ -346,10 +346,10 @@ namespace cms.dbase
                             .Where(b => b.id.Equals(id))
                             .Delete();
 
-                        db.content_content_links
-                            .Where(b => b.f_content == id)
-                            .Where(b => b.f_content_type == ContentType.BANNER.ToString())
-                            .Delete();
+                        //db.content_content_links
+                        //    .Where(b => b.f_content == id)
+                        //    .Where(b => b.f_content_type == ContentType.BANNER.ToString())
+                        //    .Delete();
 
                         // логирование
                         var log = new LogModel()

@@ -1,0 +1,88 @@
+﻿@model CategoryViewModel
+
+@if (Model.UserResolution.Read)
+{
+    <div class="content">
+        <h1>@ViewBag.Title</h1>
+        <div class="row">
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Псевдоним", @required = "" })
+            </div>
+            @Html.HiddenFor(m => m.Item.Parent)
+        </div>
+
+        <div class="row">
+            <div class="col-sm-5">
+                <h4 class="nesting_title">Список вложенностей</h4>
+            </div>
+
+            @if (Model.UserResolution.Write)
+            {
+                if (!string.IsNullOrEmpty(Model.Item.Alias))
+                {
+                    <div class="col-sm-5">
+                        <div class="bubble_but">
+                            <a class="button icon-create green" href="/admin/category/item/@Guid.NewGuid()/?parent=@Model.Item.Id">Добавить</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-12">
+                        <div class="alert alert-info">
+                            <span class="icon-info"></span>Добавить вложенный элемент возможно только после сохранения записи!
+                        </div>
+                    </div>
+                }
+
+            }
+
+            @if (Model.List != null && Model.List.Count() > 1)
+            {
+                <div class="col-sm-2">
+                    <div class="bubble_but">
+                        <a class="button icon-sort" data-action="noPreloader-accept" id="sorting_element" title="Добавляет возможность сортировки элементов списка">Сортировать</a>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (Model.List != null)
+        {
+            <div class="sort_list">
+                <table id="sm_list" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="map_site_title">Название</th>
+                            <th class="map_site_attach">Вложения</th>
+                        </tr>
+                    </thead>
+                    <tbody data-service="/Admin/Services/ChangePermit?group=category">
+                        @foreach (var item in Model.List)
+                        {
+                            <tr class="ui-sortable-handle" data-id="@item.Id">
+                                @{
+                                    string _class = String.Empty;
+                                    if (item.CountChildren == 0)
+                                    {
+                                        _class = "icon-site-page";
+                                    }
+                                    else
+                                    {
+                                        _class = "icon-site-folder";
+                                    }
+                                }
+
+                                <td class="@_class"><a href="/admin/category/item/@item.Id">@item.Title</a></td>
+                                <td class="sort-element">@item.CountChildren</td>
+                            </tr>
+                         }
+                    </tbody>
+                </table>
+            </div>
+         }
+    </div>
+    <div class="dop_info-block"></div>
+}

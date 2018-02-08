@@ -407,6 +407,7 @@
     <Content Include="Content\css\theme\green_portal.less" />
     <Content Include="Areas\Admin\Views\Category\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Category\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\Partial\BreadCrumb.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />

@@ -151,5 +151,15 @@ namespace cms.dbModel
         public abstract bool sortingPhotos(Guid id, int num);
         public abstract PhotoModel getPhotoItem(Guid id);
         public abstract bool delPhotoItem(Guid id);
+
+        // категории товаров
+        public abstract CategoryModel[] getCategories(Guid? parent);
+        public abstract CategoryModel getCategory(Guid id);
+        public abstract BreadCrumbCategory getBreadCrumbCategory(Guid id);
+        public abstract BreadCrumbCategory[] getCategoryBreadCrumbs(Guid? id);
+        public abstract bool categoryExists(Guid id);
+        public abstract bool createCategory(CategoryModel item);
+        public abstract bool updateCategory(CategoryModel item);
+        public abstract bool deleteCategory(Guid id);
     }
 }

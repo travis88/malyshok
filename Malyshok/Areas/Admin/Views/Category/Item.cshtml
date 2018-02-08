@@ -2,8 +2,20 @@
 
 @if (Model.UserResolution.Read)
 {
+    <div class="buttons">
+        @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+        {
+            <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+        }
+        @if (Model.Item != null && Model.UserResolution.Delete)
+        {
+            <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
+        }
+        <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Назад</button>
+    </div>
     <div class="content">
         <h1>@ViewBag.Title</h1>
+        @Html.Partial("Partial/BreadCrumb", Model.BreadCrumbs)
         <div class="row">
             <div class="col-md-6">
                 @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
@@ -21,7 +33,7 @@
 
             @if (Model.UserResolution.Write)
             {
-                if (!string.IsNullOrEmpty(Model.Item.Alias))
+                if (Model.Item != null && !String.IsNullOrEmpty(Model.Item.Alias))
                 {
                     <div class="col-sm-5">
                         <div class="bubble_but">
@@ -78,11 +90,11 @@
                                 <td class="@_class"><a href="/admin/category/item/@item.Id">@item.Title</a></td>
                                 <td class="sort-element">@item.CountChildren</td>
                             </tr>
-                         }
+                                    }
                     </tbody>
                 </table>
             </div>
-         }
+                                    }
     </div>
     <div class="dop_info-block"></div>
-}
+                                    }

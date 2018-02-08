@@ -47,12 +47,19 @@ namespace cms.dbase.models
 		public ITable<cms_users_group>                      cms_users_groups                      { get { return this.GetTable<cms_users_group>(); } }
 		public ITable<content_banner_sections>              content_banner_sectionss              { get { return this.GetTable<content_banner_sections>(); } }
 		public ITable<content_banners>                      content_bannerss                      { get { return this.GetTable<content_banners>(); } }
+		public ITable<content_categories>                   content_categoriess                   { get { return this.GetTable<content_categories>(); } }
+		public ITable<content_certificates>                 content_certificatess                 { get { return this.GetTable<content_certificates>(); } }
 		public ITable<content_documents>                    content_documentss                    { get { return this.GetTable<content_documents>(); } }
 		public ITable<content_materials>                    content_materialss                    { get { return this.GetTable<content_materials>(); } }
 		public ITable<content_materials_groups>             content_materials_groupss             { get { return this.GetTable<content_materials_groups>(); } }
 		public ITable<content_materials_groups_link>        content_materials_groups_links        { get { return this.GetTable<content_materials_groups_link>(); } }
+		public ITable<content_order_details>                content_order_detailss                { get { return this.GetTable<content_order_details>(); } }
+		public ITable<content_order_statuses>               content_order_statusess               { get { return this.GetTable<content_order_statuses>(); } }
+		public ITable<content_orders>                       content_orderss                       { get { return this.GetTable<content_orders>(); } }
 		public ITable<content_photoalbum>                   content_photoalbums                   { get { return this.GetTable<content_photoalbum>(); } }
 		public ITable<content_photos>                       content_photoss                       { get { return this.GetTable<content_photos>(); } }
+		public ITable<content_product_categories_links>     content_product_categories_linkss     { get { return this.GetTable<content_product_categories_links>(); } }
+		public ITable<content_products>                     content_productss                     { get { return this.GetTable<content_products>(); } }
 		public ITable<content_sitemap>                      content_sitemaps                      { get { return this.GetTable<content_sitemap>(); } }
 		public ITable<content_sitemap_menus>                content_sitemap_menuss                { get { return this.GetTable<content_sitemap_menus>(); } }
 		public ITable<content_sitemap_menutypes>            content_sitemap_menutypess            { get { return this.GetTable<content_sitemap_menutypes>(); } }
@@ -305,16 +312,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_menu_resolutions
-		/// </summary>
-		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
-		public cms_menu fkmenuresolutions { get; set; }
-
-		/// <summary>
 		/// fk_user_resolutions
 		/// </summary>
 		[Association(ThisKey="c_user_id", OtherKey="id", CanBeNull=false, KeyName="fk_user_resolutions", BackReferenceName="fkuserresolutionss")]
 		public cms_users fkuserresolutions { get; set; }
+
+		/// <summary>
+		/// fk_menu_resolutions
+		/// </summary>
+		[Association(ThisKey="c_menu_id", OtherKey="id", CanBeNull=false, KeyName="fk_menu_resolutions", BackReferenceName="fkmenuresolutionss")]
+		public cms_menu fkmenuresolutions { get; set; }
 
 		#endregion
 	}
@@ -601,6 +608,12 @@ namespace cms.dbase.models
 		[Association(ThisKey="id", OtherKey="f_user", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<cms_user_site_link> fklinkusertosites { get; set; }
 
+		/// <summary>
+		/// FK_content_orders_cms_users_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_user", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_orders> contentorderscmsuserss { get; set; }
+
 		#endregion
 	}
 
@@ -670,16 +683,55 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
+		/// FK_content_banners_content_banner_sections
+		/// </summary>
+		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
+		public content_banner_sections contentbannerscontentbannersections { get; set; }
+
+		/// <summary>
 		/// FK_content_banners_cms_sites
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
 		public cms_sites contentbannerscmssites { get; set; }
 
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_categories")]
+	public partial class content_categories
+	{
+		[PrimaryKey, NotNull    ] public Guid     id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_title    { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public string   c_alias    { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public DateTime d_date     { get; set; } // datetime
+		[Column,        Nullable] public Guid?    uui_parent { get; set; } // uniqueidentifier
+
+		#region Associations
+
 		/// <summary>
-		/// FK_content_banners_content_banner_sections
+		/// FK_content_product_categories_links_content_categories_BackReference
 		/// </summary>
-		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
-		public content_banner_sections contentbannerscontentbannersections { get; set; }
+		[Association(ThisKey="id", OtherKey="f_category", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_product_categories_links> contentproductcategorieslinkscontentcategoriess { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_certificates")]
+	public partial class content_certificates
+	{
+		[PrimaryKey, NotNull    ] public Guid   id        { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string c_title   { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_url     { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public Guid   f_product { get; set; } // uniqueidentifier
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_certificates_content_products
+		/// </summary>
+		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_content_certificates_content_products", BackReferenceName="contentcertificatescontentproductss")]
+		public content_products contentcertificatescontentproducts { get; set; }
 
 		#endregion
 	}
@@ -777,6 +829,73 @@ namespace cms.dbase.models
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_order_details")]
+	public partial class content_order_details
+	{
+		[PrimaryKey, NotNull] public Guid     id      { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid     f_order { get; set; } // uniqueidentifier
+		[Column,     NotNull] public DateTime d_date  { get; set; } // datetime
+		[Column,     NotNull] public decimal  m_sum   { get; set; } // money
+		[Column,     NotNull] public int      n_count { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_order_details_content_orders
+		/// </summary>
+		[Association(ThisKey="f_order", OtherKey="id", CanBeNull=false, KeyName="FK_content_order_details_content_orders", BackReferenceName="contentorderdetailscontentorderss")]
+		public content_orders contentorderdetailscontentorders { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_order_statuses")]
+	public partial class content_order_statuses
+	{
+		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
+		[Column,     NotNull] public string c_title { get; set; } // nvarchar(512)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_orders_content_order_statuses_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_status", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_orders> contentorderscontentorderstatusess { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_orders")]
+	public partial class content_orders
+	{
+		[PrimaryKey, NotNull] public Guid id       { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid f_status { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid f_user   { get; set; } // uniqueidentifier
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_orders_content_order_statuses
+		/// </summary>
+		[Association(ThisKey="f_status", OtherKey="id", CanBeNull=false, KeyName="FK_content_orders_content_order_statuses", BackReferenceName="contentorderscontentorderstatusess")]
+		public content_order_statuses contentorderscontentorderstatuses { get; set; }
+
+		/// <summary>
+		/// FK_content_orders_cms_users
+		/// </summary>
+		[Association(ThisKey="f_user", OtherKey="id", CanBeNull=false, KeyName="FK_content_orders_cms_users", BackReferenceName="contentorderscmsuserss")]
+		public cms_users contentorderscmsusers { get; set; }
+
+		/// <summary>
+		/// FK_content_order_details_content_orders_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_order", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_order_details> contentorderdetailscontentorderss { get; set; }
+
+		#endregion
+	}
+
 	[Table(Schema="dbo", Name="content_photoalbum")]
 	public partial class content_photoalbum
 	{
@@ -819,6 +938,61 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="f_album", OtherKey="id", CanBeNull=false, KeyName="FK_content_photos_content_photoalbum", BackReferenceName="contentphotoscontentphotoalbums")]
 		public content_photoalbum contentphotoscontentphotoalbum { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_product_categories_links")]
+	public partial class content_product_categories_links
+	{
+		[Column, NotNull] public Guid f_product  { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid f_category { get; set; } // uniqueidentifier
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_product_categories_links_content_categories
+		/// </summary>
+		[Association(ThisKey="f_category", OtherKey="id", CanBeNull=false, KeyName="FK_content_product_categories_links_content_categories", BackReferenceName="contentproductcategorieslinkscontentcategoriess")]
+		public content_categories contentproductcategorieslinkscontentcategories { get; set; }
+
+		/// <summary>
+		/// FK_content_product_categories_links_content_products
+		/// </summary>
+		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_content_product_categories_links_content_products", BackReferenceName="contentproductcategorieslinkscontentproductss")]
+		public content_products contentproductcategorieslinkscontentproducts { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_products")]
+	public partial class content_products
+	{
+		[PrimaryKey, NotNull    ] public Guid     id            { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_title       { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_code        { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_barcode     { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_description { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string   c_keyword     { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_photo       { get; set; } // nvarchar(512)
+		[Column,        Nullable] public int?     n_count       { get; set; } // int
+		[Column,        Nullable] public decimal? m_price       { get; set; } // money
+		[Column,     NotNull    ] public DateTime d_date        { get; set; } // datetime
+		[Column,        Nullable] public string   c_standart    { get; set; } // nchar(10)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_certificates_content_products_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_product", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_certificates> contentcertificatescontentproductss { get; set; }
+
+		/// <summary>
+		/// FK_content_product_categories_links_content_products_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_product", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_product_categories_links> contentproductcategorieslinkscontentproductss { get; set; }
 
 		#endregion
 	}
@@ -1473,6 +1647,18 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_categories Find(this ITable<content_categories> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_certificates Find(this ITable<content_certificates> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static content_documents Find(this ITable<content_documents> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -1497,6 +1683,24 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_order_details Find(this ITable<content_order_details> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_order_statuses Find(this ITable<content_order_statuses> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_orders Find(this ITable<content_orders> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static content_photoalbum Find(this ITable<content_photoalbum> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -1504,6 +1708,12 @@ namespace cms.dbase.models
 		}
 
 		public static content_photos Find(this ITable<content_photos> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_products Find(this ITable<content_products> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);

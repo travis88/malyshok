@@ -1,0 +1,16 @@
+﻿@model BreadCrumbCategory[]
+@{ 
+    Layout = null;
+}
+<ol class="breadcrumb">
+    <li><a href="/admin/category/">Главная</a></li>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <li>
+                @Html.ActionLink(item.Title, "item", new { area = "admin", id = item.Id })
+            </li>
+        }
+    }
+</ol>

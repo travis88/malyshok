@@ -17,5 +17,10 @@ namespace Disly.Areas.Admin.Models
         /// Список категорий
         /// </summary>
         public IEnumerable<CategoryModel> List { get; set; }
+
+        /// <summary>
+        /// Хлебные крошки
+        /// </summary>
+        public IEnumerable<BreadCrumbCategory> BreadCrumbs { get; set; }
     }
 }

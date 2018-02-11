@@ -14,6 +14,25 @@ namespace cms.dbase
     public partial class cmsRepository : abstract_cmsRepository
     {
         /// <summary>
+        /// Возвращает список всех категорий
+        /// </summary>
+        /// <returns></returns>
+        public override CategoryModel[] getAllCategories()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_categoriess
+                    .OrderBy(o => o.c_title)
+                    .ThenBy(o => o.uui_parent)
+                    .Select(s => new CategoryModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title
+                    }).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Возвращает список категорий
         /// </summary>
         /// <returns></returns>

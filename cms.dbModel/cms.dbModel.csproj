@@ -58,6 +58,7 @@
     <Compile Include="entity\cms\CategoryModel.cs" />
     <Compile Include="entity\cms\ContentLinkModel.cs" />
     <Compile Include="entity\cms\PhotoModel.cs" />
+    <Compile Include="entity\cms\ProductModel.cs" />
     <Compile Include="entity\cms\SiteSectionModel.cs" />
     <Compile Include="entity\cms\ObjectLinksModel.cs" />
     <Compile Include="entity\cms\LogModel.cs" />

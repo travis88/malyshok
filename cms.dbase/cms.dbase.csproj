@@ -64,6 +64,7 @@
     <Compile Include="Repository\cms\cmsRepository_Categories.cs" />
     <Compile Include="Repository\cms\cmsRepository_Documents.cs" />
     <Compile Include="Repository\cms\cmsRepository_PhotoAlbums.cs" />
+    <Compile Include="Repository\cms\cmsRepository_Products.cs" />
     <Compile Include="Repository\cms\cmsRepository_SiteSection.cs" />
     <Compile Include="Repository\cms\cmsRepository_Users.cs" />
     <Compile Include="Repository\cms\cmsRepository_Materials.cs" />

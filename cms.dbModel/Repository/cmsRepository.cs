@@ -153,6 +153,7 @@ namespace cms.dbModel
         public abstract bool delPhotoItem(Guid id);
 
         // категории товаров
+        public abstract CategoryModel[] getAllCategories();
         public abstract CategoryModel[] getCategories(Guid? parent);
         public abstract CategoryModel getCategory(Guid id);
         public abstract BreadCrumbCategory getBreadCrumbCategory(Guid id);
@@ -161,5 +162,12 @@ namespace cms.dbModel
         public abstract bool createCategory(CategoryModel item);
         public abstract bool updateCategory(CategoryModel item);
         public abstract bool deleteCategory(Guid id);
+
+        // продукция
+        public abstract ProductList getProducts(FilterParams filter);
+        public abstract ProductModel getProduct(Guid id);
+        public abstract bool updateProduct(ProductModel item);
+        public abstract bool insertProduct(ProductModel item);
+        public abstract bool deleteProduct(Guid id);
     }
 }

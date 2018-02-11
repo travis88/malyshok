@@ -910,9 +910,15 @@ a.button.icon-cancel{
 .icon-th-list-3:before { content:'\ed84'; }         /* Голосования */
 .icon-calc:before { content:'\e99d'; }              /* Опросы */
 .icon-graduation-cap:before {content:'\e98c'}              /* Главный специалист */
-
-.icon-menu:before {
-    content:'\ed81';
+.icon-crown:before {content: '\e81f';}              /*Продукция*/
+.icon-basket:before {
+    content: '\e8a8';
+}
+.icon-suitcase:before {
+    content: '\e92d';
+}
+.icon-upload:before {
+    content: '\e867';
 }
 .icon-archive:before {
     content: '\ea53';

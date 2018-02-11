@@ -408,6 +408,8 @@
     <Content Include="Areas\Admin\Views\Category\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Category\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Partial\BreadCrumb.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Item.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -565,6 +567,7 @@
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSectionController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\SiteSettingsController.cs" />
@@ -586,6 +589,7 @@
     <Compile Include="Areas\Admin\Models\DocumentsViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\SitesModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PhotoViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ProductViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SiteSectionViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UsersViewModel.cs" />
     <Compile Include="Areas\Admin\Models\FiltrModel.cs.cs" />

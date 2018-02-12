@@ -20,7 +20,6 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-
                 var query = (from p in db.content_productss
                              join l in db.content_product_categories_linkss on p.id equals l.f_product
                              join c in db.content_categoriess on l.f_category equals c.id

@@ -25,5 +25,10 @@ namespace Disly.Areas.Admin.Models
         /// Список категорий
         /// </summary>
         public IEnumerable<CategoryModel> Categories { get; set; }
+
+        /// <summary>
+        /// Список доступных категорий
+        /// </summary>
+        public Catalog_list[] CategoryTypes { get; set; }
     }
 }

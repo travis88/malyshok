@@ -39,7 +39,9 @@
                     <div class="li-desc">
                         <a href="/admin/products/item/@item.Id/@ViewBag.urlQuery" title="@item.Title" class="li-caption">@item.Title</a><br />
                         <span>Дата: </span>@Convert.ToDateTime(item.Date).ToString("dd.MM.yyyy")<br />
-                        <span>Текст: </span>@text<br />
+                        <span>Код: </span>@item.Code<br />
+                        <span>Штрих-код: </span>@item.Barcode<br />
+                        <span>Категории: </span>@String.Join(", ", item.Categories.Select(s => s.Title))<br />
                     </div>
                 </div>
             }
@@ -62,6 +64,7 @@
             <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
             <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
         </div>
+        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Категории", @Alias = "category", @Icon = "icon-th-list-3", @Url = "/admin/services/category/", @BtnName = "Новая категория", @Items = Model.CategoryTypes, @readOnly = true }); }
     </div>
 
     <div class="buttons">

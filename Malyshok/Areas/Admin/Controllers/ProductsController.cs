@@ -46,6 +46,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index()
         {
             model.List = _cmsRepository.getProducts(filter);
+            model.CategoryTypes = _cmsRepository.getCatalogCategories();
             return View(model);
         }
 

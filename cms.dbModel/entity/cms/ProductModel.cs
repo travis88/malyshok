@@ -69,7 +69,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Категории
         /// </summary>
-        public Guid[] Categories { get; set; }
+        public CategoryModel[] Categories { get; set; }
     }
 
     /// <summary>

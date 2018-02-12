@@ -154,6 +154,7 @@ namespace cms.dbModel
 
         // категории товаров
         public abstract CategoryModel[] getAllCategories();
+        public abstract Catalog_list[] getCatalogCategories();
         public abstract CategoryModel[] getCategories(Guid? parent);
         public abstract CategoryModel getCategory(Guid id);
         public abstract BreadCrumbCategory getBreadCrumbCategory(Guid id);

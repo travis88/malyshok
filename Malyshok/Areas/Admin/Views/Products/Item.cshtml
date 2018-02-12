@@ -40,7 +40,7 @@
                     {
                         foreach (var category in Model.Categories)
                         {
-                            <option value="@category.Id" @(Model.Item != null && Model.Item.Categories != null && Model.Item.Categories.Any(s => s.Equals(category.Id)) ? "selected" : null)>@category.Title</option>
+                            <option value="@category.Id" @(Model.Item != null && Model.Item.Categories != null && Model.Item.Categories.Any(s => s.Id.Equals(category.Id)) ? "selected" : null)>@category.Title</option>
                         }
                     }
                 </select>

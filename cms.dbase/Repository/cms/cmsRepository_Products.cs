@@ -20,21 +20,36 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                // кол-во эл-тов
-                var itemCount = db.content_productss.Count();
 
-                var list = db.content_productss
-                    .OrderByDescending(o => o.d_date)
+                var query = (from p in db.content_productss
+                             join l in db.content_product_categories_linkss on p.id equals l.f_product
+                             join c in db.content_categoriess on l.f_category equals c.id
+                             orderby p.d_date descending
+                             where String.IsNullOrEmpty(filter.Category)
+                                    || l.f_category.ToString().Equals(filter.Category)
+                             select new { p, c });
+                
+                // кол-во эл-тов
+                var itemCount = query.Count();
+
+                var list = query.ToArray()
+                    .GroupBy(g => new { g.p.id })
                     .Skip(filter.Size * (filter.Page - 1))
                     .Take(filter.Size)
                     .Select(s => new ProductModel
                     {
-                        Id = s.id,
-                        Title = s.c_title,
-                        Description = s.c_description,
-                        Date = s.d_date,
-                        Photo = new Photo { Url = s.c_photo }
-                    });
+                        Id = s.Key.id,
+                        Title = s.First().p.c_title,
+                        Code = s.First().p.c_code,
+                        Barcode = s.First().p.c_barcode,
+                        Date = s.First().p.d_date,
+                        Photo = new Photo { Url = s.First().p.c_photo },
+                        Categories = s.Select(c => new CategoryModel
+                        {
+                            Title = c.c.c_title
+                        }).ToArray()
+                    }).ToArray();
+
 
                 if (list.Any())
                 {
@@ -65,24 +80,32 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                return db.content_productss
-                    .Where(w => w.id.Equals(id))
+                var query = (from p in db.content_productss
+                             join l in db.content_product_categories_linkss on p.id equals l.f_product
+                             join c in db.content_categoriess on l.f_category equals c.id
+                             where p.id.Equals(id)
+                             select new { p, c });
+
+                return query.ToArray()
+                    .GroupBy(o => new { o.p.id })
                     .Select(s => new ProductModel
                     {
-                        Id = s.id,
-                        Title = s.c_title,
-                        Code = s.c_code,
-                        Barcode = s.c_barcode,
-                        Description = s.c_description,
-                        Keyword = s.c_keyword,
-                        Photo = new Photo { Url = s.c_photo },
-                        Count = (int)s.n_count,
-                        Price = (decimal)s.m_price,
-                        Date = s.d_date,
-                        Standart = s.c_standart,
-                        Categories = db.content_product_categories_linkss
-                                        .Where(w => w.f_product.Equals(id))
-                                        .Select(c => c.f_category).ToArray()
+                        Id = s.Key.id,
+                        Title = s.First().p.c_title,
+                        Code = s.First().p.c_code,
+                        Barcode = s.First().p.c_barcode,
+                        Description = s.First().p.c_description,
+                        Keyword = s.First().p.c_keyword,
+                        Photo = new Photo { Url = s.First().p.c_photo },
+                        Count = (int)s.First().p.n_count,
+                        Price = (decimal)s.First().p.m_price,
+                        Date = s.First().p.d_date,
+                        Standart = s.First().p.c_standart,
+                        Categories = s.Select(c => new CategoryModel
+                        {
+                            Id = c.c.id,
+                            Title = c.c.c_title
+                        }).ToArray()
                     }).SingleOrDefault();
             }
         }
@@ -144,7 +167,7 @@ namespace cms.dbase
                         .Set(s => s.m_price, item.Price)
                         .Update() > 0;
 
-                    dbUpdateProductCategories(db, item.Id, item.Categories.ToArray());
+                    dbUpdateProductCategories(db, item.Id, item.Categories.Select(s => s.Id).ToArray());
 
                     tr.Commit();
 
@@ -179,7 +202,7 @@ namespace cms.dbase
                         .Value(v => v.c_standart, item.Standart)
                         .Insert() > 0;
 
-                    dbUpdateProductCategories(db, item.Id, item.Categories);
+                    dbUpdateProductCategories(db, item.Id, item.Categories.Select(s => s.Id).ToArray());
 
                     tr.Commit();
 

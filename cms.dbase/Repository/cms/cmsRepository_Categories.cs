@@ -33,6 +33,25 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Возвращает каталог категорий для фильтра
+        /// </summary>
+        /// <returns></returns>
+        public override Catalog_list[] getCatalogCategories()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_categoriess
+                    .OrderBy(o => o.c_title)
+                    .ThenBy(o => o.uui_parent)
+                    .Select(s => new Catalog_list
+                    {
+                        text = s.c_title,
+                        value = s.id.ToString()
+                    }).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Возвращает список категорий
         /// </summary>
         /// <returns></returns>

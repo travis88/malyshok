@@ -10,7 +10,7 @@ namespace cms.dbModel
         public abstract Guid currentSiteId();
 
         public abstract SitesModel getSite(Guid Id);
-        public abstract SitesModel getSite(string domain);
+        public abstract SitesModel getSite();
 
         // !!!! Далее для всех методов не нужно передавать  Guid user, string ip пользователя, изменившего запись
         //public abstract bool updateSiteInfo(SitesModel item, Guid user, string ip);

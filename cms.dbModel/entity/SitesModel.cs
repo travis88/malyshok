@@ -160,6 +160,16 @@ namespace cms.dbModel.entity
         /// Изображение под слайдером
         /// </summary>
         public Photo BackGroundImg { get; set; }
+
+        /// <summary>
+        /// Координата по x
+        /// </summary>
+        public double? CoordX { get; set; }
+
+        /// <summary>
+        /// Координата по y
+        /// </summary>
+        public double? CoordY { get; set; }
     }
 
     /// <summary>

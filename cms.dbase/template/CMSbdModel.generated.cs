@@ -357,28 +357,30 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="cms_sites")]
 	public partial class cms_sites
 	{
-		[Column,     NotNull    ] public Guid   id               { get; set; } // uniqueidentifier
-		[PrimaryKey, NotNull    ] public string c_alias          { get; set; } // varchar(64)
-		[Column,     NotNull    ] public string c_name           { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_name_long      { get; set; } // nvarchar(1024)
-		[Column,        Nullable] public string c_adress         { get; set; } // varchar(512)
-		[Column,        Nullable] public string c_phone          { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_fax            { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_email          { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_url            { get; set; } // varchar(128)
-		[Column,        Nullable] public string c_worktime       { get; set; } // varchar(512)
-		[Column,        Nullable] public string c_logo           { get; set; } // varchar(512)
-		[Column,        Nullable] public string c_background_img { get; set; } // varchar(512)
-		[Column,        Nullable] public Guid?  f_content        { get; set; } // uniqueidentifier
-		[Column,        Nullable] public string c_content_type   { get; set; } // varchar(64)
-		[Column,        Nullable] public string c_scripts        { get; set; } // nvarchar(max)
-		[Column,     NotNull    ] public bool   b_site_off       { get; set; } // bit
-		[Column,        Nullable] public string c_facebook       { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_vk             { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_instagramm     { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_odnoklassniki  { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_twitter        { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_theme          { get; set; } // nvarchar(256)
+		[Column,     NotNull    ] public Guid     id               { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public string   c_alias          { get; set; } // varchar(64)
+		[Column,     NotNull    ] public string   c_name           { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_name_long      { get; set; } // nvarchar(1024)
+		[Column,        Nullable] public string   c_adress         { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_phone          { get; set; } // varchar(64)
+		[Column,        Nullable] public string   c_fax            { get; set; } // varchar(64)
+		[Column,        Nullable] public string   c_email          { get; set; } // varchar(64)
+		[Column,        Nullable] public string   c_url            { get; set; } // varchar(128)
+		[Column,        Nullable] public string   c_worktime       { get; set; } // varchar(512)
+		[Column,        Nullable] public decimal? d_coord_x        { get; set; } // decimal(18, 6)
+		[Column,        Nullable] public decimal? d_coord_y        { get; set; } // decimal(18, 6)
+		[Column,        Nullable] public string   c_logo           { get; set; } // varchar(512)
+		[Column,        Nullable] public string   c_background_img { get; set; } // varchar(512)
+		[Column,        Nullable] public Guid?    f_content        { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string   c_content_type   { get; set; } // varchar(64)
+		[Column,        Nullable] public string   c_scripts        { get; set; } // nvarchar(max)
+		[Column,     NotNull    ] public bool     b_site_off       { get; set; } // bit
+		[Column,        Nullable] public string   c_facebook       { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_vk             { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_instagramm     { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_odnoklassniki  { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_twitter        { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_theme          { get; set; } // nvarchar(256)
 
 		#region Associations
 
@@ -815,16 +817,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_materials_groups
-		/// </summary>
-		[Association(ThisKey="f_group", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups", BackReferenceName="fkcontentmaterialsgroupss")]
-		public content_materials_groups fkcontentmaterialsgroups { get; set; }
-
-		/// <summary>
 		/// fk_content_materials_groups_link_material
 		/// </summary>
 		[Association(ThisKey="f_material", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups_link_material", BackReferenceName="fkcontentmaterialsgroupslinkmaterials")]
 		public content_materials fkcontentmaterialsgroupslinkmaterial { get; set; }
+
+		/// <summary>
+		/// fk_content_materials_groups
+		/// </summary>
+		[Association(ThisKey="f_group", OtherKey="id", CanBeNull=false, KeyName="fk_content_materials_groups", BackReferenceName="fkcontentmaterialsgroupss")]
+		public content_materials_groups fkcontentmaterialsgroups { get; set; }
 
 		#endregion
 	}
@@ -1373,16 +1375,16 @@ namespace cms.dbase.models
 		public front_page_views sitefrontsectionpageviews { get; set; }
 
 		/// <summary>
-		/// FK_front_section_site
-		/// </summary>
-		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
-		public front_section frontsectionsite { get; set; }
-
-		/// <summary>
 		/// FK_site_front_section
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_site_front_section", BackReferenceName="sitefrontsections")]
 		public cms_sites sitefrontsection { get; set; }
+
+		/// <summary>
+		/// FK_front_section_site
+		/// </summary>
+		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="FK_front_section_site", BackReferenceName="frontsectionsites")]
+		public front_section frontsectionsite { get; set; }
 
 		#endregion
 	}

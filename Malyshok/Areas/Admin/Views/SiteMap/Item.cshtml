@@ -2,18 +2,6 @@
 @{
     string parent = Request.Params["parent"] != null ? Request.Params["parent"] : Model.Item != null ? Model.Item.ParentId.ToString() : null;
 
-    var blocked = true;
-    if (Model.Item != null)
-    {
-        if (!Model.Item.Blocked || Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
-        {
-            blocked = false;
-        }
-    }
-    else
-    {
-        blocked = false;
-    }
     string fileUrl = (Model.Item != null && Model.Item.Photo != null) ? Model.Item.Photo.Url : string.Empty;
 }
 
@@ -24,30 +12,26 @@
         <div class="content">
             <h1>@ViewBag.Title</h1>
             @Html.Partial("Partial/BreadCrumbSiteMap", Model.BreadCrumbs)
-            @if (!blocked)
-            {
-                @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "" })
-            }
-            else
-            {
-                @Html.TextBoxFor(m => m.Item.Title, new { @title = "Название", @required = "", @readonly = "readonly" })
-            }
-            @if (!blocked)
-            {
-                @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Алиас" })
-            }
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.Item.Title, new { @title = "Заголовок", @required = "" })
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Название страницы" })
+                </div>
+            </div>
 
             @Html.TextBoxFor(m => m.Item.Url, new { @title = "Ссылка" })
             @Html.HiddenFor(m => m.Item.ParentId)
             @Html.Hidden("Item_ParentId", parent)
 
             @*@Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-            @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })*@
+                @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })*@
 
             @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", accept = ".jpg,.jpeg,.png,.gif" })
 
             <div class="group-block" title="Текст">
-                @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300" ,data_dir= ViewBag.DataPath})
+                @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300", data_dir = ViewBag.DataPath })
             </div>
             <div class="row">
                 <div class="col-sm-5">
@@ -128,10 +112,7 @@
             }
         </div>
         <div class="dop_info-block">
-            @if (!blocked)
-            {
-                @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "Value", "Text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
-            }
+            @Html.DropDownListFor(m => m.Item.FrontSection, new SelectList(Model.FrontSectionList, "Value", "Text", "page"), new { @title = "Шаблон", @class = "selectpicker", @data_help = "Выбор шаблона страницы", @required = "" })
 
             @if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
             {
@@ -146,12 +127,9 @@
                 @Html.TextAreaFor(m => m.Item.Keyw, new { type = "text", title = "Ключевые слова", data_help = "Данный тег используется при создании краткого описания страницы, используется поисковыми системами для индексации, а также при создании аннотации в выдаче по запросу. При отсутствии тега поисковые системы выдают в аннотации первую строку документа или отрывок, содержащий ключевые слова." })
                 @Html.TextAreaFor(m => m.Item.Desc, new { type = "text", title = "Краткое описание", data_help = "Данный метатег поисковые системы используют для того, чтобы определить релевантность ссылки. При формировании данного тега необходимо использовать только те слова, которые содержатся в самом документе. Использование тех слов, которых нет на странице, не рекомендуется. Рекомендованное количество слов в данном теге — не более десяти." })
             </div>
-            @if (!blocked)
-            {
-                @Html.CheckBoxFor(m => m.Item.Disabled, new { @class = "checkbox", @title = "Запретить просмотр", @data_toggle = "toggle", @data_help = "Запретить просмотр", @data_off = "Доступ разрешён", @data_on = "Доступ запрещён", @data_onstyle = "danger", @data_offstyle = "success", @data_width = "248" })
-                @Html.CheckBoxFor(m => m.Item.DisabledMenu, new { @class = "checkbox", @title = "Запретить в меню", @data_toggle = "toggle", @data_help = "Запретить в меню", @data_off = "Доступ разрешён", @data_on = "Доступ запрещён", @data_onstyle = "danger", @data_offstyle = "success", @data_width = "248" })
+            @Html.CheckBoxFor(m => m.Item.Disabled, new { @class = "checkbox", @title = "Запретить просмотр", @data_toggle = "toggle", @data_help = "Запретить просмотр", @data_off = "Доступ разрешён", @data_on = "Доступ запрещён", @data_onstyle = "danger", @data_offstyle = "success", @data_width = "248" })
+            @Html.CheckBoxFor(m => m.Item.DisabledMenu, new { @class = "checkbox", @title = "Запретить в меню", @data_toggle = "toggle", @data_help = "Запретить в меню", @data_off = "Доступ разрешён", @data_on = "Доступ запрещён", @data_onstyle = "danger", @data_offstyle = "success", @data_width = "248" })
 
-            }
 
             @*Видит только администратор*@
             @if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
@@ -198,10 +176,7 @@ else
     }
     @if (Model.Item != null && Model.UserResolution.Delete)
     {
-        if (!blocked)
-        {
-            <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
-        }
+        <button type="submit" name="action" value="delete-btn" data-action="delete" class="button icon-delete">Удалить</button>
     }
-    <button type="submit" name="action" value="cancel-btn"  data-action="cancel" class="button icon-cancel">Назад</button>
+    <button type="submit" name="action" value="cancel-btn" data-action="cancel" class="button icon-cancel">Назад</button>
 </div>

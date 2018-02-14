@@ -14,29 +14,47 @@
     <h1>@ViewBag.Title</h1>
     @Html.TextBoxFor(m => m.Item.LongTitle, new { @title = "Название" })
     @Html.TextBoxFor(m => m.Item.Title, new { @title = "Краткое название", @required = "" })
-   
-    <div class="group-block open topIndent-20" title="Пользовательские скрипты">
-        @Html.TextAreaFor(m => m.Item.Scripts, new { @type = "text", @height = "300" ,@rows="15"})
+
+    <div class="group-block" title="Контакты">
+        @Html.TextBoxFor(m => Model.Item.Adress, new { @class = "uc_input", @title = "Адрес организации", @placeholder = "Адрес организации", @MaxLength = "512" })
+
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.TextBoxFor(m => Model.Item.Phone, new { @class = "uc_input", @title = "Телефон организации", @placeholder = "Телефон организации", @MaxLength = "64" })
+            </div>
+            <div class="col-xs-6">
+                @Html.TextBoxFor(m => Model.Item.Fax, new { @class = "uc_input", @title = "Факс", @placeholder = "Факс", @MaxLength = "64" })
+            </div>
+        </div>
+
+        @Html.TextBoxFor(m => Model.Item.Email, new { @class = "uc_input", @title = "Адрес Email", @placeholder = "Адрес Email", @MaxLength = "64" })
+        @Html.TextBoxFor(m => Model.Item.Site, new { @class = "uc_input", @title = "Адрес сайта", @placeholder = "Адрес сайта", @MaxLength = "128" })
+        @Html.TextBoxFor(m => Model.Item.Worktime, new { @class = "uc_input", @title = "Режим работы", @placeholder = "Режим работы", @MaxLength = "512" })
+    </div>
+
+    <div class="group-block" title="Координаты">
+        <div class="col-xs-6">
+            @Html.TextBoxFor(m => m.Item.CoordX, new { @class = "uc_input Item_CoordX", @title = "Х координата" })
+        </div>
+        <div class="col-xs-6">
+            @Html.TextBoxFor(m => m.Item.CoordY, new { @class = "uc_input Item_CoordY", @title = "Y-координата" })
+        </div>
+        <div id="map">
+            <script type="text/javascript">
+                Coords('@ViewBag.Ycoord', '@ViewBag.Xcoord', '@ViewBag.Titlecoord', '', '14');
+            </script>
+        </div>
+    </div>
+
+    <div class="group-block topIndent-20" title="Пользовательские скрипты">
+        @Html.TextAreaFor(m => m.Item.Scripts, new { @type = "text", @height = "300", @rows = "15" })
     </div>
     @Html.HiddenFor(m => m.Item.Id)
 </div>
 
 <div class="dop_info-block">
     @Html.HiddenFor(m => m.Item.Alias)
-    @Html.DropDownListFor(m => m.Item.Theme, new SelectList(Model.Themes, "Value", "Text", "blue"), new { @title = "Выбор тем", @class = "selectpicker" })
-    @Html.TextBoxFor(m => m.Item.Site, new { @title = "Ссылка" })
-
-    @*@Html.TextBox("upload", null, new { type = "file", title = "Логотип:", data_name = logoName, data_size = logoSize, data_url = logoUrl, accept = ".jpg,.jpeg,.png,.gif" })
-    @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "hidden", value = logoUrl })*@
-
-    @Html.TextBoxFor(m => m.Item.Logo.Url, new { type = "file", data_posted_name = "upload", data_url = logoUrl, title = "Картинка для предпросмотра", accept = ".jpg,.jpeg,.png,.gif" })
-
-    @*@Html.TextBox("uploadBack", null, new { type = "file", title = "Изображение под слайдером:", data_name = backgroundName, data_size = backgroundSize, data_url = backgroundUrl, accept = ".jpg,.jpeg,.png,.gif" })
-    @Html.TextBoxFor(m => m.Item.BackGroundImg.Url, new { type = "hidden", value = backgroundUrl })*@
-
-    @Html.TextBoxFor(m => m.Item.BackGroundImg.Url, new { type = "file", data_posted_name = "uploadBack", data_url = backgroundUrl, title = "Изображение под слайдером", accept = ".jpg,.jpeg,.png,.gif" })
-
-    <div class="group-block" title="Социальные сети">
+    <div class="group-block open" title="Социальные сети">
         @Html.TextBoxFor(m => m.Item.Facebook, new { @title = "Facebook" })
         @Html.TextBoxFor(m => m.Item.Vk, new { @title = "Вконтакте" })
         @Html.TextBoxFor(m => m.Item.Instagramm, new { @title = "Instagramm" })

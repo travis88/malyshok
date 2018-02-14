@@ -1,9 +1,12 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
 using Disly.Areas.Admin.Service;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -33,21 +36,15 @@ namespace Disly.Areas.Admin.Controllers
             ViewBag.Description = "";
             ViewBag.KeyWords = "";
             #endregion
-
-            model.Themes = new SelectList(new List<SelectListItem>
-                {
-                    new SelectListItem { Text = "Бирюзовая", Value = "turquoise" },
-                    new SelectListItem { Text = "Синяя", Value = "blue" },
-                    new SelectListItem { Text = "Фиолетовая", Value = "purple" },
-                    new SelectListItem { Text = "Зеленая", Value = "green" }
-                }, "Value", "Text");
         }
 
         // GET: Admin/SiteSettings
         [HttpGet]
         public ActionResult Index()
         {
-            model.Item = _cmsRepository.getSite(Domain);
+            model.Item = _cmsRepository.getSite();
+            ViewBag.Xcoord = model.Item.CoordX;
+            ViewBag.Ycoord = model.Item.CoordY;
             return View(model);
         }
 
@@ -58,11 +55,43 @@ namespace Disly.Areas.Admin.Controllers
         {
             ErrorMessage userMassege = new ErrorMessage();
             userMassege.title = "Информация";
-
-            var old = _cmsRepository.getSite(Domain);
-
+            
             if (ModelState.IsValid)
             {
+                double MapX = 0;
+                double MapY = 0;
+
+                if (backModel.Item.CoordX != null) { MapX = (double)backModel.Item.CoordX; }
+                if (backModel.Item.CoordY != null) { MapY = (double)backModel.Item.CoordY; }
+                ViewBag.Xcoord = MapX;
+                ViewBag.Ycoord = MapY;
+
+                if (backModel.Item.Adress != String.Empty && (MapX == 0 || MapY == 0))
+                {
+                    string url = "http://geocode-maps.yandex.ru/1.x/?format=json&results=1&geocode=" + backModel.Item.Adress;
+                    string html = string.Empty;
+                    // Отправляем GET запрос и получаем в ответ JSON с данным об адресе
+                    HttpWebRequest myHttpWebRequest = (HttpWebRequest)HttpWebRequest.Create(url);
+                    HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
+                    StreamReader myStreamReader = new StreamReader(myHttpWebResponse.GetResponseStream());
+                    html = myStreamReader.ReadToEnd();
+
+                    string coord = String.Empty;
+                    Regex ReCoord = new Regex("(?<=\"Point\":{\"pos\":\")(.*)(?=\"})", RegexOptions.IgnoreCase);
+
+                    coord = Convert.ToString(ReCoord.Match(html).Groups[1].Value);
+
+                    coord = coord.Replace(" ", ";");
+                    string[] ArrCoord = coord.Split(';');
+                    foreach (string qwerty in ArrCoord)
+                    {
+                        MapX = double.Parse(ArrCoord[1].Replace(".", ","));
+                        MapY = double.Parse(ArrCoord[0].Replace(".", ","));
+                    }
+                    backModel.Item.CoordX = MapX;
+                    backModel.Item.CoordY = MapY;
+                }
+
                 #region Сохранение изображений
 
                 if (upload != null && upload.ContentLength > 0)
@@ -117,7 +146,7 @@ namespace Disly.Areas.Admin.Controllers
                 };
             }
             model.ErrorInfo = userMassege;
-            model.Item = _cmsRepository.getSite(Domain);
+            model.Item = _cmsRepository.getSite();
             return View(model);
         }
 

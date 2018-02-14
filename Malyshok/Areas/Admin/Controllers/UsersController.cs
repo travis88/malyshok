@@ -41,19 +41,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             // Наполняем фильтр значениями
             filter = getFilter(page_size);
-            filter.Domain = Domain;
-
-            // Наполняем модель данными
-            var getUserslist = _cmsRepository.getUsersList(filter);
-            if (getUserslist != null && getUserslist.Data != null)
-            {
-                getUserslist.Data = getUserslist.Data.Where(u => u.Lvl <= AccountInfo.GroupLvl)
-                    .Select(p => p).ToArray();
-            }
-
-
-            model.List = getUserslist;
-
+            model.List = _cmsRepository.getCustomers(filter);
             return View(model);
         }
 
@@ -63,10 +51,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         public ActionResult Item(Guid Id)
         {
-            model.Item = _cmsRepository.getUser(Id);
-            //model.GroupList = model.GroupList.to;
-
-            var t = model.GroupList;
+            model.Item = _cmsRepository.getCustomer(Id);
             return View("Item", model);
         }
 
@@ -121,12 +106,13 @@ namespace Disly.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                if (_cmsRepository.check_user(Id))
+                back_model.Item.Id = Id;
+                if (_cmsRepository.checkCustomerExists(Id))
                 {
-                    _cmsRepository.updateUser(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                    _cmsRepository.updateCustomer(back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
                     userMassege.info = "Запись обновлена";
                 }
-                else if (!_cmsRepository.check_user(back_model.Item.EMail))
+                else if (!_cmsRepository.checkCustomerExists(back_model.Item.EMail))
                 {
                     char[] _pass = back_model.Password.Password.ToCharArray();
                     Cripto password = new Cripto(_pass);
@@ -136,7 +122,7 @@ namespace Disly.Areas.Admin.Controllers
                     back_model.Item.Hash = NewHash;
                     back_model.Item.Salt = NewSalt;
 
-                    _cmsRepository.createUserOnSite(Id, back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
+                    _cmsRepository.createCustomer(back_model.Item); //, AccountInfo.id, RequestUserInfo.IP
 
                     userMassege.info = "Запись добавлена";
                 }
@@ -159,7 +145,7 @@ namespace Disly.Areas.Admin.Controllers
                 };
             }
 
-            model.Item = _cmsRepository.getUser(Id);
+            model.Item = _cmsRepository.getCustomer(Id);
             model.ErrorInfo = userMassege;
 
             return View("Item", model);
@@ -176,7 +162,7 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-btn")]
         public ActionResult Delete(Guid Id)
         {
-            _cmsRepository.deleteUser(Id); //, AccountInfo.id, RequestUserInfo.IP
+            _cmsRepository.deleteCustomer(Id); //, AccountInfo.id, RequestUserInfo.IP
 
             // записываем информацию о результатах
             ErrorMessage userMassege = new ErrorMessage();
@@ -186,7 +172,7 @@ namespace Disly.Areas.Admin.Controllers
                 new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "ок", action = "false" }
             };
 
-            model.Item = _cmsRepository.getUser(Id);
+            model.Item = _cmsRepository.getCustomer(Id);
             model.ErrorInfo = userMassege;
 
             return View("Item", model);

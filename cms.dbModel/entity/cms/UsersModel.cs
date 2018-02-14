@@ -111,7 +111,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Адрес
         /// </summary>
-        public string Adres { get; set; }
+        public string Address { get; set; }
 
         /// <summary>
         /// Телефон
@@ -144,7 +144,17 @@ namespace cms.dbModel.entity
         /// Полное имя
         /// </summary>
         public string FullName { get { return Surname + " " + Name + " " + Patronymic; } }
-        
+
+        /// <summary>
+        /// Дата регистрации
+        /// </summary>
+        public DateTime RegistrationDate { get; set; }
+
+        /// <summary>
+        /// Организация
+        /// </summary>
+        public string Organization { get; set; }
+
         /// <summary>
         /// Уровень доступа группы, к которой он относится
         /// </summary>

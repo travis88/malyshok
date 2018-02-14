@@ -182,7 +182,7 @@ namespace cms.dbase
                         Birthday = s.d_birthday,
                         Sex = s.b_sex,
                         Photo = s.c_photo,
-                        Adres = s.c_adres,
+                        Address = s.c_adres,
                         Phone = s.c_phone,
                         Mobile = s.c_mobile,
                         Contacts = s.c_contacts,
@@ -220,7 +220,7 @@ namespace cms.dbase
                         .Value(p => p.b_sex, Item.Sex)
                         .Value(p => p.d_birthday, Item.Birthday)
                         .Value(p => p.c_post, Item.Post)
-                        .Value(p => p.c_adres, Item.Adres)
+                        .Value(p => p.c_adres, Item.Address)
                         .Value(p => p.c_phone, Item.Phone)
                         .Value(p => p.c_mobile, Item.Mobile)
                         .Value(p => p.c_email, Item.EMail)
@@ -327,7 +327,7 @@ namespace cms.dbase
                         .Value(p => p.b_sex, Item.Sex)
                         .Value(p => p.d_birthday, Item.Birthday)
                         .Value(p => p.c_post, Item.Post)
-                        .Value(p => p.c_adres, Item.Adres)
+                        .Value(p => p.c_adres, Item.Address)
                         .Value(p => p.c_phone, Item.Phone)
                         .Value(p => p.c_mobile, Item.Mobile)
                         .Value(p => p.c_email, Item.EMail)
@@ -434,7 +434,7 @@ namespace cms.dbase
                         .Set(p => p.b_sex, Item.Sex)
                         .Set(p => p.d_birthday, Item.Birthday)
                         .Set(p => p.c_post, Item.Post)
-                        .Set(p => p.c_adres, Item.Adres)
+                        .Set(p => p.c_adres, Item.Address)
                         .Set(p => p.c_phone, Item.Phone)
                         .Set(p => p.c_mobile, Item.Mobile)
                         .Set(p => p.c_email, Item.EMail)

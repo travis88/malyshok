@@ -11,7 +11,6 @@
                 string disabled = (Item.Disabled) ? "disabled" : String.Empty;
                 <div class="list-item @disabled">
                     <a title="" class="li-caption" href="/admin/Users/item/@Item.Id/@ViewBag.urlQuery">@Item.FullName</a>
-                    <div class="li-desc"><span>Группа:</span> @Item.GroupName</div>
                     <div class="li-desc"><span>E-mail:</span> @Item.EMail</div>
                 </div>
             }

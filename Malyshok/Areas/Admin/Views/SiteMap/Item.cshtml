@@ -25,11 +25,6 @@
             @Html.HiddenFor(m => m.Item.ParentId)
             @Html.Hidden("Item_ParentId", parent)
 
-            @*@Html.TextBox("upload", null, new { type = "file", title = "Изображение", data_name = fileName, data_size = fileSize, data_url = fileUrl, accept = ".jpg,.jpeg,.png,.gif" })
-                @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "hidden", value = fileUrl })*@
-
-            @Html.TextBoxFor(m => m.Item.Photo.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", accept = ".jpg,.jpeg,.png,.gif" })
-
             <div class="group-block" title="Текст">
                 @Html.TextAreaFor(m => m.Item.Text, new { @type = "editor", @height = "300", data_dir = ViewBag.DataPath })
             </div>

@@ -15,9 +15,7 @@
     @Html.TextBoxFor(m => m.Item.LongTitle, new { @title = "Название" })
     @Html.TextBoxFor(m => m.Item.Title, new { @title = "Краткое название", @required = "" })
 
-    <div class="group-block" title="Контакты">
-        @Html.TextBoxFor(m => Model.Item.Adress, new { @class = "uc_input", @title = "Адрес организации", @placeholder = "Адрес организации", @MaxLength = "512" })
-
+    <div class="group-block open" title="Контакты">
         <div class="row">
             <div class="col-xs-6">
                 @Html.TextBoxFor(m => Model.Item.Phone, new { @class = "uc_input", @title = "Телефон организации", @placeholder = "Телефон организации", @MaxLength = "64" })
@@ -30,14 +28,15 @@
         @Html.TextBoxFor(m => Model.Item.Email, new { @class = "uc_input", @title = "Адрес Email", @placeholder = "Адрес Email", @MaxLength = "64" })
         @Html.TextBoxFor(m => Model.Item.Site, new { @class = "uc_input", @title = "Адрес сайта", @placeholder = "Адрес сайта", @MaxLength = "128" })
         @Html.TextBoxFor(m => Model.Item.Worktime, new { @class = "uc_input", @title = "Режим работы", @placeholder = "Режим работы", @MaxLength = "512" })
-    </div>
 
-    <div class="group-block" title="Координаты">
-        <div class="col-xs-6">
-            @Html.TextBoxFor(m => m.Item.CoordX, new { @class = "uc_input Item_CoordX", @title = "Х координата" })
-        </div>
-        <div class="col-xs-6">
-            @Html.TextBoxFor(m => m.Item.CoordY, new { @class = "uc_input Item_CoordY", @title = "Y-координата" })
+        @Html.TextBoxFor(m => Model.Item.Adress, new { @class = "uc_input", @title = "Адрес", @placeholder = "Адрес", @MaxLength = "512" })
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.TextBoxFor(m => m.Item.CoordX, new { @class = "uc_input Item_CoordX", @title = "Х координата" })
+            </div>
+            <div class="col-xs-6">
+                @Html.TextBoxFor(m => m.Item.CoordY, new { @class = "uc_input Item_CoordY", @title = "Y-координата" })
+            </div>
         </div>
         <div id="map">
             <script type="text/javascript">
@@ -45,6 +44,7 @@
             </script>
         </div>
     </div>
+
 
     <div class="group-block topIndent-20" title="Пользовательские скрипты">
         @Html.TextAreaFor(m => m.Item.Scripts, new { @type = "text", @height = "300", @rows = "15" })

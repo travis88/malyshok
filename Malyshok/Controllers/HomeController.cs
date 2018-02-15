@@ -44,12 +44,7 @@ namespace Disly.Controllers
             #endregion
 
             model.Materials = _repository.getMaterialsModule(); //Domain
-
-            if (model.SitesInfo.Alias == "main")
-            {
-                _ViewName = _ViewName.ToLower().Replace("views/", "views/_portal/");//спец вьюха для главного сайта 
-            }
-
+            
             // версия для слабовидящих
             if (IsSpecVersion)
             {

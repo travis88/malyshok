@@ -1,10 +1,5 @@
 ﻿@model NewsViewModel
-@{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
-}
+
 <div class="type-page">
     <div class="container">
         <div class="row">
@@ -17,19 +12,6 @@
                 }
                 else
                 {
-                    <ul class="nav nav-pills tabs">
-                        @{
-                            string _allactiv = (String.IsNullOrEmpty(ViewBag.CurrentCategory)) ? "class=active" : "";
-                        }
-                        <li @_allactiv><a href="/press">Все</a></li>
-                        @foreach (var item in Model.Group)
-                        {
-                            string _class = (item.Alias == ViewBag.CurrentCategory) ? "class=active" : "";
-                            <li @_class><a href="/press/@item.Alias">@item.Title</a></li>
-                        }
-                    </ul>
-
-                    <br /><br />
                     <div class="row">
                         <div class="col-md-3 col-md-push-9">
                             <form role="form" class="filtr_news" action="/@ViewBag.ControllerName/@ViewBag.Filter.Category/">

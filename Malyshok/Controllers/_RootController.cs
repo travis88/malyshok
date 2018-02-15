@@ -54,7 +54,6 @@ namespace Disly.Controllers
                 if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
                 else Domain = String.Empty;
             }
-            //Domain = "rkod";
 
             #region Получаем данные из адресной строки
             //string UrlPath = Request.Path;

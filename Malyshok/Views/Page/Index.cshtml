@@ -1,10 +1,5 @@
 ﻿@model TypePageViewModel
-@{
-    if (Model.SitesInfo.Alias == "main")
-    {
-        Layout = "/views/_portal/shared/_layout.cshtml";
-    }
-}
+
 <div class="type-page">
     <div class="container">
         @Html.Partial("services/breadcrumbs")

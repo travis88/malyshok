@@ -75,6 +75,7 @@ namespace cms.dbase.models
 		public ITable<content_sv_people_front>              content_sv_people_fronts              { get { return this.GetTable<content_sv_people_front>(); } }
 		public ITable<content_sv_people_org>                content_sv_people_orgs                { get { return this.GetTable<content_sv_people_org>(); } }
 		public ITable<content_sv_sitemap_menu>              content_sv_sitemap_menus              { get { return this.GetTable<content_sv_sitemap_menu>(); } }
+		public ITable<content_users>                        content_userss                        { get { return this.GetTable<content_users>(); } }
 		public ITable<front_modules>                        front_moduless                        { get { return this.GetTable<front_modules>(); } }
 		public ITable<front_page_views>                     front_page_viewss                     { get { return this.GetTable<front_page_views>(); } }
 		public ITable<front_section>                        front_sections                        { get { return this.GetTable<front_section>(); } }
@@ -1285,6 +1286,23 @@ namespace cms.dbase.models
 		[Column,    Nullable] public string c_photo         { get; set; } // nvarchar(1024)
 	}
 
+	[Table(Schema="dbo", Name="content_users")]
+	public partial class content_users
+	{
+		[PrimaryKey, NotNull    ] public Guid     id              { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_email         { get; set; } // nvarchar(128)
+		[Column,     NotNull    ] public string   c_salt          { get; set; } // nvarchar(32)
+		[Column,     NotNull    ] public string   c_hash          { get; set; } // nvarchar(128)
+		[Column,     NotNull    ] public DateTime d_register_date { get; set; } // datetime
+		[Column,        Nullable] public string   c_surname       { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_name          { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_patronymic    { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_organization  { get; set; } // nvarchar(256)
+		[Column,        Nullable] public string   c_address       { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string   c_phone         { get; set; } // nvarchar(128)
+		[Column,     NotNull    ] public bool     b_disable       { get; set; } // bit
+	}
+
 	[Table(Schema="dbo", Name="front_modules")]
 	public partial class front_modules
 	{
@@ -1763,6 +1781,12 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
+		public static content_users Find(this ITable<content_users> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static front_modules Find(this ITable<front_modules> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -1782,3 +1806,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

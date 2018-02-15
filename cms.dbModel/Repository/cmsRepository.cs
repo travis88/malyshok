@@ -170,5 +170,14 @@ namespace cms.dbModel
         public abstract bool updateProduct(ProductModel item);
         public abstract bool insertProduct(ProductModel item);
         public abstract bool deleteProduct(Guid id);
+
+        // пользователи
+        public abstract UsersList getCustomers(FilterParams filtr);
+        public abstract UsersModel getCustomer(Guid id);
+        public abstract bool createCustomer(UsersModel item);
+        public abstract bool updateCustomer(UsersModel item);
+        public abstract bool deleteCustomer(Guid id);
+        public abstract bool checkCustomerExists(Guid id);
+        public abstract bool checkCustomerExists(string email);
     }
 }

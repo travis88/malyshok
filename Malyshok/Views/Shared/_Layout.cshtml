@@ -99,7 +99,16 @@
     </div>
     <div class="body_block">
         <div class="container">
-            @RenderBody()
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="prod-catalog">
+                        <div class="title">Каталог</div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    @RenderBody()
+                </div>
+            </div>
         </div>
     </div>
     <div class="footer">

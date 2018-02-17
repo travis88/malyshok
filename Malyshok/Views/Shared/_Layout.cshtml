@@ -30,9 +30,8 @@
     <meta name="description" content="@ViewBag.description">
     <title> @ViewBag.Title - @Model.SitesInfo.Title</title>
     <link href="/Content/img/favicon.ico" rel="shortcut icon">
-    <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">    
-    <link href="/Content/plugins/select2/css/select2.css" rel="stylesheet">
-    <link href="/Content/plugins/select2/css/select2_custom.css" rel="stylesheet">
+    <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Content/plugins/Slicebox/jquery.slicebox.css" rel="stylesheet">
 
     <link href="/Content/plugins/mobileGallery/swipebox.css" rel="stylesheet">
     <link href="/Content/css/common.css" rel="stylesheet" />
@@ -45,7 +44,8 @@
     <script src="/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="/Content/plugins/jquery/jquery.ui.js"></script>
     <script src="/Content/plugins/jquery/jquery.mask.min.js"></script>
-    <script src="/Content/plugins/select2/select2.min.js"></script>    
+    <script src="/Content/plugins/Slicebox/modernizr.custom.46884.js"></script>
+    <script src="/Content/plugins/Slicebox/jquery.slicebox.js"></script>
     <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>
     <script src="/Content/plugins/jquery/jquery.cookie.js"></script>    
     <script src="/Content/js/script.js"></script>
@@ -53,231 +53,93 @@
 </head>
 
 <body>
-    <div class="cont_wrap">
-
+    <div class="head_block">
         <div class="container">
-            <nav id="header" class="navbar navbar-fixed-top">
-                <div id="header-container" class="container navbar-container">
-                    <div class="head">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <a href="/" class="head_link">
-                                    <div class="head_logo">
-                                        @if (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url) && File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url)))
-                                        {
-                                            <img src="@Model.SitesInfo.Logo.Url" />
-                                        }
-                                    </div>
-                                    <div class="head_title"><span>@Model.SitesInfo.LongTitle</span></div>
-                                </a>
-                            </div>
-                            <div class="col-md-4 right_section">
-                                <ul class="nav navbar-nav navbar-right">
-                                    <li><a href="/mapsite"><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
-                                    <li><a href="/press/rsssettings"><span class="ti-rss-alt top-icon"></span>RSS</a></li>
-                                    <li><a target="_blank" href="http://www.med.cap.ru/"><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
-                                </ul>
-                                <div class="pull-right spec-version-link">
-                                    <a class="spec_version" href="/spec"><span class="spec-info">Aa</span>Для слабовидящих</a>
-                                </div>
-                            </div>
-                        </div>
+            <div class="logo">
+    <a href="/"><img title="" alt="" src="~/Content/img/logo.png"/></a>
 
-                    </div>
+    @if (Model != null && Model.SitesInfo != null && Model.SitesInfo.Phone != null)
+    {
+        string MainPhone = (Model.SitesInfo.Phone.IndexOf("|") > -1) ? Model.SitesInfo.Phone.Substring(0, Model.SitesInfo.Phone.IndexOf("|")) : Model.SitesInfo.Phone;
+        MainPhone = MainPhone.Insert(MainPhone.LastIndexOf(" "), "<span>") + "</span>";
 
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icons-bar"></span>
-                            <span class="icons-bar"></span>
-                            <span class="icons-bar"></span>
-                        </button>
-                        <a id="brand" class="navbar-brand" href="/">
-                            @if (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url) && File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url)))
-                            {
-                                <img src="@Model.SitesInfo.Logo.Url" />
-                            }
-                        </a>
-                    </div>
-                    <div id="navbar" class="collapse navbar-collapse">
-                        <form class="searchform">
-                            <a class="searchform_close ti-close" href="#"></a>
-                            <button class="searchform_btn" type="submit">Найти</button>
-                            <div class="searchform_input_wr"><input id="search_focus" class="search-input" type="search" name="q" placeholder="Поиск по сайту" /></div>
-                        </form>
-                        @if (mainMenu != null)
-                        {
-                            <ul class="nav navbar-nav navbar-left">
-                                @foreach (var item in mainMenu)
-                                {
-                                    string fullPath = "/";
-                                    if (!string.IsNullOrEmpty(item.Url))
-                                    {
-                                        fullPath = item.Url;
-                                    }
-                                    else if (item.FrontSection.ToLower().Equals("page"))
-                                    {
-                                        fullPath = item.Path + item.Alias;
-                                    }
-                                    else
-                                    {
-                                        fullPath = "/" + item.FrontSection;
-                                    }
-                                    string _class = (Request.Path == fullPath) ? "class=active" : "";
-                                    <li @_class>
-                                        <a href="@fullPath">@item.Title</a>
-                                    </li>
-                                }
-                            </ul>
-                            <ul class="nav navbar-nav navbar-right">
-                                <li>
-                                    <a href="#" title="Поиск" class="searchform_show seacrh_button__hide icon-search"></a>
-                                </li>
-                            </ul>
-                            <ul class="nav navbar-nav navbar-right menu-mini-icons">
-                                <li><a href="/mapsite" title="Карта сайта"><span class="ti-layers-alt top-icon"></span></a></li>
-                                <li><a href="/press/rsssettings" title="RSS"><span class="ti-rss-alt top-icon"></span></a></li>
-                                <li><a href="http://www.med.cap.ru/" target="_blank" title="Портал med.cap.ru"><span class="ti-new-window top-icon"></span></a></li>
-                                <li><a class="spec_version" href="/spec" title="версия для слабовидящих"><span class="spec-info">Aa</span></a></li>
-                            </ul>
-                        }
-                    </div>
-                </div>
-            </nav>
+        <div class="phone">@Html.Raw(MainPhone)</div>
+    }
+            </div>
         </div>
-
-        @RenderBody()
-
-        <div class="bottom_block">
-            <div class="container">
-                @if (Model != null && Model.BannerArray != null && Model.BannerArray.Count() > 0)
+    </div>
+    <div class="menu_block">
+        <div class="container">
+            @if (mainMenu != null)
+            {
+                <ul class="nav navbar-nav navbar-left">
+                    @foreach (var item in mainMenu)
                 {
-                    var bannerBottom = Model.BannerArray
-                                .Where(w => w.SectionAlias.Equals("text"))
-                                .OrderBy(o => o.Sort)
-                                .Select(s => new
-                                {
-                                    Id = s.Id,
-                                    Title = s.Title,
-                                    Url = s.Photo.Url,
-                                    Text = s.Text
-                                });
-
-                    <div class="row bottom-linkimg noprint">
-                        <div class="col-sm-2">
-                            <div class="bottom-linkimg_head">Официальные сетевые ресурсы</div>
-                        </div>
-                        @foreach (var item in bannerBottom)
-                        {
-                            string redirectLink = "/redirect/link/" + item.Id;
-                            <div class="col-sm-2">
-                                <a href="@redirectLink" class="bottom-linkimg-item">@item.Title</a>
-                            </div>
-                        }
-                    </div>
-                }
-
-                <div class="footer noprint">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="media">
-                                <div class="bottom_left">
-                                    @if (Model.SitesInfo.Logo != null && !string.IsNullOrWhiteSpace(Model.SitesInfo.Logo.Url) && File.Exists(Server.MapPath(Model.SitesInfo.Logo.Url)))
-                                    {
-                                        <img class="logo-small" src="@Model.SitesInfo.Logo.Url" />
-                                    }
-                                </div>
-
-                                @if (Model != null && Model.SitesInfo != null)
-                                {
-                                    <div class="bottom_info">
-                                        <div class="bottom_info_title">@Model.SitesInfo.LongTitle</div>
-                                        <div class="small_address">
-                                            <div>@Model.SitesInfo.Adress</div>
-                                            <div>@Model.SitesInfo.Phone</div>
-                                            <div><a href="@Model.SitesInfo.Site">@Model.SitesInfo.Site</a></div>
-                                        </div>
-                                        <div class="metrica">
-                                            <img src="~/Content/img/metrica1.png" />
-                                        </div>
-                                        <div class="metrica">
-                                            <img src="~/Content/img/metrica2.png" />
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="footer-right">
-                                <form class="search-form-bottom">
-                                    <input class="search-form" type="text" placeholder="Поиск по сайту" value="" />
-                                    <a href="" class="icon-search bottom-search"></a>
-                                </form>
-                                <ul class="nav navbar-nav bottom_menu navbar-left">
-                                    <li><a href="/mapsite"><span class="ti-layers-alt top-icon"></span>Карта сайта</a></li>
-                                    <li><a href="/press/rsssettings"><span class="ti-rss-alt top-icon"></span>RSS</a></li>
-                                    <li><a href="http://www.med.cap.ru"><span class="ti-new-window top-icon"></span>Медицинский портал</a></li>
-                                </ul>
-                                <ul class="nav navbar-nav versions navbar-left">
-                                    @*<li><a href="">English version</a></li>*@
-                                    <li><a href=""><span class="spec-info">Aa</span>Для слабовидящих</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-12 metrica-block">
-                            <div class="float-right social_network_list">
-                                @if (Model != null && Model.SitesInfo != null)
-                                {
-                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Facebook))
-                                    {
-                                        <a href="@Model.SitesInfo.Facebook" class="icon-facebook-4"></a>
-                                    }
-                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Vk))
-                                    {
-                                        <a href="@Model.SitesInfo.Vk" class="icon-vk"></a>
-                                    }
-                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Instagramm))
-                                    {
-                                        <a href="@Model.SitesInfo.Instagramm" class="icon-instagramm"></a>
-                                    }
-                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki))
-                                    {
-                                        <a href="@Model.SitesInfo.Odnoklassniki" class="icon-odnoklassniki"></a>
-                                    }
-                                    if (!string.IsNullOrEmpty(Model.SitesInfo.Twitter))
-                                    {
-                                        <a href="@Model.SitesInfo.Twitter" class="icon-twitter"></a>
-                                    }
-                                }
-                            </div>
-                        </div>
+                    string fullPath = "/";
+                    if (!string.IsNullOrEmpty(item.Url))
+                    {
+                        fullPath = item.Url;
+                    }
+                    else if (item.FrontSection.ToLower().Equals("page"))
+                    {
+                        fullPath = item.Path + item.Alias;
+                    }
+                    else
+                    {
+                        fullPath = "/" + item.FrontSection;
+                    }
+                    string _class = (Request.Path == fullPath) ? "class=active" : "";
+                        <li @_class>
+                            <a href="@fullPath">@item.Title</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+    <div class="body_block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="prod-catalog">
+                        <div class="title">Каталог</div>
                     </div>
                 </div>
-                <div class="footer-copyright">
-                    <div class="row">
-                        <div class="col-md-6">
-                            &copy;&nbsp;2009-@currentYear&nbsp;@ViewBag.MedCap<br />
-                            @ViewBag.Quote
-                        </div>
-                        <div class="col-md-4">
-                            @ViewBag.Concept<br />
-                            @ViewBag.Coordination
-                        </div>
-                        <div class="col-md-2">
-                            Конструктор сайтов:
-                            <a href="http://www.it-serv.ru/" target="_blank">
-                                <div class="asoft_logo"></div>
-                            </a>
-                        </div>
-                    </div>
+                <div class="col-md-9">
+                    @RenderBody()
                 </div>
             </div>
         </div>
     </div>
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-push-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>Контакты:</div>
+                            <div>
+                                <div>тел.</div>
+                                <div>@Html.Raw(Model.SitesInfo.Phone.Replace("|", "<br />"))</div>
+                                <div>e-mail</div>
+                                <div>@Html.Raw(Model.SitesInfo.Email.Replace("|", "<br />"))</div>
+                            </div>
 
-    <script type="text/javascript">
-        var SiteId = "@Model.SitesInfo.Alias";
-    </script>
+                        </div>
+                        <div class="col-md-6">
+                            <div>Режим работы</div>
+                            @Html.Raw(Model.SitesInfo.Worktime.Replace("|", "<br />"))
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-md-pull-6">
+                    &copy;&nbsp;2010-@currentYear&nbsp;@Model.SitesInfo.LongTitle
+                    <div>@Model.SitesInfo.Adress</div>
+                    <p>@ViewBag.Quote</p>
+                </div>
+            </div>
+        </div>
+    </div>
     @Html.Raw(Model.SitesInfo.Scripts)
 </body>
 

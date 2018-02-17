@@ -1,5 +1,11 @@
 ﻿$(document).ready(function () {
-    $('.select2').select2();
+    $('#sb-slider').slicebox({
+        orientation: 'h',
+        cuboidsRandom: true,
+        disperseFactor: 30,
+        autoplay: true,
+        interval: 3000,
+    });
 
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
@@ -7,11 +13,7 @@
     $('input[data-mask]').each(function () {
         $(this).mask($(this).attr('data-mask'));
     });
-
-    //раскрытие кнопки поиска
-    if ($('.seacrh_button__hide').length > 0) {
-        SearchWork();
-    }
+    
 
     //original photo
     if ($('.show_original,.swipebox').length > 0) {

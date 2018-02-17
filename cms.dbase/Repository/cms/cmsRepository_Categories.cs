@@ -61,7 +61,7 @@ namespace cms.dbase
             {
                 return db.content_categoriess
                     .Where(w => w.uui_parent.Equals(parent))
-                    .OrderBy(o => o.c_title)
+                    .OrderBy(o => o.n_sort)
                     .Select(s => new CategoryModel
                     {
                         Id = s.id,
@@ -210,11 +210,17 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                int maxSort = db.content_categoriess
+                    .Where(w => w.uui_parent.Equals(item.Parent))
+                    .Select(s => s.n_sort)
+                    .Max();
+
                 return db.content_categoriess
                     .Value(v => v.id, item.Id)
                     .Value(v => v.c_title, item.Title)
                     .Value(v => v.c_alias, item.Alias)
                     .Value(v => v.uui_parent, item.Parent)
+                    .Value(v => v.n_sort, maxSort + 1)
                     .Insert() > 0;
             }
         }
@@ -245,9 +251,61 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                var item = db.content_categoriess
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new { s.n_sort, s.uui_parent })
+                    .SingleOrDefault();
+
+                db.content_categoriess
+                    .Where(w => w.uui_parent.Equals(item.uui_parent))
+                    .Where(w => w.n_sort >= item.n_sort)
+                    .Set(u => u.n_sort, u => u.n_sort - 1)
+                    .Update();
+
                 return db.content_categoriess
                     .Where(w => w.id.Equals(id))
                     .Delete() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Приоритет сортировки в категориях
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="permit"></param>
+        /// <returns></returns>
+        public override bool permit_Category(Guid id, int permit)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var item = db.content_categoriess
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new CategoryModel
+                    {
+                        Parent = s.uui_parent,
+                        Sort = s.n_sort
+                    }).SingleOrDefault();
+
+                if (permit > item.Sort)
+                {
+                    db.content_categoriess
+                        .Where(w => w.uui_parent.Equals(item.Parent))
+                        .Where(w => w.n_sort > item.Sort && w.n_sort <= permit)
+                        .Set(u => u.n_sort, u => u.n_sort - 1)
+                        .Update();
+                }
+                else
+                {
+                    db.content_categoriess
+                        .Where(w => w.uui_parent.Equals(item.Parent))
+                        .Where(w => w.n_sort < item.Sort && w.n_sort >= permit)
+                        .Set(u => u.n_sort, u => u.n_sort + 1)
+                        .Update();
+                }
+                return db.content_categoriess
+                    .Where(w => w.id.Equals(id))
+                    .Set(u => u.n_sort, permit)
+                    .Update() > 0;
             }
         }
     }

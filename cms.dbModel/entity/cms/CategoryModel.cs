@@ -37,6 +37,11 @@ namespace cms.dbModel.entity
         /// Кол-во дочерних эл-тов
         /// </summary>
         public int CountChildren { get; set; }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public int Sort { get; set; }
     }
 
     /// <summary>

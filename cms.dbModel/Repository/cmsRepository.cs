@@ -164,6 +164,7 @@ namespace cms.dbModel
         public abstract bool createCategory(CategoryModel item);
         public abstract bool updateCategory(CategoryModel item);
         public abstract bool deleteCategory(Guid id);
+        public abstract bool permit_Category(Guid id, int permit);
 
         // продукция
         public abstract ProductList getProducts(FilterParams filter);

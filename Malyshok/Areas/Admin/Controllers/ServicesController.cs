@@ -374,6 +374,9 @@ namespace Disly.Areas.Admin.Controllers
                 case "sitemap":
                     Result = _cmsRepository.permit_SiteMap(id, permit, menuSort);
                     break;
+                case "category":
+                    Result = _cmsRepository.permit_Category(id, permit);
+                    break;
                 case "documents":
                     Result = _cmsRepository.permit_Documents(id, permit);
                     break;

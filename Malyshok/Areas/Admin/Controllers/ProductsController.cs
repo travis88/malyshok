@@ -46,7 +46,8 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index()
         {
             model.List = _cmsRepository.getProducts(filter);
-            model.CategoryTypes = _cmsRepository.getCatalogCategories();
+            model.CategoryFilters = _cmsRepository.getCategoryFilters();
+            ViewBag.Category = Request.Params["category"];
             return View(model);
         }
 
@@ -190,7 +191,7 @@ namespace Disly.Areas.Admin.Controllers
         /// <returns></returns>
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
-        public ActionResult Search(string searchtext, bool disabled, string size, DateTime? date, DateTime? dateend)
+        public ActionResult Search(string searchtext, string size, DateTime? date, DateTime? dateend, string category, bool disabled = false)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = addFiltrParam(query, "searchtext", searchtext);
@@ -199,6 +200,7 @@ namespace Disly.Areas.Admin.Controllers
             query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty) : addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
+            query = addFiltrParam(query, "category", category);
 
             return Redirect(StartUrl + query);
         }

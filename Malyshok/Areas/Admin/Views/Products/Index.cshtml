@@ -52,7 +52,7 @@
             <div class="alert alert-info">Не найдено ни одной записи.</div>
         }
     </div>
-    
+
     <div class="dop_info-block">
         <div class="dop-caption">Фильтр</div>
         @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск по ключевым словам", @placeholder = "поиск...", @MaxLength = "512" })
@@ -60,11 +60,37 @@
             <div class="col-xs-6">@Html.TextBox("date", Request.QueryString["date"], new { @data_type = "date", @title = "Дата с", @placeholder = "дд.мм.гггг" })</div>
             <div class="col-xs-6">@Html.TextBox("dateend", Request.QueryString["dateend"], new { @data_type = "date", @title = "по", @placeholder = "дд.мм.гггг" })</div>
         </div>
+        @if (Model.CategoryFilters.Count() > 0)
+        {
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="label_filtr">Категории</label>
+                    <select class="form-control select2" name="category">
+                        <option value="">не выбрано</option>
+                        @foreach (var item in Model.CategoryFilters)
+                        {
+                            <optgroup label="@item.Title">
+                                @if (item.Childrens.Count() > 0)
+                                {
+                                    foreach (var child in item.Childrens)
+                                    {
+                                        string selected = (child.Id.ToString() == ViewBag.Category) ? "selected" : "";
+                                        <option value="@child.Id" @selected>@child.Title</option>
+                                    }
+                                }
+                            </optgroup>
+                        }
+                    </select>
+                </div>
+            </div>
+        }
         <div class="row">
             <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
             <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
         </div>
-        @{ Html.RenderAction("Filtr", "Templates", new { @Title = "Категории", @Alias = "category", @Icon = "icon-th-list-3", @Url = "/admin/services/category/", @BtnName = "Новая категория", @Items = Model.CategoryTypes, @readOnly = true }); }
+
+
+        @*@{ Html.RenderAction("Filtr", "Templates", new { @Title = "Категории", @Alias = "category", @Icon = "icon-th-list-3", @Url = "/admin/services/category/", @BtnName = "Новая категория", @Items = Model.CategoryTypes, @readOnly = true }); }*@
     </div>
 
     <div class="buttons">

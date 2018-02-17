@@ -156,6 +156,7 @@ namespace cms.dbModel
         public abstract CategoryModel[] getAllCategories();
         public abstract Catalog_list[] getCatalogCategories();
         public abstract CategoryModel[] getCategories(Guid? parent);
+        public abstract CategoryFilterModel[] getCategoryFilters(Guid? parent);
         public abstract CategoryModel getCategory(Guid id);
         public abstract BreadCrumbCategory getBreadCrumbCategory(Guid id);
         public abstract BreadCrumbCategory[] getCategoryBreadCrumbs(Guid? id);

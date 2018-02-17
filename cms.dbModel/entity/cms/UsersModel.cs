@@ -159,6 +159,16 @@ namespace cms.dbModel.entity
         /// Уровень доступа группы, к которой он относится
         /// </summary>
         public int Lvl { get; set; }
+
+        /// <summary>
+        /// Вконтакте
+        /// </summary>
+        public string Vk { get; set; }
+
+        /// <summary>
+        /// Facebook
+        /// </summary>
+        public string Facebook { get; set; }
     }
     
     /// <summary>

@@ -75,6 +75,46 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Возвращает список категорий для фильтрации продукции
+        /// </summary>
+        /// <returns></returns>
+        public override CategoryFilterModel[] getCategoryFilters(Guid? parent = null)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_categoriess
+                    .Where(w => w.uui_parent.Equals(null))
+                    .OrderBy(o => o.c_title)
+                    .Select(s => new CategoryFilterModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Childrens = getCategoryFilterChildrens(s.id)
+                    }).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Возвращает дочерние эл-ты категорий
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        private CategoryFilterModel[] getCategoryFilterChildrens(Guid parent)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_categoriess
+                    .Where(w => w.uui_parent.Equals(parent))
+                    .OrderBy(o => o.c_title)
+                    .Select(s => new CategoryFilterModel
+                    {
+                        Id = s.id,
+                        Title = s.c_title
+                    }).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Возвращает запись категории продукции
         /// </summary>
         /// <param name="id">идентификатор</param>

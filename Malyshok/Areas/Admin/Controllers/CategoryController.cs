@@ -87,6 +87,12 @@ namespace Disly.Areas.Admin.Controllers
             {
                 backModel.Item.Id = id;
 
+                string parentParam = Request.Form["Item_ParentId"];
+
+                backModel.Item.Parent = !String.IsNullOrEmpty(parentParam)
+                                            ? Guid.Parse(parentParam)
+                                            : backModel.Item.Parent;
+
                 if (String.IsNullOrEmpty(backModel.Item.Alias))
                 {
                     backModel.Item.Alias = Transliteration.Translit(backModel.Item.Title);

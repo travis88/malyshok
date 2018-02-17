@@ -1302,6 +1302,8 @@ namespace cms.dbase.models
 		[Column,        Nullable] public string   c_address       { get; set; } // nvarchar(max)
 		[Column,        Nullable] public string   c_phone         { get; set; } // nvarchar(128)
 		[Column,     NotNull    ] public bool     b_disable       { get; set; } // bit
+		[Column,        Nullable] public string   c_vk            { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_facebook      { get; set; } // nvarchar(128)
 	}
 
 	[Table(Schema="dbo", Name="front_modules")]

@@ -96,7 +96,9 @@ namespace cms.dbase
                         Address = s.c_address,
                         Phone = s.c_phone,
                         EMail = s.c_email,
-                        Disabled = s.b_disable
+                        Disabled = s.b_disable,
+                        Vk = s.c_vk,
+                        Facebook = s.c_facebook
                     })
                     .SingleOrDefault();
             }
@@ -120,6 +122,8 @@ namespace cms.dbase
                     .Value(v => v.c_phone, item.Phone)
                     .Value(v => v.c_email, item.EMail)
                     .Value(v => v.b_disable, item.Disabled)
+                    .Value(v => v.c_vk, item.Vk)
+                    .Value(v => v.c_facebook, item.Facebook)
                     .Insert() > 0;
             }
         }
@@ -142,6 +146,8 @@ namespace cms.dbase
                     .Set(s => s.c_phone, item.Phone)
                     .Set(s => s.c_email, item.EMail)
                     .Set(s => s.b_disable, item.Disabled)
+                    .Set(s => s.c_vk, item.Vk)
+                    .Set(s => s.c_facebook, item.Facebook)
                     .Update() > 0;
             }
         }

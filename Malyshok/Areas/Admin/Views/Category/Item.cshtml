@@ -1,5 +1,9 @@
 ﻿@model CategoryViewModel
 
+@{ 
+    string parent = Request.Params["parent"];
+}
+
 @if (Model.UserResolution.Read)
 {
     <div class="buttons">
@@ -24,6 +28,7 @@
                 @Html.TextBoxFor(m => m.Item.Alias, new { @title = "Псевдоним", @required = "" })
             </div>
             @Html.HiddenFor(m => m.Item.Parent)
+            @Html.Hidden("Item_ParentId", parent)
         </div>
 
         <div class="row">

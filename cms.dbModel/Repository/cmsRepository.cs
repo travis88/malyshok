@@ -156,6 +156,7 @@ namespace cms.dbModel
         public abstract CategoryModel[] getAllCategories();
         public abstract Catalog_list[] getCatalogCategories();
         public abstract CategoryModel[] getCategories(Guid? parent);
+        public abstract CategoryFilterModel[] getCategoryFilters(Guid? parent);
         public abstract CategoryModel getCategory(Guid id);
         public abstract BreadCrumbCategory getBreadCrumbCategory(Guid id);
         public abstract BreadCrumbCategory[] getCategoryBreadCrumbs(Guid? id);
@@ -163,6 +164,7 @@ namespace cms.dbModel
         public abstract bool createCategory(CategoryModel item);
         public abstract bool updateCategory(CategoryModel item);
         public abstract bool deleteCategory(Guid id);
+        public abstract bool permit_Category(Guid id, int permit);
 
         // продукция
         public abstract ProductList getProducts(FilterParams filter);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace cms.dbModel.entity
 {
@@ -36,6 +37,11 @@ namespace cms.dbModel.entity
         /// Кол-во дочерних эл-тов
         /// </summary>
         public int CountChildren { get; set; }
+
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public int Sort { get; set; }
     }
 
     /// <summary>
@@ -57,5 +63,26 @@ namespace cms.dbModel.entity
         /// Родитель
         /// </summary>
         public Guid? Parent { get; set; }
+    }
+
+    /// <summary>
+    /// Категории для фильтра продукций
+    /// </summary>
+    public class CategoryFilterModel
+    {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Дочерние категории
+        /// </summary>
+        public IEnumerable<CategoryFilterModel> Childrens { get; set; }
     }
 }

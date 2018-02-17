@@ -30,6 +30,10 @@ namespace Disly.Models
         /// Баннеры
         /// </summary>
         public BannersModel[] BannerArray { get; set; }
+        /// <summary>
+        /// Каталог продукции
+        /// </summary>
+        public CategoryModel[] ProdCatalog { get; set; }
 
         /// <summary>
         /// Текущая страница

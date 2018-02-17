@@ -29,7 +29,7 @@
     <meta name="keywords" content="@ViewBag.keywords">
     <meta name="description" content="@ViewBag.description">
     <title> @ViewBag.Title - @Model.SitesInfo.Title</title>
-    <link href="/Content/img/favicon.ico" rel="shortcut icon">
+    <link href="/favicon.ico" rel="shortcut icon">
     <link href="/Content/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/Content/plugins/Slicebox/jquery.slicebox.css" rel="stylesheet">
 
@@ -47,7 +47,7 @@
     <script src="/Content/plugins/Slicebox/modernizr.custom.46884.js"></script>
     <script src="/Content/plugins/Slicebox/jquery.slicebox.js"></script>
     <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>
-    <script src="/Content/plugins/jquery/jquery.cookie.js"></script>    
+    <script src="/Content/plugins/jquery/jquery.cookie.js"></script>
     <script src="/Content/js/script.js"></script>
     <script src="/Content/js/menu.js"></script>
 </head>
@@ -56,15 +56,15 @@
     <div class="head_block">
         <div class="container">
             <div class="logo">
-    <a href="/"><img title="" alt="" src="~/Content/img/logo.png"/></a>
+                <a href="/"><img title="" alt="" src="~/Content/img/logo.png" /></a>
 
-    @if (Model != null && Model.SitesInfo != null && Model.SitesInfo.Phone != null)
-    {
-        string MainPhone = (Model.SitesInfo.Phone.IndexOf("|") > -1) ? Model.SitesInfo.Phone.Substring(0, Model.SitesInfo.Phone.IndexOf("|")) : Model.SitesInfo.Phone;
-        MainPhone = MainPhone.Insert(MainPhone.LastIndexOf(" "), "<span>") + "</span>";
+                @if (Model != null && Model.SitesInfo != null && Model.SitesInfo.Phone != null)
+                {
+                    string MainPhone = (Model.SitesInfo.Phone.IndexOf("|") > -1) ? Model.SitesInfo.Phone.Substring(0, Model.SitesInfo.Phone.IndexOf("|")) : Model.SitesInfo.Phone;
+                    MainPhone = MainPhone.Insert(MainPhone.LastIndexOf(" "), "<span>") + "</span>";
 
-        <div class="phone">@Html.Raw(MainPhone)</div>
-    }
+                    <div class="phone">@Html.Raw(MainPhone)</div>
+                }
             </div>
         </div>
     </div>
@@ -72,8 +72,8 @@
         <div class="container">
             @if (mainMenu != null)
             {
-                <ul class="nav navbar-nav navbar-left">
-                    @foreach (var item in mainMenu)
+            <ul class="nav navbar-nav navbar-left">
+                @foreach (var item in mainMenu)
                 {
                     string fullPath = "/";
                     if (!string.IsNullOrEmpty(item.Url))
@@ -89,11 +89,11 @@
                         fullPath = "/" + item.FrontSection;
                     }
                     string _class = (Request.Path == fullPath) ? "class=active" : "";
-                        <li @_class>
-                            <a href="@fullPath">@item.Title</a>
-                        </li>
+                    <li @_class>
+                        <a href="@fullPath">@item.Title</a>
+                    </li>
                     }
-                </ul>
+            </ul>
             }
         </div>
     </div>
@@ -103,6 +103,16 @@
                 <div class="col-md-3">
                     <div class="prod-catalog">
                         <div class="title">Каталог</div>
+                        @if (Model.ProdCatalog != null)
+                        {
+                            foreach (var item in Model.ProdCatalog)
+                            {
+                                <div class="catalog_item"><a href="/prod?catalog=@item.Alias">@item.Title</a></div>
+                            }
+                        }
+                    </div>
+                    <div class="prod-new">
+                        <a href=""><img src="~/Content/img/prod_new.jpg" /></a>
                     </div>
                 </div>
                 <div class="col-md-9">

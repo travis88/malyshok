@@ -23,6 +23,7 @@ namespace Disly.Controllers
                 SiteMapArray = siteMapArray,
                 Breadcrumbs= breadcrumb,
                 BannerArray = bannerArray,
+                ProdCatalog = category_list,
                 CurrentPage = currentPage
             };
 

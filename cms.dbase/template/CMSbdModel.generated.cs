@@ -687,16 +687,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_banners_content_banner_sections
-		/// </summary>
-		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
-		public content_banner_sections contentbannerscontentbannersections { get; set; }
-
-		/// <summary>
 		/// FK_content_banners_cms_sites
 		/// </summary>
 		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
 		public cms_sites contentbannerscmssites { get; set; }
+
+		/// <summary>
+		/// FK_content_banners_content_banner_sections
+		/// </summary>
+		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
+		public content_banner_sections contentbannerscontentbannersections { get; set; }
 
 		#endregion
 	}
@@ -705,6 +705,7 @@ namespace cms.dbase.models
 	public partial class content_categories
 	{
 		[PrimaryKey, NotNull    ] public Guid     id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public int      n_sort     { get; set; } // int
 		[Column,     NotNull    ] public string   c_title    { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public string   c_alias    { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public DateTime d_date     { get; set; } // datetime
@@ -967,16 +968,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_product_categories_links_content_categories
-		/// </summary>
-		[Association(ThisKey="f_category", OtherKey="id", CanBeNull=false, KeyName="FK_content_product_categories_links_content_categories", BackReferenceName="contentproductcategorieslinkscontentcategoriess")]
-		public content_categories contentproductcategorieslinkscontentcategories { get; set; }
-
-		/// <summary>
 		/// FK_content_product_categories_links_content_products
 		/// </summary>
 		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_content_product_categories_links_content_products", BackReferenceName="contentproductcategorieslinkscontentproductss")]
 		public content_products contentproductcategorieslinkscontentproducts { get; set; }
+
+		/// <summary>
+		/// FK_content_product_categories_links_content_categories
+		/// </summary>
+		[Association(ThisKey="f_category", OtherKey="id", CanBeNull=false, KeyName="FK_content_product_categories_links_content_categories", BackReferenceName="contentproductcategorieslinkscontentcategoriess")]
+		public content_categories contentproductcategorieslinkscontentcategories { get; set; }
 
 		#endregion
 	}
@@ -1041,16 +1042,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// fk_content_sitemap_from_sites
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_from_sites", BackReferenceName="fkcontentsitemapfromsitess")]
-		public cms_sites fkcontentsitemapfromsites { get; set; }
-
-		/// <summary>
 		/// fk_content_sitemap_front_section
 		/// </summary>
 		[Association(ThisKey="f_front_section", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_front_section", BackReferenceName="fkcontentsitemapfrontsections")]
 		public front_section fkcontentsitemapfrontsection { get; set; }
+
+		/// <summary>
+		/// fk_content_sitemap_from_sites
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="fk_content_sitemap_from_sites", BackReferenceName="fkcontentsitemapfromsitess")]
+		public cms_sites fkcontentsitemapfromsites { get; set; }
 
 		/// <summary>
 		/// FK_content_documents_content_sitemap_BackReference
@@ -1806,4 +1807,3 @@ namespace cms.dbase.models
 		}
 	}
 }
- 

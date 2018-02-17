@@ -188,6 +188,7 @@
     <Content Include="Content\img\nophoto.jpg" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
+    <Content Include="Content\img\prod_new.jpg" />
     <Content Include="Content\img\slide1.jpg" />
     <Content Include="Content\img\special\image.jpg" />
     <Content Include="Content\img\special\museum.png" />

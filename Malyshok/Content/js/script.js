@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     $('#sb-slider').slicebox({
-        orientation: 'h',
+        orientation: 'r',
         cuboidsRandom: true,
         disperseFactor: 30,
         autoplay: true,

@@ -18,6 +18,7 @@ namespace Disly.Controllers
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
                 BannerArray = bannerArray,
+                ProdCatalog = category_list
             };
 
             IsSpecVersion = HttpContext.Request.Cookies["spec_version"] != null;

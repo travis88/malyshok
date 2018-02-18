@@ -33,6 +33,7 @@ namespace Disly.Controllers
         protected BannersModel[] bannerArray;
         protected List<Breadcrumbs> breadcrumb;
         protected SiteMapModel currentPage;
+        protected CategoryModel[] category_list;
 
         protected string MedCap;
         protected string Quote;
@@ -104,6 +105,7 @@ namespace Disly.Controllers
             siteMapArray = _repository.getSiteMapList(); //Domain
 
             bannerArray = _repository.getBanners(); //Domain
+            category_list = _repository.getProdCatalogModule();
 
             ViewBag.MedCap = MedCap = Settings.MedCap;
             ViewBag.Quote = Quote = Settings.Quote;

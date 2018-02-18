@@ -1,20 +1,10 @@
 ﻿@model NewsViewModel
 
-<div class="row">
-    <div class="col-md-8">
-        @Html.Raw(Model.Item.Text)
-    </div>
-    <div class="col-md-1"></div>
-    <div class="col-md-3">
-        <div class="dop-block">
-            <div class="dop-block_info">
-                <label>Опубликовано</label>
-                <div>@Model.Item.Date.ToString("dd MMMM yyyy")<br>@Model.Item.Date.ToString("HH:mm")</div>
-            </div>
-            <a class="btn_print" onClick="window.print()">Распечатать</a><br />
-            <a class="btn_share" title="Поделиться" href="../../../../#">Поделиться</a>            
-        </div>
-    </div>
+<h3>@Model.Item.Title</h3>
+<div class="dop-block_info">
+    <div>@Model.Item.Date.ToString("HH:mm dd MMMM yyyy")</div>
 </div>
+@Html.Raw(Model.Item.Text)
+
 
 

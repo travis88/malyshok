@@ -43,5 +43,8 @@ namespace cms.dbModel
 
         //фотоальбом
         public abstract PhotoModel[] getPhotoList(Guid id);
+
+        // Продукция
+        public abstract CategoryModel[] getProdCatalogModule();
     }
 }

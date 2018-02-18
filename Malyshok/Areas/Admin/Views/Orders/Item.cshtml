@@ -1,0 +1,58 @@
+﻿@model OrderViewModel
+@if (Model.UserResolution.Read)
+{
+    if (Model.Item != null)
+    {
+        <div class="content">
+            <h1>@ViewBag.Title</h1>
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.Item.Num, new { type = "number", title = "Номер заказа", MaxLength = "128", @readonly= "readonly" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.Item.Date, new { required = "", data_type = "datetime", title = "Дата", @readonly = "readonly" })
+                </div>
+                <div class="col-md-4">
+                    @Html.TextBoxFor(m => m.Item.Status.Title, new { type = "text", title = "Статус", MaxLength = "128", @readonly = "readonly" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Пользователь:</label><br />
+                <a target="_blank" href="/admin/users/item/@Model.Item.User.Id">@Model.Item.User.FullName</a>
+            </div>
+            @if (Model.Item.Details != null)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Продукция</th>
+                            <th>Дата</th>
+                            <th>Цена</th>
+                            <th>Кол-во</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var d in Model.Item.Details)
+                        {
+                            <tr>
+                                <td style="width:30%;">
+                                    <a target="_blank" href="/admin/products/item/@d.Product.Id">@d.Product.Title</a>
+                                </td>
+                                <td>@d.Date.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                                <td>@d.Price</td>
+                                <td>@d.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+        </div>
+
+        <div class="dop_info-block"></div>
+    }
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}

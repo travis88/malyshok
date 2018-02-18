@@ -181,5 +181,9 @@ namespace cms.dbModel
         public abstract bool deleteCustomer(Guid id);
         public abstract bool checkCustomerExists(Guid id);
         public abstract bool checkCustomerExists(string email);
+
+        // заказы
+        public abstract OrdersList getOrders(FilterParams filter);
+        public abstract OrderModel getOrder(Guid id);
     }
 }

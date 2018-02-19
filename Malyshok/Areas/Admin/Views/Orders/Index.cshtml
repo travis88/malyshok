@@ -25,7 +25,34 @@
         }
     </div>
 
-    <div class="dop_info-block"></div>
+    <div class="dop_info-block">
+        <div class="dop-caption">Фильтр</div>
+        @Html.TextBox("searchtext", Request.QueryString["searchtext"], new { @title = "Поиск по номеру заказа", @placeholder = "поиск...", @MaxLength = "512" })
+        @if (Model.Statuses.Count() > 0)
+        {
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="label_filtr">Статусы</label>
+                    <select class="form-control select2" name="status">
+                        <option value="">не выбрано</option>
+                        @foreach (var item in Model.Statuses)
+                        {
+                            string selected = item.Id.ToString() == ViewBag.Status ? "selected" : "";
+                            <option value="@item.Id" @selected>@item.Title</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-xs-6">@Html.TextBox("date", Request.QueryString["date"], new { @data_type = "date", @title = "Дата с", @placeholder = "дд.мм.гггг" })</div>
+            <div class="col-xs-6">@Html.TextBox("dateend", Request.QueryString["dateend"], new { @data_type = "date", @title = "по", @placeholder = "дд.мм.гггг" })</div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><button type="submit" name="action" value="search-btn" class="button btn-primary">Применить</button></div>
+            <div class="col-md-6"><button type="submit" name="action" value="clear-btn" class="button btn-default">Сбросить</button></div>
+        </div>
+    </div>
 
     <div class="buttons"></div>
 }

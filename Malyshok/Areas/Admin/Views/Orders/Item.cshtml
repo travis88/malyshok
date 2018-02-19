@@ -4,21 +4,29 @@
     if (Model.Item != null)
     {
         <div class="content">
-            <h1>@ViewBag.Title</h1>
-            <div class="row">
-                <div class="col-md-4">
-                    @Html.TextBoxFor(m => m.Item.Num, new { type = "number", title = "Номер заказа", MaxLength = "128", @readonly= "readonly" })
-                </div>
-                <div class="col-md-4">
-                    @Html.TextBoxFor(m => m.Item.Date, new { required = "", data_type = "datetime", title = "Дата", @readonly = "readonly" })
-                </div>
-                <div class="col-md-4">
-                    @Html.TextBoxFor(m => m.Item.Status.Title, new { type = "text", title = "Статус", MaxLength = "128", @readonly = "readonly" })
-                </div>
-            </div>
+            <h1>Заказ №@Model.Item.Num от @Model.Item.Date.ToString("dd.MM.yyyy")</h1>
+            @Html.TextAreaFor(m => m.Item.UserComment, new { type = "text", title = "Комментарий Пользователя", @readonly="readonly" })
+            @Html.TextAreaFor(m => m.Item.AdminComment, new { type = "text", title = "Комментарий Администратора" })
+            <br />
             <div class="form-group">
-                <label>Пользователь:</label><br />
-                <a target="_blank" href="/admin/users/item/@Model.Item.User.Id">@Model.Item.User.FullName</a>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Пользователь:</label><br />
+                        <a target="_blank" href="/admin/users/item/@Model.Item.User.Id">@Model.Item.User.FullName</a>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Телефон:</label><br />
+                        @Model.Item.User.Phone
+                    </div>
+                    <div class="col-md-3">
+                        <label>Адрес:</label><br />
+                        @Model.Item.User.Address
+                    </div>
+                    <div class="col-md-3">
+                        <label>Сумма заказа:</label><br />
+                        @ViewBag.Sum
+                    </div>
+                </div>
             </div>
             @if (Model.Item.Details != null)
             {
@@ -49,7 +57,28 @@
 
         </div>
 
-        <div class="dop_info-block"></div>
+        <div class="dop_info-block">
+            <div class="dop-caption">Настройки</div>
+            <div class="form-group">
+                <label for="itemGroups-select">Статус:</label>
+                <select name="Item.StatusId" id="itemGroups-select" class="form-control select2">
+                    @if (Model.Item != null)
+                    {
+                        foreach (var status in Model.Statuses)
+                        {
+                            <option value="@status.Id" @(Model.Item != null && Model.Item.Status != null && Model.Item.Status.Id.Equals(status.Id) ? "selected" : null)>@status.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="buttons">
+            @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+            {
+                <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+            }
+            <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+        </div>
     }
 }
 else

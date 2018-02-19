@@ -887,11 +887,13 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_orders")]
 	public partial class content_orders
 	{
-		[PrimaryKey, NotNull] public Guid     id       { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid     f_user   { get; set; } // uniqueidentifier
-		[Column,     NotNull] public int      f_status { get; set; } // int
-		[Column,     NotNull] public int      n_num    { get; set; } // int
-		[Column,     NotNull] public DateTime d_date   { get; set; } // datetime
+		[PrimaryKey, NotNull    ] public Guid     id              { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public Guid     f_user          { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public int      f_status        { get; set; } // int
+		[Column,     NotNull    ] public int      n_num           { get; set; } // int
+		[Column,     NotNull    ] public DateTime d_date          { get; set; } // datetime
+		[Column,        Nullable] public string   c_user_comment  { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string   c_admin_comment { get; set; } // nvarchar(max)
 
 		#region Associations
 
@@ -1828,3 +1830,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

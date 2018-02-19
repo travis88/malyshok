@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using cms.dbModel.entity;
 using cms.dbase.models;
+using LinqToDB;
 
 namespace cms.dbase
 {
@@ -23,28 +24,47 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                int itemCount = db.content_orderss.Count();
+                var list = db.content_orderss.AsQueryable();
 
-                var list = db.content_orderss
-                    .OrderByDescending(o => o.n_num)
-                    .Skip(filter.Size * (filter.Page - 1))
-                    .Take(filter.Size)
-                    .Select(s => new OrderModel
-                    {
-                        Id = s.id,
-                        Num = s.n_num,
-                        Date = s.d_date,
-                        Status = new OrderStatus
-                        {
-                            Title = s.contentorderscontentorderstatuses.c_title
-                        }
-                    });
+                if (!String.IsNullOrEmpty(filter.SearchText))
+                {
+                    list = list.Where(w => w.n_num.ToString().Equals(filter.SearchText));
+                }
+                if (filter.Date != null)
+                {
+                    list = list.Where(w => w.d_date >= filter.Date);
+                }
+                if (filter.DateEnd != null)
+                {
+                    list = list.Where(w => w.d_date <= filter.DateEnd);
+                }
+                if (!String.IsNullOrEmpty(filter.Category))
+                {
+                    list = list.Where(w => w.f_status.ToString().Equals(filter.Category));
+                }
+
+                int itemCount = list.Count();
+
+                var data = list
+                            .OrderByDescending(o => o.n_num)
+                            .Skip(filter.Size * (filter.Page - 1))
+                            .Take(filter.Size)
+                            .Select(s => new OrderModel
+                            {
+                                Id = s.id,
+                                Num = s.n_num,
+                                Date = s.d_date,
+                                Status = new OrderStatus
+                                {
+                                    Title = s.contentorderscontentorderstatuses.c_title
+                                }
+                            });
 
                 if (list.Any())
                 {
                     return new OrdersList
                     {
-                        Orders = list.ToArray(),
+                        Orders = data.ToArray(),
                         Pager = new Pager
                         {
                             page = filter.Page,
@@ -76,16 +96,21 @@ namespace cms.dbase
                         Id = s.id,
                         Num = s.n_num,
                         Date = s.d_date,
+                        UserComment = s.c_user_comment,
+                        AdminComment = s.c_admin_comment,
                         Status = new OrderStatus
                         {
-                            Title = s.contentorderscontentorderstatuses.c_title
+                            Title = s.contentorderscontentorderstatuses.c_title,
+                            Id = s.contentorderscontentorderstatuses.id
                         },
                         User = new UsersModel
                         {
                             Id = s.contentorderscontentusers.id,
                             Name = s.contentorderscontentusers.c_name,
                             Patronymic = s.contentorderscontentusers.c_patronymic,
-                            Surname = s.contentorderscontentusers.c_surname
+                            Surname = s.contentorderscontentusers.c_surname,
+                            Phone = s.contentorderscontentusers.c_phone,
+                            Address = s.contentorderscontentusers.c_address
                         },
                         Details = s.contentorderdetailscontentorderss
                                     .Select(d => new OrderDetails
@@ -100,6 +125,41 @@ namespace cms.dbase
                                         Count = d.n_count
                                     }).ToArray()
                     }).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Возвращает список статусов
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<OrderStatus> getStatuses()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_order_statusess
+                    .OrderBy(o => o.id)
+                    .Select(s => new OrderStatus
+                    {
+                        Id = s.id,
+                        Title = s.c_title
+                    }).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Обновляет инфу по заказу
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public override bool updateOrder(OrderModel item)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_orderss
+                    .Where(w => w.id.Equals(item.Id))
+                    .Set(u => u.f_status, item.Status.Id)
+                    .Set(u => u.c_admin_comment, item.AdminComment)
+                    .Update() > 0;
             }
         }
     }

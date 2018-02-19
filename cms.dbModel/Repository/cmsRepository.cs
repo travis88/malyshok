@@ -185,5 +185,7 @@ namespace cms.dbModel
         // заказы
         public abstract OrdersList getOrders(FilterParams filter);
         public abstract OrderModel getOrder(Guid id);
+        public abstract IEnumerable<OrderStatus> getStatuses();
+        public abstract bool updateOrder(OrderModel item);
     }
 }

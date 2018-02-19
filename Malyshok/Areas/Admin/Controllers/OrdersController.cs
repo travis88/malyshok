@@ -44,13 +44,97 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index()
         {
             model.List = _cmsRepository.getOrders(filter);
+            model.Statuses = _cmsRepository.getStatuses();
+            ViewBag.Status = Request.Params["category"];
             return View(model);
         }
 
         public ActionResult Item(Guid id)
         {
             model.Item = _cmsRepository.getOrder(id);
+            model.Statuses = _cmsRepository.getStatuses();
+            ViewBag.Sum = model.Item.Details.Sum(g => g.Price * g.Count);
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
+        public ActionResult Item(Guid id, OrderViewModel binData)
+        {
+            ErrorMessage userMessage = new ErrorMessage();
+            userMessage.title = "Информация";
+            binData.Item.Id = id;
+            bool result = false;
+
+            if (ModelState.IsValid)
+            {
+                int status = Int32.Parse(Request.Form["Item.StatusId"]);
+                binData.Item.Status = new cms.dbModel.entity.OrderStatus
+                {
+                    Id = status
+                };
+                userMessage.info = "Запись обновлена";
+                result = _cmsRepository.updateOrder(binData.Item);
+
+                if (result)
+                {
+                    string currentUrl = Request.Url.PathAndQuery;
+
+                    userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = currentUrl, text = "ок" }
+                 };
+                }
+                else
+                {
+                    userMessage.info = "Произошла ошибка";
+
+                    userMessage.buttons = new ErrorMassegeBtn[]{
+                     new ErrorMassegeBtn { url = StartUrl + Request.Url.Query, text = "Вернуться в список" },
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false"  }
+                 };
+                }
+            }
+            else
+            {
+                userMessage.info = "Ошибка в заполнении формы. Поля в которых допушены ошибки - помечены цветом.";
+
+                userMessage.buttons = new ErrorMassegeBtn[]
+                {
+                     new ErrorMassegeBtn { url = "#", text = "ок", action = "false" }
+                };
+            }
+
+            model.Item = _cmsRepository.getOrder(id);
+            model.Statuses = _cmsRepository.getStatuses();
+            ViewBag.Sum = model.Item.Details.Sum(g => g.Price * g.Count);
+
+            model.ErrorInfo = userMessage;
+
+            return View("Item", model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "search-btn")]
+        public ActionResult Search(string searchtext, string size, DateTime? date, DateTime? dateend, string status)
+        {
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = addFiltrParam(query, "searchtext", searchtext);
+            query = (date == null) ? addFiltrParam(query, "date", String.Empty) : addFiltrParam(query, "date", ((DateTime)date).ToString("dd.MM.yyyy").ToLower());
+            query = (dateend == null) ? addFiltrParam(query, "dateend", String.Empty) : addFiltrParam(query, "dateend", ((DateTime)dateend).ToString("dd.MM.yyyy").ToString().ToLower());
+            query = addFiltrParam(query, "page", String.Empty);
+            query = addFiltrParam(query, "size", size);
+            query = addFiltrParam(query, "category", status);
+
+            return Redirect(StartUrl + query);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "cancel-btn")]
+        public ActionResult Cancel()
+        {
+            return Redirect(StartUrl + Request.Url.Query);
         }
     }
 }

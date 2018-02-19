@@ -40,6 +40,16 @@ namespace cms.dbModel.entity
         /// Детали 
         /// </summary>
         public IEnumerable<OrderDetails> Details { get; set; }
+
+        /// <summary>
+        /// Комментарий пользователя
+        /// </summary>
+        public string UserComment { get; set; }
+
+        /// <summary>
+        /// Комментарий админа
+        /// </summary>
+        public string AdminComment { get; set; }
     }
 
     /// <summary>

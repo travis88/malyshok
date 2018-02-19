@@ -20,5 +20,10 @@ namespace Disly.Areas.Admin.Models
         /// Заказ
         /// </summary>
         public OrderModel Item { get; set; }
+
+        /// <summary>
+        /// Статусы
+        /// </summary>
+        public IEnumerable<OrderStatus> Statuses { get; set; }
     }
 }

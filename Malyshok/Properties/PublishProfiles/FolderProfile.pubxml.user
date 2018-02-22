@@ -285,10 +285,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/17/2018 08:10:14</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>02/17/2018 08:10:18</publishTime>
+      <publishTime>02/16/2018 08:31:49</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>02/17/2018 08:10:18</publishTime>
+      <publishTime>02/16/2018 08:31:49</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>09/28/2017 10:24:43</publishTime>
@@ -357,7 +357,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/28/2017 10:24:45</publishTime>
     </File>
     <File Include="Content/css/common.css">
-      <publishTime>02/17/2018 07:11:48</publishTime>
+      <publishTime>02/15/2018 22:34:41</publishTime>
     </File>
     <File Include="Content/css/commonless.css">
       <publishTime>12/18/2017 14:18:16</publishTime>
@@ -924,7 +924,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/11/2017 11:16:54</publishTime>
     </File>
     <File Include="Content/js/script.js">
-      <publishTime>02/17/2018 07:11:49</publishTime>
+      <publishTime>02/15/2018 23:10:48</publishTime>
     </File>
     <File Include="Content/js/spec.js">
       <publishTime>01/17/2018 13:52:12</publishTime>
@@ -945,7 +945,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/26/2017 10:52:33</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap.min.css">
-      <publishTime>09/28/2017 10:24:42</publishTime>
+      <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/fonts/glyphicons-halflings-regular.eot">
       <publishTime>09/28/2017 10:24:42</publishTime>
@@ -2022,7 +2022,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2018 08:19:41</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>02/17/2018 07:11:49</publishTime>
+      <publishTime>02/16/2018 08:29:13</publishTime>
     </File>
     <File Include="Views/Home/part/media.cshtml">
       <publishTime>01/17/2018 08:23:29</publishTime>
@@ -2046,7 +2046,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/16/2018 12:49:26</publishTime>
     </File>
     <File Include="Views/Page/Index.cshtml">
-      <publishTime>02/17/2018 07:11:49</publishTime>
+      <publishTime>02/15/2018 16:58:37</publishTime>
     </File>
     <File Include="Views/PortalDoctors/Index.cshtml">
       <publishTime>01/16/2018 12:49:26</publishTime>
@@ -2055,10 +2055,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/16/2018 09:10:23</publishTime>
     </File>
     <File Include="Views/Press/Index.cshtml">
-      <publishTime>02/17/2018 07:11:49</publishTime>
+      <publishTime>02/15/2018 17:00:20</publishTime>
     </File>
     <File Include="Views/Press/part/Item.cshtml">
-      <publishTime>01/10/2018 14:42:13</publishTime>
+      <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
     <File Include="Views/Press/Rss.cshtml">
       <publishTime>12/18/2017 14:18:17</publishTime>
@@ -2097,7 +2097,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/06/2017 12:39:32</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>02/17/2018 07:11:49</publishTime>
+      <publishTime>02/16/2018 08:28:31</publishTime>
     </File>
     <File Include="Views/SpecStructure/Index.cshtml">
       <publishTime>01/16/2018 12:49:26</publishTime>

@@ -1,0 +1,87 @@
+﻿@model OrderViewModel
+@if (Model.UserResolution.Read)
+{
+    if (Model.Item != null)
+    {
+        <div class="content">
+            <h1>Заказ №@Model.Item.Num от @Model.Item.Date.ToString("dd.MM.yyyy")</h1>
+            @Html.TextAreaFor(m => m.Item.UserComment, new { type = "text", title = "Комментарий Пользователя", @readonly="readonly" })
+            @Html.TextAreaFor(m => m.Item.AdminComment, new { type = "text", title = "Комментарий Администратора" })
+            <br />
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Пользователь:</label><br />
+                        <a target="_blank" href="/admin/users/item/@Model.Item.User.Id">@Model.Item.User.FullName</a>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Телефон:</label><br />
+                        @Model.Item.User.Phone
+                    </div>
+                    <div class="col-md-3">
+                        <label>Адрес:</label><br />
+                        @Model.Item.User.Address
+                    </div>
+                    <div class="col-md-3">
+                        <label>Сумма заказа:</label><br />
+                        @ViewBag.Sum
+                    </div>
+                </div>
+            </div>
+            @if (Model.Item.Details != null)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Продукция</th>
+                            <th>Дата</th>
+                            <th>Цена</th>
+                            <th>Кол-во</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var d in Model.Item.Details)
+                        {
+                            <tr>
+                                <td style="width:30%;">
+                                    <a target="_blank" href="/admin/products/item/@d.Product.Id">@d.Product.Title</a>
+                                </td>
+                                <td>@d.Date.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                                <td>@d.Price</td>
+                                <td>@d.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+        </div>
+
+        <div class="dop_info-block">
+            <div class="dop-caption">Настройки</div>
+            <div class="form-group">
+                <label for="itemGroups-select">Статус:</label>
+                <select name="Item.StatusId" id="itemGroups-select" class="form-control select2">
+                    @if (Model.Item != null)
+                    {
+                        foreach (var status in Model.Statuses)
+                        {
+                            <option value="@status.Id" @(Model.Item != null && Model.Item.Status != null && Model.Item.Status.Id.Equals(status.Id) ? "selected" : null)>@status.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="buttons">
+            @if ((Model.Item != null && Model.UserResolution.Change) || (Model.Item == null && Model.UserResolution.Write))
+            {
+                <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
+            }
+            <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+        </div>
+    }
+}
+else
+{
+    <div class="content"><p>У вас недостаточно прав.</p></div>
+}

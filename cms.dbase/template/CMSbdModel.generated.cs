@@ -612,12 +612,6 @@ namespace cms.dbase.models
 		[Association(ThisKey="id", OtherKey="f_user", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<cms_user_site_link> fklinkusertosites { get; set; }
 
-		/// <summary>
-		/// FK_content_orders_cms_users_BackReference
-		/// </summary>
-		[Association(ThisKey="id", OtherKey="f_user", CanBeNull=true, IsBackReference=true)]
-		public IEnumerable<content_orders> contentorderscmsuserss { get; set; }
-
 		#endregion
 	}
 
@@ -687,16 +681,16 @@ namespace cms.dbase.models
 		#region Associations
 
 		/// <summary>
-		/// FK_content_banners_cms_sites
-		/// </summary>
-		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
-		public cms_sites contentbannerscmssites { get; set; }
-
-		/// <summary>
 		/// FK_content_banners_content_banner_sections
 		/// </summary>
 		[Association(ThisKey="f_section", OtherKey="id", CanBeNull=false, KeyName="FK_content_banners_content_banner_sections", BackReferenceName="contentbannerscontentbannersectionss")]
 		public content_banner_sections contentbannerscontentbannersections { get; set; }
+
+		/// <summary>
+		/// FK_content_banners_cms_sites
+		/// </summary>
+		[Association(ThisKey="f_site", OtherKey="c_alias", CanBeNull=false, KeyName="FK_content_banners_cms_sites", BackReferenceName="contentbannerscmssitess")]
+		public cms_sites contentbannerscmssites { get; set; }
 
 		#endregion
 	}
@@ -849,13 +843,20 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_order_details")]
 	public partial class content_order_details
 	{
-		[PrimaryKey, NotNull] public Guid     id      { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid     f_order { get; set; } // uniqueidentifier
-		[Column,     NotNull] public DateTime d_date  { get; set; } // datetime
-		[Column,     NotNull] public decimal  m_sum   { get; set; } // money
-		[Column,     NotNull] public int      n_count { get; set; } // int
+		[PrimaryKey, NotNull] public Guid     id        { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid     f_order   { get; set; } // uniqueidentifier
+		[Column,     NotNull] public Guid     f_prod_id { get; set; } // uniqueidentifier
+		[Column,     NotNull] public DateTime d_date    { get; set; } // datetime
+		[Column,     NotNull] public decimal  m_price   { get; set; } // money
+		[Column,     NotNull] public int      n_count   { get; set; } // int
 
 		#region Associations
+
+		/// <summary>
+		/// FK_content_order_details_content_products
+		/// </summary>
+		[Association(ThisKey="f_prod_id", OtherKey="id", CanBeNull=false, KeyName="FK_content_order_details_content_products", BackReferenceName="contentorderdetailscontentproductss")]
+		public content_products contentorderdetailscontentproducts { get; set; }
 
 		/// <summary>
 		/// FK_content_order_details_content_orders
@@ -869,7 +870,7 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_order_statuses")]
 	public partial class content_order_statuses
 	{
-		[PrimaryKey, NotNull] public Guid   id      { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull] public int    id      { get; set; } // int
 		[Column,     NotNull] public string c_title { get; set; } // nvarchar(512)
 
 		#region Associations
@@ -886,9 +887,13 @@ namespace cms.dbase.models
 	[Table(Schema="dbo", Name="content_orders")]
 	public partial class content_orders
 	{
-		[PrimaryKey, NotNull] public Guid id       { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid f_status { get; set; } // uniqueidentifier
-		[Column,     NotNull] public Guid f_user   { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public Guid     id              { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public Guid     f_user          { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public int      f_status        { get; set; } // int
+		[Column,     NotNull    ] public int      n_num           { get; set; } // int
+		[Column,     NotNull    ] public DateTime d_date          { get; set; } // datetime
+		[Column,        Nullable] public string   c_user_comment  { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string   c_admin_comment { get; set; } // nvarchar(max)
 
 		#region Associations
 
@@ -899,10 +904,10 @@ namespace cms.dbase.models
 		public content_order_statuses contentorderscontentorderstatuses { get; set; }
 
 		/// <summary>
-		/// FK_content_orders_cms_users
+		/// FK_content_orders_content_users
 		/// </summary>
-		[Association(ThisKey="f_user", OtherKey="id", CanBeNull=false, KeyName="FK_content_orders_cms_users", BackReferenceName="contentorderscmsuserss")]
-		public cms_users contentorderscmsusers { get; set; }
+		[Association(ThisKey="f_user", OtherKey="id", CanBeNull=false, KeyName="FK_content_orders_content_users", BackReferenceName="contentorderscontentuserss")]
+		public content_users contentorderscontentusers { get; set; }
 
 		/// <summary>
 		/// FK_content_order_details_content_orders_BackReference
@@ -1010,6 +1015,12 @@ namespace cms.dbase.models
 		/// </summary>
 		[Association(ThisKey="id", OtherKey="f_product", CanBeNull=true, IsBackReference=true)]
 		public IEnumerable<content_product_categories_links> contentproductcategorieslinkscontentproductss { get; set; }
+
+		/// <summary>
+		/// FK_content_order_details_content_products_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_prod_id", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_order_details> contentorderdetailscontentproductss { get; set; }
 
 		#endregion
 	}
@@ -1304,6 +1315,16 @@ namespace cms.dbase.models
 		[Column,     NotNull    ] public bool     b_disable       { get; set; } // bit
 		[Column,        Nullable] public string   c_vk            { get; set; } // nvarchar(128)
 		[Column,        Nullable] public string   c_facebook      { get; set; } // nvarchar(128)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_orders_content_users_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_user", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_orders> contentorderscontentuserss { get; set; }
+
+		#endregion
 	}
 
 	[Table(Schema="dbo", Name="front_modules")]
@@ -1742,7 +1763,7 @@ namespace cms.dbase.models
 				t.id == id);
 		}
 
-		public static content_order_statuses Find(this ITable<content_order_statuses> table, Guid id)
+		public static content_order_statuses Find(this ITable<content_order_statuses> table, int id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
@@ -1809,3 +1830,4 @@ namespace cms.dbase.models
 		}
 	}
 }
+ 

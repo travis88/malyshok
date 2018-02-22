@@ -4,7 +4,7 @@
     string currentYear = DateTime.Now.Year.ToString();
     string theme = Model.SitesInfo.Theme + ".css";
 
-    var mainMenu = (Model.SiteMapArray != null)?
+    var mainMenu = (Model.SiteMapArray != null) ?
                     Model.SiteMapArray
                               .Where(w => w.MenuAlias.Equals("main"))
                               .OrderBy(o => o.MenuSort)
@@ -17,7 +17,7 @@
                                   Url = s.Url
                               }).ToArray()
                       : null;
-    
+
 }
 
 <!DOCTYPE html>

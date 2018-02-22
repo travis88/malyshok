@@ -1,12 +1,10 @@
-﻿@import url('/Content/fonts/PtSans/ptsans.css');
-@import url('/Content/fonts/PtSerif/ptserif.css');
-@import url('/Content/fonts/fontello/fontello.css');
-@import url('/Content/fonts/OpenSans/opensans.css');
+﻿@import url('/Content/fonts/fontello/fontello.css');
 
 
 body {
     font-family: Verdana;
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 1.4em;
     color: #4c4c4c;
 }
 
@@ -18,6 +16,7 @@ body {
 .logo {
     position: relative;
     width: 414px;
+    float: left;
 }
 .logo a {
     display: block;
@@ -34,18 +33,57 @@ body {
         font-size: 28px;
         color: #dd201e;
     }
+.search-block {
+    float: right;
+
+}
+.basket-block {
+    position: relative;
+    float: right;
+    width: 140px;
+    text-align: right;
+}
+.basket-counter {
+    position: absolute;
+    background: #ffcd00;
+    border: solid 1px #ffffff;
+    border-radius: 20px;
+    padding: 5px 5px;
+    min-width: 30px;
+    color: #4c4c4c;
+    right: 65px;
+    font: 13px;
+    line-height: 13px;
+    text-align: center;
+}
 .menu_block {
     background: #21aedd;
     color: #ffffff;
     font-size: 16px;
 }
-.menu_block a {
-    color: #ffffff;
+    .menu_block a {
+        color: #ffffff;
+        border-left: solid 1px #21aedd;
+        border-right: solid 1px #21aedd;
+    }
+    .menu_block .nav .active a,
+    .menu_block .nav a:hover {
+        background: #49c1e9 !important;
+        color: #ffffff;
+    }
+.login-block {
+    float: right;
 }
-
-.body_block {
-    padding: 50px 0;
-}
+    .login-block a {
+        display: block;
+        float: left;
+        padding: 15px 5px;
+        font-weight: bold;
+    }
+        .login-block a:hover {
+            color: #ffcd00;
+            text-decoration: none;
+        }
 .prod-catalog {
     background: #fafafa url('/Content/img/catalog.jpg') top right no-repeat;
     border: solid 1px #dadada;
@@ -70,6 +108,13 @@ body {
 .prod-new img {
     max-width: 100%;
 }
+
+
+.body_block {
+    padding: 50px 0;
+}
+
+/* default */
 .slider {
     margin-bottom: 40px;
 }
@@ -111,6 +156,36 @@ body {
     .top_news-item .date {
         margin-top: 10px;
     }
+
+/* page */
+.body_block h1 {
+    font-size: 44px;
+    font-family: 'Times New Roman';
+    color: #65acda;
+}
+.body_block h2 {
+    font-size: 34px;
+    font-family: 'Times New Roman';
+    color: #3887b9;
+}
+.body_block h3 {
+    font-size: 24px;
+    font-family: 'Times New Roman';
+    color: #466172;
+}
+.body_block blockquote {
+    margin: 30px 0;
+    padding: 35px 30px 35px 110px;
+    border: none;
+    border-top: solid 1px #dadada;
+    border-bottom: solid 1px #dadada;
+    background: #ffffff url('/Content/img/blockquote.png') 0 35px no-repeat;
+    font-size: 18px;
+    color: #4d4d4d;
+}
+.type-page a {
+    color: #786de3 !important;
+}
 
 .footer {
     overflow: hidden;

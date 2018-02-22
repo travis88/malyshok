@@ -182,6 +182,8 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
+    <Content Include="Content\img\basket.png" />
+    <Content Include="Content\img\blockquote.png" />
     <Content Include="Content\img\catalog.jpg" />
     <Content Include="Content\img\head.png" />
     <Content Include="Content\img\logo.png" />

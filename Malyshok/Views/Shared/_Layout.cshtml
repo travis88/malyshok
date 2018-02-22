@@ -66,6 +66,23 @@
                     <div class="phone">@Html.Raw(MainPhone)</div>
                 }
             </div>
+            <div class="basket-block">
+                <a href="/basket">
+                    <div class="basket-counter">10</div>
+                    <img src="~/Content/img/basket.png" />
+                </a>
+            </div>
+            <div class="search-block">
+                <div>
+
+                </div>
+                <div>
+                    Мы в социальных сетях
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="menu_block">
@@ -95,6 +112,9 @@
                     }
             </ul>
             }
+            <div class="login-block">
+                <a href="/login">Вход</a><a>/</a><a href="/reg">Регистрация</a>
+            </div>
         </div>
     </div>
     <div class="body_block">
@@ -107,7 +127,7 @@
                         {
                             foreach (var item in Model.ProdCatalog)
                             {
-                                <div class="catalog_item"><a href="/prod?catalog=@item.Alias">@item.Title</a></div>
+                                <div class="catalog_item"><a href="/prod/?catalog=@item.Alias">@item.Title</a></div>
                             }
                         }
                     </div>

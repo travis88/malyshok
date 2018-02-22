@@ -23,6 +23,13 @@ namespace Disly
                defaults: new { controller = "Home", action = "Index" }
             );
 
+            // Продукция
+            routes.MapRoute(
+               name: "Production",
+               url: "prod/{id}",
+               defaults: new { controller = "Prod", action = "Index", id = UrlParameter.Optional }
+            );
+
             // поиск
             routes.MapRoute(
                name: "Search",
@@ -71,7 +78,6 @@ namespace Disly
                defaults: new { controller = "Page", action = "Index", path = UrlParameter.Optional }
                //constraints: new { path = @"\d{6}" }
             );
-
             
             routes.MapRoute(
                 name: "Service",

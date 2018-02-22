@@ -56,20 +56,7 @@ namespace Disly.Controllers
         {
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
 
-            model.Item = _repository.getSiteMap(_path,_alias); //,Domain
-            if (model.Item != null)
-            {
-                if (model.Item.FrontSection.ToLower() != "page")
-                {
-                    return Redirect("/" + model.Item.FrontSection);
-                }
-                model.Child = _repository.getSiteMapChild(model.Item.Id);
-                model.Documents = _repository.getAttachDocuments(model.Item.Id);
-            }
-            else
-            {
-                return new HttpNotFoundResult();
-            }
+
 
             return View(_ViewName,model);
         }

@@ -1,10 +1,15 @@
-﻿using Disly.Areas.Admin.Models;
+﻿using cms.dbModel.entity;
+using Disly.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -43,7 +48,7 @@ namespace Disly.Areas.Admin.Controllers
         {
             return View(model);
         }
-        
+
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "xml-btn")]
         public ActionResult IndexPost(HttpPostedFileBase upload)
@@ -55,7 +60,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult ImportProcessed()
         {
             var now = DateTime.Now;
-            var d = new TestDate
+            var d = new
             {
                 Year = now.Year,
                 Month = now.Month,
@@ -67,15 +72,31 @@ namespace Disly.Areas.Admin.Controllers
 
             return Json(d, JsonRequestBehavior.AllowGet);
         }
-    }
 
-    class TestDate
-    {
-        public int Year { get; set; }
-        public int Month { get; set; }
-        public int Day { get; set; }
-        public int Hour { get; set; }
-        public int Minute { get; set; }
-        public int Second { get; set; }
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "lastprod-btn")]
+        public ActionResult GetLastProducts()
+        {
+            var filter = getFilter(200);
+
+            var products = _cmsRepository.getProducts(filter);
+            XmlSerializer xsSubmit = new XmlSerializer(typeof(ProductArray));
+            byte[] xml;
+
+            var p = new ProductArray
+            {
+                Products = products.Data
+            };
+
+            using (var sww = new StringWriter())
+            {
+                using (XmlWriter writer = XmlWriter.Create(sww))
+                {
+                    xsSubmit.Serialize(writer, p);
+                    xml = Encoding.UTF8.GetBytes(sww.ToString());
+                }
+            }
+            return File(xml, "application/xml", "last-products.xml");
+        }
     }
 }

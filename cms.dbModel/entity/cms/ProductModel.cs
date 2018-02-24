@@ -87,4 +87,15 @@ namespace cms.dbModel.entity
         /// </summary>
         public Pager Pager { get; set; }
     }
+
+    /// <summary>
+    /// Массив продуктов
+    /// </summary>
+    public class ProductArray
+    {
+        /// <summary>
+        /// Продукты
+        /// </summary>
+        public ProductModel[] Products { get; set; }
+    }
 }

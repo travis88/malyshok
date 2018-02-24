@@ -1,0 +1,20 @@
+﻿@model TypePageViewModel
+
+<div class="type-page">
+
+    @Html.Partial("services/breadcrumbs")
+    @if (Model.Item != null)
+    {
+        <h1>@Model.Item.Title</h1>
+
+        if (Model.Child != null)
+        {
+            @Html.Partial("part/childlist_sitemap")
+        }
+
+        <div class="page-text">
+
+            @Html.Raw(Model.Item.Text)
+        </div>
+    }
+</div>

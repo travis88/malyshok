@@ -182,6 +182,8 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
+    <Content Include="Content\img\basket.png" />
+    <Content Include="Content\img\blockquote.png" />
     <Content Include="Content\img\catalog.jpg" />
     <Content Include="Content\img\head.png" />
     <Content Include="Content\img\logo.png" />
@@ -598,6 +600,7 @@
     <Compile Include="Areas\Admin\Models\SitesViewModel.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ProdController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\PressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

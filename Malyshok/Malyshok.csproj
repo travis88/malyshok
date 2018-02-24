@@ -444,6 +444,8 @@
     <Content Include="Areas\Admin\Views\Orders\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Orders\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Import\Index.cshtml" />
+    <Content Include="src\index.js" />
+    <Content Include="webpack.config.js" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -835,6 +837,7 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.ttf" />
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="package.json" />
+    <Content Include="package-lock.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
@@ -860,6 +863,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\temp\" />
+    <Folder Include="dist\" />
+    <Folder Include="src\components\" />
     <Folder Include="Userfiles\" />
   </ItemGroup>
   <ItemGroup>

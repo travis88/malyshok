@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -49,5 +50,32 @@ namespace Disly.Areas.Admin.Controllers
         {
             return View(model);
         }
+
+        [OutputCache(Location = OutputCacheLocation.None)]
+        public ActionResult ImportProcessed()
+        {
+            var now = DateTime.Now;
+            var d = new TestDate
+            {
+                Year = now.Year,
+                Month = now.Month,
+                Day = now.Day,
+                Hour = now.Hour,
+                Minute = now.Minute,
+                Second = now.Second
+            };
+
+            return Json(d, JsonRequestBehavior.AllowGet);
+        }
+    }
+
+    class TestDate
+    {
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int Day { get; set; }
+        public int Hour { get; set; }
+        public int Minute { get; set; }
+        public int Second { get; set; }
     }
 }

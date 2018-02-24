@@ -189,6 +189,7 @@
     <Content Include="Content\decor\chuvashia\styles.css" />
     <Content Include="Content\decor\first\color.css" />
     <Content Include="Content\decor\first\main.css" />
+    <Content Include="Content\dist\bundle.js" />
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\fonts\fontello\fontello.css" />
     <Content Include="Content\fonts\fontello\fontello.svg" />
@@ -863,7 +864,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\temp\" />
-    <Folder Include="dist\" />
     <Folder Include="src\components\" />
     <Folder Include="Userfiles\" />
   </ItemGroup>

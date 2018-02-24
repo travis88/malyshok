@@ -4,7 +4,7 @@ const webpack = require('webpack');
 module.exports = {
     entry: './src/index.js',
     output: {
-        path: path.resolve('dist'),
+        path: path.resolve('Content/dist'),
         filename: 'bundle.js',
         sourceMapFilename: "bundle.map"
     },

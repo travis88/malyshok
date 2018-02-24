@@ -1,9 +1,14 @@
-﻿using Disly.Areas.Admin.Models;
+﻿using cms.dbModel.entity;
+using Disly.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Disly.Areas.Admin.Controllers
 {
@@ -135,6 +140,31 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Cancel()
         {
             return Redirect(StartUrl + Request.Url.Query);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "xml-btn")]
+        public ActionResult GetXml(Guid id)
+        {
+            var order = _cmsRepository.getOrder(id);
+            if (order != null)
+            {
+                XmlSerializer xsSubmit = new XmlSerializer(typeof(OrderModel));
+                byte[] xml;
+
+                using (var sww = new StringWriter())
+                {
+                    using (XmlWriter writer = XmlWriter.Create(sww))
+                    {
+                        xsSubmit.Serialize(writer, order);
+                        xml = Encoding.UTF8.GetBytes(sww.ToString());
+                    }
+                }
+                return File(xml, "application/xml", order.Num.ToString() + ".xml");
+            }
+
+            model.Item = order;
+            return View("Item", model);
         }
     }
 }

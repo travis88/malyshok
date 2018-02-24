@@ -117,11 +117,13 @@ namespace cms.dbase
                             Patronymic = s.contentorderscontentusers.c_patronymic,
                             Surname = s.contentorderscontentusers.c_surname,
                             Phone = s.contentorderscontentusers.c_phone,
-                            Address = s.contentorderscontentusers.c_address
+                            Address = s.contentorderscontentusers.c_address,
+                            Birthday = s.contentorderscontentusers.d_register_date
                         },
                         Details = s.contentorderdetailscontentorderss
                                     .Select(d => new OrderDetails
                                     {
+                                        Id = d.id,
                                         Product = new ProductModel
                                         {
                                             Id = d.contentorderdetailscontentproducts.id,

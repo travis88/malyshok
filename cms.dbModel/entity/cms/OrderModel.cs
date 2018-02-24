@@ -39,7 +39,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Детали 
         /// </summary>
-        public IEnumerable<OrderDetails> Details { get; set; }
+        public OrderDetails[] Details { get; set; }
 
         /// <summary>
         /// Комментарий пользователя

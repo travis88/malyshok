@@ -406,6 +406,7 @@
     <Content Include="Areas\Admin\Views\Products\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Orders\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Orders\Item.cshtml" />
+    <Content Include="Areas\Admin\Views\Import\Index.cshtml" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
     <Content Include="Content\plugins\tinymce\plugins\help\img\logo.png" />
     <Content Include="Content\plugins\tinymce\plugins\help\plugin.min.js" />
@@ -562,6 +563,7 @@
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\cmsMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\DocumentsController .cs" />
+    <Compile Include="Areas\Admin\Controllers\ImportController.cs" />
     <Compile Include="Areas\Admin\Controllers\OrdersController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhotoAlbumsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
@@ -584,6 +586,7 @@
     <Compile Include="Areas\Admin\Models\CategoryViewModel.cs" />
     <Compile Include="Areas\Admin\Models\cmsMenuViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DocumentsViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\ImportViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ModalViewModels\SitesModalViewModel.cs" />
     <Compile Include="Areas\Admin\Models\OrderViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PhotoViewModel.cs" />

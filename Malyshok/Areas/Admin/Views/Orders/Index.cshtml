@@ -7,16 +7,37 @@
 
         @if (Model.List != null)
         {
-            foreach (var item in Model.List.Orders)
-            {
-                <div class="list-item">
-                    <div class="li-desc">
-                        <a href="/admin/orders/item/@item.Id/@ViewBag.urlQuery" title="@item.Num" class="li-caption">@item.Num</a><br />
-                        <span>Статус: </span>@(item.Status != null ? item.Status.Title : String.Empty)<br />
-                        <span>Дата: </span>@item.Date.ToString("dd.MM.yyyy HH:mm:ss")<br />
-                    </div>
-                </div>
-            }
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Номер</th>
+                        <th>Пользователь</th>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.List.Orders)
+                    {
+                        <tr>
+                            <td>
+                                <a href="/admin/orders/item/@item.Id">
+                                    @item.Num
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/admin/users/item/@item.User.Id" target="_blank">
+                                    @item.User.EMail
+                                </a>
+                            </td>
+                            <td>@item.Date.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                            <td>@item.Total.ToString("0.##")</td>
+                            <td>@(item.Status != null ? item.Status.Title : String.Empty)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
             Html.RenderAction("Pager", "Templates", new { @Model = Model.List.Pager });
         }
         else

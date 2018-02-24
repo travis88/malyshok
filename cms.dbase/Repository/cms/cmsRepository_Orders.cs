@@ -57,7 +57,14 @@ namespace cms.dbase
                                 Status = new OrderStatus
                                 {
                                     Title = s.contentorderscontentorderstatuses.c_title
-                                }
+                                },
+                                User = new UsersModel
+                                {
+                                    Id = s.contentorderscontentusers.id,
+                                    EMail = s.contentorderscontentusers.c_email
+                                },
+                                Total = s.contentorderdetailscontentorderss
+                                            .Sum(d => d.m_price * d.n_count)
                             });
 
                 if (list.Any())

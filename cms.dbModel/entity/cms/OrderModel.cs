@@ -50,6 +50,11 @@ namespace cms.dbModel.entity
         /// Комментарий админа
         /// </summary>
         public string AdminComment { get; set; }
+
+        /// <summary>
+        /// Общая стоимость
+        /// </summary>
+        public decimal Total { get; set; }
     }
 
     /// <summary>

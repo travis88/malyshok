@@ -5,10 +5,11 @@
         @Html.TextBox("upload", null, new { type = "file", title = "xml-документ", accept = ".xml" })
 
         <div id="content"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
-        <script src="@Url.Content("~/Scripts/importInfo.jsx")"></script>
+        <script type="text/babel" src="@Url.Content("~/Scripts/importInfo.jsx")"></script>
 
     </div>
     <div class="dop_info-block"></div>

@@ -36,10 +36,20 @@ namespace Import.Core
         public static int Step { get; set; }
 
         /// <summary>
+        /// Флаг завершённости
+        /// </summary>
+        public static bool IsCompleted { get; set; } = false;
+
+        /// <summary>
         /// Основной метод
         /// </summary>
         public static void DoImport(Stream xml)
         {
+            if (!IsCompleted)
+            {
+                Percent = Step = CountProducts = 0;
+            }
+
             //SrvcLogger.Debug("{PREPARING}", "Начало чтения XML-данных");
 
             XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfProducts));
@@ -57,7 +67,7 @@ namespace Import.Core
 
                 for (int i = 0; i <= 100; i++)
                 {
-                    Thread.Sleep(300);
+                    Thread.Sleep(250);
                     Percent = i;
 
                     if (i == 100)
@@ -65,7 +75,10 @@ namespace Import.Core
                         i = 0;
                         Step++;
                         if (Step == 3)
+                        {
+                            IsCompleted = true;
                             break;
+                        }
                     }
                 }
             }

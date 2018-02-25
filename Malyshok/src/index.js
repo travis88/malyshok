@@ -19,7 +19,8 @@ class ImportInfo extends Component {
                 percent: 0,
                 count: 0,
                 step: 0,
-                time: `${dd}.${MM}.${yyyy} ${HH}:${mm}:${ss}`
+                time: `${dd}.${MM}.${yyyy} ${HH}:${mm}:${ss}`,
+                isCompleted: false
             }
         };
         this.loadFromServer = this.loadFromServer.bind(this);
@@ -51,7 +52,7 @@ class ImportInfo extends Component {
                 </Steps>
                 <CircularProgressbar percentage={this.state.data.percent} />
                 <h1>Кол-во продуктов: {this.state.data.count}</h1>
-                {this.state.data.time}
+                <p>{this.state.data.time}</p>
           </div>
         );
     }

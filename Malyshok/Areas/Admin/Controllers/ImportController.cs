@@ -51,6 +51,11 @@ namespace Disly.Areas.Admin.Controllers
         // GET: Admin/Import
         public ActionResult Index()
         {
+            Importer.IsCompleted = false;
+            Importer.Percent = 0;
+            Importer.Step = 0;
+            Importer.CountProducts = 0;
+
             return View(model);
         }
 
@@ -76,7 +81,8 @@ namespace Disly.Areas.Admin.Controllers
                 count = Importer.CountProducts,
                 percent = Importer.Percent,
                 step = Importer.Step,
-                time = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")
+                time = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"),
+                isCompleted = Importer.IsCompleted
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);

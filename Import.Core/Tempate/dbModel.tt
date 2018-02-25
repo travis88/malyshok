@@ -1,0 +1,17 @@
+﻿<#@ template language="C#" debug="True" hostSpecific="True"                           #>
+<#@ output extension=".generated.cs"                                                  #>
+<#@ include file="$(ProjectDir)LinqToDB.Templates\LinqToDB.SqlServer.SqlTypes.Tools.ttinclude"     #>
+
+<#
+	NamespaceName = "Import.Core";
+	DataContextName	 = "dbModel";
+	DefaultConfiguration = "dbModel";
+	GenerateConstructors = true;
+	 
+	LoadSqlServerMetadata("Data Source=chuvashia.com;Initial Catalog=Malyshok21;User ID=Malyshok_Admin;Password=Malyshok_db;");
+	
+	//Tables = Tables.Where(p => p.Value.TableName.StartsWith("Orgs")).ToDictionary(p => p.Key, p => p.Value);
+	//Procedures = Procedures.Where(p => p.Value.ProcedureName.StartsWith("cms_")).ToDictionary(p => p.Key, p => p.Value);
+	
+	GenerateModel();                                                                                                
+#> 

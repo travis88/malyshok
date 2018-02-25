@@ -1,10 +1,27 @@
 ﻿import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import CircularProgressbar from 'react-circular-progressbar';
+import Steps, { Step } from 'rc-steps';
 
 class ImportInfo extends Component {
     constructor(props) {
+        var today = new Date();
+        var dd = today.getDate();
+        var MM = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+        var HH = today.getHours();
+        var mm = today.getMinutes();
+        var ss = today.getSeconds();
+
         super(props);
-        this.state = { data: [] };
+        this.state = {
+            data: {
+                percent: 0,
+                count: 0,
+                step: 0,
+                time: `${dd}.${MM}.${yyyy} ${HH}:${mm}:${ss}`
+            }
+        };
         this.loadFromServer = this.loadFromServer.bind(this);
     }
 
@@ -26,7 +43,15 @@ class ImportInfo extends Component {
     render() {
         return (
             <div className="import-info">
-                {this.state.data.Day}.{this.state.data.Month}.{this.state.data.Year} | {this.state.data.Hour}:{this.state.data.Minute}:{this.state.data.Second}
+
+                <Steps current={this.state.data.step}>
+                    <Steps.Step title="загрузка" />
+                    <Steps.Step title="обработка" />
+                    <Steps.Step title="финализация" />
+                </Steps>
+                <CircularProgressbar percentage={this.state.data.percent} />
+                <h1>Кол-во продуктов: {this.state.data.count}</h1>
+                {this.state.data.time}
           </div>
         );
     }

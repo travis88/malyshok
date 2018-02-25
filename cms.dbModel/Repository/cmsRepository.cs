@@ -168,7 +168,6 @@ namespace cms.dbModel
 
         // продукция
         public abstract ProductList getProducts(FilterParams filter);
-        public abstract ProductModel[] getProducts();
         public abstract ProductModel getProduct(Guid id);
         public abstract bool updateProduct(ProductModel item);
         public abstract bool insertProduct(ProductModel item);

@@ -71,38 +71,6 @@ namespace cms.dbase
             }
         }
 
-        public override ProductModel[] getProducts()
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = (from p in db.content_productss
-                             join l in db.content_product_categories_linkss on p.id equals l.f_product
-                             join c in db.content_categoriess on l.f_category equals c.id
-                             orderby p.d_date descending
-                             select new { p, c });
-
-                // кол-во эл-тов
-                var itemCount = query.Count();
-
-                return query.ToArray()
-                    .GroupBy(g => new { g.p.id })
-                    .Select(s => new ProductModel
-                    {
-                        Id = s.Key.id,
-                        Title = s.First().p.c_title,
-                        Code = s.First().p.c_code,
-                        Barcode = s.First().p.c_barcode,
-                        Date = s.First().p.d_date,
-                        Photo = new Photo { Url = s.First().p.c_photo },
-                        Categories = s.Select(c => new CategoryModel
-                        {
-                            Id = c.c.id,
-                            Title = c.c.c_title
-                        }).ToArray()
-                    }).ToArray();
-            }
-        }
-
         /// <summary>
         /// Возвращает единичную запись продукта
         /// </summary>

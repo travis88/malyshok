@@ -8,14 +8,17 @@ module.exports = {
         filename: 'bundle.js',
         sourceMapFilename: "bundle.map"
     },
+    //resolve: {
+    //    extensions: ['', '.js', '.jsx']
+    //},
     module: {
-        rules: [
+        loaders: [
             {
-                test: /\.js$/,
+                test: /\.jsx?$/,
                 exclude: /(node_modules)/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['env', 'stage-0', 'react']
+                    presets: ['es2015', 'env', 'stage-0', 'react']
                 }
             }
         ]

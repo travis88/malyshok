@@ -1,10 +1,12 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
+using Import.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
@@ -15,6 +17,9 @@ namespace Disly.Areas.Admin.Controllers
 {
     public class ImportController : CoreController
     {
+        /// <summary>
+        /// Модель для вьюхи
+        /// </summary>
         ImportViewModel model;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -53,50 +58,28 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "xml-btn")]
         public ActionResult IndexPost(HttpPostedFileBase upload)
         {
+            if (upload != null && upload.ContentLength > 0)
+            {
+                using (Stream stream = upload.InputStream)
+                {
+                    Importer.DoImport(stream);
+                }
+            }
             return View(model);
         }
-
+        
         [OutputCache(Location = OutputCacheLocation.None)]
         public ActionResult ImportProcessed()
         {
-            var now = DateTime.Now;
-            var d = new
+            var result = new
             {
-                Year = now.Year,
-                Month = now.Month,
-                Day = now.Day,
-                Hour = now.Hour,
-                Minute = now.Minute,
-                Second = now.Second
+                count = Importer.CountProducts,
+                percent = Importer.Percent,
+                step = Importer.Step,
+                time = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")
             };
 
-            return Json(d, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "lastprod-btn")]
-        public ActionResult GetLastProducts()
-        {
-            var filter = getFilter(200);
-
-            var products = _cmsRepository.getProducts(filter);
-            XmlSerializer xsSubmit = new XmlSerializer(typeof(ProductArray));
-            byte[] xml;
-
-            var p = new ProductArray
-            {
-                Products = products.Data
-            };
-
-            using (var sww = new StringWriter())
-            {
-                using (XmlWriter writer = XmlWriter.Create(sww))
-                {
-                    xsSubmit.Serialize(writer, p);
-                    xml = Encoding.UTF8.GetBytes(sww.ToString());
-                }
-            }
-            return File(xml, "application/xml", "last-products.xml");
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

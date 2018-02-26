@@ -45,6 +45,7 @@ namespace cms.dbase
                         Photo = new Photo { Url = s.First().p.c_photo },
                         Categories = s.Select(c => new CategoryModel
                         {
+                            Id = c.c.id,
                             Title = c.c.c_title
                         }).ToArray()
                     }).ToArray();

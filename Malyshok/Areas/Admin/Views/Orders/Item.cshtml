@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-3">
                         <label>Сумма заказа:</label><br />
-                        @ViewBag.Sum
+                        @ViewBag.Sum.ToString("0.##")
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                                     <a target="_blank" href="/admin/products/item/@d.Product.Id">@d.Product.Title</a>
                                 </td>
                                 <td>@d.Date.ToString("dd.MM.yyyy HH:mm:ss")</td>
-                                <td>@d.Price</td>
+                                <td>@d.Price.ToString("0.##")</td>
                                 <td>@d.Count</td>
                             </tr>
                         }
@@ -78,6 +78,7 @@
                 <button type="submit" name="action" value="save-btn" data-primary="true" class="button icon-create">Сохранить</button>
             }
             <button type="submit" name="action" data-action="cancel" value="cancel-btn" class="button icon-cancel">Закрыть</button>
+            <button type="submit" name="action" data-action="noPreloader-accept" value="xml-btn" class="button icon-sitemap">Получить в виде xml</button>
         </div>
     }
 }

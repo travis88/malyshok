@@ -31,7 +31,7 @@
             @Html.TextBoxFor(m => m.Item.Code, new { required = "", type = "text", maxlength = "128", title = "Код" })
             @Html.TextBoxFor(m => m.Item.Barcode, new { required = "", type = "text", maxlength = "128", title = "Штрих-код" })
             @Html.TextBoxFor(m => m.Item.Count, new { required = "", type = "number", maxlength = "128", title = "Кол-во" })
-            @Html.TextBoxFor(m => m.Item.Price, new { required = "", type = "text", maxlength = "128", title = "Цена" })
+            @Html.TextBoxFor(m => m.Item.Price, new { required = "", type = "text", maxlength = "128", title = "Цена", value = Model.Item != null ? Model.Item.Price.ToString("0.##") : "0.00" })
 
             <div class="form-group">
                 <label for="itemGroups-select">Категории продукции:</label>

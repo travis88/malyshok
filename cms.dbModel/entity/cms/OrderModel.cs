@@ -39,7 +39,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Детали 
         /// </summary>
-        public IEnumerable<OrderDetails> Details { get; set; }
+        public OrderDetails[] Details { get; set; }
 
         /// <summary>
         /// Комментарий пользователя
@@ -50,6 +50,11 @@ namespace cms.dbModel.entity
         /// Комментарий админа
         /// </summary>
         public string AdminComment { get; set; }
+
+        /// <summary>
+        /// Общая стоимость
+        /// </summary>
+        public decimal Total { get; set; }
     }
 
     /// <summary>

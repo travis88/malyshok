@@ -76,12 +76,6 @@
                 <div>
 
                 </div>
-                <div>
-                    Мы в социальных сетях
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
             </div>
         </div>
     </div>
@@ -147,25 +141,32 @@
                 <div class="col-md-6 col-md-push-6">
                     <div class="row">
                         <div class="col-md-6">
-                            <div>Контакты:</div>
+                            <div class="title">Контакты:</div>
                             <div>
-                                <div>тел.</div>
+                                <div class="telefon">тел.</div>
                                 <div>@Html.Raw(Model.SitesInfo.Phone.Replace("|", "<br />"))</div>
-                                <div>e-mail</div>
+                            </div>
+                            <div>
+                                <div class="email">e-mail</div>
                                 <div>@Html.Raw(Model.SitesInfo.Email.Replace("|", "<br />"))</div>
                             </div>
 
                         </div>
                         <div class="col-md-6">
-                            <div>Режим работы</div>
+                            <div class="title">Режим работы</div>
                             @Html.Raw(Model.SitesInfo.Worktime.Replace("|", "<br />"))
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-md-pull-6">
-                    &copy;&nbsp;2010-@currentYear&nbsp;@Model.SitesInfo.LongTitle
-                    <div>@Model.SitesInfo.Adress</div>
-                    <p>@ViewBag.Quote</p>
+                <div class="col-md-6 col-md-pull-6">                    
+                    <div class="adress"><b>@Model.SitesInfo.Adress</b>&nbsp;&nbsp;&nbsp;<a href="/comtacts">Схема проезда</a></div>
+                    <div class="socseti">
+                        <a href="https://vk.com"><span class="icon-vkontakte"></span></a>
+                        <a href="https://ru-ru.facebook.com/"><span class="icon-facebook"></span></a>
+                        <a href="https://www.instagram.com/"><span class="icon-instagram"></span></a>
+                    </div>
+                    <div class="copyright">&copy;&nbsp;2010-@currentYear&nbsp;@Model.SitesInfo.LongTitle</div>
+                    <div class="quote">@ViewBag.Quote</div>
                 </div>
             </div>
         </div>

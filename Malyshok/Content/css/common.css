@@ -67,6 +67,7 @@ body {
         border-right: solid 1px #21aedd;
     }
     .menu_block .nav .active a,
+    .menu_block .nav a:focus,
     .menu_block .nav a:hover {
         background: #49c1e9 !important;
         color: #ffffff;
@@ -192,4 +193,45 @@ body {
     padding: 40px 0;
     background: #f2f2f2;
     border-top: solid 1px #dadada;
+    font-size: 14px;
 }
+.copyright {
+    font-size: 17px;
+}
+.quote {
+    font-size: 13.2px;
+}
+.adress {
+    margin-bottom: 10px;
+}
+.socseti {
+    margin-bottom: 40px;
+}
+    .socseti span {
+        padding: 5px;
+        background: #21aedc;
+        border-radius: 50%;
+        text-align: center;
+    }
+    .socseti span:before {
+        color: #ffffff;
+    }
+.quote {
+
+}
+.footer .title {
+    font-size: 16px;
+    color: #65acda;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+.telefon,
+.email {
+    float: left;
+    width: 70px;
+    color: #b2b2b2;
+}
+    .telefon ~ div,
+    .email ~ div {
+        overflow: auto;
+    }

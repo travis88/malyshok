@@ -1,0 +1,46 @@
+﻿<div class="type-page">
+
+    @Html.Partial("services/breadcrumbs")
+    <h1>Вход</h1>
+
+    <div class="page-text">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="shadow-block login-form">
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+                        <div>
+                            <div class="WelocomeLogin">
+                                <div>
+                                    <label for="Login">Логин / E-Mail</label>
+                                </div>
+                                @Html.TextBox("Login","", new { @class = "RegField", @placeholder = "Логин" })
+                            </div>
+                            <div class="WelcomePass">
+                                <div>
+                                    <label for="Pass">Пароль</label>
+                                </div>
+                                @Html.Password("Pass","", new { @class = "RegField", @placeholder = "Пароль" })
+                            </div>
+                            <div class="WelcomeBtn">
+                                <input id="LoginButton" class="RegButton" type="submit" value="Войти" />
+                            </div>
+                            <p>&nbsp;</p>
+                            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div>
+                    <div>Войти через социальные сети</div>
+                    <div>Вы можете войти в личный кабинет в один клик, через свой профиль в социальной сети.</div>
+                    <div>
+                        <a href="/User/login_vk"><span class="login-vk"></span></a>
+                        <a href="/User/login_vk"><span class="login-fb"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

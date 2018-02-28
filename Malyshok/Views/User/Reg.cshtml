@@ -1,0 +1,58 @@
+﻿
+
+<div class="type-page">
+
+    @Html.Partial("services/breadcrumbs")
+    <h1>Регистрация</h1>
+    <div class="page-text">
+        <div class="shadow-block">
+            <form>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.CheckBox("Type", true, new { type = "checkbox", title = "Тип", data_toggle = "toggle", data_on = "Физическое лицо", data_off = "Юридическое лицо или ИП", data_width = "248" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBox("OrgName", "", new { title= "Название организации", @placeholder = "ООО «Прессмарк» или ИП «Иванов»" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.TextBox("UserName", "", new { title = "ФИО", required = "", @placeholder = "Иванов Иван" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBox("Adress", "", new { title = "Адрес", required = "", @placeholder = "Название населенного пункта, Название удичы, номер дома" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.TextBox("Phone", "", new { title = "Телефон", required = "", @placeholder = "+7 (000) 000-00-00" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBox("Mail", "", new { title = " E-Mail", required = "", @placeholder = "user@domain" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.Password("Pass", "", new { title = "Пароль", required = "", @placeholder = "password" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Password("confirmPass", "", new { title = "подтверждение пароля", required = "", @placeholder = "password" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="compliance">Настоящим подтверждаю, что я ознакомлен и согласен с <a href="/working-conditions/terms_of_use" target="_blank">условиями политики конфиденциальности</a></label>
+                    @Html.CheckBox("compliance", new { type = "checkbox", required = "", data_toggle = "toggle", data_on = "принимаю условия", data_off = "не принимаю условия", data_width = "300" })
+                </div>
+                <div class="g-recaptcha" data-sitekey="6LefhkkUAAAAAFeDkqz2uYmGSKooPJGnDnkBGPGy"></div>
+            </form>
+            <button type="submit" name="action" class="button icon-user">Регистрация</button>
+            <button type="submit" name="action" class="button icon-user">Вход</button>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <link href="/Content/plugins/Disly/DislyControls.css" rel="stylesheet">
+    <script src="/Content/plugins/bootstrap/js/bootstrap-toggle.js"></script>
+    <script src="/Content/plugins/Disly/DislyControls.js"></script>
+}

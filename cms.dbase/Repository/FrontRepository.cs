@@ -724,7 +724,7 @@ namespace cms.dbase
 
                 // берём последние 3 новости данной группы
                 if (data.Any())
-                    list.AddRange(data.Take(3));
+                    list.AddRange(data.Take(6));
 
                 if (list.Any())
                     return list;

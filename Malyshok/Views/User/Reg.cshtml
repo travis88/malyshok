@@ -6,7 +6,7 @@
     <h1>Регистрация</h1>
     <div class="page-text">
         <div class="shadow-block">
-            <form>
+            <form id="regForm" name="rgistr" method="post">
                 <div class="row">
                     <div class="col-md-6">
                         @Html.CheckBox("Type", true, new { type = "checkbox", title = "Тип", data_toggle = "toggle", data_on = "Физическое лицо", data_off = "Юридическое лицо или ИП", data_width = "248" })
@@ -33,10 +33,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        @Html.Password("Pass", "", new { title = "Пароль", required = "", @placeholder = "password" })
+                        @Html.Password("Pass.Password", "", new { title = "Пароль", required = "", @placeholder = "password" })
                     </div>
                     <div class="col-md-6">
-                        @Html.Password("confirmPass", "", new { title = "подтверждение пароля", required = "", @placeholder = "password" })
+                        @Html.Password("Pass.PasswordConfirm", "", new { title = "подтверждение пароля", required = "", @placeholder = "password" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -45,8 +45,11 @@
                 </div>
                 <div class="g-recaptcha" data-sitekey="6LefhkkUAAAAAFeDkqz2uYmGSKooPJGnDnkBGPGy"></div>
             </form>
-            <button type="submit" name="action" class="button icon-user">Регистрация</button>
+            <button type="submit" form="regForm" name="action" class="button icon-user">Регистрация</button>
             <button type="submit" name="action" class="button icon-user">Вход</button>
+
+            <p>&nbsp;</p>
+            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
         </div>
     </div>
 </div>

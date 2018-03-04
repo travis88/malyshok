@@ -7,28 +7,20 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="shadow-block login-form">
-                    <form method="post">
-                        @Html.AntiForgeryToken()
-                        <div>
-                            <div class="WelocomeLogin">
-                                <div>
-                                    <label for="Login">Логин / E-Mail</label>
-                                </div>
-                                @Html.TextBox("Login","", new { @class = "RegField", @placeholder = "Логин" })
-                            </div>
-                            <div class="WelcomePass">
-                                <div>
-                                    <label for="Pass">Пароль</label>
-                                </div>
-                                @Html.Password("Pass","", new { @class = "RegField", @placeholder = "Пароль" })
-                            </div>
-                            <div class="WelcomeBtn">
-                                <input id="LoginButton" class="RegButton" type="submit" value="Войти" />
-                            </div>
-                            <p>&nbsp;</p>
-                            @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                    <p>&nbsp;</p>
+                    <div>
+                        <form id="regForm" method="post">
+                            @Html.AntiForgeryToken()
+                            @Html.TextBox("Login", "", new { title = "Логин / E-Mail", required = "", @placeholder = "mail@domain" })
+                            @Html.Password("Password", "", new { title = "Пароль", required = "", @placeholder = "password" })
+                        </form>
+                        <div class="WelcomeBtn">
+                            <button type="submit" form="regForm" class="button btn-blue">Войти</button>
+                            <a href="/user/reg" class="button btn-invers to-right">Регистрация</a>
                         </div>
-                    </form>
+                        <p>&nbsp;</p>
+                        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                    </div>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -44,3 +36,9 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+    <link href="/Content/plugins/Disly/DislyControls.css" rel="stylesheet">
+    <script src="/Content/plugins/bootstrap/js/bootstrap-toggle.js"></script>
+    <script src="/Content/plugins/Disly/DislyControls.js"></script>
+}

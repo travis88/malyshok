@@ -68,7 +68,7 @@
                     <a href="/basket">
                         <div class="basket-counter">
                             <div class="goods"><span>85</span> товаров</div>
-                            <div class="goods"><span>34285,75</span> руб.</div>
+                            <div class="price"><span>34285,75</span> руб.</div>
                         </div>
                         <img src="~/Content/img/basket.png" />
                     </a>
@@ -76,7 +76,7 @@
                 <div class="search-block">
                     <div>
                         <form id="search-form" action="/search/" method="post">
-                            <input id="SerchText" placeholder="Поиск..." />
+                            <input id="SearchText" class="search-text" placeholder="Поиск..." />
                             <button type="submit" class="button">Найти</button>
                         </form>
                     </div>
@@ -112,7 +112,14 @@
             </ul>
             }
             <div class="login-block">
-                <a href="/User/login">Вход</a><a>/</a><a href="/User/reg">Регистрация</a>
+                @if (Model.UserInfo == null)
+                {
+                    <a href="/user/login">Вход</a><a>/</a><a href="/user/reg">Регистрация</a>
+                }
+                else
+                {
+                    <a href="/user/">@Model.UserInfo.FIO</a><a>/</a><a href="/user/logout">Выход</a>
+                }
             </div>
         </div>
     </div>

@@ -222,7 +222,6 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
-    <Content Include="Content\img\basket.png" />
     <Content Include="Content\img\blockquote.png" />
     <Content Include="Content\img\catalog.jpg" />
     <Content Include="Content\img\clouds.png" />
@@ -232,6 +231,7 @@
     <Content Include="Content\img\preloader.svg" />
     <Content Include="Content\img\prod_new.jpg" />
     <Content Include="Content\img\slide1.jpg" />
+    <Content Include="Content\img\basket.png" />
     <Content Include="Content\img\special\image.jpg" />
     <Content Include="Content\img\special\museum.png" />
     <Content Include="Content\img\special\sand-blind-panel\a1.png" />
@@ -866,6 +866,8 @@
     <Content Include="Views\Prod\Index.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Reg.cshtml" />
+    <Content Include="Views\User\RegCompleted.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

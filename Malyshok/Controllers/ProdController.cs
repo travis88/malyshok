@@ -21,7 +21,8 @@ namespace Disly.Controllers
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
-                Breadcrumbs= breadcrumb,
+                UserInfo = UserInfo,
+                Breadcrumbs = breadcrumb,
                 BannerArray = bannerArray,
                 ProdCatalog = category_list,
                 CurrentPage = currentPage

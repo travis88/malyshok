@@ -44,6 +44,14 @@ namespace cms.dbModel
         //фотоальбом
         public abstract PhotoModel[] getPhotoList(Guid id);
 
+        // Пользователи
+        public abstract bool CheckCustomerMail(string Mail);
+        public abstract string ConfirmMail(Guid Code);
+        public abstract UsersModel getCustomer(Guid id);
+        public abstract bool createCustomer(UsersModel item);
+        //public abstract bool updateCustomer(UsersModel item);
+        //public abstract bool deleteCustomer(Guid id);
+
         // Продукция
         public abstract CategoryModel[] getProdCatalogModule();
     }

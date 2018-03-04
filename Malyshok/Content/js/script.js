@@ -1,4 +1,14 @@
 ﻿$(document).ready(function () {
+
+    var SummerSt = $(".validation-summary-valid").find("li").attr("style")
+    if (SummerSt == "display:none") $(".validation-summary-valid").hide();
+
+    $('form input[type=checkbox]#Type').bind({
+        change: function () {
+            $('input#OrgName').closest('.form-group').toggle();
+        }
+    });
+
     $('#sb-slider').slicebox({
         orientation: 'r',
         cuboidsRandom: true,
@@ -7,6 +17,22 @@
         interval: 3000,
     });
 
+    $('input#Mail').bind({
+        change: function () {
+            var $obj = $('.check-mail').empty();
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "/user/CheckMail/"+$(this).val(),
+                error: function () { $obj.append("ошибка в запросе на проверку уникальности E-Mail"); },
+                success: function (data) {
+                    var _result = data.Result;
+                    $obj.append(_result);
+                }
+            });
+        }
+    });
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 

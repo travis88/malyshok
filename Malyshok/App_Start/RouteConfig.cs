@@ -81,7 +81,7 @@ namespace Disly
             routes.MapRoute(
                name: "User",
                url: "User/{action}/{id}",
-               defaults: new { controller = "User", action = "LogIn", id = UrlParameter.Optional }
+               defaults: new { controller = "User", action = "Index", id = UrlParameter.Optional }
             );
 
 

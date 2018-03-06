@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Import.Core.Models;
+using LinqToDB.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -87,22 +88,46 @@ namespace Import.Core
 
                 using (var db = new dbModel(connection))
                 {
-                    Mapper.Initialize(cfg => cfg.CreateMap<import_products, ProductModel>()
-                                        .ForMember(d => d.Title, opt => opt.MapFrom(src => src.c_title))
-                                        .ForMember(d => d.Code, opt => opt.MapFrom(src => src.c_code))
-                                        .ForMember(d => d.Barcode, opt => opt.MapFrom(src => src.c_barcode))
-                                        .ForMember(d => d.Count, opt => opt.MapFrom(src => src.n_count))
-                                        .ForMember(d => d.Price, opt => opt.MapFrom(src => src.m_price))
-                                        .ForMember(d => d.Date, opt => opt.MapFrom(src => src.d_date))
-                                        .ForMember(d => d.Standart, opt => opt.MapFrom(src => src.c_standart)));
+                    Mapper.Initialize(cfg =>
+                    {
+                        cfg.CreateMap<ProductModel, import_products>()
+                           .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
+                           .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
+                           .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
+                           .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.Barcode))
+                           .ForMember(d => d.n_count, opt => opt.MapFrom(src => src.Count))
+                           .ForMember(d => d.m_price, opt => opt.MapFrom(src => src.Price))
+                           .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date))
+                           .ForMember(d => d.c_standart, opt => opt.MapFrom(src => src.Standart));
+
+                        cfg.CreateMap<CategoryModel, import_catalogs>()
+                           .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
+                           .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
+                           .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)));
+                    });
+
+                    var products = Mapper.Map<List<import_products>>(arrayOfProducts.Products);
 
                     #region продукция
                     try
                     {
-                        AddProducts(db, arrayOfProducts.Products);
+                        AddProducts(db, products);
                     }
                     catch (Exception e)
                     {
+                        SrvcLogger.Error("{error}", "Ошибка при добавлении продукции");
+                        SrvcLogger.Error("{error}", e.ToString());
+                    }
+                    #endregion
+
+                    #region категории
+                    try
+                    {
+
+                    }
+                    catch (Exception e)
+                    {
+                        SrvcLogger.Error("{error}", "Ошибка при добавлении категорий");
                         SrvcLogger.Error("{error}", e.ToString());
                     }
                     #endregion
@@ -114,28 +139,27 @@ namespace Import.Core
         /// Добавляет продукцию
         /// </summary>
         /// <param name="products"></param>
-        private static void AddProducts(dbModel db, IEnumerable<ProductModel> products)
+        private static void AddProducts(dbModel db, IEnumerable<import_products> products)
         {
-            //foreach (var org in distinctOrgs)
-            //{
-            //    Guid id = org.ID; // идентификатор
-            //    string name = org.Name; // название
-            //                            //string oid = org.OID; // OID
-            //    string kpp = org.KPP; // кпп
-            //                          //string orgn = org.OGRN; // OGRN
+            using (var tr = db.BeginTransaction())
+            {
+                db.BulkCopy(products);
+                tr.Commit();
+            }
+        }
 
-            //    list.Add(new ImportFrmpOrgs
-            //    {
-            //        Guid = id,
-            //        CName = name,
-            //        DModify = DateTime.Now
-            //    });
-            //}
-
-            //// добавляем организации
-            //db.BulkCopy(list);
-            
-
+        /// <summary>
+        /// Добавляет категории
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="categories"></param>
+        private static void AddCategories(dbModel db, IEnumerable<import_catalogs> categories)
+        {
+            using (var tr = db.BeginTransaction())
+            {
+                db.BulkCopy(categories);
+                tr.Commit();
+            }
         }
     }
 }

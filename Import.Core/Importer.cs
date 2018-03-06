@@ -87,15 +87,14 @@ namespace Import.Core
 
                 using (var db = new dbModel(connection))
                 {
-                    //Mapper.Initialize(cfg => cfg.CreateMap<CreateUserViewModel, User>()
-                    //.ForMember("Name", opt => opt.MapFrom(c => c.FirstName + " " + c.LastName))
-                    //.ForMember("Email", opt => opt.MapFrom(src => src.Login)))
-
-                    Mapper.Initialize(confing =>
-                    {
-                        //config.CreateMap<Entities.Book, Models.BookDTO>();
-                        //confing.CreateMap<pp, ProductModel[]>();
-                    });
+                    Mapper.Initialize(cfg => cfg.CreateMap<import_products, ProductModel>()
+                                        .ForMember(d => d.Title, opt => opt.MapFrom(src => src.c_title))
+                                        .ForMember(d => d.Code, opt => opt.MapFrom(src => src.c_code))
+                                        .ForMember(d => d.Barcode, opt => opt.MapFrom(src => src.c_barcode))
+                                        .ForMember(d => d.Count, opt => opt.MapFrom(src => src.n_count))
+                                        .ForMember(d => d.Price, opt => opt.MapFrom(src => src.m_price))
+                                        .ForMember(d => d.Date, opt => opt.MapFrom(src => src.d_date))
+                                        .ForMember(d => d.Standart, opt => opt.MapFrom(src => src.c_standart)));
 
                     #region продукция
                     try
@@ -135,19 +134,7 @@ namespace Import.Core
 
             //// добавляем организации
             //db.BulkCopy(list);
-
-            //List<import_products> prods = new List<import_products>();
-
-            //            Mapper.CreateMap<Src, Dest>()
-            //.ForMember(d => d.UserName, opt => opt.MapFrom(/* ????? */));
-
-            //AutoMapper.Mapper.Initialize(config =>
-            //{
-            //    config.CreateMap<Entities.Book, Models.BookDTO>();
-            //    config.CreateMap<Models.BookDTO, Entities.Book>();
-            //    config.CreateMap<Entities.Publisher, Models.PublisherDTO>();
-            //    config.CreateMap<Models.PublisherDTO, Entities.Publisher>();
-            //});
+            
 
         }
     }

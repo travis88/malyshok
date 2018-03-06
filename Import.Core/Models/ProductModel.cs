@@ -8,15 +8,15 @@ using System.Xml.Serialization;
 namespace Import.Core.Models
 {
     /// <summary>
-    /// Продуки
+    /// Продукты
     /// </summary>
     public class ProductModel
     {
         /// <summary>
         /// Идентификатор
         /// </summary>
-        [XmlAttribute("Id")]
-        public Guid Id { get; set; }
+        [XmlAttribute("ID")]
+        public int Id { get; set; }
 
         /// <summary>
         /// Название
@@ -63,7 +63,7 @@ namespace Import.Core.Models
         /// <summary>
         /// Категории товара
         /// </summary>
-        [XmlElement(ElementName = "Category")]
+        [XmlElement(ElementName = "Categories")]
         public CategoryModel Category { get; set; }
     }
 }

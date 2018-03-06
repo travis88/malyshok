@@ -1,4 +1,5 @@
-﻿using Import.Core.Models;
+﻿using AutoMapper;
+using Import.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -61,27 +62,93 @@ namespace Import.Core
 
             if (arrayOfProducts != null && arrayOfProducts.Products != null)
             {
-                int count = arrayOfProducts.Products.Count();
+                //int count = arrayOfProducts.Products.Count();
                 //SrvcLogger.Debug("{PREPARING}", String.Format("Кол-во записей {0}", count));
-                CountProducts = count;
+                //CountProducts = count;
 
-                for (int i = 0; i <= 100; i++)
+                #region comment
+                //for (int i = 0; i <= 100; i++)
+                //{
+                //    Thread.Sleep(250);
+                //    Percent = i;
+
+                //    if (i == 100)
+                //    {
+                //        i = 0;
+                //        Step++;
+                //        if (Step == 3)
+                //        {
+                //            IsCompleted = true;
+                //            break;
+                //        }
+                //    }
+                //}
+                #endregion
+
+                using (var db = new dbModel(connection))
                 {
-                    Thread.Sleep(250);
-                    Percent = i;
+                    //Mapper.Initialize(cfg => cfg.CreateMap<CreateUserViewModel, User>()
+                    //.ForMember("Name", opt => opt.MapFrom(c => c.FirstName + " " + c.LastName))
+                    //.ForMember("Email", opt => opt.MapFrom(src => src.Login)))
 
-                    if (i == 100)
+                    Mapper.Initialize(confing =>
                     {
-                        i = 0;
-                        Step++;
-                        if (Step == 3)
-                        {
-                            IsCompleted = true;
-                            break;
-                        }
+                        //config.CreateMap<Entities.Book, Models.BookDTO>();
+                        //confing.CreateMap<pp, ProductModel[]>();
+                    });
+
+                    #region продукция
+                    try
+                    {
+                        AddProducts(db, arrayOfProducts.Products);
                     }
+                    catch (Exception e)
+                    {
+                        SrvcLogger.Error("{error}", e.ToString());
+                    }
+                    #endregion
                 }
             }
+        }
+
+        /// <summary>
+        /// Добавляет продукцию
+        /// </summary>
+        /// <param name="products"></param>
+        private static void AddProducts(dbModel db, IEnumerable<ProductModel> products)
+        {
+            //foreach (var org in distinctOrgs)
+            //{
+            //    Guid id = org.ID; // идентификатор
+            //    string name = org.Name; // название
+            //                            //string oid = org.OID; // OID
+            //    string kpp = org.KPP; // кпп
+            //                          //string orgn = org.OGRN; // OGRN
+
+            //    list.Add(new ImportFrmpOrgs
+            //    {
+            //        Guid = id,
+            //        CName = name,
+            //        DModify = DateTime.Now
+            //    });
+            //}
+
+            //// добавляем организации
+            //db.BulkCopy(list);
+
+            //List<import_products> prods = new List<import_products>();
+
+            //            Mapper.CreateMap<Src, Dest>()
+            //.ForMember(d => d.UserName, opt => opt.MapFrom(/* ????? */));
+
+            //AutoMapper.Mapper.Initialize(config =>
+            //{
+            //    config.CreateMap<Entities.Book, Models.BookDTO>();
+            //    config.CreateMap<Models.BookDTO, Entities.Book>();
+            //    config.CreateMap<Entities.Publisher, Models.PublisherDTO>();
+            //    config.CreateMap<Models.PublisherDTO, Entities.Publisher>();
+            //});
+
         }
     }
 }

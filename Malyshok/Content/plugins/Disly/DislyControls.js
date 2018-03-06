@@ -162,7 +162,7 @@
     // ==================
 
     $(function () {
-        $('input:not([type=checkbox]):not([type=file]):visible, textarea:visible').DislyInput()
+        $('input:not([type=checkbox]):not([type=file]):not([id=SearchText]):visible, textarea:visible').DislyInput()
     })
 
 }(jQuery);

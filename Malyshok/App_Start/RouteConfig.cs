@@ -26,8 +26,15 @@ namespace Disly
             // Продукция
             routes.MapRoute(
                name: "Production",
-               url: "prod/{id}",
-               defaults: new { controller = "Prod", action = "Index", id = UrlParameter.Optional }
+               url: "prod",
+               defaults: new { controller = "Prod", action = "Index" }
+            );
+
+            // Контакты
+            routes.MapRoute(
+               name: "Contacts",
+               url: "contacts/{id}",
+               defaults: new { controller = "Contacts", action = "Index", id = UrlParameter.Optional }
             );
 
             // поиск
@@ -36,7 +43,7 @@ namespace Disly
                url: "Search/",
                defaults: new { controller = "Search", action = "Index" }
             );
-            // поиск
+            // 
             routes.MapRoute(
                name: "Photolist",
                url: "photolist/{id}",
@@ -70,6 +77,14 @@ namespace Disly
                url: "Press/{category}/{*path}",
                defaults: new { controller = "Press", action = "Index", category = UrlParameter.Optional, path = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+               name: "User",
+               url: "User/{action}/{id}",
+               defaults: new { controller = "User", action = "Index", id = UrlParameter.Optional }
+            );
+
+
 
             // Типовая страница (карта сайта)
             routes.MapRoute(

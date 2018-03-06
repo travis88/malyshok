@@ -1,21 +1,27 @@
 ﻿@import url('/Content/fonts/fontello/fontello.css');
 
-
 body {
     font-family: Verdana;
     font-size: 15px;
     line-height: 1.4em;
     color: #4c4c4c;
 }
+form {
+    margin: 0;
+    padding: 0;
+}
 
 .head_block {
-    background: #82e3ff url('/Content/img/head.png') bottom center no-repeat;
-    padding: 30px 0 20px;
-    min-height: 164px;
+    background: linear-gradient(to top, #ffffff, #a4e2ff);
+}
+.clouds {
+    background: url('/Content/img/clouds.png') bottom center repeat-x;
+    padding: 30px 0;
+    min-height: 123px;
 }
 .logo {
     position: relative;
-    width: 414px;
+    width: 340px;
     float: left;
 }
 .logo a {
@@ -35,27 +41,49 @@ body {
     }
 .search-block {
     float: right;
-
+    padding-top: 50px;
 }
+    .search-block input,
+    .search-block button {
+        padding: 13px 20px !important;
+        border: solid 1px;
+        border-radius: 5px;
+        outline: none;
+        min-width: 150px;
+        resize: none;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        outline: none;
+    }
+    .search-block input {
+        width: 270px;
+        border-color: #cccccc;
+        background: #fff;
+    }
+    .search-block button {
+        border-color: #ffcd00;
+        background: #ffcd00;
+        text-transform: uppercase;
+    }
+
+
+
 .basket-block {
     position: relative;
     float: right;
-    width: 140px;
-    text-align: right;
+    text-align: left;
+    margin: 50px 0 0 100px;
 }
 .basket-counter {
-    position: absolute;
-    background: #ffcd00;
-    border: solid 1px #ffffff;
-    border-radius: 20px;
-    padding: 5px 5px;
-    min-width: 30px;
+    float: right;
     color: #4c4c4c;
-    right: 65px;
-    font: 13px;
-    line-height: 13px;
-    text-align: center;
+    font-weight: bold;
 }
+.basket-block img {
+    margin-right: 18px;
+}
+
 .menu_block {
     background: #21aedd;
     color: #ffffff;
@@ -67,6 +95,7 @@ body {
         border-right: solid 1px #21aedd;
     }
     .menu_block .nav .active a,
+    .menu_block .nav a:focus,
     .menu_block .nav a:hover {
         background: #49c1e9 !important;
         color: #ffffff;
@@ -114,6 +143,11 @@ body {
     padding: 50px 0;
 }
 
+.shadow-block {
+    box-shadow: 0 0 10px #dadada;
+    padding: 15px 20px;
+}
+
 /* default */
 .slider {
     margin-bottom: 40px;
@@ -146,6 +180,8 @@ body {
     padding: 20px;
     border: solid 1px #d9d9d9;
     color: #999999;
+    min-height: 140px;
+    margin-bottom: 30px;
 }
     .top_news-item a {
         color: #65acda;
@@ -158,6 +194,17 @@ body {
     }
 
 /* page */
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+}
+.type-page .breadcrumb a {
+    color: #b3b3b3 !important;
+}
+    .type-page .breadcrumb a:hover {
+        color: #65acda !important;
+    }
+
 .body_block h1 {
     font-size: 44px;
     font-family: 'Times New Roman';
@@ -187,9 +234,111 @@ body {
     color: #786de3 !important;
 }
 
+/* reg */
+.pass-block {
+    margin-bottom: 20px;
+}
+.check-mail {
+    color: #dd201e;
+    font-size: 14px;
+}
+.compliance-block {
+    margin-bottom: 20px;
+}
+    .compliance-block label {
+        font-size: 14px !important;
+        font-weight: normal !important;
+    }
+.g-recaptcha {
+    margin-bottom: 30px;
+}
+.reg-buttons {
+    margin-bottom: 40px;
+}
+.type-page .button {
+    padding: 7px 20px;
+    text-transform: uppercase;
+    border: solid 1px;
+    border-radius: 5px;
+    outline: none;
+}
+a.button:hover {
+    text-decoration: none;
+}
+.btn-blue {
+    background: #65acda;
+    border-color: #65acda;
+    color: #ffffff;
+}
+.btn-invers {
+    background: #ffffff;
+    border-color: #786de3;
+    color: #786de3;
+}
+.to-right {
+    float: right;
+}
+/* footer */
 .footer {
     overflow: hidden;
     padding: 40px 0;
     background: #f2f2f2;
     border-top: solid 1px #dadada;
+    font-size: 14px;
+}
+.copyright {
+    font-size: 17px;
+}
+.quote {
+    font-size: 13.2px;
+}
+.adress {
+    margin-bottom: 10px;
+}
+.socseti {
+    margin-bottom: 40px;
+}
+.socseti span:before {
+    font-size: 20px;
+    color: #21aedc;
+}
+.footer .title {
+    font-size: 16px;
+    color: #65acda;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+.telefon,
+.email {
+    float: left;
+    width: 70px;
+    color: #b2b2b2;
+}
+    .telefon ~ div,
+    .email ~ div {
+        overflow: auto;
+    }
+
+
+
+
+/* ----------- Элементы формы ----------- */
+.form-group {
+    margin: 9px 0 !important;
+}
+
+    .form-group > label {
+        font-size: 16px !important;
+        margin: 11px 0 !important;
+        color: #4c4c4c !important;
+    }
+input.form-control,
+textarea.form-control,
+select.form-control {
+    padding: 19px 10px !important;
+    border-radius: 5px !important;
+    border: solid 1px #cccccc !important;
+}
+.toggle.btn {
+    height: 40px !important;
 }

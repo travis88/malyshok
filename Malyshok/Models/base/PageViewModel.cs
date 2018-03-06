@@ -26,6 +26,8 @@ namespace Disly.Models
         /// Группы меню
         /// </summary>
         public SiteMapModel[] SiteMapArray { get; set; }
+
+        public UsersModel UserInfo { get; set; }
         /// <summary>
         /// Баннеры
         /// </summary>

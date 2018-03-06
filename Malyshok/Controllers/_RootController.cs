@@ -30,6 +30,7 @@ namespace Disly.Controllers
 
         protected SitesModel siteModel;
         protected SiteMapModel[] siteMapArray;
+        protected UsersModel UserInfo;
         protected BannersModel[] bannerArray;
         protected List<Breadcrumbs> breadcrumb;
         protected SiteMapModel currentPage;
@@ -46,23 +47,18 @@ namespace Disly.Controllers
         {
             base.OnActionExecuting(filterContext);
 
-            try {
-                var domainUrl = Request.Url.Host.ToLower().Replace("www.", "");
-                Domain = _repository.getSiteId(domainUrl);
-            }
-            catch
-            {
-                if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
-                else Domain = String.Empty;
-            }
+            Domain = "main";
+            //try {
+            //    var domainUrl = Request.Url.Host.ToLower().Replace("www.", "");
+            //    Domain = _repository.getSiteId(domainUrl);
+            //}
+            //catch
+            //{
+            //    if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
+            //    else Domain = String.Empty;
+            //}
 
             #region Получаем данные из адресной строки
-            //string UrlPath = Request.Path;
-            //if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1)
-            //    UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-            //string _path = (UrlPath.LastIndexOf("/")==0) ? UrlPath.Substring(1, UrlPath.Length-1) : UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            //string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-
             //Частные случаи (model.CurrentPage = null) рассматриваем в самих контроллерах 
             _alias = "";
             _path = "/";
@@ -92,9 +88,13 @@ namespace Disly.Controllers
                 }
                 currentPage = _repository.getSiteMap(_path, _alias);
                 breadcrumb = _repository.getBreadCrumbCollection(HttpContext.Request.Url.PathAndQuery);
-            
+
 
             #endregion
+            if (User.Identity.IsAuthenticated)
+            {
+                UserInfo = _repository.getCustomer(new Guid(User.Identity.Name));
+            }
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
@@ -104,7 +104,7 @@ namespace Disly.Controllers
             
             siteMapArray = _repository.getSiteMapList(); //Domain
 
-            bannerArray = _repository.getBanners(); //Domain
+            //bannerArray = _repository.getBanners(); //Domain
             category_list = _repository.getProdCatalogModule();
 
             ViewBag.MedCap = MedCap = Settings.MedCap;

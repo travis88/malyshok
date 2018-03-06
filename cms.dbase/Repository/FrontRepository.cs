@@ -709,7 +709,7 @@ namespace cms.dbase
 
                 var query = db.content_materialss
                         .Where(w => w.d_date <= DateTime.Now);
-                
+
                 var data = query
                     .Where(w => w.b_disabled == false)
                     .OrderByDescending(o => o.d_date)
@@ -724,7 +724,7 @@ namespace cms.dbase
 
                 // берём последние 3 новости данной группы
                 if (data.Any())
-                    list.AddRange(data.Take(3));
+                    list.AddRange(data.Take(6));
 
                 if (list.Any())
                     return list;
@@ -746,7 +746,7 @@ namespace cms.dbase
                 if (!string.IsNullOrEmpty(filter.Domain))
                 {
                     var contentType = ContentType.MATERIAL.ToString().ToLower();
-                   
+
                     var query = db.content_materialss
                                 .Where(w => w.b_disabled == false && w.d_date <= DateTime.Now);
 
@@ -842,9 +842,9 @@ namespace cms.dbase
                 int _year = Convert.ToInt32(year);
                 int _month = Convert.ToInt32(month);
                 int _day = Convert.ToInt32(day);
-                
+
                 var contentType = ContentType.MATERIAL.ToString().ToLower();
-                
+
                 var query = db.content_materialss
                             .Where(w => (w.n_year == _year) && (w.n_month == _month) && (w.n_day == _day) && (w.c_alias.ToLower() == alias.ToLower()));
                 if (query.Any())
@@ -860,7 +860,7 @@ namespace cms.dbase
                             Url = s.c_preview
                         }
                     }).SingleOrDefault();
-                    
+
                     return material;
                 }
 
@@ -890,7 +890,7 @@ namespace cms.dbase
                 return null;
             }
         }
-        
+
         /// <summary>
         /// Получаем список фотоматериалов
         /// </summary>
@@ -937,6 +937,78 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        /// <summary>
+        /// Проверка пользователя по E-Mail
+        /// </summary>
+        /// <param name="Mail"></param>
+        /// <returns></returns>
+        public override bool CheckCustomerMail(string Mail)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_userss.Where(w => w.c_email == Mail);
+                if (query.Any())
+                    return true;
+                else
+                    return false;
+            }
+        }
+        public override string ConfirmMail(Guid Code)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_userss.Where(w => w.id == Code);
+                if (data.Any())
+                {
+                    return data.Select(s => s.id).FirstOrDefault().ToString();
+                }
+                return null;
+            }
+        }
+        public override UsersModel getCustomer(Guid id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_userss
+                    .Where(w => w.id.Equals(id))
+                    .Select(s => new UsersModel
+                    {
+                        Id = s.id,
+                        FIO = s.c_name,
+                        Address = s.c_address,
+                        Phone = s.c_phone,
+                        EMail = s.c_email,
+                        Organization = s.c_organization,
+                        Disabled = s.b_disable,
+                        Vk = s.c_vk,
+                        Facebook = s.c_facebook
+                    })
+                    .SingleOrDefault();
+            }
+        }
+        public override bool createCustomer(UsersModel item)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_userss
+                    .Value(v => v.id, item.Id)
+                    .Value(v => v.c_name, item.FIO)
+                    .Value(v => v.c_address, item.Address)
+                    .Value(v => v.c_phone, item.Phone)
+                    .Value(v => v.c_email, item.EMail)
+                    .Value(v => v.c_organization, item.Organization)
+                    .Value(v => v.c_salt, item.Salt)
+                    .Value(v => v.c_hash, item.Hash)
+                    .Value(v => v.d_register_date, DateTime.Now)
+                    .Value(v => v.b_disable, item.Disabled)
+                    .Insert() > 0;
+            }
+        }
+        //public override bool updateCustomer(UsersModel item) { }
+        //public override bool deleteCustomer(Guid id) { }
+
+
 
         #region private methods
 

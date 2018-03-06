@@ -1,23 +1,24 @@
 ﻿using cms.dbase;
+using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
 {
-    public class ProdController : RootController
+    public class ContactsController : RootController
     {
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
-        private TypePageViewModel model;
-
+        private ContatcsViewModel model;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
-            model = new TypePageViewModel
+            model = new ContatcsViewModel
             {
                 SitesInfo = siteModel,
                 SiteMapArray = siteMapArray,
@@ -35,14 +36,15 @@ namespace Disly.Controllers
             #endregion
         }
 
+
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index() 
         {
             #region currentPage
-            currentPage = _repository.getSiteMap("Prod");
+            currentPage = _repository.getSiteMap("Contacts");
             if (currentPage == null)
                 //throw new Exception("model.CurrentPage == null");
                 return RedirectToRoute("Error", new { httpCode = 404 });
@@ -58,9 +60,9 @@ namespace Disly.Controllers
             #endregion
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
+            
             var page = model.CurrentPage.FrontSection;
-
+                        
 
             return View(_ViewName, model);
         }

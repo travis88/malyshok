@@ -1,4 +1,14 @@
 ﻿$(document).ready(function () {
+
+    var SummerSt = $(".validation-summary-valid").find("li").attr("style")
+    if (SummerSt == "display:none") $(".validation-summary-valid").hide();
+
+    $('form input[type=checkbox]#Type').bind({
+        change: function () {
+            $('input#OrgName').closest('.form-group').toggle();
+        }
+    });
+
     $('#sb-slider').slicebox({
         orientation: 'r',
         cuboidsRandom: true,
@@ -7,6 +17,22 @@
         interval: 3000,
     });
 
+    $('input#Mail').bind({
+        change: function () {
+            var $obj = $('.check-mail').empty();
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "/user/CheckMail/"+$(this).val(),
+                error: function () { $obj.append("ошибка в запросе на проверку уникальности E-Mail"); },
+                success: function (data) {
+                    var _result = data.Result;
+                    $obj.append(_result);
+                }
+            });
+        }
+    });
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 
@@ -45,62 +71,7 @@
         
     }
 
-
-
-    //Фильтр по новостям
-    //$('.filtr_news').submit(function (e) {
-        
-    //    var start = $('#data_start').val();
-    //    var end = $('#data_fin').val();
-    //    var search = $('#search_news').val();        
-
-    //    var params = {
-    //        datearea: search,
-    //        datestart: start,
-    //        datefin: end
-    //    };
-
-    //    var str = jQuery.param(params);
-    //    location.href = UrlPage() + "?" + str;
-    //    e.preventDefault();
-    //});
-
-    //rss link spot
-    if ($('.rss_param').length > 0) {
-        setInterval(function () { SpotRssLink();}, 1500);
-        $('.rss_param').change(function () { SpotRssLink()});
-        $('.rss_param').bind("change", function () { SpotRssLink() });  
-        //$('.rss_param.rss_date').datepicker().on('changeDate', function () { SpotRssLink() });
-        //$('.rss_param.rss_date').change(function () {
-        //    SpotRssLink();
-        //});
-        function SpotRssLink() {
-            var _group = $('#rss_param_group').val();
-            //var _start = $('#rss_param_start').val();
-            //var _end = $('#rss_param_end').val();
-            var _size = $('#rss_param_size').val();
-            var _rsslink = $('#rss_param_link');
-            var new_rsslink = '/press/rss';
-            if (_group != '') {
-                new_rsslink = new_rsslink + "/" + _group;
-            }
-            //new_rsslink = new_rsslink + "?";
-            //if (_start != '') {
-            //    new_rsslink = new_rsslink + "date=" + _start;
-            //}
-            ////date
-            //if (_end != '') {
-            //    new_rsslink = new_rsslink + "&dateend=" + _end;
-            //}
-            if (_size != '') {
-                new_rsslink = new_rsslink + "?size=" + _size;
-            }
-            _rsslink.attr('href', "http://" + _rsslink.attr('data-domain') + new_rsslink);
-            _rsslink.text("http://" +_rsslink.attr('data-domain') + new_rsslink);
-        }
-    }
-
-
+   
     //coords
     if ($('.buildmap').length > 0) {
         $('.buildmap').each(function () {
@@ -115,10 +86,6 @@
         });
     }
 
-
-    if ($('.searchform_dop').length > 0) {
-        SearchDopWork()
-    }
 
     $('.spec_version').on('click', function (event) {
         event.preventDefault();

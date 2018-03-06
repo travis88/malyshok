@@ -1,0 +1,36 @@
+﻿@model ContatcsViewModel
+@if (Model.Administrativ != null)
+{
+    <table class="adminlist">
+        @foreach (var item in Model.Administrativ)
+        {
+            string fio = item.Surname + " " + item.Name + " " + item.Patronymic;
+
+            string link = (item.PeopleId.HasValue) ? string.Format("/doctors/{0}", item.PeopleId.Value) : "";
+
+            string photo = (item.Photo != null && !string.IsNullOrWhiteSpace(item.Photo.Url))
+                       ? File.Exists(Server.MapPath(item.Photo.Url))
+                           ? item.Photo.Url : "/Content/img/no_avatar.png"
+                       : "/Content/img/no_avatar.png";
+
+            <tr>
+                <td class="adminlist_img_td">
+                    <a class="adminlist_img_wr" target="_blank" href="@link">
+                        <img class="img-circle img-person-list" src="@photo" />
+                    </a>
+                </td>
+                <td>
+                    <a class="adminlist_name" href="@link">@fio</a>
+                    <div class="adminlist_post">@item.Post</div>
+                </td>
+                <td>
+                    @if (item.Phone != null)
+                    {
+                        <div class="adminlist_phone">@item.Phone</div>
+                    }
+                </td>
+                <td width="35%">@Html.Raw(item.Text)</td>
+            </tr>
+        }
+    </table>
+}

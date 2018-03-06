@@ -35,12 +35,9 @@
 
     <link href="/Content/plugins/mobileGallery/swipebox.css" rel="stylesheet">
     <link href="/Content/css/common.css" rel="stylesheet" />
-    <link href="/Content/css/commonless.css" rel="stylesheet" />
-    <link href="/Content/css/theme/@theme" rel="stylesheet" />
     <link href="~/Content/css/print.css" rel="stylesheet" type="text/css" media="print">
 
     <script src="/Content/plugins/jquery/jquery.js"></script>
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
     <script src="/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="/Content/plugins/jquery/jquery.ui.js"></script>
     <script src="/Content/plugins/jquery/jquery.mask.min.js"></script>
@@ -49,38 +46,40 @@
     <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>
     <script src="/Content/plugins/jquery/jquery.cookie.js"></script>
     <script src="/Content/js/script.js"></script>
-    <script src="/Content/js/menu.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body>
     <div class="head_block">
-        <div class="container">
-            <div class="logo">
-                <a href="/"><img title="" alt="" src="~/Content/img/logo.png" /></a>
+        <div class="clouds">
+            <div class="container">
+                <div class="logo">
+                    <a href="/"><img title="" alt="" src="~/Content/img/logo.png" /></a>
 
-                @if (Model != null && Model.SitesInfo != null && Model.SitesInfo.Phone != null)
+                    @if (Model != null && Model.SitesInfo != null && Model.SitesInfo.Phone != null)
                 {
                     string MainPhone = (Model.SitesInfo.Phone.IndexOf("|") > -1) ? Model.SitesInfo.Phone.Substring(0, Model.SitesInfo.Phone.IndexOf("|")) : Model.SitesInfo.Phone;
                     MainPhone = MainPhone.Insert(MainPhone.LastIndexOf(" "), "<span>") + "</span>";
 
-                    <div class="phone">@Html.Raw(MainPhone)</div>
+                        <div class="phone">@Html.Raw(MainPhone)</div>
                 }
-            </div>
-            <div class="basket-block">
-                <a href="/basket">
-                    <div class="basket-counter">10</div>
-                    <img src="~/Content/img/basket.png" />
-                </a>
-            </div>
-            <div class="search-block">
-                <div>
-
                 </div>
-                <div>
-                    Мы в социальных сетях
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div class="basket-block">
+                    <a href="/basket">
+                        <div class="basket-counter">
+                            <div class="goods"><span>85</span> товаров</div>
+                            <div class="price"><span>34285,75</span> руб.</div>
+                        </div>
+                        <img src="~/Content/img/basket.png" />
+                    </a>
+                </div>
+                <div class="search-block">
+                    <div>
+                        <form id="search-form" action="/search/" method="post">
+                            <input id="SearchText" class="search-text" placeholder="Поиск..." />
+                            <button type="submit" class="button">Найти</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,7 +112,14 @@
             </ul>
             }
             <div class="login-block">
-                <a href="/login">Вход</a><a>/</a><a href="/reg">Регистрация</a>
+                @if (Model.UserInfo == null)
+                {
+                    <a href="/user/login">Вход</a><a>/</a><a href="/user/reg">Регистрация</a>
+                }
+                else
+                {
+                    <a href="/user/">@Model.UserInfo.FIO</a><a>/</a><a href="/user/logout">Выход</a>
+                }
             </div>
         </div>
     </div>
@@ -147,30 +153,39 @@
                 <div class="col-md-6 col-md-push-6">
                     <div class="row">
                         <div class="col-md-6">
-                            <div>Контакты:</div>
+                            <div class="title">Контакты:</div>
                             <div>
-                                <div>тел.</div>
+                                <div class="telefon">тел.</div>
                                 <div>@Html.Raw(Model.SitesInfo.Phone.Replace("|", "<br />"))</div>
-                                <div>e-mail</div>
+                            </div>
+                            <div>
+                                <div class="email">e-mail</div>
                                 <div>@Html.Raw(Model.SitesInfo.Email.Replace("|", "<br />"))</div>
                             </div>
 
                         </div>
                         <div class="col-md-6">
-                            <div>Режим работы</div>
+                            <div class="title">Режим работы</div>
                             @Html.Raw(Model.SitesInfo.Worktime.Replace("|", "<br />"))
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-md-pull-6">
-                    &copy;&nbsp;2010-@currentYear&nbsp;@Model.SitesInfo.LongTitle
-                    <div>@Model.SitesInfo.Adress</div>
-                    <p>@ViewBag.Quote</p>
+                <div class="col-md-6 col-md-pull-6">                    
+                    <div class="adress"><b>@Model.SitesInfo.Adress</b>&nbsp;&nbsp;&nbsp;<a href="/contacts">Схема проезда</a></div>
+                    <div class="socseti">
+                        <a href="https://vk.com"><span class="icon-vkontakte"></span></a>
+                        <a href="https://ru-ru.facebook.com/"><span class="icon-facebook"></span></a>
+                        <a href="https://www.instagram.com/"><span class="icon-instagram"></span></a>
+                    </div>
+                    <div class="copyright">&copy;&nbsp;2010-@currentYear&nbsp;@Model.SitesInfo.LongTitle</div>
+                    <div class="quote">@ViewBag.Quote</div>
                 </div>
             </div>
         </div>
     </div>
     @Html.Raw(Model.SitesInfo.Scripts)
+
+    @RenderSection("scripts", false)
 </body>
 
 </html>

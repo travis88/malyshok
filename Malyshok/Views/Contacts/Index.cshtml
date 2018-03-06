@@ -1,0 +1,17 @@
+﻿@model ContatcsViewModel
+
+<div class="type-page">
+
+    @Html.Partial("services/breadcrumbs")
+    @if (Model.SitesInfo != null)
+    {
+        <h1>@Model.CurrentPage.Title</h1>
+        
+        <div class="page-text">
+
+        
+        </div>
+    }
+</div>
+
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>

@@ -48,6 +48,7 @@ namespace Import.Core
 		public ITable<content_banner_sections>              content_banner_sectionss              { get { return this.GetTable<content_banner_sections>(); } }
 		public ITable<content_banners>                      content_bannerss                      { get { return this.GetTable<content_banners>(); } }
 		public ITable<content_categories>                   content_categoriess                   { get { return this.GetTable<content_categories>(); } }
+		public ITable<content_category_hierarhy>            content_category_hierarhys            { get { return this.GetTable<content_category_hierarhy>(); } }
 		public ITable<content_certificates>                 content_certificatess                 { get { return this.GetTable<content_certificates>(); } }
 		public ITable<content_content_link>                 content_content_links                 { get { return this.GetTable<content_content_link>(); } }
 		public ITable<content_documents>                    content_documentss                    { get { return this.GetTable<content_documents>(); } }
@@ -81,6 +82,11 @@ namespace Import.Core
 		public ITable<front_section>                        front_sections                        { get { return this.GetTable<front_section>(); } }
 		public ITable<front_site_section>                   front_site_sections                   { get { return this.GetTable<front_site_section>(); } }
 		public ITable<front_sv_page_veiw>                   front_sv_page_veiws                   { get { return this.GetTable<front_sv_page_veiw>(); } }
+		public ITable<import_catalogs>                      import_catalogss                      { get { return this.GetTable<import_catalogs>(); } }
+		public ITable<import_product_categories>            import_product_categoriess            { get { return this.GetTable<import_product_categories>(); } }
+		public ITable<import_product_certificates>          import_product_certificatess          { get { return this.GetTable<import_product_certificates>(); } }
+		public ITable<import_product_images>                import_product_imagess                { get { return this.GetTable<import_product_images>(); } }
+		public ITable<import_products>                      import_productss                      { get { return this.GetTable<import_products>(); } }
 		public ITable<sv_orgs_materials>                    sv_orgs_materialss                    { get { return this.GetTable<sv_orgs_materials>(); } }
 		public ITable<sv_sites_banners>                     sv_sites_bannerss                     { get { return this.GetTable<sv_sites_banners>(); } }
 
@@ -704,6 +710,8 @@ namespace Import.Core
 		[Column,     NotNull    ] public string   c_alias    { get; set; } // nvarchar(512)
 		[Column,     NotNull    ] public DateTime d_date     { get; set; } // datetime
 		[Column,        Nullable] public Guid?    uui_parent { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string   c_path     { get; set; } // nvarchar(max)
+		[Column,        Nullable] public int?     n_1s_id    { get; set; } // int
 
 		#region Associations
 
@@ -714,6 +722,13 @@ namespace Import.Core
 		public IEnumerable<content_product_categories_links> contentproductcategorieslinkscontentcategoriess { get; set; }
 
 		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_category_hierarhy")]
+	public partial class content_category_hierarhy
+	{
+		[Column, NotNull] public Guid f_category { get; set; } // uniqueidentifier
+		[Column, NotNull] public Guid f_child    { get; set; } // uniqueidentifier
 	}
 
 	[Table(Schema="dbo", Name="content_certificates")]
@@ -967,8 +982,8 @@ namespace Import.Core
 	[Table(Schema="dbo", Name="content_product_categories_links")]
 	public partial class content_product_categories_links
 	{
-		[Column, NotNull] public Guid f_product  { get; set; } // uniqueidentifier
-		[Column, NotNull] public Guid f_category { get; set; } // uniqueidentifier
+		[PrimaryKey(1), NotNull] public Guid f_product  { get; set; } // uniqueidentifier
+		[PrimaryKey(2), NotNull] public Guid f_category { get; set; } // uniqueidentifier
 
 		#region Associations
 
@@ -1001,6 +1016,7 @@ namespace Import.Core
 		[Column,        Nullable] public decimal? m_price       { get; set; } // money
 		[Column,     NotNull    ] public DateTime d_date        { get; set; } // datetime
 		[Column,        Nullable] public string   c_standart    { get; set; } // nchar(10)
+		[Column,        Nullable] public int?     n_1s_id       { get; set; } // int
 
 		#region Associations
 
@@ -1456,6 +1472,120 @@ namespace Import.Core
 		[Column, NotNull    ] public string f_site      { get; set; } // varchar(64)
 	}
 
+	[Table(Schema="dbo", Name="import_catalogs")]
+	public partial class import_catalogs
+	{
+		[PrimaryKey, NotNull    ] public int      id       { get; set; } // int
+		[Column,     NotNull    ] public string   c_title  { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public string   c_alias  { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public DateTime d_date   { get; set; } // datetime
+		[Column,        Nullable] public int?     n_parent { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_import_product_categories_import_catalogs_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_category", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<import_product_categories> importproductcategoriesimportcatalogss { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="import_product_categories")]
+	public partial class import_product_categories
+	{
+		[PrimaryKey(1), NotNull] public int f_product  { get; set; } // int
+		[PrimaryKey(2), NotNull] public int f_category { get; set; } // int
+
+		#region Associations
+
+		/// <summary>
+		/// FK_import_product_categories_import_products
+		/// </summary>
+		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_import_product_categories_import_products", BackReferenceName="importproductcategoriesimportproductss")]
+		public import_products importproductcategoriesimportproducts { get; set; }
+
+		/// <summary>
+		/// FK_import_product_categories_import_catalogs
+		/// </summary>
+		[Association(ThisKey="f_category", OtherKey="id", CanBeNull=false, KeyName="FK_import_product_categories_import_catalogs", BackReferenceName="importproductcategoriesimportcatalogss")]
+		public import_catalogs importproductcategoriesimportcatalogs { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="import_product_certificates")]
+	public partial class import_product_certificates
+	{
+		[Column, NotNull] public int    f_product  { get; set; } // int
+		[Column, NotNull] public string c_title    { get; set; } // nvarchar(512)
+		[Column, NotNull] public bool   b_hygienic { get; set; } // bit
+
+		#region Associations
+
+		/// <summary>
+		/// FK_import_product_certificates_import_products
+		/// </summary>
+		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_import_product_certificates_import_products", BackReferenceName="importproductcertificatesimportproductss")]
+		public import_products importproductcertificatesimportproducts { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="import_product_images")]
+	public partial class import_product_images
+	{
+		[Column, NotNull] public int    f_product { get; set; } // int
+		[Column, NotNull] public string c_title   { get; set; } // nvarchar(512)
+		[Column, NotNull] public bool   b_main    { get; set; } // bit
+
+		#region Associations
+
+		/// <summary>
+		/// FK_import_product_images_import_products
+		/// </summary>
+		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_import_product_images_import_products", BackReferenceName="importproductimagesimportproductss")]
+		public import_products importproductimagesimportproducts { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="import_products")]
+	public partial class import_products
+	{
+		[PrimaryKey, NotNull    ] public int      id         { get; set; } // int
+		[Column,     NotNull    ] public string   c_title    { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_code     { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_barcode  { get; set; } // nvarchar(128)
+		[Column,        Nullable] public int?     n_count    { get; set; } // int
+		[Column,        Nullable] public decimal? m_price    { get; set; } // money
+		[Column,     NotNull    ] public DateTime d_date     { get; set; } // datetime
+		[Column,        Nullable] public string   c_standart { get; set; } // nvarchar(10)
+
+		#region Associations
+
+		/// <summary>
+		/// FK_import_product_images_import_products_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_product", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<import_product_images> importproductimagesimportproductss { get; set; }
+
+		/// <summary>
+		/// FK_import_product_certificates_import_products_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_product", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<import_product_certificates> importproductcertificatesimportproductss { get; set; }
+
+		/// <summary>
+		/// FK_import_product_categories_import_products_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_product", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<import_product_categories> importproductcategoriesimportproductss { get; set; }
+
+		#endregion
+	}
+
 	// View
 	[Table(Schema="dbo", Name="sv_orgs_materials")]
 	public partial class sv_orgs_materials
@@ -1525,6 +1655,15 @@ namespace Import.Core
 			return dataConnection.ExecuteProc("[dbo].[dublicate_content_sitemap]",
 				new DataParameter("@domain",     @domain,     DataType.VarChar),
 				new DataParameter("@new_domain", @new_domain, DataType.VarChar));
+		}
+
+		#endregion
+
+		#region import
+
+		public static int import(this DataConnection dataConnection)
+		{
+			return dataConnection.ExecuteProc("[dbo].[import]");
 		}
 
 		#endregion
@@ -1787,6 +1926,13 @@ namespace Import.Core
 				t.id == id);
 		}
 
+		public static content_product_categories_links Find(this ITable<content_product_categories_links> table, Guid f_product, Guid f_category)
+		{
+			return table.FirstOrDefault(t =>
+				t.f_product  == f_product &&
+				t.f_category == f_category);
+		}
+
 		public static content_products Find(this ITable<content_products> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
@@ -1827,6 +1973,25 @@ namespace Import.Core
 		{
 			return table.FirstOrDefault(t =>
 				t.c_alias == c_alias);
+		}
+
+		public static import_catalogs Find(this ITable<import_catalogs> table, int id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static import_product_categories Find(this ITable<import_product_categories> table, int f_product, int f_category)
+		{
+			return table.FirstOrDefault(t =>
+				t.f_product  == f_product &&
+				t.f_category == f_category);
+		}
+
+		public static import_products Find(this ITable<import_products> table, int id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
 		}
 	}
 }

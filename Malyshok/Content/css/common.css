@@ -46,26 +46,16 @@ form {
     .search-block input,
     .search-block button {
         padding: 13px 20px !important;
-        border: solid 1px;
-        border-radius: 5px;
-        outline: none;
         min-width: 150px;
-        resize: none;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        outline: none;
     }
     .search-block input {
         width: 270px;
         border-color: #cccccc;
-        background: #fff;
     }
     .search-block button {
         border-color: #ffcd00;
         background: #ffcd00;
-        text-transform: uppercase;
-    }
+    }/**/
 
 
 
@@ -199,10 +189,10 @@ form {
     padding: 0;
 }
 .type-page .breadcrumb a {
-    color: #b3b3b3 !important;
+    color: #b3b3b3;
 }
     .type-page .breadcrumb a:hover {
-        color: #65acda !important;
+        color: #65acda;
     }
 
 .body_block h1 {
@@ -231,8 +221,80 @@ form {
     color: #4d4d4d;
 }
 .type-page a {
-    color: #786de3 !important;
+    color: #786de3;
 }
+/* news */
+#rubric_news {
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.news_list .item_news {
+    padding-bottom: 22px;
+    margin-bottom: 21px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.news-list_info {
+}
+
+.news-list_title, news-list_title:hover, news-list_title:focus {
+    color: #000 !important;
+}
+.rubr {
+    color: #808080;
+    font-style: italic;
+    font-size: 14px;
+}
+
+.map_img {
+    width: 100%;
+    max-width: 445px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 25px;
+}
+
+.show_original {
+    display: block;
+}
+
+.news_item_title {
+    margin-bottom: 20px;
+}
+
+.attachfile_title {
+    margin-bottom: 15px;
+}
+
+.news_text img {
+    max-width: 100%
+}
+
+.news_text a {
+    text-decoration: underline;
+}
+
+.news-list-source {
+    color: #808080;
+}
+
+.news-list_date {
+    font-size: 14px;
+    color: #808080;
+}
+
+.item_news .news-list_date {
+    float: left;
+    margin-right: 30px;
+}
+
+.news-list_title {
+    display: table;
+}
+
+
 
 /* reg */
 .pass-block {
@@ -255,13 +317,6 @@ form {
 .reg-buttons {
     margin-bottom: 40px;
 }
-.type-page .button {
-    padding: 7px 20px;
-    text-transform: uppercase;
-    border: solid 1px;
-    border-radius: 5px;
-    outline: none;
-}
 a.button:hover {
     text-decoration: none;
 }
@@ -278,6 +333,88 @@ a.button:hover {
 .to-right {
     float: right;
 }
+/* prod */
+.item_prod {
+    margin-bottom: 20px;
+    overflow: auto;
+}
+.prod-img {
+    position: relative;
+    float: left;
+    border: solid 1px #cccccc;
+    background: url('/Content/img/_nofoto.png') center no-repeat;
+    background-clip: content-box;
+    background-size:contain;
+    width: 200px;
+    height:200px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+.prod-info {
+    overflow: hidden;
+}
+.item_prod .prod-title {
+    font-size: 19px;
+    margin-bottom: 10px;
+}
+.type-page .prod-title a {
+    color: #4d4d4d;
+}
+.prod-catalog-link {
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+    .prod-catalog-link::after {
+        content: "";
+        display: block;
+        border-bottom: solid 1px #cccccc;
+        margin-top: 10px;
+    }
+
+.prod-catalog-link div {
+    float: left;
+    padding-right: 10px; 
+    background: #ffffff;
+}
+
+.prod-params {
+    margin-bottom: 10px;
+}
+.prod-params div {
+    overflow: hidden;
+    padding: 5px 0;
+}
+    .prod-params div span {
+        display: block;
+        float: left;
+        padding: 0 20px;
+        width: 130px;
+        color: #cccccc;
+    }
+.prod-basket-block {
+    border-top: solid 1px #cccccc;
+    padding: 15px 0;
+    overflow: auto;
+}
+.prod-price {
+    float: left;
+    width: 150px;
+    padding: 7px 20px 7px 0;
+}
+.prod-cert {
+    float: right;
+    color: #65acda;
+    padding: 7px 0 7px 60px;
+    background: url('/Content/img/cert.png') 20px 7px no-repeat;
+    cursor: pointer;
+}
+.basket-form {
+    overflow: hidden;
+}
+.basket-form input {
+    width: 30px;
+}
+
 /* footer */
 .footer {
     overflow: hidden;
@@ -323,7 +460,26 @@ a.button:hover {
 
 
 /* ----------- Элементы формы ----------- */
-.form-group {
+input:not([type=checkbox]) {
+    padding: 7px 15px;
+    resize: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: solid 1px #cccccc;
+    border-radius: 5px;
+    outline: none;
+    background: #fff;
+    color: #4c4c4c;
+    min-width: 60px;
+} button, .button {
+    padding: 7px 20px;
+    text-transform: uppercase;
+    border: solid 1px;
+    border-radius: 5px;
+    outline: none;
+}
+/*.form-group {
     margin: 9px 0 !important;
 }
 
@@ -341,4 +497,50 @@ select.form-control {
 }
 .toggle.btn {
     height: 40px !important;
+}
+
+
+.mobile-indicator {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 10px;
+    height: 10px;
+    background: #ff0300;
+}*/
+@media only screen and (max-width: 1200px) {
+    .mobile-indicator {
+        background: #ffe400;
+    }
+    .sb-description {
+        font-size: 18px;
+        line-height: 25px;
+        padding: 20px;
+        width: 350px;
+        top: 30px;
+        bottom: 80px;
+    }
+        .sb-description span {
+            font-size: 15px;
+            margin-top: 10px;
+        }
+} @media only screen and (max-width: 992px) {
+    .mobile-indicator {
+        background: #9cff00;
+    }
+    .menu_block .nav > li > a {
+        padding: 10px;
+    }
+} @media only screen and (max-width: 768px) {
+    .mobile-indicator {
+        background: #00ffe4;
+    }
+} @media only screen and (max-width: 620px) {
+    .mobile-indicator {
+        background: #003cff;
+    }
+} @media only screen and (max-width: 400px) {
+    .mobile-indicator {
+        background: #d200ff;
+    }
 }

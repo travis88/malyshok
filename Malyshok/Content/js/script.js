@@ -14,7 +14,7 @@
         cuboidsRandom: true,
         disperseFactor: 30,
         autoplay: true,
-        interval: 3000,
+        interval: 300000,
     });
 
     $('input#Mail').bind({

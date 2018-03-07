@@ -21,7 +21,7 @@
                         @Html.TextBox("UserName", "", new { title = "ФИО", required = "", @placeholder = "Иванов Иван" })
                     </div>
                     <div class="col-md-6">
-                        @Html.TextBox("Adress", "", new { title = "Адрес", required = "", @placeholder = "Название населенного пункта, Название удичы, номер дома" })
+                        @Html.TextBox("Adress", "", new { title = "Адрес (адрес доставки)", required = "", @placeholder = "Населенный пункт, Удица, Дома" })
                     </div>
                 </div>
                 <div class="row">
@@ -54,7 +54,7 @@
                 <div class="g-recaptcha" data-sitekey="6LefhkkUAAAAAFeDkqz2uYmGSKooPJGnDnkBGPGy"></div>
             </form>
             <div class="reg-buttons">
-                <button type="submit" form="regForm" name="action" class="button btn-blue">
+                <button type="submit" form="regForm" name="action" class="btn-blue">
                     Регистрация
                 </button>
                 <a href="/user/login" class="button btn-invers to-right">
@@ -66,7 +66,8 @@
 </div>
 
 @section scripts {
-    <link href="/Content/plugins/Disly/DislyControls.css" rel="stylesheet">
+    @*<link href="/Content/plugins/Disly/DislyControls.css" rel="stylesheet">*@
+    <link href="/Content/plugins/bootstrap/css/bootstrap-toggle.css" rel="stylesheet">
     <script src="/Content/plugins/bootstrap/js/bootstrap-toggle.js"></script>
     <script src="/Content/plugins/Disly/DislyControls.js"></script>
 }

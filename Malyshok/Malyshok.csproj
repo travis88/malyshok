@@ -224,6 +224,7 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
     <Content Include="Content\img\blockquote.png" />
     <Content Include="Content\img\catalog.jpg" />
+    <Content Include="Content\img\cert.png" />
     <Content Include="Content\img\clouds.png" />
     <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\nophoto.jpg" />
@@ -246,9 +247,11 @@
     <Content Include="Content\img\special\sand-blind-panel\f3.png" />
     <Content Include="Content\img\special\sand-blind-panel\sel.png" />
     <Content Include="Content\img\special\sand-blind-panel\w_normal.png" />
+    <Content Include="Content\img\_nofoto.png" />
     <Content Include="Content\js\menu.js" />
     <Content Include="Content\js\script.js" />
     <Content Include="Content\js\spec.js" />
+    <Content Include="Content\plugins\bootstrap\css\bootstrap-toggle.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="Content\plugins\bootstrap\css\bootstrap.css" />
@@ -661,6 +664,7 @@
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
+    <Compile Include="Models\ProdViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />

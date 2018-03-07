@@ -918,6 +918,7 @@ namespace cms.dbase
             }
         }
 
+
         public override CategoryModel[] getProdCatalogModule() {
             using (var db = new CMSdb(_context))
             {
@@ -935,6 +936,55 @@ namespace cms.dbase
                     return data;
                 }
                 return null;
+            }
+        }
+        public override ProductList getProdList(FilterParams filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                if (String.IsNullOrEmpty(filter.Category))
+                {
+                    var query = db.content_productss.Where(w => w.n_count > 0);
+
+                    query = query.OrderBy(w => new { w.d_date, w.c_title });
+
+                    int itemCount = query.Count();
+
+                    var List = query
+                            .Skip(filter.Size * (filter.Page - 1))
+                            .Take(filter.Size)
+                            .Select(s => new ProductModel
+                            {
+                                Id = s.id,
+                                Title = s.c_title,
+                                Code = s.c_code,
+                                Barcode = s.c_barcode,
+                                Price = (decimal)s.m_price,
+                                Standart = s.c_standart,
+                                Count = (int)s.n_count,
+                                Photo = new Photo()
+                                {
+                                    Url = s.c_photo
+                                }
+                            });
+
+                    return new ProductList
+                    {
+                        Data = List.ToArray(),
+                        Pager = new Pager
+                        {
+                            page = filter.Page,
+                            size = filter.Size,
+                            items_count = itemCount,
+                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                        }
+                    };
+                }
+                else
+                {
+
+                    return null;
+                }
             }
         }
 
@@ -1007,9 +1057,7 @@ namespace cms.dbase
         }
         //public override bool updateCustomer(UsersModel item) { }
         //public override bool deleteCustomer(Guid id) { }
-
-
-
+        
         #region private methods
 
         /// <summary>

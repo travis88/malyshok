@@ -54,5 +54,7 @@ namespace cms.dbModel
 
         // Продукция
         public abstract CategoryModel[] getProdCatalogModule();
+        public abstract ProductList getProdList(FilterParams filter);
+
     }
 }

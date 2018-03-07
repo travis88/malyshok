@@ -29,18 +29,24 @@
     <div class="news_list">
         @if (Model.Materials != null)
         {
+            var count = 1;
             <div class="row">
                 @foreach (var item in Model.Materials)
                 {
-                <div class="col-md-4">
-                    <div class="top_news-item">
-                        <a class="title" href="/press/@item.Date.Year/@item.Date.Month/@item.Date.Day/@item.Alias">@Html.Raw(item.Title)</a>
-                        <div class="date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
+                    var unlook = count > 4 ? "visible-lg" : "";
+                    count = count+1;
+                    <div class="col-sm-4 col-md-6 col-lg-4 @unlook">
+                        <div class="top_news-item">
+                            <a class="title" href="/press/@item.Date.Year/@item.Date.Month/@item.Date.Day/@item.Alias">@Html.Raw(item.Title)</a>
+                            <div class="date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
+                        </div>
                     </div>
-                </div>
+                    
                 }
             </div>
         }
     </div>
 </div>
+
+
 

@@ -45,94 +45,71 @@ namespace Import.Core
         /// <summary>
         /// Основной метод
         /// </summary>
-        public static void DoImport(Stream xml)
+        public static void DoImport(FileInfo files)
         {
             if (!IsCompleted)
             {
                 Percent = Step = CountProducts = 0;
             }
-
-            //SrvcLogger.Debug("{PREPARING}", "Начало чтения XML-данных");
-
-            XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfProducts));
-
-            //SrvcLogger.Debug("{PREPARING}", "Данные успешно прочитаны из файла");
-
-            var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(xml);
+            
+            //XmlSerializer serializer = new XmlSerializer(typeof(ArrayOfProducts));
+            
+            //var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(xml);
 
 
-            if (arrayOfProducts != null && arrayOfProducts.Products != null)
-            {
-                //int count = arrayOfProducts.Products.Count();
-                //SrvcLogger.Debug("{PREPARING}", String.Format("Кол-во записей {0}", count));
-                //CountProducts = count;
+            //if (arrayOfProducts != null && arrayOfProducts.Products != null)
+            //{
+            //    //int count = arrayOfProducts.Products.Count();
+            //    //SrvcLogger.Debug("{PREPARING}", String.Format("Кол-во записей {0}", count));
+            //    //CountProducts = count;
+                
+            //    using (var db = new dbModel(connection))
+            //    {
+            //        Mapper.Initialize(cfg =>
+            //        {
+            //            cfg.CreateMap<ProductModel, import_products>()
+            //               .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
+            //               .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
+            //               .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
+            //               .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.Barcode))
+            //               .ForMember(d => d.n_count, opt => opt.MapFrom(src => src.Count))
+            //               .ForMember(d => d.m_price, opt => opt.MapFrom(src => src.Price))
+            //               .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date))
+            //               .ForMember(d => d.c_standart, opt => opt.MapFrom(src => src.Standart));
 
-                #region comment
-                //for (int i = 0; i <= 100; i++)
-                //{
-                //    Thread.Sleep(250);
-                //    Percent = i;
+            //            //cfg.CreateMap<CategoryCoreModel, import_catalogs>()
+            //            //   .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
+            //            //   .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
+            //            //   .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)));
+            //        });
 
-                //    if (i == 100)
-                //    {
-                //        i = 0;
-                //        Step++;
-                //        if (Step == 3)
-                //        {
-                //            IsCompleted = true;
-                //            break;
-                //        }
-                //    }
-                //}
-                #endregion
+            //        var products = Mapper.Map<List<import_products>>(arrayOfProducts.Products);
 
-                using (var db = new dbModel(connection))
-                {
-                    Mapper.Initialize(cfg =>
-                    {
-                        cfg.CreateMap<ProductModel, import_products>()
-                           .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
-                           .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
-                           .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
-                           .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.Barcode))
-                           .ForMember(d => d.n_count, opt => opt.MapFrom(src => src.Count))
-                           .ForMember(d => d.m_price, opt => opt.MapFrom(src => src.Price))
-                           .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date))
-                           .ForMember(d => d.c_standart, opt => opt.MapFrom(src => src.Standart));
+            //        #region продукция
+            //        try
+            //        {
+            //            AddProducts(db, products);
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            SrvcLogger.Error("{error}", "Ошибка при добавлении продукции");
+            //            SrvcLogger.Error("{error}", e.ToString());
+            //        }
+            //        #endregion
 
-                        cfg.CreateMap<CategoryModel, import_catalogs>()
-                           .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
-                           .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
-                           .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)));
-                    });
+            //        #region категории
+            //        try
+            //        {
 
-                    var products = Mapper.Map<List<import_products>>(arrayOfProducts.Products);
-
-                    #region продукция
-                    try
-                    {
-                        AddProducts(db, products);
-                    }
-                    catch (Exception e)
-                    {
-                        SrvcLogger.Error("{error}", "Ошибка при добавлении продукции");
-                        SrvcLogger.Error("{error}", e.ToString());
-                    }
-                    #endregion
-
-                    #region категории
-                    try
-                    {
-
-                    }
-                    catch (Exception e)
-                    {
-                        SrvcLogger.Error("{error}", "Ошибка при добавлении категорий");
-                        SrvcLogger.Error("{error}", e.ToString());
-                    }
-                    #endregion
-                }
-            }
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            SrvcLogger.Error("{error}", "Ошибка при добавлении категорий");
+            //            SrvcLogger.Error("{error}", e.ToString());
+            //        }
+            //        #endregion
+            //    }
+            //}
         }
 
         /// <summary>

@@ -61,15 +61,15 @@ namespace Disly.Areas.Admin.Controllers
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "xml-btn")]
-        public ActionResult IndexPost(HttpPostedFileBase upload)
+        public ActionResult IndexPost(IEnumerable<HttpPostedFileBase> upload)
         {
-            if (upload != null && upload.ContentLength > 0)
-            {
-                using (Stream stream = upload.InputStream)
-                {
-                    Importer.DoImport(stream);
-                }
-            }
+            //if (upload != null && upload.ContentLength > 0)
+            //{
+            //    using (Stream stream = upload.InputStream)
+            //    {
+            //        Importer.DoImport(stream);
+            //    }
+            //}
             return View(model);
         }
         

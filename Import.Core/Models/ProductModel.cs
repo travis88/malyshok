@@ -61,9 +61,15 @@ namespace Import.Core.Models
         public string Standart { get; set; }
 
         /// <summary>
+        /// Список изображений
+        /// </summary>
+        [XmlElement(ElementName = "ImageList")]
+        public Image[] ImageList { get; set; }
+
+        /// <summary>
         /// Категории товара
         /// </summary>
         [XmlElement(ElementName = "Categories")]
-        public CategoryModel Category { get; set; }
+        public CategoryCoreModel[] Categories { get; set; }
     }
 }

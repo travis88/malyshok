@@ -13,6 +13,11 @@ namespace Import.Core.Models
     public class Certificate
     {
         /// <summary>
+        /// Идентификатор продукции
+        /// </summary>
+        public int ProductId { get; set; }
+
+        /// <summary>
         /// Название
         /// </summary>
         [XmlAttribute("name")]

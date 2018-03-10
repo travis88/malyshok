@@ -53,6 +53,7 @@
     <Compile Include="Importer.cs" />
     <Compile Include="Models\CatalogList.cs" />
     <Compile Include="Models\ArrayOfProducts.cs" />
+    <Compile Include="Models\CatalogProductLink.cs" />
     <Compile Include="Models\CategoryCoreModel.cs" />
     <Compile Include="Models\CatalogModel.cs" />
     <Compile Include="Models\Certificate.cs" />

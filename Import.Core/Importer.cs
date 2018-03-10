@@ -43,6 +43,42 @@ namespace Import.Core
         public static bool IsCompleted { get; set; } = false;
 
         /// <summary>
+        /// Конструктор
+        /// </summary>
+        static Importer()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<CatalogModel, import_catalogs>()
+                   .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
+                   .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
+                   .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)))
+                   .ForMember(d => d.d_date, opt => opt.MapFrom(src => DateTime.Now))
+                   .ForMember(d => d.n_parent, opt => opt.MapFrom(src => src.ParentId));
+                cfg.CreateMap<ProductModel, import_products>()
+                   .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
+                   .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
+                   .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
+                   .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.Barcode))
+                   .ForMember(d => d.n_count, opt => opt.MapFrom(src => src.Count))
+                   .ForMember(d => d.m_price, opt => opt.MapFrom(src => src.Price))
+                   .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date))
+                   .ForMember(d => d.c_standart, opt => opt.MapFrom(src => src.Standart));
+                cfg.CreateMap<Image, import_product_images>()
+                   .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
+                   .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Name))
+                   .ForMember(d => d.b_main, opt => opt.MapFrom(src => src.IsMain));
+                cfg.CreateMap<Certificate, import_product_certificates>()
+                   .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
+                   .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Name))
+                   .ForMember(d => d.b_hygienic, opt => opt.MapFrom(src => src.IsHygienic));
+                cfg.CreateMap<CatalogProductLink, import_product_categories>()
+                   .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
+                   .ForMember(d => d.f_category, opt => opt.MapFrom(src => src.CatalogId));
+            });
+        }
+
+        /// <summary>
         /// Основной метод
         /// </summary>
         public static void DoImport(FileInfo[] files)
@@ -56,27 +92,6 @@ namespace Import.Core
             {
                 files = files.OrderBy(o => o.FullName)
                              .Select(s => s).ToArray();
-
-                #region mapping
-                Mapper.Initialize(cfg =>
-                {
-                    cfg.CreateMap<CatalogModel, import_catalogs>()
-                       .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
-                       .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
-                       .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)))
-                       .ForMember(d => d.d_date, opt => opt.MapFrom(src => DateTime.Now))
-                       .ForMember(d => d.n_parent, opt => opt.MapFrom(src => src.ParentId));
-                    cfg.CreateMap<ProductModel, import_products>()
-                       .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
-                       .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
-                       .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
-                       .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.Barcode))
-                       .ForMember(d => d.n_count, opt => opt.MapFrom(src => src.Count))
-                       .ForMember(d => d.m_price, opt => opt.MapFrom(src => src.Price))
-                       .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date))
-                       .ForMember(d => d.c_standart, opt => opt.MapFrom(src => src.Standart));
-                });
-                #endregion
 
                 foreach (var file in files)
                 {
@@ -118,6 +133,65 @@ namespace Import.Core
                                                                      .Select(s => s.First()).ToArray();
                                     var products = Mapper.Map<List<import_products>>(distinctProducts);
                                     AddProducts(db, products);
+
+                                    #region связи изображений и товаров
+                                    var queryImageList = (from p in distinctProducts
+                                                          select new { p.Id, p.ImageList })
+                                                          .Select(s => new
+                                                          {
+                                                              List = s.ImageList
+                                                              .Select(g => new Image
+                                                              {
+                                                                  ProductId = s.Id,
+                                                                  Name = g.Name,
+                                                                  IsMain = g.IsMain
+                                                              }).ToArray()
+                                                          })
+                                                          .SelectMany(s => s.List)
+                                                          .ToArray();
+
+                                    var imageProdLinks = Mapper.Map<List<import_product_images>>(queryImageList);
+                                    AddImageProdLinks(db, imageProdLinks);
+                                    #endregion
+
+                                    #region связи сертификатов и товаров
+                                    var queryCertificateList = (from p in distinctProducts
+                                                                select new { p.Id, p.Certificates })
+                                                                .Select(s => new
+                                                                {
+                                                                    List = s.Certificates
+                                                                    .Select(g => new Certificate
+                                                                    {
+                                                                        ProductId = s.Id,
+                                                                        Name = g.Name,
+                                                                        IsHygienic = g.IsHygienic
+                                                                    }).ToArray()
+                                                                })
+                                                                .SelectMany(s => s.List)
+                                                                .ToArray();
+
+                                    var certificateProdLinks = Mapper.Map<List<import_product_certificates>>(queryCertificateList);
+                                    AddCertificateProdLinks(db, certificateProdLinks);
+                                    #endregion
+
+                                    #region связи категорий и товаров
+                                    var queryCatalogList = (from p in distinctProducts
+                                                            select new { p.Id, p.Categories })
+                                                            .Select(s => new
+                                                            {
+                                                                List = s.Categories
+                                                                .Select(g => new CatalogProductLink
+                                                                {
+                                                                    ProductId = s.Id,
+                                                                    CatalogId = g.Id
+                                                                }).ToArray()
+                                                            })
+                                                            .SelectMany(s => s.List)
+                                                            .ToArray();
+
+                                    var catalogProdLinks = Mapper.Map<List<import_product_categories>>(queryCatalogList);
+                                    AddCatalogProdLinks(db, catalogProdLinks);
+                                    #endregion
                                 }
                                 catch (Exception e)
                                 {
@@ -132,21 +206,6 @@ namespace Import.Core
         }
 
         /// <summary>
-        /// Добавляет продукцию
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="products"></param>
-        private static void AddProducts(dbModel db, IEnumerable<import_products> products)
-        {
-            SrvcLogger.Debug("{work}", String.Format("кол-во товаров {0}", products.Count()));
-            using (var tr = db.BeginTransaction())
-            {
-                db.BulkCopy(products);
-                tr.Commit();
-            }
-        }
-
-        /// <summary>
         /// Добавляет категории
         /// </summary>
         /// <param name="db"></param>
@@ -154,10 +213,105 @@ namespace Import.Core
         private static void AddCategories(dbModel db, IEnumerable<import_catalogs> catalogs)
         {
             SrvcLogger.Debug("{work}", String.Format("кол-во каталогов {0}", catalogs.Count()));
-            using (var tr = db.BeginTransaction())
+            try
             {
-                db.BulkCopy(catalogs);
-                tr.Commit();
+                using (var tr = db.BeginTransaction())
+                {
+                    db.BulkCopy(catalogs);
+                    tr.Commit();
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Добавляет продукцию
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="products"></param>
+        private static void AddProducts(dbModel db, IEnumerable<import_products> products)
+        {
+            SrvcLogger.Debug("{work}", String.Format("кол-во товаров {0}", products.Count()));
+            try
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    db.BulkCopy(products);
+                    tr.Commit();
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Добавляет связи изображений с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddImageProdLinks(dbModel db, IEnumerable<import_product_images> links)
+        {
+            SrvcLogger.Debug("{work}", String.Format("кол-во изображений {0}", links.Count()));
+            try
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    db.BulkCopy(links);
+                    tr.Commit();
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Добавляет связи сертификатов с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddCertificateProdLinks(dbModel db, IEnumerable<import_product_certificates> links)
+        {
+            SrvcLogger.Debug("{work}", String.Format("кол-во сертификатов {0}", links.Count()));
+            try
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    db.BulkCopy(links);
+                    tr.Commit();
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Добавляет связи категорий с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddCatalogProdLinks(dbModel db, IEnumerable<import_product_categories> links)
+        {
+            SrvcLogger.Debug("{work}", String.Format("кол-во каталогов {0}", links.Count()));
+            try
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    db.BulkCopy(links);
+                    tr.Commit();
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
             }
         }
     }

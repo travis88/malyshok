@@ -63,13 +63,22 @@ namespace Import.Core.Models
         /// <summary>
         /// Список изображений
         /// </summary>
-        [XmlElement(ElementName = "ImageList")]
+        [XmlArray(ElementName = "ImageList")]
+        [XmlArrayItem("Image")]
         public Image[] ImageList { get; set; }
+
+        /// <summary>
+        /// Сертификаты
+        /// </summary>
+        [XmlArray(ElementName = "Certificates")]
+        [XmlArrayItem("Certificate")]
+        public Certificate[] Certificates { get; set; }
 
         /// <summary>
         /// Категории товара
         /// </summary>
-        [XmlElement(ElementName = "Categories")]
+        [XmlArray(ElementName = "Categories")]
+        [XmlArrayItem("Category")]
         public CategoryCoreModel[] Categories { get; set; }
     }
 }

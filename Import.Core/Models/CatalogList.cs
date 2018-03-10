@@ -10,12 +10,12 @@ namespace Import.Core.Models
     /// <summary>
     /// Массив каталогов
     /// </summary>
-    public class ArrayOfCatalogs
+    public class CatalogList
     {
         /// <summary>
         /// Список каталогов
         /// </summary>
         [XmlElement(ElementName = "CatalogItem")]
-        public CatalogModel[] CatalogList { get; set; }
+        public CatalogModel[] Catalogs { get; set; }
     }
 }

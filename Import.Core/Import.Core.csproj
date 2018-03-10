@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Importer.cs" />
-    <Compile Include="Models\ArrayOfCatalogs.cs" />
+    <Compile Include="Models\CatalogList.cs" />
     <Compile Include="Models\ArrayOfProducts.cs" />
     <Compile Include="Models\CategoryCoreModel.cs" />
     <Compile Include="Models\CatalogModel.cs" />

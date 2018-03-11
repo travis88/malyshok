@@ -43,6 +43,16 @@ namespace Import.Core
         public static bool IsCompleted { get; set; } = false;
 
         /// <summary>
+        /// кол-во успешных процессов
+        /// </summary>
+        private static int countSuccess = 0;
+
+        /// <summary>
+        /// кол-во процессов, завершившихся неудачей
+        /// </summary>
+        private static int countFalse = 0;
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         static Importer()
@@ -83,6 +93,8 @@ namespace Import.Core
         /// </summary>
         public static void DoImport(FileInfo[] files)
         {
+            countSuccess = countFalse = 0;
+
             if (!IsCompleted)
             {
                 Percent = Step = CountProducts = 0;
@@ -108,6 +120,7 @@ namespace Import.Core
                             {
                                 try
                                 {
+                                    SrvcLogger.Debug("{work}", "категории начало");
                                     var serializer = new XmlSerializer(typeof(CatalogList));
                                     var arrayOfCatalogs = (CatalogList)serializer.Deserialize(fileStream);
                                     var distinctCatalogs = (from c in arrayOfCatalogs.Catalogs
@@ -115,17 +128,22 @@ namespace Import.Core
                                                                      .Select(s => s.First()).ToArray();
                                     var catalogs = Mapper.Map<List<import_catalogs>>(distinctCatalogs);
                                     AddCategories(db, catalogs);
+                                    SrvcLogger.Debug("{work}", "категории конец");
+                                    countSuccess++;
                                 }
                                 catch (Exception e)
                                 {
                                     SrvcLogger.Error("{error}", "ошибка при импорте каталогов");
                                     SrvcLogger.Error("{error}", e.ToString());
+                                    countFalse++;
                                 }
                             }
                             else if (file.FullName.Contains("product"))
                             {
                                 try
                                 {
+                                    #region продукция
+                                    SrvcLogger.Debug("{work}", "продукция начало");
                                     var serializer = new XmlSerializer(typeof(ArrayOfProducts));
                                     var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(fileStream);
                                     var distinctProducts = (from p in arrayOfProducts.Products
@@ -133,8 +151,11 @@ namespace Import.Core
                                                                      .Select(s => s.First()).ToArray();
                                     var products = Mapper.Map<List<import_products>>(distinctProducts);
                                     AddProducts(db, products);
+                                    SrvcLogger.Debug("{work}", "продукция конец");
+                                    #endregion
 
                                     #region связи изображений и товаров
+                                    SrvcLogger.Debug("{work}", "связи изображений и товаров начало");
                                     var queryImageList = (from p in distinctProducts
                                                           select new { p.Id, p.ImageList })
                                                           .Select(s => new
@@ -152,9 +173,11 @@ namespace Import.Core
 
                                     var imageProdLinks = Mapper.Map<List<import_product_images>>(queryImageList);
                                     AddImageProdLinks(db, imageProdLinks);
+                                    SrvcLogger.Debug("{work}", "связи изображений и товаров конец");
                                     #endregion
 
                                     #region связи сертификатов и товаров
+                                    SrvcLogger.Debug("{work}", "связи сертификатов и товаров начало");
                                     var queryCertificateList = (from p in distinctProducts
                                                                 select new { p.Id, p.Certificates })
                                                                 .Select(s => new
@@ -172,9 +195,11 @@ namespace Import.Core
 
                                     var certificateProdLinks = Mapper.Map<List<import_product_certificates>>(queryCertificateList);
                                     AddCertificateProdLinks(db, certificateProdLinks);
+                                    SrvcLogger.Debug("{work}", "связи сертификатов и товаров конец");
                                     #endregion
 
                                     #region связи категорий и товаров
+                                    SrvcLogger.Debug("{work}", "связи категорий и товаров начало");
                                     var queryCatalogList = (from p in distinctProducts
                                                             select new { p.Id, p.Categories })
                                                             .Select(s => new
@@ -191,14 +216,24 @@ namespace Import.Core
 
                                     var catalogProdLinks = Mapper.Map<List<import_product_categories>>(queryCatalogList);
                                     AddCatalogProdLinks(db, catalogProdLinks);
+                                    SrvcLogger.Debug("{work}", "связи категорий и товаров конец");
                                     #endregion
+
+                                    countSuccess++;
                                 }
                                 catch (Exception e)
                                 {
                                     SrvcLogger.Error("{error}", "ошибка при импорте продукции");
                                     SrvcLogger.Error("{error}", e.ToString());
+                                    countFalse++;
                                 }
                             }
+
+                            SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
+                            Finalize(db);
+                            SrvcLogger.Debug("{work}", "импорт завершён");
+                            SrvcLogger.Debug("{work}", String.Format("кол-во ошибок {0}", countFalse));
+                            SrvcLogger.Debug("{work}", String.Format("кол-во успешных процессов {0}", countSuccess));
                         }
                     }
                 }
@@ -220,10 +255,12 @@ namespace Import.Core
                     db.BulkCopy(catalogs);
                     tr.Commit();
                 }
+                countSuccess++;
             }
             catch (Exception e)
             {
                 SrvcLogger.Error("{error}", e.ToString());
+                countFalse++;
             }
         }
 
@@ -242,10 +279,12 @@ namespace Import.Core
                     db.BulkCopy(products);
                     tr.Commit();
                 }
+                countSuccess++;
             }
             catch (Exception e)
             {
                 SrvcLogger.Error("{error}", e.ToString());
+                countFalse++;
             }
         }
 
@@ -264,10 +303,12 @@ namespace Import.Core
                     db.BulkCopy(links);
                     tr.Commit();
                 }
+                countSuccess++;
             }
             catch (Exception e)
             {
                 SrvcLogger.Error("{error}", e.ToString());
+                countFalse++;
             }
         }
 
@@ -286,10 +327,12 @@ namespace Import.Core
                     db.BulkCopy(links);
                     tr.Commit();
                 }
+                countSuccess++;
             }
             catch (Exception e)
             {
                 SrvcLogger.Error("{error}", e.ToString());
+                countFalse++;
             }
         }
 
@@ -308,10 +351,35 @@ namespace Import.Core
                     db.BulkCopy(links);
                     tr.Commit();
                 }
+                countSuccess++;
             }
             catch (Exception e)
             {
                 SrvcLogger.Error("{error}", e.ToString());
+                countFalse++;
+            }
+        }
+
+        /// <summary>
+        /// Запускает хранимку для переноса данных из буферных таблиц в боевые
+        /// </summary>
+        /// <param name="db"></param>
+        private static void Finalize(dbModel db)
+        {
+            if (db.Command != null)
+            {
+                db.Command.CommandTimeout = 1200000;
+            }
+
+            try
+            {
+                db.import();
+                countSuccess++;
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+                countFalse++;
             }
         }
     }

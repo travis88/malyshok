@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
+using System.Text;
 
 namespace Disly.Controllers
 {
@@ -27,6 +28,7 @@ namespace Disly.Controllers
 
         public string _path;
         public string _alias;
+        public Guid? OrderId;
 
         protected SitesModel siteModel;
         protected SiteMapModel[] siteMapArray;
@@ -95,6 +97,19 @@ namespace Disly.Controllers
             {
                 UserInfo = _repository.getCustomer(new Guid(User.Identity.Name));
             }
+            else
+            {
+                HttpCookie MyCookie = Request.Cookies["order-id"];
+                try
+                {
+                    OrderId = Guid.Parse(HttpUtility.UrlDecode(MyCookie.Value, Encoding.UTF8));
+                }
+                catch { OrderId = null; }
+            }
+
+            #region OrderInfo
+
+            #endregion
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();

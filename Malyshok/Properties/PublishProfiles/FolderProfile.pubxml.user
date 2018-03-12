@@ -278,29 +278,32 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/Antlr3.Runtime.pdb">
       <publishTime>02/13/2018 17:41:40</publishTime>
     </File>
+    <File Include="bin/AutoMapper.dll">
+      <publishTime>03/07/2018 15:09:59</publishTime>
+    </File>
     <File Include="bin/ClearScript.dll">
       <publishTime>02/26/2018 18:47:38</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>03/04/2018 12:31:31</publishTime>
+      <publishTime>03/09/2018 14:06:51</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>05/22/2017 13:02:04</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>03/04/2018 12:31:31</publishTime>
+      <publishTime>03/09/2018 14:06:51</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>03/04/2018 12:31:28</publishTime>
+      <publishTime>03/09/2018 14:06:49</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>03/04/2018 12:31:28</publishTime>
+      <publishTime>03/09/2018 14:06:49</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>03/04/2018 12:31:32</publishTime>
+      <publishTime>03/09/2018 14:06:52</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>03/04/2018 12:31:32</publishTime>
+      <publishTime>03/09/2018 14:06:52</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>02/13/2018 17:41:41</publishTime>
@@ -312,10 +315,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/12/2017 08:41:49</publishTime>
     </File>
     <File Include="bin/Import.Core.dll">
-      <publishTime>03/04/2018 12:31:28</publishTime>
+      <publishTime>03/09/2018 14:06:49</publishTime>
     </File>
     <File Include="bin/Import.Core.pdb">
-      <publishTime>03/04/2018 12:31:28</publishTime>
+      <publishTime>03/09/2018 14:06:49</publishTime>
     </File>
     <File Include="bin/JavaScriptEngineSwitcher.ChakraCore.dll">
       <publishTime>02/26/2018 18:47:38</publishTime>
@@ -420,7 +423,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:45</publishTime>
     </File>
     <File Include="Content/css/common.css">
-      <publishTime>03/04/2018 13:09:55</publishTime>
+      <publishTime>03/07/2018 15:07:43</publishTime>
     </File>
     <File Include="Content/css/commonless.css">
       <publishTime>02/13/2018 17:41:31</publishTime>
@@ -893,6 +896,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Content/img/catalog.jpg">
       <publishTime>02/15/2018 22:07:15</publishTime>
     </File>
+    <File Include="Content/img/cert.png">
+      <publishTime>03/07/2018 11:55:20</publishTime>
+    </File>
     <File Include="Content/img/clouds.png">
       <publishTime>03/02/2018 14:01:45</publishTime>
     </File>
@@ -1004,6 +1010,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Content/img/youtube-ico.png">
       <publishTime>11/28/2017 15:26:31</publishTime>
     </File>
+    <File Include="Content/img/_nofoto.png">
+      <publishTime>03/05/2018 19:05:01</publishTime>
+    </File>
     <File Include="Content/js/menu.js">
       <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
@@ -1024,6 +1033,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap-theme.min.css">
       <publishTime>02/13/2018 17:41:31</publishTime>
+    </File>
+    <File Include="Content/plugins/bootstrap/css/bootstrap-toggle.css">
+      <publishTime>03/07/2018 14:17:28</publishTime>
     </File>
     <File Include="Content/plugins/bootstrap/css/bootstrap.css">
       <publishTime>02/13/2018 17:41:31</publishTime>
@@ -2115,7 +2127,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2018 08:19:41</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>03/04/2018 13:04:46</publishTime>
+      <publishTime>03/04/2018 19:19:29</publishTime>
     </File>
     <File Include="Views/Home/part/media.cshtml">
       <publishTime>02/13/2018 17:41:32</publishTime>
@@ -2160,7 +2172,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
     <File Include="Views/Prod/Index.cshtml">
-      <publishTime>02/27/2018 10:23:12</publishTime>
+      <publishTime>03/07/2018 15:04:56</publishTime>
     </File>
     <File Include="Views/Search/Index.cshtml">
       <publishTime>02/13/2018 17:41:32</publishTime>
@@ -2193,7 +2205,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>03/04/2018 12:56:40</publishTime>
+      <publishTime>03/04/2018 19:20:00</publishTime>
     </File>
     <File Include="Views/SpecStructure/Index.cshtml">
       <publishTime>01/16/2018 12:49:26</publishTime>
@@ -2226,7 +2238,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/02/2018 19:02:30</publishTime>
     </File>
     <File Include="Views/User/Reg.cshtml">
-      <publishTime>03/02/2018 19:50:55</publishTime>
+      <publishTime>03/07/2018 14:19:33</publishTime>
     </File>
     <File Include="Views/User/RegCompleted.cshtml">
       <publishTime>03/03/2018 00:04:28</publishTime>

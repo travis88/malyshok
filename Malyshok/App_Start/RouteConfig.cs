@@ -83,7 +83,12 @@ namespace Disly
                url: "User/{action}/{id}",
                defaults: new { controller = "User", action = "Index", id = UrlParameter.Optional }
             );
-
+            
+            routes.MapRoute(
+               name: "Basket",
+               url: "basket/{action}/{id}",
+               defaults: new { controller = "Basket", action = "Index", id = UrlParameter.Optional }
+            );
 
 
             // Типовая страница (карта сайта)

@@ -651,6 +651,7 @@
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ProdController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -872,6 +873,7 @@
     <Content Include="Views\User\Reg.cshtml" />
     <Content Include="Views\User\RegCompleted.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Basket\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -881,7 +883,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\temp\" />
     <Folder Include="src\components\" />
     <Folder Include="Userfiles\" />
   </ItemGroup>

@@ -61,14 +61,38 @@ namespace Disly.Areas.Admin.Controllers
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "xml-btn")]
-        public ActionResult IndexPost(HttpPostedFileBase upload)
+        public ActionResult IndexPost(IEnumerable<HttpPostedFileBase> upload)
         {
-            if (upload != null && upload.ContentLength > 0)
+            if (upload != null)
             {
-                using (Stream stream = upload.InputStream)
+                string importDir = Server.MapPath(Settings.UserFiles + Settings.ImportDir);
+                
+                // чистим папку от предыдущих файлов
+                DirectoryInfo di = new DirectoryInfo(importDir);
+                if (di.Exists)
                 {
-                    Importer.DoImport(stream);
+                    foreach (FileInfo file in di.GetFiles())
+                    {
+                        file.Delete();
+                    }
                 }
+                else
+                {
+                    di.Create();
+                }
+
+                // сохраняем файлы для импорта
+                foreach (var file in upload)
+                {
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        string savePath = importDir + file.FileName;
+                        file.SaveAs(savePath);
+                    }
+                }
+
+                FileInfo[] files = di.GetFiles("*.xml");
+                Importer.DoImport(files);
             }
             return View(model);
         }

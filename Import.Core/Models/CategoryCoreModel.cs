@@ -10,18 +10,12 @@ namespace Import.Core.Models
     /// <summary>
     /// Категория
     /// </summary>
-    public class CategoryModel
+    public class CategoryCoreModel
     {
         /// <summary>
         /// Идентификатор
         /// </summary>
         [XmlAttribute("ID")]
         public int Id { get; set; }
-
-        /// <summary>
-        /// Название
-        /// </summary>
-        [XmlAttribute("Title")]
-        public string Title { get; set; }
     }
 }

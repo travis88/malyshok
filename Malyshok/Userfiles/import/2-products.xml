@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfProducts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Product ID="13" Title="Название товара" Code="Код товара" Barcode="Штрих-код товара" Count="23" Price="1830.1600" Date="2017-08-04T00:00:00.000" Standart="0">
+	  <ImageList>
+      <!-- Если есть несколько фоток товара, например с разного ракурса или разных цветов -->
+      <!-- Атрибут "main" - можно удалить, в этом случае первая картинка будет главной -->
+		  <Image name="название картинки" main="1"></Image>
+		  <Image name="название картинки" main="0"></Image>
+		  <Image name="название картинки" main="0"></Image>
+	  </ImageList>
+	  <Certificates>
+      <Certificate name="название картинки" Hygienic="1"></Certificate>
+		  <Certificate name="название картинки" Hygienic="0"></Certificate>
+		  <Certificate name="название картинки" Hygienic="0"></Certificate>
+		  <Certificate name="название картинки" Hygienic="0"></Certificate>
+	  </Certificates>
+	  <Categories>
+		  <Category ID="320" />
+		  <Category ID="324" />
+	  </Categories>
+  </Product>
+  <Product ID="368428" Title="904/172974/Конструктор пласт.Пожарная машина с аксессуарами.364дет.в кор/1" Code="И000368428" Barcode="6934614431735" Count="14" Price="635.86" Date="2018-01-15T00:00:00.000" Standart="0">
+    <ImageList>
+      <Image name="6934614431735_1.jpg" main="1"></Image>
+    </ImageList>
+    <Certificates>
+      <!-- атрибут "Hygienic" - определяет Гигиенический сертификат -->
+      <Certificate name="пр.исп.06-72301/60 23.07.15.jpg" Hygienic="1"></Certificate>
+      <Certificate name="ТС RU С-СN.ЛТ47.В.03125.jpg" Hygienic="0"></Certificate>
+      <Certificate name="ТС RU C-CN.ЛТ47.В.02982.jpg" Hygienic="0"></Certificate>
+    </Certificates>
+    <Categories>
+      <!-- Если товар относится к разным категориям, например "Игрушки/Конструкторы/Конструкторы BRICK" и к "Акция! Снижение цены!" -->
+      <Category ID="320" />
+      <!-- 320 - ID записи "Акция! Снижение цены!" в 1С и в файле catalog.xml -->
+      <Category ID="327" />
+      <!-- 320 - ID записи "Конструкторы BRICK" в 1С и в файле catalog.xml -->
+    </Categories>
+  </Product>
+</ArrayOfProducts>

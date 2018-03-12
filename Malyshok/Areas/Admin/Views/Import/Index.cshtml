@@ -2,8 +2,9 @@
 @if (Model.UserResolution.Read)
 {
     <div class="content">
-        @Html.TextBox("upload", null, new { type = "file", title = "xml-документ", accept = ".xml" })
-
+        @Html.TextBox("upload", null, new { type = "file", title = "xml-документ", accept = ".xml", @class = "noplagin", multiple = "multiple" })
+        <br />
+        <br />
         <div id="content"></div>
         <script src="~/Content/dist/bundle.js"></script>
         <link href="~/Content/css/import-react.css" rel="stylesheet" />

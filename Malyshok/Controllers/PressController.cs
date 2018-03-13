@@ -22,13 +22,8 @@ namespace Disly.Controllers
             model = new NewsViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
-                UserInfo = UserInfo,
-                Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray,
-                ProdCatalog = category_list,
                 CurrentPage = currentPage,
-                Group = _repository.getMaterialsGroup()
+                UserInfo = UserInfo
             };
 
             #region Создаем переменные (значения по умолчанию)
@@ -103,9 +98,7 @@ namespace Disly.Controllers
             ViewBag.NewsSearchArea = filter.SearchText;
             ViewBag.NewsSearchDateStart = filter.Date;
             ViewBag.NewsSearchDateFin = filter.DateEnd;
-
-            ViewBag.SiteUrl = _repository.getDomainSite();
-
+            
             return View(model);
         }
 
@@ -120,7 +113,6 @@ namespace Disly.Controllers
             {
                 ViewBag.LastDatePublish = model.List.Data[0].Date;
             }
-            ViewBag.Domain = _repository.getDomainSite();
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             return View("rss", model);

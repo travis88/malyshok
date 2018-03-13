@@ -31,34 +31,15 @@ namespace Disly.Controllers
         public Guid? OrderId;
 
         protected SitesModel siteModel;
-        protected SiteMapModel[] siteMapArray;
         protected UsersModel UserInfo;
-        protected BannersModel[] bannerArray;
-        protected List<Breadcrumbs> breadcrumb;
         protected SiteMapModel currentPage;
-        protected CategoryModel[] category_list;
-
-        protected string MedCap;
-        protected string Quote;
-        protected string Concept;
-        protected string Coordination;
-
-        protected bool IsSpecVersion = false;
+        
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
             Domain = "main";
-            //try {
-            //    var domainUrl = Request.Url.Host.ToLower().Replace("www.", "");
-            //    Domain = _repository.getSiteId(domainUrl);
-            //}
-            //catch
-            //{
-            //    if (Request.Url.Host.ToLower().Replace("www.", "") != ConfigurationManager.AppSettings["BaseURL"]) filterContext.Result = Redirect("/Error/");
-            //    else Domain = String.Empty;
-            //}
 
             #region Получаем данные из адресной строки
             //Частные случаи (model.CurrentPage = null) рассматриваем в самих контроллерах 
@@ -89,58 +70,36 @@ namespace Disly.Controllers
                     }
                 }
                 currentPage = _repository.getSiteMap(_path, _alias);
-                breadcrumb = _repository.getBreadCrumbCollection(HttpContext.Request.Url.PathAndQuery);
-
-
             #endregion
+            
+            HttpCookie MyCookie = Request.Cookies["order-id"];
+            
             if (User.Identity.IsAuthenticated)
             {
                 UserInfo = _repository.getCustomer(new Guid(User.Identity.Name));
             }
             else
             {
-                HttpCookie MyCookie = Request.Cookies["order-id"];
                 try
                 {
                     OrderId = Guid.Parse(HttpUtility.UrlDecode(MyCookie.Value, Encoding.UTF8));
                 }
-                catch { OrderId = null; }
+                catch
+                {
+                    OrderId = null;
+                }
             }
-
-            #region OrderInfo
-
-            #endregion
 
             ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
             ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
 
-            ViewName = _repository.getView(ControllerName); //Domain, 
+            ViewName = _repository.getView(ControllerName);
             siteModel = _repository.getSiteInfo();
-            
-            siteMapArray = _repository.getSiteMapList(); //Domain
-
-            //bannerArray = _repository.getBanners(); //Domain
-            category_list = _repository.getProdCatalogModule();
-
-            ViewBag.MedCap = MedCap = Settings.MedCap;
-            ViewBag.Quote = Quote = Settings.Quote;
-            ViewBag.Concept = Concept = Settings.Concept;
-            ViewBag.Coordination = Coordination = Settings.Coordination;
-            ViewBag.ControllerName = ControllerName;
         }
 
         public RootController()
         {
-            var domainUrl = "";
-
-            if (System.Web.HttpContext.Current != null)
-            {
-                var context = System.Web.HttpContext.Current;
-
-                if (context.Request != null && context.Request.Url != null && !string.IsNullOrEmpty(context.Request.Url.Host))
-                    domainUrl = context.Request.Url.Host.ToLower().Replace("www.", "");
-            }
-            _repository = new FrontRepository("cmsdbConnection", domainUrl);
+            _repository = new FrontRepository("cmsdbConnection");
         }
         
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]

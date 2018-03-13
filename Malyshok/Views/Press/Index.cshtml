@@ -1,7 +1,9 @@
 ﻿@model NewsViewModel
 
 <div class="type-page">
-    @Html.Partial("services/breadcrumbs")
+    @{ Html.RenderAction("BreadCrumb", "Partials"); }
+
+
     <h1>@ViewBag.Title</h1>
     @if (!String.IsNullOrEmpty(ViewBag.Alias))
     {

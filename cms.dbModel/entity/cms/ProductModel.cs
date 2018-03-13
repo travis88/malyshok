@@ -70,6 +70,11 @@ namespace cms.dbModel.entity
         /// Категории
         /// </summary>
         public CategoryModel[] Categories { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int inBasket { get; set; }
     }
 
     /// <summary>

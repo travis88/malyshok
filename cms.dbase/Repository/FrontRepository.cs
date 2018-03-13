@@ -14,7 +14,7 @@ namespace cms.dbase
         /// Контекст подключения
         /// </summary>
         private string _context = null;
-        private string _domain = string.Empty;
+        private string _domain = "main";
 
         /// <summary>
         /// Конструктор
@@ -25,165 +25,12 @@ namespace cms.dbase
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
 
-        public FrontRepository(string ConnectionString, string DomainUrl)
+        public FrontRepository(string ConnectionString)
         {
             _context = ConnectionString;
-            _domain = (!string.IsNullOrEmpty(DomainUrl)) ? getSiteId(DomainUrl) : "";
-            //_domain = "rkod";
             LinqToDB.Common.Configuration.Linq.AllowMultipleQuery = true;
         }
-        #region redirect methods
-        public override SitesModel getSiteInfoByOldId(int Id)
-        {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.cms_sitess
-                    .Where(w => w.c_alias.Equals(domain))
-                    .Select(s => new SitesModel
-                    {
-                        Id = s.id,
-                        Title = s.c_name,
-                        LongTitle = s.c_name_long,
-                        Alias = s.c_alias,
-                        Adress = s.c_adress,
-                        Phone = s.c_phone,
-                        Fax = s.c_fax,
-                        Email = s.c_email,
-                        Site = s.c_url,
-                        Worktime = s.c_worktime,
-                        Logo = new Photo
-                        {
-                            Url = s.c_logo
-                        },
-                        ContentId = (Guid)s.f_content,
-                        ContentType = (ContentLinkType)Enum.Parse(typeof(ContentLinkType), s.c_content_type, true),
-                        Type = s.c_content_type,
-                        Facebook = s.c_facebook,
-                        Vk = s.c_vk,
-                        Instagramm = s.c_instagramm,
-                        Odnoklassniki = s.c_odnoklassniki,
-                        Twitter = s.c_twitter,
-                        Theme = s.c_theme,
-                        BackGroundImg = new Photo
-                        {
-                            Url = s.c_background_img
-                        }
-                    });
-
-                if (data.Any())
-                    return data.SingleOrDefault();
-
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Элемент карты сайта по старому линку с ид
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public override SiteMapModel getSiteMapByOldId(int id)
-        {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_sitemaps.Where(w => w.n_old_id == id);
-                var data = query.Select(s => new SiteMapModel
-                {
-                    Title = s.c_title,
-                    Text = s.c_text,
-                    Alias = s.c_alias,
-                    Path = s.c_path,
-                    Id = s.id,
-                    FrontSection = s.f_front_section,
-                    ParentId = s.uui_parent
-                });
-
-                if (data.Any())
-                    return data.SingleOrDefault();
-
-                return null;
-            }
-        }
-        /// <summary>
-        /// Новость по старому линку с ид
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public override MaterialsModel getMaterialsByOldId(int id)
-        {
-            //string domain = _domain;
-            //using (var db = new CMSdb(_context))
-            //{
-            //    var query = db.content_materialss
-            //                .Where(w => w.n_old_id == id);
-
-            //    if (query.Any())
-            //    {
-            //        var material = query.Select(s => new MaterialsModel
-            //        {
-            //            Id = s.id,
-            //            Title = s.c_title,
-            //            Text = s.c_text,
-            //            Alias = s.c_alias,
-            //            Date = s.d_date,
-            //            Year = s.n_year,
-            //            Month = s.n_month,
-            //            Day = s.n_day,
-            //            PreviewImage = new Photo
-            //            {
-            //                Url = s.c_preview
-            //            }
-            //        }).SingleOrDefault();
-
-            //        db.content_materialss
-            //            .Where(w => w.id.Equals(material.Id))
-            //            .Set(u => u.n_count_see, u => u.n_count_see + 1)
-            //            .Update();
-
-            //        return material;
-            //    }
-
-            //    return null;
-            //}
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        /// <summary>
-        /// Получение идентификатора сайта
-        /// </summary>
-        /// <param name="domain">Домен</param>
-        /// <returns></returns>
-        public override string getSiteId(string domain)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(domain))
-                    throw new Exception("FrontRepository: getSiteId Domain is empty!");
-
-                using (var db = new CMSdb(_context))
-                {
-                    var data = db.cms_sites_domainss
-                        .Where(w => w.c_domain == domain);
-
-                    if (data.Any())
-                    {
-                        //Может быть найдено несколько записей по разным доменам, но ссылаются на один сайт
-                        var _domain = data.FirstOrDefault();
-                        return _domain.f_site;
-                    }
-
-                    throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' was not found!");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("FrontRepository: getSiteId Domain '" + domain + "' непредвиденная ошибка!" + ex.Message);
-            }
-        }
-
+        
         /// <summary>
         /// Получение вьюхи
         /// </summary>
@@ -191,7 +38,6 @@ namespace cms.dbase
         /// <returns></returns>
         public override string getView(string siteSection) //string siteId,
         {
-            string siteId = _domain;
             using (var db = new CMSdb(_context))
             {
                 string ViewPath = "~/Error/404/";
@@ -199,7 +45,7 @@ namespace cms.dbase
                 var query = (from s in db.front_site_sections
                              join v in db.front_page_viewss
                              on s.f_page_view equals v.id
-                             where (s.f_site.Equals(siteId) && s.f_front_section.Equals(siteSection))
+                             where (s.f_site.Equals(_domain) && s.f_front_section.Equals(siteSection))
                              select v.c_url);
                 if (query.Any())
                     ViewPath = query.SingleOrDefault();
@@ -257,137 +103,7 @@ namespace cms.dbase
                 return null;
             }
         }
-
-
-        public override string getDomainSite()
-        {
-            using (var db = new CMSdb(_context))
-            {
-                string siteId = _domain;
-                var data = db.cms_sites_domainss.Where(w => w.f_site == siteId);
-                if (data.Any())
-                {
-                    return data.OrderBy(o => o.num).Select(s => s.c_domain).FirstOrDefault();
-                }
-                return null;
-            }
-        }
-        /// <summary>
-        /// Получение информации по сайту
-        /// </summary>
-        /// <returns></returns>
-        public override UsersModel[] getSiteAdmins()
-        {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.cms_userss.Where(w => w.f_group == "admin");
-                if (query.Any())
-                {
-                    var data = query.Select(s => new UsersModel
-                    {
-                        Id = s.id,
-                        FIO = s.c_surname + " " + s.c_name + " " + s.c_patronymic,
-                        EMail = s.c_email
-                    }).ToArray();
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Получим список элементов карты сайта для контроллера
-        /// </summary>
-        /// <returns></returns>
-        public override SiteMapModel[] getSiteMapListShort(string path)
-        {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_sitemaps
-                    .Where(w => w.f_site.Equals(domain))
-                    .Where(w => !w.b_disabled)
-                    .Where(w => string.IsNullOrWhiteSpace(path) || w.c_path.Equals(path))
-                    .OrderBy(o => o.c_path)
-                    .ThenBy(o => o.n_sort)
-                    .Select(s => new SiteMapModel
-                    {
-                        Title = s.c_title,
-                        Path = s.c_path,
-                        Alias = s.c_alias,
-                        FrontSection = s.f_front_section
-                    });
-
-                if (query.Any())
-                    return query.ToArray();
-
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Получение меню из карты сайта
-        /// </summary>
-        /// <returns></returns>
-        public override SiteMapModel[] getSiteMapList() //string domain
-        {
-            string domain = _domain;
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.content_sv_sitemap_menus
-                    .Where(w => w.f_site.Equals(domain))
-                    .Where(w => !w.b_disabled)
-                    .OrderBy(o => o.n_sort)
-                    .Select(s => new SiteMapModel
-                    {
-                        Id = s.id,
-                        Site = s.f_site,
-                        FrontSection = s.f_front_section,
-                        Path = s.c_path,
-                        Alias = s.c_alias,
-                        Title = s.c_title,
-                        Text = s.c_text,
-                        Preview = s.c_preview,
-                        Url = s.c_url,
-                        Desc = s.c_desc,
-                        Keyw = s.c_keyw,
-                        Disabled = s.b_disabled,
-                        DisabledMenu = s.b_disabled_menu,
-                        Sort = s.n_sort,
-                        ParentId = s.uui_parent,
-                        MenuAlias = s.menu_alias,
-                        MenuSort = s.menu_sort,
-                        MenuGroups = getSiteMapGroupMenu(s.id),
-                        Photo = new Photo { Url = s.c_photo }
-                    });
-
-                if (data.Any())
-                    return data.ToArray();
-
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Получение групп меню для элемента карты сайта
-        /// </summary>
-        /// <param name="id">Идентификатор карты сайта</param>
-        /// <returns></returns>
-        public override string[] getSiteMapGroupMenu(Guid id)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var data = db.content_sitemap_menutypess
-                    .Where(w => w.f_sitemap.Equals(id))
-                    .Select(s => s.f_menutype.ToString());
-
-                if (data.Any())
-                    return data.ToArray();
-
-                return null;
-            }
-        }
-
+        
         /// <summary>
         /// Получение списка баннеров
         /// </summary>
@@ -460,6 +176,30 @@ namespace cms.dbase
             }
         }
 
+
+
+        public override SiteMapModel[] getMenu(string section)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_sv_sitemap_menus
+                    .Where(w => w.menu_alias == section)
+                    .Where(w => w.b_disabled == false && w.b_disabled_menu == false)
+                    .OrderBy(o => o.n_sort)
+                    .Select(c => new SiteMapModel
+                    {
+                        Title = c.c_title,
+                        Alias = c.c_alias,
+                        Path = c.c_path,
+                        FrontSection = c.f_front_section,
+                        Url = c.c_url
+                    });
+
+                return data.ToArray();
+            }
+        }
+        
+
         /// <summary>
         /// карта сайта
         /// </summary>
@@ -528,57 +268,7 @@ namespace cms.dbase
                 return null;
             }
         }
-
-        /// <summary>
-        /// Получим сестринские эл-ты карты сайта по пути
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public override string[] getSiteMapSiblings(string path)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_sitemaps
-                    .Where(w => w.f_site.Equals(_domain))
-                    .Where(w => w.c_path.Equals(path))
-                    .Select(s => s.c_alias);
-
-                if (!query.Any()) return null;
-                return query.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Получим сестринские эл-ты из карты сайта
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public override List<SiteMapModel> getSiteMapSiblingElements(string path)
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_sitemaps
-                    .Where(w => w.b_disabled == false)
-                    .Where(w => w.b_disabled_menu == false)
-                    .Where(w => w.f_site.Equals(_domain))
-                    .Where(w => w.c_path.Equals(path))
-                    .OrderBy(o => o.n_sort)
-                    .Select(s => new SiteMapModel
-                    {
-                        Id = s.id,
-                        Title = s.c_title,
-                        Alias = s.c_alias,
-                        Path = s.c_path,
-                        FrontSection = s.f_front_section,
-                        Url = s.c_url,
-                        ParentId = s.uui_parent
-                    });
-
-                if (!query.Any()) return null;
-                return query.ToList();
-            }
-        }
-
+        
         /// <summary>
         /// Дочерние элементы
         /// </summary>
@@ -611,7 +301,7 @@ namespace cms.dbase
         }
 
         /// <summary>
-        /// Список прикрепленных лдокументов к элементу карты сайта
+        /// Список прикрепленных документов к элементу карты сайта
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -641,54 +331,18 @@ namespace cms.dbase
         /// </summary>
         /// <param name="Url">относительная ссылка на страницу</param>
         /// <returns></returns>
-        public override List<Breadcrumbs> getBreadCrumbCollection(string Url)
+        public override Breadcrumbs[] getBreadCrumb(string Url)
         {
-            string domain = _domain;
             using (var db = new CMSdb(_context))
             {
-                int _len = Url.Count();
-                int _lastIndex = Url.LastIndexOf("/");
-                List<Breadcrumbs> data = new List<Breadcrumbs>();
+                var query = db.SP_site_PagePath(Url)
+                    .Select(s => new Breadcrumbs
+                    {
+                        Title = s.c_title,
+                        Url = s.c_path + s.c_alias
+                    });
 
-                while (_lastIndex > -1)
-                {
-                    string _path = Url.Substring(0, _lastIndex + 1).ToString();
-                    string _alias = Url.Substring(_lastIndex + 1).ToString();
-                    if (_alias == String.Empty) _alias = " ";
-
-                    var getContentSitemaps = db.content_sitemaps
-                                .Where(w => w.f_site == domain)
-                                .Where(w => w.c_path == _path)
-                                .Where(w => w.c_alias == _alias)
-                                //.Take(1)
-                                .Select(w => new Breadcrumbs
-                                {
-                                    Title = w.c_title,
-                                    Url = w.c_path + w.c_alias
-                                });
-                    if (getContentSitemaps.Any())
-                        try
-                        {
-                            var itemContentSitemap = getContentSitemaps.SingleOrDefault();
-                            if (itemContentSitemap != null)
-                                data.Add(itemContentSitemap);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("FrontRepository > getBreadCrumbCollection: Found more than one record " + ex);
-                        }
-                    Url = Url.Substring(0, _lastIndex);
-                    _len = Url.Count();
-                    _lastIndex = Url.LastIndexOf("/");
-
-                }
-                if (data.Any())
-                {
-                    data.Reverse();
-                    return data;
-                }
-
-                return data;
+                return query.ToArray();
             }
         }
 
@@ -868,28 +522,7 @@ namespace cms.dbase
             }
             throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Выдает группы преесс-центра
-        /// </summary>
-        /// <returns></returns>
-        public override MaterialsGroup[] getMaterialsGroup()
-        {
-            using (var db = new CMSdb(_context))
-            {
-                var query = db.content_sv_materials_groups_for_sites
-                    .Where(w => w.domain.Equals(_domain))
-                    .OrderBy(o => o.n_sort)
-                    .Select(s => new MaterialsGroup
-                    {
-                        Alias = s.c_alias,
-                        Title = s.c_title
-                    });
-
-                if (query.Any()) return query.ToArray();
-                return null;
-            }
-        }
+        
 
         /// <summary>
         /// Получаем список фотоматериалов
@@ -945,32 +578,39 @@ namespace cms.dbase
                 if (String.IsNullOrEmpty(filter.Category))
                 {
                     var query = db.content_productss.Where(w => w.n_count > 0);
-
                     query = query.OrderBy(w => new { w.d_date, w.c_title });
 
                     int itemCount = query.Count();
 
-                    var List = query
-                            .Skip(filter.Size * (filter.Page - 1))
-                            .Take(filter.Size)
-                            .Select(s => new ProductModel
-                            {
-                                Id = s.id,
-                                Title = s.c_title,
-                                Code = s.c_code,
-                                Barcode = s.c_barcode,
-                                Price = (decimal)s.m_price,
-                                Standart = s.c_standart,
-                                Count = (int)s.n_count,
-                                Photo = new Photo()
+                    var ProdList = query
+                        .Skip(filter.Size * (filter.Page - 1))
+                        .Take(filter.Size);
+
+                    var BasketList = db.content_order_detailss
+                        .Where(w => w.f_order == filter.Order);
+
+                    var Prod = (from p in ProdList join b in BasketList on p.id equals b.f_prod_id into ps
+                                from b in ps.DefaultIfEmpty()
+                                select new { p, b.n_count })
+                                .Select(s => new ProductModel
                                 {
-                                    Url = s.c_photo
-                                }
-                            });
+                                    Id = s.p.id,
+                                    Title = s.p.c_title,
+                                    Code = s.p.c_code,
+                                    Barcode = s.p.c_barcode,
+                                    Price = (decimal)s.p.m_price,
+                                    Standart = s.p.c_standart,
+                                    Count = (int)s.p.n_count,
+                                    inBasket = s.n_count,
+                                    Photo = new Photo()
+                                    {
+                                        Url = s.p.c_photo
+                                    }
+                                });
 
                     return new ProductList
                     {
-                        Data = List.ToArray(),
+                        Data = Prod.ToArray(),
                         Pager = new Pager
                         {
                             page = filter.Page,
@@ -1057,29 +697,132 @@ namespace cms.dbase
         }
         //public override bool updateCustomer(UsersModel item) { }
         //public override bool deleteCustomer(Guid id) { }
-        
-        #region private methods
 
         /// <summary>
-        /// список доменных имен по алиасу сайта
+        /// Заказы
         /// </summary>
-        /// <param name="SiteId"></param>
         /// <returns></returns>
-        private Domain[] getSiteDomains(string SiteId)
+        public override bool CheckOrder(Guid OrderId)
         {
             using (var db = new CMSdb(_context))
             {
-                var data = db.cms_sites_domainss.Where(w => w.f_site == SiteId);
-                if (data.Any())
-                    return data.Select(s => new Domain()
+                var query = db.content_orderss.Where(w => w.id == OrderId && w.f_status==0);
+                if (query.Any())
+                    return true;
+                else
+                    return false;
+            }
+        }
+        public override Guid? CreateOrder() {
+            using (var db = new CMSdb(_context))
+            {
+                Guid OrderId = Guid.NewGuid();
+
+                db.content_orderss
+                   .Value(v => v.id, OrderId)
+                   .Insert();
+
+                return OrderId;
+            }
+        }
+        //public override OrderModel[] getOrders(Guid UserId)
+        //{
+
+        //}
+
+
+        public override bool addInBasket(Guid OrderId, Guid ProdId, int Count)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                // Получаем данные о продукте
+                var query = db.content_productss.Where(w => w.id == ProdId);
+                //
+                var orderProd_query = db.content_order_detailss
+                    .Where(w => w.f_order == OrderId && w.f_prod_id == ProdId);
+
+                if (query.Any())
+                {
+                    var Prod = query.Select(s => new ProductModel
                     {
-                        DomainName = s.c_domain,
-                        id = s.id
-                    }).ToArray();
-                return null;
+                        Id = s.id,
+                        Title = s.c_title,
+                        Barcode = s.c_barcode,
+                        Code = s.c_code,
+                        Photo = new Photo { Url = s.c_photo },
+                        Price = (decimal)s.m_price
+                    })
+                    .SingleOrDefault();
+
+                    if (orderProd_query.Any())
+                    {
+                        return db.content_order_detailss
+                            .Where(w => w.f_order == OrderId && w.f_prod_id == ProdId)
+                            .Set(p => p.c_caption, Prod.Title)
+                            .Set(p => p.c_code, Prod.Code)
+                            .Set(p => p.c_barcode, Prod.Barcode)
+                            .Set(p => p.c_photo, Prod.Photo.Url)
+                            .Set(p => p.m_price, Prod.Price)
+                            .Set(p => p.n_count, Count)
+                            .Update() > 0;
+                    }
+                    else
+                    {
+                        return db.content_order_detailss
+                            .Value(v => v.f_order, OrderId)
+                            .Value(v => v.f_prod_id, ProdId)
+                            .Value(v => v.c_caption, Prod.Title)
+                            .Value(v => v.c_code, Prod.Code)
+                            .Value(v => v.c_barcode, Prod.Barcode)
+                            .Value(v => v.c_photo, Prod.Photo.Url)
+                            .Value(v => v.m_price, Prod.Price)
+                            .Value(v => v.n_count, Count)
+                            .Insert() > 0;
+                    }
+                }
+
+                return false;
             }
         }
 
-        #endregion
+        public override OrderModel getBasketInfo(Guid OrderId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                if (OrderId != null && db.content_orderss.Where(w => w.id == OrderId).Any())
+                {
+                    var data = db.BasketInfo(OrderId);
+
+                    if (data.Any())
+                    {
+                        var BasketInfo = data.Select(s => new OrderModel
+                        {
+                            ProdCount = (int)s.ProdCount,
+                            Total = (decimal)s.TotalSum
+                        });
+
+                        return BasketInfo.FirstOrDefault();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        //public override OrderModel getBasket(Guid OrderId)
+        //{
+        //    using (var db = new CMSdb(_context))
+        //    {
+        //        var query = db.content_orderss.Where(w => w.id == OrderId);
+        //        if (query.Any())
+        //        {
+        //            query.Select(s => new OrderModel
+        //            {
+        //                ProdCount = 1,
+        //                Total = 1
+        //            });
+        //        }
+        //    }
+        //}
     }
 }

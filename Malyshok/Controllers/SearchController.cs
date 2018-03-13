@@ -24,12 +24,8 @@ namespace Disly.Controllers
             model = new TypePageViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
-                UserInfo = UserInfo,
-                Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray,
-                ProdCatalog = category_list,
-                CurrentPage = currentPage
+                CurrentPage = currentPage,
+                UserInfo = UserInfo
             };
 
             //Для чего это тут???

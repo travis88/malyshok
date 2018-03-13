@@ -38,6 +38,11 @@ namespace Disly.Models
         public CategoryModel[] ProdCatalog { get; set; }
 
         /// <summary>
+        /// Краткая информация о корзине
+        /// </summary>
+        public OrderModel BasketInfo { get; set; }
+
+        /// <summary>
         /// Текущая страница
         /// </summary>
         public SiteMapModel CurrentPage { get; set; }

@@ -19,7 +19,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Номер
         /// </summary>
-        public int Num { get; set; }
+        public int? Num { get; set; }
 
         /// <summary>
         /// Дата
@@ -50,6 +50,11 @@ namespace cms.dbModel.entity
         /// Комментарий админа
         /// </summary>
         public string AdminComment { get; set; }
+
+        /// <summary>
+        /// Общая стоимость
+        /// </summary>
+        public int ProdCount { get; set; }
 
         /// <summary>
         /// Общая стоимость

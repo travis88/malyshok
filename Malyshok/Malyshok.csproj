@@ -649,9 +649,10 @@
     <Compile Include="Areas\Admin\Models\SiteMapViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SitesViewModel.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
+    <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\BasketController.cs" />
+    <Compile Include="Controllers\PartialsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ProdController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -857,7 +858,6 @@
     <Content Include="Views\Press\Rss.cshtml" />
     <Content Include="Views\Press\Index.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
-    <Content Include="Views\Home\part\media.cshtml" />
     <Content Include="Views\Shared\part\childlist.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\part\childtabs.cshtml" />
@@ -866,14 +866,14 @@
     <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
     <Content Include="Views\Shared\part\nav.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
-    <Content Include="Views\Contacts\part\administration.cshtml" />
-    <Content Include="Views\Contacts\part\phone.cshtml" />
     <Content Include="Views\Prod\Index.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Reg.cshtml" />
     <Content Include="Views\User\RegCompleted.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\Basket\Index.cshtml" />
+    <Content Include="Views\Partials\Menu\Default.cshtml" />
+    <Content Include="Views\Partials\Basket\Default.cshtml" />
+    <Content Include="Views\Partials\Catalog\Default.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -883,6 +883,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\temp\" />
     <Folder Include="src\components\" />
     <Folder Include="Userfiles\" />
   </ItemGroup>

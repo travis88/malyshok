@@ -1,8 +1,8 @@
 ﻿@model ProdViewModel
 
 <div class="type-page">
+    @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
-    @Html.Partial("services/breadcrumbs")
     <h1>@Model.CurrentPage.Title</h1>
 
     <div class="page-text">
@@ -43,8 +43,14 @@
                                     Сертификаты
                                 </div>
                                 <div class="basket-form">
-                                    <input data-id="@item.Id" value="" /> шт.
-                                    <button type="button" class="in-basket btn-blue" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="">В корзину <span></span></button>
+                                    @{ 
+                                        var count = item.inBasket;
+                                        string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
+                                        string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
+                                        string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
+                                    }
+                                    <input data-id="@item.Id" value="@inputVal" /> шт.
+                                    <button type="button" class="in-basket @btnStyle" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="">@btnName</button>
                                 </div>
                             </div>
                         </div>

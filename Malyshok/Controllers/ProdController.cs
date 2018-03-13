@@ -21,18 +21,14 @@ namespace Disly.Controllers
             model = new ProdViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
-                UserInfo = UserInfo,
-                Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray,
-                ProdCatalog = category_list,
-                CurrentPage = currentPage
+                CurrentPage = currentPage,
+                UserInfo = UserInfo
             };
 
             #region Создаем переменные (значения по умолчанию)
-            ViewBag.Title = "Страница";
-            ViewBag.Description = "Страница без названия";
-            ViewBag.KeyWords = "";
+            ViewBag.Title = currentPage.Title;
+            ViewBag.Description = currentPage.Desc;
+            ViewBag.KeyWords = currentPage.Keyw;
             #endregion
         }
 
@@ -44,16 +40,12 @@ namespace Disly.Controllers
         {
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             var filter = getFilter();
+            filter.Order = (Guid)OrderId;
             filter.Size = PageSize;
             filter.Category = catalog;
+            
             model.List = _repository.getProdList(filter);
-
-
-            ViewBag.Filter = filter;
-            ViewBag.NewsSearchArea = filter.SearchText;
-            ViewBag.NewsSearchDateStart = filter.Date;
-            ViewBag.NewsSearchDateFin = filter.DateEnd;
-
+            
             return View(_ViewName, model);
         }
     }

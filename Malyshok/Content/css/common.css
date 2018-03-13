@@ -11,6 +11,30 @@ form {
     padding: 0;
 }
 
+.scroll-menu {
+    display: none;
+    background: #21aedd;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000000;
+    color: #ffffff;
+    font-size: 16px;
+}
+    .scroll-menu a {
+        color: #ffffff;
+        border-left: solid 1px #21aedd;
+        border-right: solid 1px #21aedd;
+    }
+
+    .scroll-menu .nav .active a,
+    .scroll-menu .nav a:focus,
+    .scroll-menu .nav a:hover {
+        background: #49c1e9 !important;
+        color: #ffffff;
+    }
+
 .head_block {
     background: linear-gradient(to top, #ffffff, #a4e2ff);
 }
@@ -69,6 +93,7 @@ form {
     float: right;
     color: #4c4c4c;
     font-weight: bold;
+    width: 140px;
 }
 .basket-block img {
     margin-right: 18px;
@@ -110,7 +135,7 @@ form {
     margin-bottom: 30px;
 }
 .prod-catalog .title {
-    padding: 0 30px 15px;
+    padding: 0 28px 15px;
     font-size: 22px;
     color: #65acda;
     text-transform: uppercase;
@@ -119,7 +144,7 @@ form {
     display: block;
     font-size: 15px;
     color: #4c4c4c;
-    padding: 7px 30px;
+    padding: 7px 28px;
 }
 .catalog_item a:hover {
     background: #d9d9d9;

@@ -6,27 +6,17 @@ namespace cms.dbModel
 {
     public abstract class abstract_FrontRepository
     {
-        public abstract string getSiteId(string domainUrl);
         public abstract string getView(string siteSection); //string siteId,
         public abstract SitesModel getSiteInfo(); //string domain
-        public abstract string getDomainSite();
-        public abstract UsersModel[] getSiteAdmins();
-        public abstract SiteMapModel[] getSiteMapList(); //string domain
-        public abstract SiteMapModel[] getSiteMapListShort(string path); //string domain
-        public abstract string[] getSiteMapGroupMenu(Guid id);
-
-        //Redirect from old portal methods
-        public abstract SitesModel getSiteInfoByOldId(int id);
-        public abstract SiteMapModel getSiteMapByOldId(int id);
-        public abstract MaterialsModel getMaterialsByOldId(int id);
+        public abstract SiteMapModel[] getMenu(string section);
 
         // Карта сайта
         public abstract SiteMapModel getSiteMap(string path, string alias); //, string domain
         public abstract SiteMapModel getSiteMap(string frontSection);
-        public abstract string[] getSiteMapSiblings(string path);
-        public abstract List<SiteMapModel> getSiteMapSiblingElements(string path);
+        //public abstract string[] getSiteMapSiblings(string path);
+        //public abstract List<SiteMapModel> getSiteMapSiblingElements(string path);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
-        public abstract List<Breadcrumbs> getBreadCrumbCollection(string Url); //, string domain
+        public abstract Breadcrumbs[] getBreadCrumb(string Url); //, string domain
 
         //Banners
         public abstract BannersModel[] getBanners(); //string domain
@@ -36,7 +26,7 @@ namespace cms.dbModel
         public abstract List<MaterialFrontModule> getMaterialsModule(); //string domain
         public abstract MaterialsList getMaterialsList(FilterParams filtr);
         public abstract MaterialsModel getMaterialsItem(string year, string month, string day, string alias); //, string domain
-        public abstract MaterialsGroup[] getMaterialsGroup();
+        //public abstract MaterialsGroup[] getMaterialsGroup();
         
         //Attached Documents
         public abstract DocumentsModel[] getAttachDocuments(Guid id);
@@ -56,5 +46,14 @@ namespace cms.dbModel
         public abstract CategoryModel[] getProdCatalogModule();
         public abstract ProductList getProdList(FilterParams filter);
 
+        // Заказы
+        public abstract bool CheckOrder(Guid OrderId);
+        public abstract Guid? CreateOrder();
+        //public abstract OrderModel[] getOrders(Guid UserId);
+
+        // Корзина
+        public abstract bool addInBasket(Guid OrderId, Guid id, int Count);
+        public abstract OrderModel getBasketInfo(Guid OrderId);
+        //public abstract OrderModel getBasket(Guid OrderId);
     }
 }

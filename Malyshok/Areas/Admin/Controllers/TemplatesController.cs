@@ -9,7 +9,7 @@ namespace Disly.Areas.Admin.Controllers
     public class TemplatesController : CoreController
     {
 
-        public ActionResult AdminMenu(string viewName = "Templates/Menu/Default")
+        public ActionResult AdminMenu(string viewName = "Partials/Menu/Default")
         {
             cmsMenuModel[] Menu = _cmsRepository.getCmsMenu(AccountInfo.id);
 

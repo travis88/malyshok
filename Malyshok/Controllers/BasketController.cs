@@ -22,12 +22,8 @@ namespace Disly.Controllers
             model = new TypePageViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
-                UserInfo = UserInfo,
-                Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray,
-                ProdCatalog = category_list,
-                CurrentPage = currentPage
+                CurrentPage = currentPage,
+                UserInfo = UserInfo
             };
         }
 
@@ -50,18 +46,27 @@ namespace Disly.Controllers
             {
                 if (OrderId == null)
                 {
-                    OrderId = Guid.NewGuid();
+                    OrderId = _repository.CreateOrder();
 
-                    HttpCookie MyCookie = new HttpCookie("order-id");
-                    MyCookie.Value = HttpUtility.UrlEncode(OrderId.ToString(), Encoding.UTF8);
-                    Response.Cookies.Add(MyCookie);
+                    if (OrderId != null)
+                    {
+                        HttpCookie MyCookie = new HttpCookie("order-id");
+                        MyCookie.Value = HttpUtility.UrlEncode(OrderId.ToString(), Encoding.UTF8);
+                        Response.Cookies.Add(MyCookie);
+                    }
                 }
-                else
-                {
 
-                }
+                _repository.addInBasket((Guid)OrderId, id, (int)Count);
 
-                return Json(new { Result = "Добавлено в корзину " + Count.ToString() + " шт." }, JsonRequestBehavior.AllowGet);
+                OrderModel basketInfo = _repository.getBasketInfo((Guid)OrderId);
+
+                string ProdCount = "<span>" + basketInfo.ProdCount.ToString() + "</span> ";
+                string LL = basketInfo.ProdCount.ToString().Substring(basketInfo.ProdCount.ToString().Length - 1);
+                if (LL == "1" && basketInfo.ProdCount != 11) ProdCount += "товар";
+                else if ((LL == "2" || LL == "3" || LL == "4") && basketInfo.ProdCount != 12 && basketInfo.ProdCount != 13 && basketInfo.ProdCount != 14) ProdCount += "товара";
+                else ProdCount += "товаров";
+
+                return Json(new { Result = "Товар успешно добавлен в корзину", Count = ProdCount, Cost = "<span>" + basketInfo.Total.ToString("# ###.00#") + "</span> руб." }, JsonRequestBehavior.AllowGet);
             }
             else
                 return Json(new { Result = "Ошибка. Товар не идентифицирован." }, JsonRequestBehavior.AllowGet);

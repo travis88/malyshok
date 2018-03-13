@@ -40,7 +40,10 @@ namespace Disly.Controllers
         {
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             var filter = getFilter();
-            filter.Order = (Guid)OrderId;
+            if (OrderId != null)
+            {
+                filter.Order = (Guid)OrderId;
+            }
             filter.Size = PageSize;
             filter.Category = catalog;
             

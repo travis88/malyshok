@@ -5,6 +5,7 @@
 */obj/
 cms.dbase/template/CMSbdModel.tt
 cms.dbase/template/OnlineRegister.tt
+Import.Core/Tempate/
 App.config
 app.config
 Web.config

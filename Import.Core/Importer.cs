@@ -107,6 +107,7 @@ namespace Import.Core
                     });
 
                     var products = Mapper.Map<List<import_products>>(arrayOfProducts.Products);
+                    //var categories = Mapper.Map<List<import_catalogs>>(arrayOfProducts.)
 
                     #region продукция
                     try
@@ -123,7 +124,7 @@ namespace Import.Core
                     #region категории
                     try
                     {
-
+                        //AddCategories(db, categories);
                     }
                     catch (Exception e)
                     {

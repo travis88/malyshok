@@ -3,8 +3,7 @@
 */Logs/
 */bin/
 */obj/
-cms.dbase/template/CMSbdModel.tt
-cms.dbase/template/OnlineRegister.tt
+cms.dbase/template/
 Import.Core/Tempate/
 App.config
 app.config

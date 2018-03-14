@@ -1,0 +1,25 @@
+﻿ @{ 
+     Layout = null; 
+}
+@model OrderModel
+
+<a href="/basket">
+    <div class="basket-counter">
+        @if (Model != null)
+        {
+            string ProdCount = "";
+            string LL = Model.ProdCount.ToString().Substring(Model.ProdCount.ToString().Length - 1);
+            if (LL == "1" && Model.ProdCount != 11) { ProdCount = "товар"; }
+            else if ((LL == "2" || LL == "3" || LL == "4") && Model.ProdCount != 12 && Model.ProdCount != 13 && Model.ProdCount != 14) { ProdCount = "товара"; }
+            else { ProdCount = "товаров"; }
+
+            <div class="goods"><span>@Model.ProdCount</span> @ProdCount</div>
+                                <div class="cost"><span>@Model.Total.ToString("# ###.00#")</span> руб.</div>
+        }
+        else
+        {
+            <div class="basket-empty">Корзина пуста</div>
+        }
+    </div>
+    <img src="~/Content/img/basket.png" />
+</a>

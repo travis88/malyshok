@@ -25,7 +25,8 @@ public class Settings
     public static string ProductsDir = ReadAppSetting("ProductsDir");
     public static string FeedbacksDir = ReadAppSetting("FeedbacksDir");
     public static string PhotoDir = ReadAppSetting("PhotoDir");
-    
+    public static string ImportDir = ReadAppSetting("ImportDir");
+
     public static string mailServer = ReadAppSetting("MailServer");
 
     public static int mailServerPort = Convert.ToInt32(ReadAppSetting("MailServerPort"));

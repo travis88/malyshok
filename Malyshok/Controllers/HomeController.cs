@@ -16,13 +16,9 @@ namespace Disly.Controllers
             model = new HomePageViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
-                UserInfo = UserInfo,
-                BannerArray = bannerArray,
-                ProdCatalog = category_list
+                CurrentPage = currentPage,
+                UserInfo = UserInfo
             };
-
-            IsSpecVersion = HttpContext.Request.Cookies["spec_version"] != null;
         }
 
         /// <summary>
@@ -47,12 +43,6 @@ namespace Disly.Controllers
 
             model.Materials = _repository.getMaterialsModule(); //Domain
             
-            // версия для слабовидящих
-            if (IsSpecVersion)
-            {
-                _ViewName = _ViewName.ToLower().Replace("views/", "views/_spec/");
-            }
-
             return View(_ViewName, model);
         }
     }

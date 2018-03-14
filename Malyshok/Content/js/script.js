@@ -1,22 +1,36 @@
-﻿$(document).ready(function () {
+﻿$(window).on('load scroll', function () {
+    var nowScroll = $(window).scrollTop();
+
+    if (nowScroll > 165) {
+        $('.scroll-menu').css('display', 'block');        
+    }
+    else {
+        $('.scroll-menu').css('display', 'none');
+    }
+});
+
+$(document).ready(function () {
 
     var SummerSt = $(".validation-summary-valid").find("li").attr("style")
     if (SummerSt == "display:none") $(".validation-summary-valid").hide();
 
+    // Переключатель на форме регистрации
     $('form input[type=checkbox]#Type').bind({
         change: function () {
             $('input#OrgName').closest('.form-group').toggle();
         }
     });
 
+    // 
     $('#sb-slider').slicebox({
         orientation: 'r',
         cuboidsRandom: true,
         disperseFactor: 30,
         autoplay: true,
-        interval: 3000,
+        interval: 300000,
     });
 
+    // Проверка уникальности E-Mail
     $('input#Mail').bind({
         change: function () {
             var $obj = $('.check-mail').empty();
@@ -33,6 +47,66 @@
             });
         }
     });
+
+
+    // 
+    $('.in-basket').bind({
+        click: function () {
+            var $Btn = $(this);
+            var id = $(this).closest('.basket-form').find('input').attr('data-id');
+            var count = $(this).closest('.basket-form').find('input').val();
+            count = (count > 0) ? count : 1;
+            $Btn.closest('.basket-form').find('input').val(count);
+            //$(this).closest('.basket-form').find('input').focus();
+            //$(this).closest('.item_prod').next().find('input').focus();
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: '/basket/add/' + id + '?count=' + count,
+                error: function () {
+                    $Btn.attr('data-content', 'Ошибка.');
+                },
+                success: function (data) {
+                    var _result = data.Result;
+                    var _count = data.Count;
+                    var _cost = data.Cost;
+
+                    $Btn.attr('data-content', _result);
+
+                    // меняем стиль кнопки
+                    $Btn.stop().animate({ backgroundColor: "#ffffff" }, 600).removeClass('btn-blue').addClass('btn-invers');
+                    // меняем заголовок кнопки
+                    $Btn.empty().append('В корзине');
+
+                    $('.basket-counter').empty()
+                        .append('<div class="goods">' + _count + '</div>')
+                        .append(' <div class="cost">' + _cost + '</div>');
+                }
+            });
+        }
+    });
+    //
+    $('.basket-form input').bind({
+        keydown: function (e) {
+            //alert(e.keyCode);
+            if ((e.keyCode > 47 & e.keyCode < 59) || (e.keyCode > 95 & e.keyCode < 106) || e.keyCode === 8) {
+
+            }
+            else if (e.keyCode === 13 && $(this).val()>=0) {
+                $(this).closest('.basket-form').find('.in-basket').trigger('click');
+            }
+            else {
+                return false;
+            }
+        },
+        change: function () {
+            $(this).closest('.basket-form').find('.in-basket').trigger('click');
+        }
+    });
+
+
+
 
     $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
 

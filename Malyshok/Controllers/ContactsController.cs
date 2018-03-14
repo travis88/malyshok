@@ -21,12 +21,8 @@ namespace Disly.Controllers
             model = new ContatcsViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
-                UserInfo = UserInfo,
-                Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray,
-                ProdCatalog = category_list,
-                CurrentPage = currentPage
+                CurrentPage = currentPage,
+                UserInfo = UserInfo
             };
 
             #region Создаем переменные (значения по умолчанию)

@@ -1,0 +1,15 @@
+﻿ @{ 
+     Layout = null; 
+}
+@*@model OrderModel*@
+
+<div class="prod-catalog">
+    <div class="title">Каталог</div>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <div class="catalog_item"><a href="/prod/?catalog=@item.Alias">@item.Title</a></div>
+        }
+    }
+</div>

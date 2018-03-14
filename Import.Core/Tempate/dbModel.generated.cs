@@ -26,69 +26,75 @@ namespace Import.Core
 	/// </summary>
 	public partial class dbModel : LinqToDB.Data.DataConnection
 	{
-		public ITable<cms_content_sv_people_posts>          cms_content_sv_people_postss          { get { return this.GetTable<cms_content_sv_people_posts>(); } }
-		public ITable<cms_log>                              cms_logs                              { get { return this.GetTable<cms_log>(); } }
-		public ITable<cms_log_actions>                      cms_log_actionss                      { get { return this.GetTable<cms_log_actions>(); } }
-		public ITable<cms_log_sections>                     cms_log_sectionss                     { get { return this.GetTable<cms_log_sections>(); } }
-		public ITable<cms_menu>                             cms_menus                             { get { return this.GetTable<cms_menu>(); } }
-		public ITable<cms_menu_group>                       cms_menu_groups                       { get { return this.GetTable<cms_menu_group>(); } }
-		public ITable<cms_resolutions>                      cms_resolutionss                      { get { return this.GetTable<cms_resolutions>(); } }
-		public ITable<cms_resolutions_templates>            cms_resolutions_templatess            { get { return this.GetTable<cms_resolutions_templates>(); } }
-		public ITable<cms_sites>                            cms_sitess                            { get { return this.GetTable<cms_sites>(); } }
-		public ITable<cms_sites_domains>                    cms_sites_domainss                    { get { return this.GetTable<cms_sites_domains>(); } }
-		public ITable<cms_sv_log>                           cms_sv_logs                           { get { return this.GetTable<cms_sv_log>(); } }
-		public ITable<cms_sv_log_users>                     cms_sv_log_userss                     { get { return this.GetTable<cms_sv_log_users>(); } }
-		public ITable<cms_sv_resolutions>                   cms_sv_resolutionss                   { get { return this.GetTable<cms_sv_resolutions>(); } }
-		public ITable<cms_sv_resolutions_templates>         cms_sv_resolutions_templatess         { get { return this.GetTable<cms_sv_resolutions_templates>(); } }
-		public ITable<cms_sv_user_sites>                    cms_sv_user_sitess                    { get { return this.GetTable<cms_sv_user_sites>(); } }
-		public ITable<cms_sv_users>                         cms_sv_userss                         { get { return this.GetTable<cms_sv_users>(); } }
-		public ITable<cms_user_site_link>                   cms_user_site_links                   { get { return this.GetTable<cms_user_site_link>(); } }
-		public ITable<cms_users>                            cms_userss                            { get { return this.GetTable<cms_users>(); } }
-		public ITable<cms_users_group>                      cms_users_groups                      { get { return this.GetTable<cms_users_group>(); } }
-		public ITable<content_banner_sections>              content_banner_sectionss              { get { return this.GetTable<content_banner_sections>(); } }
-		public ITable<content_banners>                      content_bannerss                      { get { return this.GetTable<content_banners>(); } }
-		public ITable<content_categories>                   content_categoriess                   { get { return this.GetTable<content_categories>(); } }
-		public ITable<content_category_hierarhy>            content_category_hierarhys            { get { return this.GetTable<content_category_hierarhy>(); } }
-		public ITable<content_certificates>                 content_certificatess                 { get { return this.GetTable<content_certificates>(); } }
-		public ITable<content_content_link>                 content_content_links                 { get { return this.GetTable<content_content_link>(); } }
-		public ITable<content_documents>                    content_documentss                    { get { return this.GetTable<content_documents>(); } }
-		public ITable<content_materials>                    content_materialss                    { get { return this.GetTable<content_materials>(); } }
-		public ITable<content_materials_groups>             content_materials_groupss             { get { return this.GetTable<content_materials_groups>(); } }
-		public ITable<content_materials_groups_link>        content_materials_groups_links        { get { return this.GetTable<content_materials_groups_link>(); } }
-		public ITable<content_order_details>                content_order_detailss                { get { return this.GetTable<content_order_details>(); } }
-		public ITable<content_order_statuses>               content_order_statusess               { get { return this.GetTable<content_order_statuses>(); } }
-		public ITable<content_orders>                       content_orderss                       { get { return this.GetTable<content_orders>(); } }
-		public ITable<content_photoalbum>                   content_photoalbums                   { get { return this.GetTable<content_photoalbum>(); } }
-		public ITable<content_photos>                       content_photoss                       { get { return this.GetTable<content_photos>(); } }
-		public ITable<content_product_categories_links>     content_product_categories_linkss     { get { return this.GetTable<content_product_categories_links>(); } }
-		public ITable<content_products>                     content_productss                     { get { return this.GetTable<content_products>(); } }
-		public ITable<content_sitemap>                      content_sitemaps                      { get { return this.GetTable<content_sitemap>(); } }
-		public ITable<content_sitemap_menus>                content_sitemap_menuss                { get { return this.GetTable<content_sitemap_menus>(); } }
-		public ITable<content_sitemap_menutypes>            content_sitemap_menutypess            { get { return this.GetTable<content_sitemap_menutypes>(); } }
-		public ITable<content_sv_banner_sections_sites>     content_sv_banner_sections_sitess     { get { return this.GetTable<content_sv_banner_sections_sites>(); } }
-		public ITable<content_sv_banners_section>           content_sv_banners_sections           { get { return this.GetTable<content_sv_banners_section>(); } }
-		public ITable<content_sv_materials_groups>          content_sv_materials_groupss          { get { return this.GetTable<content_sv_materials_groups>(); } }
-		public ITable<content_sv_materials_groups_for_site> content_sv_materials_groups_for_sites { get { return this.GetTable<content_sv_materials_groups_for_site>(); } }
-		public ITable<content_sv_materials_sites>           content_sv_materials_sitess           { get { return this.GetTable<content_sv_materials_sites>(); } }
-		public ITable<content_sv_orgs_by_type>              content_sv_orgs_by_types              { get { return this.GetTable<content_sv_orgs_by_type>(); } }
-		public ITable<content_sv_orgs_not_attached>         content_sv_orgs_not_attacheds         { get { return this.GetTable<content_sv_orgs_not_attached>(); } }
-		public ITable<content_sv_people_department>         content_sv_people_departments         { get { return this.GetTable<content_sv_people_department>(); } }
-		public ITable<content_sv_people_front>              content_sv_people_fronts              { get { return this.GetTable<content_sv_people_front>(); } }
-		public ITable<content_sv_people_org>                content_sv_people_orgs                { get { return this.GetTable<content_sv_people_org>(); } }
-		public ITable<content_sv_sitemap_menu>              content_sv_sitemap_menus              { get { return this.GetTable<content_sv_sitemap_menu>(); } }
-		public ITable<content_users>                        content_userss                        { get { return this.GetTable<content_users>(); } }
-		public ITable<front_modules>                        front_moduless                        { get { return this.GetTable<front_modules>(); } }
-		public ITable<front_page_views>                     front_page_viewss                     { get { return this.GetTable<front_page_views>(); } }
-		public ITable<front_section>                        front_sections                        { get { return this.GetTable<front_section>(); } }
-		public ITable<front_site_section>                   front_site_sections                   { get { return this.GetTable<front_site_section>(); } }
-		public ITable<front_sv_page_veiw>                   front_sv_page_veiws                   { get { return this.GetTable<front_sv_page_veiw>(); } }
-		public ITable<import_catalogs>                      import_catalogss                      { get { return this.GetTable<import_catalogs>(); } }
-		public ITable<import_product_categories>            import_product_categoriess            { get { return this.GetTable<import_product_categories>(); } }
-		public ITable<import_product_certificates>          import_product_certificatess          { get { return this.GetTable<import_product_certificates>(); } }
-		public ITable<import_product_images>                import_product_imagess                { get { return this.GetTable<import_product_images>(); } }
-		public ITable<import_products>                      import_productss                      { get { return this.GetTable<import_products>(); } }
-		public ITable<sv_orgs_materials>                    sv_orgs_materialss                    { get { return this.GetTable<sv_orgs_materials>(); } }
-		public ITable<sv_sites_banners>                     sv_sites_bannerss                     { get { return this.GetTable<sv_sites_banners>(); } }
+		public ITable<cms_content_sv_people_posts>           cms_content_sv_people_postss           { get { return this.GetTable<cms_content_sv_people_posts>(); } }
+		public ITable<cms_log>                               cms_logs                               { get { return this.GetTable<cms_log>(); } }
+		public ITable<cms_log_actions>                       cms_log_actionss                       { get { return this.GetTable<cms_log_actions>(); } }
+		public ITable<cms_log_sections>                      cms_log_sectionss                      { get { return this.GetTable<cms_log_sections>(); } }
+		public ITable<cms_menu>                              cms_menus                              { get { return this.GetTable<cms_menu>(); } }
+		public ITable<cms_menu_group>                        cms_menu_groups                        { get { return this.GetTable<cms_menu_group>(); } }
+		public ITable<cms_resolutions>                       cms_resolutionss                       { get { return this.GetTable<cms_resolutions>(); } }
+		public ITable<cms_resolutions_templates>             cms_resolutions_templatess             { get { return this.GetTable<cms_resolutions_templates>(); } }
+		public ITable<cms_sites>                             cms_sitess                             { get { return this.GetTable<cms_sites>(); } }
+		public ITable<cms_sites_domains>                     cms_sites_domainss                     { get { return this.GetTable<cms_sites_domains>(); } }
+		public ITable<cms_sv_log>                            cms_sv_logs                            { get { return this.GetTable<cms_sv_log>(); } }
+		public ITable<cms_sv_log_users>                      cms_sv_log_userss                      { get { return this.GetTable<cms_sv_log_users>(); } }
+		public ITable<cms_sv_resolutions>                    cms_sv_resolutionss                    { get { return this.GetTable<cms_sv_resolutions>(); } }
+		public ITable<cms_sv_resolutions_templates>          cms_sv_resolutions_templatess          { get { return this.GetTable<cms_sv_resolutions_templates>(); } }
+		public ITable<cms_sv_user_sites>                     cms_sv_user_sitess                     { get { return this.GetTable<cms_sv_user_sites>(); } }
+		public ITable<cms_sv_users>                          cms_sv_userss                          { get { return this.GetTable<cms_sv_users>(); } }
+		public ITable<cms_user_site_link>                    cms_user_site_links                    { get { return this.GetTable<cms_user_site_link>(); } }
+		public ITable<cms_users>                             cms_userss                             { get { return this.GetTable<cms_users>(); } }
+		public ITable<cms_users_group>                       cms_users_groups                       { get { return this.GetTable<cms_users_group>(); } }
+		public ITable<content_banner_sections>               content_banner_sectionss               { get { return this.GetTable<content_banner_sections>(); } }
+		public ITable<content_banners>                       content_bannerss                       { get { return this.GetTable<content_banners>(); } }
+		public ITable<content_categories>                    content_categoriess                    { get { return this.GetTable<content_categories>(); } }
+		public ITable<content_categories_test>               content_categories_tests               { get { return this.GetTable<content_categories_test>(); } }
+		public ITable<content_category_hierarhy>             content_category_hierarhys             { get { return this.GetTable<content_category_hierarhy>(); } }
+		public ITable<content_certificates>                  content_certificatess                  { get { return this.GetTable<content_certificates>(); } }
+		public ITable<content_certificates_test>             content_certificates_tests             { get { return this.GetTable<content_certificates_test>(); } }
+		public ITable<content_content_link>                  content_content_links                  { get { return this.GetTable<content_content_link>(); } }
+		public ITable<content_documents>                     content_documentss                     { get { return this.GetTable<content_documents>(); } }
+		public ITable<content_materials>                     content_materialss                     { get { return this.GetTable<content_materials>(); } }
+		public ITable<content_materials_groups>              content_materials_groupss              { get { return this.GetTable<content_materials_groups>(); } }
+		public ITable<content_materials_groups_link>         content_materials_groups_links         { get { return this.GetTable<content_materials_groups_link>(); } }
+		public ITable<content_order_details>                 content_order_detailss                 { get { return this.GetTable<content_order_details>(); } }
+		public ITable<content_order_statuses>                content_order_statusess                { get { return this.GetTable<content_order_statuses>(); } }
+		public ITable<content_orders>                        content_orderss                        { get { return this.GetTable<content_orders>(); } }
+		public ITable<content_photoalbum>                    content_photoalbums                    { get { return this.GetTable<content_photoalbum>(); } }
+		public ITable<content_photos>                        content_photoss                        { get { return this.GetTable<content_photos>(); } }
+		public ITable<content_product_categories_links>      content_product_categories_linkss      { get { return this.GetTable<content_product_categories_links>(); } }
+		public ITable<content_product_categories_test_links> content_product_categories_test_linkss { get { return this.GetTable<content_product_categories_test_links>(); } }
+		public ITable<content_product_images_links>          content_product_images_linkss          { get { return this.GetTable<content_product_images_links>(); } }
+		public ITable<content_product_images_test_links>     content_product_images_test_linkss     { get { return this.GetTable<content_product_images_test_links>(); } }
+		public ITable<content_products>                      content_productss                      { get { return this.GetTable<content_products>(); } }
+		public ITable<content_products_test>                 content_products_tests                 { get { return this.GetTable<content_products_test>(); } }
+		public ITable<content_sitemap>                       content_sitemaps                       { get { return this.GetTable<content_sitemap>(); } }
+		public ITable<content_sitemap_menus>                 content_sitemap_menuss                 { get { return this.GetTable<content_sitemap_menus>(); } }
+		public ITable<content_sitemap_menutypes>             content_sitemap_menutypess             { get { return this.GetTable<content_sitemap_menutypes>(); } }
+		public ITable<content_sv_banner_sections_sites>      content_sv_banner_sections_sitess      { get { return this.GetTable<content_sv_banner_sections_sites>(); } }
+		public ITable<content_sv_banners_section>            content_sv_banners_sections            { get { return this.GetTable<content_sv_banners_section>(); } }
+		public ITable<content_sv_materials_groups>           content_sv_materials_groupss           { get { return this.GetTable<content_sv_materials_groups>(); } }
+		public ITable<content_sv_materials_groups_for_site>  content_sv_materials_groups_for_sites  { get { return this.GetTable<content_sv_materials_groups_for_site>(); } }
+		public ITable<content_sv_materials_sites>            content_sv_materials_sitess            { get { return this.GetTable<content_sv_materials_sites>(); } }
+		public ITable<content_sv_orgs_by_type>               content_sv_orgs_by_types               { get { return this.GetTable<content_sv_orgs_by_type>(); } }
+		public ITable<content_sv_orgs_not_attached>          content_sv_orgs_not_attacheds          { get { return this.GetTable<content_sv_orgs_not_attached>(); } }
+		public ITable<content_sv_people_department>          content_sv_people_departments          { get { return this.GetTable<content_sv_people_department>(); } }
+		public ITable<content_sv_people_front>               content_sv_people_fronts               { get { return this.GetTable<content_sv_people_front>(); } }
+		public ITable<content_sv_people_org>                 content_sv_people_orgs                 { get { return this.GetTable<content_sv_people_org>(); } }
+		public ITable<content_sv_sitemap_menu>               content_sv_sitemap_menus               { get { return this.GetTable<content_sv_sitemap_menu>(); } }
+		public ITable<content_users>                         content_userss                         { get { return this.GetTable<content_users>(); } }
+		public ITable<front_modules>                         front_moduless                         { get { return this.GetTable<front_modules>(); } }
+		public ITable<front_page_views>                      front_page_viewss                      { get { return this.GetTable<front_page_views>(); } }
+		public ITable<front_section>                         front_sections                         { get { return this.GetTable<front_section>(); } }
+		public ITable<front_site_section>                    front_site_sections                    { get { return this.GetTable<front_site_section>(); } }
+		public ITable<front_sv_page_veiw>                    front_sv_page_veiws                    { get { return this.GetTable<front_sv_page_veiw>(); } }
+		public ITable<import_catalogs>                       import_catalogss                       { get { return this.GetTable<import_catalogs>(); } }
+		public ITable<import_product_categories>             import_product_categoriess             { get { return this.GetTable<import_product_categories>(); } }
+		public ITable<import_product_certificates>           import_product_certificatess           { get { return this.GetTable<import_product_certificates>(); } }
+		public ITable<import_product_images>                 import_product_imagess                 { get { return this.GetTable<import_product_images>(); } }
+		public ITable<import_products>                       import_productss                       { get { return this.GetTable<import_products>(); } }
+		public ITable<sv_orgs_materials>                     sv_orgs_materialss                     { get { return this.GetTable<sv_orgs_materials>(); } }
+		public ITable<sv_sites_banners>                      sv_sites_bannerss                      { get { return this.GetTable<sv_sites_banners>(); } }
 
 		public dbModel()
 			: base("dbModel")
@@ -724,6 +730,19 @@ namespace Import.Core
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_categories_test")]
+	public partial class content_categories_test
+	{
+		[PrimaryKey, NotNull    ] public Guid     id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public int      n_sort     { get; set; } // int
+		[Column,     NotNull    ] public string   c_title    { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public string   c_alias    { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public DateTime d_date     { get; set; } // datetime
+		[Column,        Nullable] public Guid?    uui_parent { get; set; } // uniqueidentifier
+		[Column,        Nullable] public string   c_path     { get; set; } // nvarchar(max)
+		[Column,        Nullable] public int?     n_1s_id    { get; set; } // int
+	}
+
 	[Table(Schema="dbo", Name="content_category_hierarhy")]
 	public partial class content_category_hierarhy
 	{
@@ -734,10 +753,11 @@ namespace Import.Core
 	[Table(Schema="dbo", Name="content_certificates")]
 	public partial class content_certificates
 	{
-		[PrimaryKey, NotNull    ] public Guid   id        { get; set; } // uniqueidentifier
-		[Column,     NotNull    ] public string c_title   { get; set; } // nvarchar(512)
-		[Column,        Nullable] public string c_url     { get; set; } // nvarchar(512)
-		[Column,     NotNull    ] public Guid   f_product { get; set; } // uniqueidentifier
+		[PrimaryKey, NotNull    ] public Guid   id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string c_title    { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_url      { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public Guid   f_product  { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public bool   b_hygienic { get; set; } // bit
 
 		#region Associations
 
@@ -748,6 +768,16 @@ namespace Import.Core
 		public content_products contentcertificatescontentproducts { get; set; }
 
 		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_certificates_test")]
+	public partial class content_certificates_test
+	{
+		[PrimaryKey, NotNull    ] public Guid   id         { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string c_title    { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string c_url      { get; set; } // nvarchar(512)
+		[Column,     NotNull    ] public Guid   f_product  { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public bool   b_hygienic { get; set; } // bit
 	}
 
 	[Table(Schema="dbo", Name="content_content_link")]
@@ -1002,6 +1032,39 @@ namespace Import.Core
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="content_product_categories_test_links")]
+	public partial class content_product_categories_test_links
+	{
+		[PrimaryKey(1), NotNull] public Guid f_product  { get; set; } // uniqueidentifier
+		[PrimaryKey(2), NotNull] public Guid f_category { get; set; } // uniqueidentifier
+	}
+
+	[Table(Schema="dbo", Name="content_product_images_links")]
+	public partial class content_product_images_links
+	{
+		[Column, NotNull] public Guid   f_product { get; set; } // uniqueidentifier
+		[Column, NotNull] public string c_title   { get; set; } // nvarchar(512)
+		[Column, NotNull] public bool   b_main    { get; set; } // bit
+
+		#region Associations
+
+		/// <summary>
+		/// FK_content_product_images_links_content_products
+		/// </summary>
+		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_content_product_images_links_content_products", BackReferenceName="contentproductimageslinkscontentproductss")]
+		public content_products contentproductimageslinkscontentproducts { get; set; }
+
+		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_product_images_test_links")]
+	public partial class content_product_images_test_links
+	{
+		[Column, NotNull] public Guid   f_product { get; set; } // uniqueidentifier
+		[Column, NotNull] public string c_title   { get; set; } // nvarchar(512)
+		[Column, NotNull] public bool   b_main    { get; set; } // bit
+	}
+
 	[Table(Schema="dbo", Name="content_products")]
 	public partial class content_products
 	{
@@ -1019,6 +1082,12 @@ namespace Import.Core
 		[Column,        Nullable] public int?     n_1s_id       { get; set; } // int
 
 		#region Associations
+
+		/// <summary>
+		/// FK_content_product_images_links_content_products_BackReference
+		/// </summary>
+		[Association(ThisKey="id", OtherKey="f_product", CanBeNull=true, IsBackReference=true)]
+		public IEnumerable<content_product_images_links> contentproductimageslinkscontentproductss { get; set; }
 
 		/// <summary>
 		/// FK_content_certificates_content_products_BackReference
@@ -1039,6 +1108,23 @@ namespace Import.Core
 		public IEnumerable<content_order_details> contentorderdetailscontentproductss { get; set; }
 
 		#endregion
+	}
+
+	[Table(Schema="dbo", Name="content_products_test")]
+	public partial class content_products_test
+	{
+		[PrimaryKey, NotNull    ] public Guid     id            { get; set; } // uniqueidentifier
+		[Column,     NotNull    ] public string   c_title       { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_code        { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_barcode     { get; set; } // nvarchar(128)
+		[Column,        Nullable] public string   c_description { get; set; } // nvarchar(max)
+		[Column,        Nullable] public string   c_keyword     { get; set; } // nvarchar(512)
+		[Column,        Nullable] public string   c_photo       { get; set; } // nvarchar(512)
+		[Column,        Nullable] public int?     n_count       { get; set; } // int
+		[Column,        Nullable] public decimal? m_price       { get; set; } // money
+		[Column,     NotNull    ] public DateTime d_date        { get; set; } // datetime
+		[Column,        Nullable] public string   c_standart    { get; set; } // nchar(10)
+		[Column,        Nullable] public int?     n_1s_id       { get; set; } // int
 	}
 
 	[Table(Schema="dbo", Name="content_sitemap")]
@@ -1501,16 +1587,16 @@ namespace Import.Core
 		#region Associations
 
 		/// <summary>
-		/// FK_import_product_categories_import_products
-		/// </summary>
-		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_import_product_categories_import_products", BackReferenceName="importproductcategoriesimportproductss")]
-		public import_products importproductcategoriesimportproducts { get; set; }
-
-		/// <summary>
 		/// FK_import_product_categories_import_catalogs
 		/// </summary>
 		[Association(ThisKey="f_category", OtherKey="id", CanBeNull=false, KeyName="FK_import_product_categories_import_catalogs", BackReferenceName="importproductcategoriesimportcatalogss")]
 		public import_catalogs importproductcategoriesimportcatalogs { get; set; }
+
+		/// <summary>
+		/// FK_import_product_categories_import_products
+		/// </summary>
+		[Association(ThisKey="f_product", OtherKey="id", CanBeNull=false, KeyName="FK_import_product_categories_import_products", BackReferenceName="importproductcategoriesimportproductss")]
+		public import_products importproductcategoriesimportproducts { get; set; }
 
 		#endregion
 	}
@@ -1860,7 +1946,19 @@ namespace Import.Core
 				t.id == id);
 		}
 
+		public static content_categories_test Find(this ITable<content_categories_test> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
 		public static content_certificates Find(this ITable<content_certificates> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_certificates_test Find(this ITable<content_certificates_test> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);
@@ -1933,7 +2031,20 @@ namespace Import.Core
 				t.f_category == f_category);
 		}
 
+		public static content_product_categories_test_links Find(this ITable<content_product_categories_test_links> table, Guid f_product, Guid f_category)
+		{
+			return table.FirstOrDefault(t =>
+				t.f_product  == f_product &&
+				t.f_category == f_category);
+		}
+
 		public static content_products Find(this ITable<content_products> table, Guid id)
+		{
+			return table.FirstOrDefault(t =>
+				t.id == id);
+		}
+
+		public static content_products_test Find(this ITable<content_products_test> table, Guid id)
 		{
 			return table.FirstOrDefault(t =>
 				t.id == id);

@@ -10,28 +10,25 @@ namespace Disly.Controllers
     {
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
-        private TypePageViewModel model;
+        private ProdViewModel model;
+        public int PageSize = 12;
 
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
-            model = new TypePageViewModel
+            model = new ProdViewModel
             {
                 SitesInfo = siteModel,
-                SiteMapArray = siteMapArray,
-                UserInfo = UserInfo,
-                Breadcrumbs = breadcrumb,
-                BannerArray = bannerArray,
-                ProdCatalog = category_list,
-                CurrentPage = currentPage
+                CurrentPage = currentPage,
+                UserInfo = UserInfo
             };
 
             #region Создаем переменные (значения по умолчанию)
-            ViewBag.Title = "Страница";
-            ViewBag.Description = "Страница без названия";
-            ViewBag.KeyWords = "";
+            ViewBag.Title = currentPage.Title;
+            ViewBag.Description = currentPage.Desc;
+            ViewBag.KeyWords = currentPage.Keyw;
             #endregion
         }
 
@@ -39,29 +36,19 @@ namespace Disly.Controllers
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index()
+        public ActionResult Index(string catalog)
         {
-            #region currentPage
-            currentPage = _repository.getSiteMap("Prod");
-            if (currentPage == null)
-                //throw new Exception("model.CurrentPage == null");
-                return RedirectToRoute("Error", new { httpCode = 404 });
-
-            if (currentPage != null)
-            {
-                ViewBag.Title = currentPage.Title;
-                ViewBag.Description = currentPage.Desc;
-                ViewBag.KeyWords = currentPage.Keyw;
-
-                model.CurrentPage = currentPage;
-            }
-            #endregion
-
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            var page = model.CurrentPage.FrontSection;
-
-
+            var filter = getFilter();
+            if (OrderId != null)
+            {
+                filter.Order = (Guid)OrderId;
+            }
+            filter.Size = PageSize;
+            filter.Category = catalog;
+            
+            model.List = _repository.getProdList(filter);
+            
             return View(_ViewName, model);
         }
     }

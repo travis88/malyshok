@@ -1,8 +1,9 @@
 ﻿@model ContatcsViewModel
 
 <div class="type-page">
+    @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
-    @Html.Partial("services/breadcrumbs")
+
     @if (Model.SitesInfo != null)
     {
         <h1>@Model.CurrentPage.Title</h1>

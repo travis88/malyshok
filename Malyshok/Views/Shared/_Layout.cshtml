@@ -1,24 +1,4 @@
 ﻿@model PageViewModel
-@{
-    ViewBag.Version = "1.0.1";
-    string currentYear = DateTime.Now.Year.ToString();
-    string theme = Model.SitesInfo.Theme + ".css";
-
-    var mainMenu = (Model.SiteMapArray != null) ?
-                    Model.SiteMapArray
-                              .Where(w => w.MenuAlias.Equals("main"))
-                              .OrderBy(o => o.MenuSort)
-                              .Select(s => new
-                              {
-                                  Path = s.Path,
-                                  Alias = s.Alias,
-                                  Title = s.Title,
-                                  FrontSection = s.FrontSection,
-                                  Url = s.Url
-                              }).ToArray()
-                      : null;
-
-}
 
 <!DOCTYPE html>
 
@@ -50,6 +30,22 @@
 </head>
 
 <body>
+    <div class="mobile-indicator"></div>
+    <div class="scroll-menu">
+        <div class="container">
+            @{ Html.RenderAction("AdminMenu", "Partials"); }
+            <div class="login-block">
+                @if (Model.UserInfo == null)
+                {
+                    <a href="/user/login">Вход</a><a>/</a><a href="/user/reg">Регистрация</a>
+                }
+                else
+                {
+                    <a href="/user/">@Model.UserInfo.FIO</a><a>/</a><a href="/user/logout">Выход</a>
+                }
+            </div>
+        </div>
+    </div>
     <div class="head_block">
         <div class="clouds">
             <div class="container">
@@ -57,21 +53,15 @@
                     <a href="/"><img title="" alt="" src="~/Content/img/logo.png" /></a>
 
                     @if (Model != null && Model.SitesInfo != null && Model.SitesInfo.Phone != null)
-                {
-                    string MainPhone = (Model.SitesInfo.Phone.IndexOf("|") > -1) ? Model.SitesInfo.Phone.Substring(0, Model.SitesInfo.Phone.IndexOf("|")) : Model.SitesInfo.Phone;
-                    MainPhone = MainPhone.Insert(MainPhone.LastIndexOf(" "), "<span>") + "</span>";
+                    {
+                        string MainPhone = (Model.SitesInfo.Phone.IndexOf("|") > -1) ? Model.SitesInfo.Phone.Substring(0, Model.SitesInfo.Phone.IndexOf("|")) : Model.SitesInfo.Phone;
+                        MainPhone = MainPhone.Insert(MainPhone.LastIndexOf(" "), "<span>") + "</span>";
 
                         <div class="phone">@Html.Raw(MainPhone)</div>
-                }
+                    }
                 </div>
                 <div class="basket-block">
-                    <a href="/basket">
-                        <div class="basket-counter">
-                            <div class="goods"><span>85</span> товаров</div>
-                            <div class="price"><span>34285,75</span> руб.</div>
-                        </div>
-                        <img src="~/Content/img/basket.png" />
-                    </a>
+                    @{ Html.RenderAction("Basket", "Partials"); }
                 </div>
                 <div class="search-block">
                     <div>
@@ -86,31 +76,7 @@
     </div>
     <div class="menu_block">
         <div class="container">
-            @if (mainMenu != null)
-            {
-            <ul class="nav navbar-nav navbar-left">
-                @foreach (var item in mainMenu)
-                {
-                    string fullPath = "/";
-                    if (!string.IsNullOrEmpty(item.Url))
-                    {
-                        fullPath = item.Url;
-                    }
-                    else if (item.FrontSection.ToLower().Equals("page"))
-                    {
-                        fullPath = item.Path + item.Alias;
-                    }
-                    else
-                    {
-                        fullPath = "/" + item.FrontSection;
-                    }
-                    string _class = (Request.Path == fullPath) ? "class=active" : "";
-                    <li @_class>
-                        <a href="@fullPath">@item.Title</a>
-                    </li>
-                    }
-            </ul>
-            }
+            @{ Html.RenderAction("AdminMenu", "Partials"); }
             <div class="login-block">
                 @if (Model.UserInfo == null)
                 {
@@ -126,22 +92,13 @@
     <div class="body_block">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="prod-catalog">
-                        <div class="title">Каталог</div>
-                        @if (Model.ProdCatalog != null)
-                        {
-                            foreach (var item in Model.ProdCatalog)
-                            {
-                                <div class="catalog_item"><a href="/prod/?catalog=@item.Alias">@item.Title</a></div>
-                            }
-                        }
-                    </div>
+                <div class="col-md-4 col-lg-3">
+                    @{ Html.RenderAction("Catalog", "Partials"); }
                     <div class="prod-new">
                         <a href=""><img src="~/Content/img/prod_new.jpg" /></a>
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-8 col-lg-9">
                     @RenderBody()
                 </div>
             </div>
@@ -170,14 +127,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-md-pull-6">                    
+                <div class="col-md-6 col-md-pull-6">
                     <div class="adress"><b>@Model.SitesInfo.Adress</b>&nbsp;&nbsp;&nbsp;<a href="/contacts">Схема проезда</a></div>
                     <div class="socseti">
                         <a href="https://vk.com"><span class="icon-vkontakte"></span></a>
                         <a href="https://ru-ru.facebook.com/"><span class="icon-facebook"></span></a>
                         <a href="https://www.instagram.com/"><span class="icon-instagram"></span></a>
                     </div>
-                    <div class="copyright">&copy;&nbsp;2010-@currentYear&nbsp;@Model.SitesInfo.LongTitle</div>
+                    <div class="copyright">&copy;&nbsp;2010-@DateTime.Now.Year.ToString()&nbsp;@Model.SitesInfo.LongTitle</div>
                     <div class="quote">@ViewBag.Quote</div>
                 </div>
             </div>

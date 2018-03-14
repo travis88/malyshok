@@ -46,6 +46,11 @@ public class FilterParams
     public string Group { get; set; }
 
     /// <summary>
+    /// Группа
+    /// </summary>
+    public Guid Order { get; set; }
+
+    /// <summary>
     /// Дата
     /// </summary>
     public DateTime? Date { get; set; }

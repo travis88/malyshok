@@ -1,0 +1,30 @@
+﻿@{ 
+     Layout = null; 
+}
+@model SiteMapModel[]
+
+@if (Model != null)
+{
+    <ul class="nav navbar-nav navbar-left">
+        @foreach (var item in Model)
+        {
+            string fullPath = "/";
+            if (!string.IsNullOrEmpty(item.Url))
+            {
+                fullPath = item.Url;
+            }
+            else if (item.FrontSection.ToLower().Equals("page"))
+            {
+                fullPath = item.Path + item.Alias;
+            }
+            else
+            {
+                fullPath = "/" + item.FrontSection;
+            }
+            string _class = (Request.Path == fullPath) ? "class=active" : "";
+            <li @_class>
+                <a href="@fullPath">@item.Title</a>
+            </li>
+        }
+    </ul>
+}

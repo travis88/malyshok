@@ -5,7 +5,6 @@
 */obj/
 cms.dbase/template/CMSbdModel.tt
 cms.dbase/template/OnlineRegister.tt
-*/dbModel.tt
 App.config
 app.config
 Web.config

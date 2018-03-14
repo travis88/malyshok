@@ -28,7 +28,7 @@ namespace Import.Core.Models
         /// Код
         /// </summary>
         [XmlAttribute("Code")]
-        public string Code { get; set; }
+        public string Code { get; set; } 
 
         /// <summary>
         /// Штрих-код

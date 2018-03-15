@@ -24,7 +24,6 @@ namespace Disly.Controllers
             model = new TypePageViewModel
             {
                 SitesInfo = siteModel,
-                CurrentPage = currentPage,
                 UserInfo = UserInfo
             };
 
@@ -38,9 +37,9 @@ namespace Disly.Controllers
             //#endregion
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
+            string PageTitle = currentPage.Title;
+            string PageDesc = currentPage.Desc;
+            string PageKeyw = currentPage.Keyw;
             #endregion
 
             #region Метатеги

@@ -21,23 +21,22 @@ namespace Disly.Controllers
             model = new ProdViewModel
             {
                 SitesInfo = siteModel,
-                CurrentPage = currentPage,
                 UserInfo = UserInfo
             };
-
-            #region Создаем переменные (значения по умолчанию)
-            ViewBag.Title = currentPage.Title;
-            ViewBag.Description = currentPage.Desc;
-            ViewBag.KeyWords = currentPage.Keyw;
-            #endregion
         }
 
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult Index(string catalog)
+        public ActionResult catalog(string catalog)
         {
+            #region Заголовок страницы
+            //ViewBag.Title = currentPage.Title;
+            //ViewBag.Description = currentPage.Desc;
+            //ViewBag.KeyWords = currentPage.Keyw;
+            #endregion
+
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             var filter = getFilter();
             if (OrderId != null)
@@ -46,10 +45,31 @@ namespace Disly.Controllers
             }
             filter.Size = PageSize;
             filter.Category = catalog;
-            
+
+            if (!string.IsNullOrEmpty(catalog))
+            {
+                var catalogStart = catalog.Substring(1);
+                catalogStart = (catalogStart.IndexOf("/") > 0) ? "/" + catalogStart.Substring(0, catalogStart.IndexOf("/")) : "/"+ catalogStart;
+
+                model.Categorys = _repository.getProdCatalogModule(catalogStart);
+            }
+
             model.List = _repository.getProdList(filter);
-            
+
+
             return View(_ViewName, model);
+        }
+
+
+        /// <summary>
+        /// Сраница по умолчанию
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Item(string catalog, string id)
+        {
+            
+
+            return View(model);
         }
     }
 }

@@ -20,29 +20,8 @@ namespace Disly.Controllers
             model = new TypePageViewModel
             {
                 SitesInfo = siteModel,
-                CurrentPage = currentPage,
                 UserInfo = UserInfo
             };
-
-            //#region Получаем данные из адресной строки
-            //string UrlPath = "/" + (String)RouteData.Values["path"];
-            //if (UrlPath.LastIndexOf("/") > 0 && UrlPath.LastIndexOf("/") == UrlPath.Length - 1) UrlPath = UrlPath.Substring(0, UrlPath.Length - 1);
-
-            //string _path = UrlPath.Substring(0, UrlPath.LastIndexOf("/") + 1);
-            //string _alias = UrlPath.Substring(UrlPath.LastIndexOf("/") + 1);
-            //#endregion
-
-            //#region Создаем переменные (значения по умолчанию)
-            //string PageTitle = model.CurrentPage.Title;
-            //string PageDesc = model.CurrentPage.Desc;
-            //string PageKeyw = model.CurrentPage.Keyw;
-            //#endregion
-
-            //#region Метатеги
-            //ViewBag.Title = PageTitle;
-            //ViewBag.Description = PageDesc;
-            //ViewBag.KeyWords = PageKeyw;
-            //#endregion
         }
 
         /// <summary>

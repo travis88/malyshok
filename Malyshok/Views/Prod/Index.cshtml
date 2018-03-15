@@ -3,9 +3,21 @@
 <div class="type-page">
     @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
-    <h1>@Model.CurrentPage.Title</h1>
+    <h1>@ViewBag.Title</h1>
 
     <div class="page-text">
+        @if (Model.Categorys != null)
+        {
+            <div class="catalog-block">
+                @foreach (var item in Model.Categorys)
+                {
+                    var url = "/prod/?catalog=" + item.Path + item.Alias;
+                    <div>
+                        <a href="@url">@item.Title</a>
+                    </div>
+                }
+            </div>
+        }
         @if (Model.List != null)
         {
             if (Model.List.Data.Any())
@@ -18,7 +30,7 @@
                     <div class="item_prod shadow-block">
                         <div class="prod-img"><img src="@item.Photo.Url" /></div>
                         <div class="prod-info">
-                            <div class="prod-title"><a href="/press/@item.Id/">@Html.Raw(item.Title)</a></div>
+                            <div class="prod-title"><a href="/prod/item/@item.Id/">@Html.Raw(item.Title)</a></div>
                             <div class="prod-catalog-link">
                                 <div><a href="/">Игрушки</a> / <a href="/">Игрушки</a></div>
                             </div>

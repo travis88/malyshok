@@ -44,6 +44,7 @@ namespace cms.dbModel
 
         // Продукция
         public abstract CategoryModel[] getProdCatalogModule();
+        public abstract CategoryModel[] getProdCatalogModule(string ParentPath);
         public abstract ProductList getProdList(FilterParams filter);
 
         // Заказы
@@ -54,6 +55,6 @@ namespace cms.dbModel
         // Корзина
         public abstract bool addInBasket(Guid OrderId, Guid id, int Count);
         public abstract OrderModel getBasketInfo(Guid OrderId);
-        //public abstract OrderModel getBasket(Guid OrderId);
+        public abstract ProductModel[] getBasketItems(Guid OrderId);
     }
 }

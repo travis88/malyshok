@@ -1,10 +1,27 @@
-﻿
+﻿@model BasketViewModel
 
 <div class="type-page">
 
-    @Html.Partial("services/breadcrumbs")
+    @*@Html.Partial("services/breadcrumbs")*@
     <h1>!Корзина</h1>
     <div class="page-text">
-        
+        @foreach (var item in Model.Items)
+        {
+        <div class="item_prod shadow-block">
+            <div class="basket-img"><img src="@item.Photo.Url" /></div>
+            <div class="prod-info">
+                <div class="prod-title"><a href="/prod/item/@item.Id/">@Html.Raw(item.Title)</a></div>
+                <div class="prod-basket-block">
+                    <div class="prod-price"><span>Цена</span>@item.Price.ToString("# ###.00#")</div>
+                    <div class="prod-cert">
+                        <button type="button" class="in-basket btn-invers" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="">Удалить</button>
+                    </div>
+                    <div class="basket-form">
+                        <div><span>Код</span>@item.Standart</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
     </div>
 </div>

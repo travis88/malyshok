@@ -571,10 +571,36 @@ namespace cms.dbase
                 return null;
             }
         }
+        public override CategoryModel[] getProdCatalogModule(string ParentPath)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                ParentPath = (!string.IsNullOrEmpty(ParentPath)) ? ParentPath : "/";
+
+                var query = db.content_categoriess.Where(w => w.c_path.IndexOf(ParentPath) == 0);
+                if (query.Any())
+                {
+                    var data = query.OrderBy(o => new { o.c_path, o.n_sort })
+                                  .Select(s => new CategoryModel()
+                                  {
+                                      Title = s.c_title,
+                                      Alias = s.c_alias,
+                                      Path = s.c_path,
+                                      Id = s.id
+                                  }).ToArray();
+                    return data;
+                }
+
+                return null;
+            }
+        }
         public override ProductList getProdList(FilterParams filter)
         {
             using (var db = new CMSdb(_context))
             {
+                var BasketList = db.content_order_detailss
+                    .Where(w => w.f_order == filter.Order);
+
                 if (String.IsNullOrEmpty(filter.Category))
                 {
                     var query = db.content_productss.Where(w => w.n_count > 0);
@@ -585,11 +611,9 @@ namespace cms.dbase
                     var ProdList = query
                         .Skip(filter.Size * (filter.Page - 1))
                         .Take(filter.Size);
-
-                    var BasketList = db.content_order_detailss
-                        .Where(w => w.f_order == filter.Order);
-
-                    var Prod = (from p in ProdList join b in BasketList on p.id equals b.f_prod_id into ps
+                    
+                    var Prod = (from p in ProdList
+                                join b in BasketList on p.id equals b.f_prod_id into ps
                                 from b in ps.DefaultIfEmpty()
                                 select new { p, b.n_count })
                                 .Select(s => new ProductModel
@@ -619,11 +643,61 @@ namespace cms.dbase
                             page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
                         }
                     };
+
                 }
                 else
                 {
+                    var path = filter.Category.Substring(0, filter.Category.LastIndexOf("/"));
+                    var alias = filter.Category.Substring(filter.Category.LastIndexOf("/") + 1);
+                    
+                    var query = db.content_categoriess
+                        .Where(w => w.c_path.StartsWith(filter.Category) || (w.c_path == path + "/" && w.c_alias == alias))
+                        .Select(s => new { s.id });
 
-                    return null;
+                    var prodQuery = query
+                        .Join(db.sv_productss, c => c.id, p => p.f_category, (c, p) => p)
+                        .OrderBy(w => new { w.d_date, w.c_title });
+
+                    int itemCount = prodQuery.Count();
+
+                    var ProdList = prodQuery
+                        .Skip(filter.Size * (filter.Page - 1))
+                        .Take(filter.Size);
+
+                    var Prod = (from p in ProdList
+                                join b in BasketList on p.id equals b.f_prod_id into ps
+                                from b in ps.DefaultIfEmpty()
+                                select new { p, b.n_count })
+                                .Select(s => new ProductModel
+                                {
+                                    Id = s.p.id,
+                                    Title = s.p.c_title,
+                                    Code = s.p.c_code,
+                                    Barcode = s.p.c_barcode,
+                                    Price = (decimal)s.p.m_price,
+                                    Standart = s.p.c_standart,
+                                    Count = (int)s.p.n_count,
+                                    inBasket = s.n_count,
+                                    Photo = new Photo()
+                                    {
+                                        Url = s.p.c_photo
+                                    }
+                                });
+
+                    var  List = new ProductList
+                    {
+                        Data = Prod.ToArray(),
+                        Pager = new Pager
+                        {
+                            page = filter.Page,
+                            size = filter.Size,
+                            items_count = itemCount,
+                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                        }
+                    };
+
+
+                    return List;
                 }
             }
         }
@@ -809,20 +883,30 @@ namespace cms.dbase
             return null;
         }
 
-        //public override OrderModel getBasket(Guid OrderId)
-        //{
-        //    using (var db = new CMSdb(_context))
-        //    {
-        //        var query = db.content_orderss.Where(w => w.id == OrderId);
-        //        if (query.Any())
-        //        {
-        //            query.Select(s => new OrderModel
-        //            {
-        //                ProdCount = 1,
-        //                Total = 1
-        //            });
-        //        }
-        //    }
-        //}
+        public override ProductModel[] getBasketItems(Guid OrderId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_order_detailss
+                    .Where(w => w.f_order == OrderId)
+                    .Join(db.content_productss, o => o.f_prod_id, p => p.id, (o, p) => p)
+                    .OrderByDescending(o => o.d_date);
+
+                return query.Select(s => new ProductModel
+                {
+                    Id = s.id,
+                    Title = s.c_title,
+                    Code = s.c_code,
+                    Barcode = s.c_barcode,
+                    Price = (decimal)s.m_price,
+                    Standart = s.c_standart,
+                    Count = (int)s.n_count,
+                    Photo = new Photo()
+                    {
+                        Url = s.c_photo
+                    }
+                }).ToArray();
+            }
+        }
     }
 }

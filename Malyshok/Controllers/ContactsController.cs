@@ -21,7 +21,6 @@ namespace Disly.Controllers
             model = new ContatcsViewModel
             {
                 SitesInfo = siteModel,
-                CurrentPage = currentPage,
                 UserInfo = UserInfo
             };
 
@@ -50,14 +49,12 @@ namespace Disly.Controllers
                 ViewBag.Title = currentPage.Title;
                 ViewBag.Description = currentPage.Desc;
                 ViewBag.KeyWords = currentPage.Keyw;
-
-                model.CurrentPage = currentPage;
             }
             #endregion
 
             string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
             
-            var page = model.CurrentPage.FrontSection;
+            var page = currentPage.FrontSection;
                         
 
             return View(_ViewName, model);

@@ -21,8 +21,6 @@ namespace Disly.Controllers
         protected FrontRepository _repository { get; private set; }
         
         public string Domain;
-        public string ControllerName;
-        public string ActionName;
         public string ViewName;
         public string StartUrl;
 
@@ -89,11 +87,8 @@ namespace Disly.Controllers
                     OrderId = null;
                 }
             }
-
-            ControllerName = filterContext.RouteData.Values["Controller"].ToString().ToLower();
-            ActionName = filterContext.RouteData.Values["Action"].ToString().ToLower();
-
-            ViewName = _repository.getView(ControllerName);
+            
+            ViewName = _repository.getView(filterContext.RouteData.Values["Controller"].ToString().ToLower());
             siteModel = _repository.getSiteInfo();
         }
 

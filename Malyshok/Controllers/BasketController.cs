@@ -12,17 +12,16 @@ namespace Disly.Controllers
     {
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
-        private TypePageViewModel model;
+        private BasketViewModel model;
 
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
-            model = new TypePageViewModel
+            model = new BasketViewModel
             {
                 SitesInfo = siteModel,
-                CurrentPage = currentPage,
                 UserInfo = UserInfo
             };
         }
@@ -33,7 +32,12 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            //string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+
+            model.Items = _repository.getBasketItems((Guid)OrderId);
+
             return View(model);
+            //return View(_ViewName, model);
         }
 
         [HttpPost]

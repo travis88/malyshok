@@ -16,7 +16,6 @@ namespace Disly.Controllers
             model = new HomePageViewModel
             {
                 SitesInfo = siteModel,
-                CurrentPage = currentPage,
                 UserInfo = UserInfo
             };
         }

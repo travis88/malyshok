@@ -94,6 +94,7 @@ namespace cms.dbase.models
 		public ITable<import_product_images>                 import_product_imagess                 { get { return this.GetTable<import_product_images>(); } }
 		public ITable<import_products>                       import_productss                       { get { return this.GetTable<import_products>(); } }
 		public ITable<sv_orgs_materials>                     sv_orgs_materialss                     { get { return this.GetTable<sv_orgs_materials>(); } }
+		public ITable<sv_products>                           sv_productss                           { get { return this.GetTable<sv_products>(); } }
 		public ITable<sv_sites_banners>                      sv_sites_bannerss                      { get { return this.GetTable<sv_sites_banners>(); } }
 
 		public CMSdb()
@@ -1708,6 +1709,25 @@ namespace cms.dbase.models
 		[Column, NotNull    ] public string   site_alias              { get; set; } // varchar(64)
 		[Column, NotNull    ] public string   site_name               { get; set; } // nvarchar(512)
 		[Column, NotNull    ] public bool     site_off                { get; set; } // bit
+	}
+
+	// View
+	[Table(Schema="dbo", Name="sv_products")]
+	public partial class sv_products
+	{
+		[Column, NotNull    ] public Guid     id            { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public Guid     f_category    { get; set; } // uniqueidentifier
+		[Column, NotNull    ] public string   c_title       { get; set; } // nvarchar(512)
+		[Column,    Nullable] public string   c_code        { get; set; } // nvarchar(128)
+		[Column,    Nullable] public string   c_barcode     { get; set; } // nvarchar(128)
+		[Column,    Nullable] public string   c_description { get; set; } // nvarchar(max)
+		[Column,    Nullable] public string   c_keyword     { get; set; } // nvarchar(512)
+		[Column,    Nullable] public string   c_photo       { get; set; } // nvarchar(512)
+		[Column,    Nullable] public int?     n_count       { get; set; } // int
+		[Column,    Nullable] public decimal? m_price       { get; set; } // money
+		[Column, NotNull    ] public DateTime d_date        { get; set; } // datetime
+		[Column,    Nullable] public string   c_standart    { get; set; } // nchar(10)
+		[Column,    Nullable] public int?     n_1s_id       { get; set; } // int
 	}
 
 	// View

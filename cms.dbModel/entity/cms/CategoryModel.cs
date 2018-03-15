@@ -34,6 +34,11 @@ namespace cms.dbModel.entity
         public Guid? Parent { get; set; }
 
         /// <summary>
+        /// Путь к корню
+        /// </summary>
+        public string Path { get; set; }
+
+        /// <summary>
         /// Кол-во дочерних эл-тов
         /// </summary>
         public int CountChildren { get; set; }

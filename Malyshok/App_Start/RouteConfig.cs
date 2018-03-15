@@ -25,9 +25,9 @@ namespace Disly
 
             // Продукция
             routes.MapRoute(
-               name: "Production",
-               url: "prod",
-               defaults: new { controller = "Prod", action = "Index" }
+               name: "ProdCatalog",
+               url: "prod/{action}/{id}",
+               defaults: new { controller = "Prod", action = "catalog", id = UrlParameter.Optional }
             );
 
             // Контакты

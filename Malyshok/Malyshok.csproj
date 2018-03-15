@@ -667,6 +667,7 @@
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\ProdViewModel.cs" />
+    <Compile Include="Models\BasketViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
@@ -874,6 +875,8 @@
     <Content Include="Views\Partials\Menu\Default.cshtml" />
     <Content Include="Views\Partials\Basket\Default.cshtml" />
     <Content Include="Views\Partials\Catalog\Default.cshtml" />
+    <Content Include="Views\Prod\Item.cshtml" />
+    <Content Include="Views\Basket\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -439,6 +439,18 @@ a.button:hover {
 .basket-form input {
     width: 30px;
 }
+.basket-img {
+    position: relative;
+    float: left;
+    border: solid 1px #cccccc;
+    background: url('/Content/img/_nofoto.png') center no-repeat;
+    background-clip: content-box;
+    background-size: contain;
+    margin-right: 20px;
+    cursor: pointer;
+    width: 120px;
+    height: 120px;
+}
 
 /* footer */
 .footer {

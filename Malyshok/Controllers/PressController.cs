@@ -22,14 +22,13 @@ namespace Disly.Controllers
             model = new NewsViewModel
             {
                 SitesInfo = siteModel,
-                CurrentPage = currentPage,
                 UserInfo = UserInfo
             };
 
             #region Создаем переменные (значения по умолчанию)
-            string PageTitle = model.CurrentPage.Title;
-            string PageDesc = model.CurrentPage.Desc;
-            string PageKeyw = model.CurrentPage.Keyw;
+            string PageTitle = currentPage.Title;
+            string PageDesc = currentPage.Desc;
+            string PageKeyw = currentPage.Keyw;
             #endregion
 
             #region Метатеги

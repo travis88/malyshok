@@ -22,6 +22,6 @@ namespace Import.Core.Models
         /// Родительский идентификатор
         /// </summary>
         [XmlAttribute("parentId")]
-        public int ParentId { get; set; }
+        public Guid? ParentId { get; set; }
     }
 }

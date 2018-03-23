@@ -16,6 +16,6 @@ namespace Import.Core.Models
         /// Идентификатор
         /// </summary>
         [XmlAttribute("ID")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

@@ -14,11 +14,11 @@ namespace Import.Core.Models
         /// <summary>
         /// Идентификатор каталога
         /// </summary>
-        public int CatalogId { get; set; }
+        public Guid CatalogId { get; set; }
 
         /// <summary>
         /// Идентификатор продукции
         /// </summary>
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
     }
 }

@@ -64,16 +64,20 @@ namespace Import.Core
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
                    .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)))
                    .ForMember(d => d.d_date, opt => opt.MapFrom(src => DateTime.Now))
-                   .ForMember(d => d.n_parent, opt => opt.MapFrom(src => src.ParentId));
+                   .ForMember(d => d.uui_parent, opt => opt.MapFrom(src => src.ParentId));
                 cfg.CreateMap<ProductModel, import_products>()
                    .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
                    .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
-                   .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.Barcode))
                    .ForMember(d => d.n_count, opt => opt.MapFrom(src => src.Count))
-                   .ForMember(d => d.m_price, opt => opt.MapFrom(src => src.Price))
-                   .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date))
-                   .ForMember(d => d.c_standart, opt => opt.MapFrom(src => src.Standart));
+                   .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date));
+                cfg.CreateMap<Barcode, import_product_barcodes>()
+                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
+                    .ForMember(d => d.c_value, opt => opt.MapFrom(src => src.Value));
+                cfg.CreateMap<Price, import_product_prices>()
+                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
+                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
+                    .ForMember(d => d.m_value, opt => opt.MapFrom(src => src.Value));
                 cfg.CreateMap<Image, import_product_images>()
                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Name))
@@ -84,7 +88,7 @@ namespace Import.Core
                    .ForMember(d => d.b_hygienic, opt => opt.MapFrom(src => src.IsHygienic));
                 cfg.CreateMap<CatalogProductLink, import_product_categories>()
                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
-                   .ForMember(d => d.f_category, opt => opt.MapFrom(src => src.CatalogId));
+                   .ForMember(d => d.f_catalog, opt => opt.MapFrom(src => src.CatalogId));
             });
         }
 
@@ -152,6 +156,49 @@ namespace Import.Core
                                     var products = Mapper.Map<List<import_products>>(distinctProducts);
                                     AddProducts(db, products);
                                     SrvcLogger.Debug("{work}", "продукция конец");
+                                    #endregion
+
+                                    #region связи штрих-кодов и товаров
+                                    SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров начало");
+                                    var queryBarcodeList = (from p in distinctProducts
+                                                            select new { p.Id, p.BarcodeList })
+                                                            .Select(s => new
+                                                            {
+                                                                List = s.BarcodeList
+                                                                .Select(g => new Barcode
+                                                                {
+                                                                    ProductId = s.Id,
+                                                                    Value = g.Value
+                                                                }).ToArray()
+                                                            })
+                                                            .SelectMany(s => s.List)
+                                                            .ToArray();
+
+                                    var barcodeProdLinks = Mapper.Map<List<import_product_barcodes>>(queryBarcodeList);
+                                    AddBarcodeProdLinks(db, barcodeProdLinks);
+                                    SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров конец");
+                                    #endregion
+
+                                    #region связи цен и товаров
+                                    SrvcLogger.Debug("{work}", "связи цен и товаров начало");
+                                    var queryPriceList = (from p in distinctProducts
+                                                          select new { p.Id, p.PriceList })
+                                                          .Select(s => new
+                                                          {
+                                                              List = s.PriceList
+                                                              .Select(g => new Price
+                                                              {
+                                                                  ProductId = s.Id,
+                                                                  Title = g.Title,
+                                                                  Value = g.Value
+                                                              })
+                                                          })
+                                                          .SelectMany(s => s.List)
+                                                          .ToArray();
+
+                                    var priceProdLinks = Mapper.Map<List<import_product_prices>>(queryPriceList);
+                                    AddPriceProdLinks(db, priceProdLinks);
+                                    SrvcLogger.Debug("{work}", "связи цен и товаров конец");
                                     #endregion
 
                                     #region связи изображений и товаров
@@ -337,6 +384,54 @@ namespace Import.Core
         }
 
         /// <summary>
+        /// Добавляет связи штрих-кодов с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddBarcodeProdLinks(dbModel db, IEnumerable<import_product_barcodes> links)
+        {
+            SrvcLogger.Debug("{work}", String.Format("кол-во штрих-кодов {0}", links.Count()));
+            try
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    db.BulkCopy(links);
+                    tr.Commit();
+                }
+                countSuccess++;
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+                countFalse++;
+            }
+        }
+
+        /// <summary>
+        /// Добавляет связи цен с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddPriceProdLinks(dbModel db, IEnumerable<import_product_prices> links)
+        {
+            SrvcLogger.Debug("{work}", String.Format("кол-во цен {0}", links.Count()));
+            try
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    db.BulkCopy(links);
+                    tr.Commit();
+                }
+                countSuccess++;
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+                countFalse++;
+            }
+        }
+
+        /// <summary>
         /// Добавляет связи категорий с товарами
         /// </summary>
         /// <param name="db"></param>
@@ -373,7 +468,7 @@ namespace Import.Core
 
             try
             {
-                db.import();
+                //db.import();
                 countSuccess++;
             }
             catch (Exception e)

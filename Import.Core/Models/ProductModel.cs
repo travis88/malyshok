@@ -16,12 +16,12 @@ namespace Import.Core.Models
         /// Идентификатор
         /// </summary>
         [XmlAttribute("ID")]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Название
         /// </summary>
-        [XmlAttribute("Title")]
+        [XmlAttribute("title")]
         public string Title { get; set; }
 
         /// <summary>
@@ -29,25 +29,13 @@ namespace Import.Core.Models
         /// </summary>
         [XmlAttribute("Code")]
         public string Code { get; set; } 
-
-        /// <summary>
-        /// Штрих-код
-        /// </summary>
-        [XmlAttribute("Barcode")]
-        public string Barcode { get; set; }
-
+        
         /// <summary>
         /// Кол-во
         /// </summary>
         [XmlAttribute("Count")]
         public int Count { get; set; }
-
-        /// <summary>
-        /// Цена
-        /// </summary>
-        [XmlAttribute("Price")]
-        public decimal Price { get; set; }
-
+        
         /// <summary>
         /// Дата
         /// </summary>
@@ -55,10 +43,18 @@ namespace Import.Core.Models
         public DateTime Date { get; set; }
 
         /// <summary>
-        /// Стандарт
+        /// Список штрих-кодов
         /// </summary>
-        [XmlAttribute("Standart")]
-        public string Standart { get; set; }
+        [XmlArray(ElementName = "BarcodeList")]
+        [XmlArrayItem("Barcode")]
+        public Barcode[] BarcodeList { get; set; }
+
+        /// <summary>
+        /// Список цен
+        /// </summary>
+        [XmlArray(ElementName = "PriceList")]
+        [XmlArrayItem("Price")]
+        public Price[] PriceList { get; set; }
 
         /// <summary>
         /// Список изображений

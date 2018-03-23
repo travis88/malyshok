@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Importer.cs" />
+    <Compile Include="Models\Barcode.cs" />
     <Compile Include="Models\CatalogList.cs" />
     <Compile Include="Models\ArrayOfProducts.cs" />
     <Compile Include="Models\CatalogProductLink.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Models\CatalogModel.cs" />
     <Compile Include="Models\Certificate.cs" />
     <Compile Include="Models\Image.cs" />
+    <Compile Include="Models\Price.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="ServiceLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

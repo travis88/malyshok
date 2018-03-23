@@ -1,0 +1,40 @@
+﻿@model CategoryModel[]
+
+@foreach (var item in Model)
+{
+    var thisAlias = (Request.Path.Split('/').Last()).ToLower();
+    var thisPath = String.Join("/", Request.Path.Replace("/catalog", "").Split('/')).ToLower();
+    thisPath = thisPath.Substring(thisPath.IndexOf("/"), thisPath.LastIndexOf("/") + 1);
+
+    var url = "/catalog" + item.Path + item.Alias;
+    var isActive = (item.Alias.ToLower() == thisAlias && item.Path.ToLower() == thisPath) ? "active" : "";
+    var Lavel = "lavel-" + (item.Level - 1);
+
+    <div class="catalog-item @Lavel @isActive">
+        <a href="@url">@item.Title</a>
+    </div>
+    if (item.CountChildren > 0)
+    {
+        @Html.Partial("Catalog", item.Children)
+    }
+}
+
+@*<div class="catalog-branch">
+    @foreach (var item in Model)
+    {
+        var thisAlias = (Request.Path.Split('/').Last()).ToLower();
+        var thisPath = String.Join("/", Request.Path.Replace("/catalog","").Split('/')).ToLower();
+        thisPath = thisPath.Substring(thisPath.IndexOf("/"), thisPath.LastIndexOf("/") + 1);
+
+        var url = "/catalog" + item.Path + item.Alias;
+        var isActive = (item.Alias.ToLower() == thisAlias && item.Path.ToLower() == thisPath) ? "active" : "";
+
+        <div class="catalog-item @isActive">
+            <a href="@url">@item.Title</a>
+            @if (item.CountChildren > 0)
+            {
+                @Html.Partial("Catalog", item.Children)
+            }
+        </div>
+    }
+</div>*@

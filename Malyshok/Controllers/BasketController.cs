@@ -32,12 +32,93 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            //string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-            model.Items = _repository.getBasketItems((Guid)OrderId);
-
+            model.OrderInfo = _repository.getOrder(OrderId);
+            model.Items = _repository.getBasketItems(OrderId);
+            
             return View(model);
-            //return View(_ViewName, model);
+        }
+
+        [HttpPost]
+        public ActionResult Index(OrderModel BackModel)
+        {
+            model.OrderInfo = _repository.getOrder(OrderId);
+            
+            if (!ModelState.IsValid)
+            {
+                model.Items = _repository.getBasketItems(OrderId);
+
+                return View(model);
+            }
+
+            BackModel.Id = OrderId;
+            int OrderNum = _repository.sendOrder(BackModel);
+
+            string OrderDetail = String.Empty;
+
+            #region Описываем список заказанной продукции
+            model.Items = _repository.getBasketItems(OrderId);
+            foreach (var item in model.Items)
+            {
+                OrderDetail += "<div style=\"margin-bottom: 10px; overflow: auto; border-bottom: solid 1px #dadada; padding: 10px;\">";
+                OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"" + Settings.BaseURL + "/" + item.Photo.Url + "\" />";
+                OrderDetail += "<div style=\"overflow: auto;\">";
+                OrderDetail += "<a href=\"" + Settings.BaseURL + "/prod/" + item.Id + "/\"> " + item.Title + "</a>";
+                OrderDetail += "<div><span>Код:</span> " + item.Standart + "</div>";
+                OrderDetail += "<div><span>Цена:</span> " + item.Price.ToString("# ###.00#") + "</div>";
+                OrderDetail += "<div><span>Количество:</span> " + item.Count + "шт.</div>";
+                OrderDetail += "</div></div>";
+            }
+            #endregion
+
+            #region Оповещение пользователя
+            string Massege = String.Empty;
+            Mailer Letter = new Mailer();
+            Letter.Theme = "Информация по Вашему заказу №"+ OrderNum.ToString();
+            Massege = "<p>Вы оформили заказ <b>№" + OrderNum.ToString() + "</b> на сумму <b>" + model.OrderInfo.Total.ToString("# ###.00#") + " руб</b>.</p>";
+            Massege += "<p>В ближайшее время наши менеджеры свяжутся с Вами для окончательного оформления покупки.</p>";
+            Massege += "<p>Получить дополнительную информацию по заказу Вы можете по телефонам " + model.SitesInfo.Phone.Replace("|", " ") + " или эл. почте " + model.SitesInfo.Email.Replace("|", ", ") + ". <br/>";
+            Massege += "При обращении не забывайте указывать номер заказа.</p>";
+            Massege += "<p><b>Детали заказа:</b></p>";
+            Massege += OrderDetail;
+            Massege += "<p>&nbsp;</p><p>С уважением, администрация сайта!</p>";
+            Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
+            Letter.MailTo = BackModel.Email;
+            Letter.Text = Massege;
+            string ErrorText = Letter.SendMail();
+            #endregion
+
+            #region Оповещение Администратора
+            Massege = String.Empty;
+            Letter = new Mailer();
+            Letter.Theme = "Заказа №" + OrderNum.ToString() + " с сайта";
+            Massege = "<p>На сайте оформлен заказ <b>№" + OrderNum.ToString() + "</b>.</p>";
+            Massege += "<p>Сведения о заказчике:<br/>";
+            Massege += "<b>Имя:</b> <i>"+ BackModel.UserName + "</i>";
+            if (BackModel.UserType) Massege += ", является представителем ЮЛ (ИП) <b><i>" + BackModel.Organization + "</i></b>";
+            Massege += "<br/><b>Телефон:</b> <i>" + BackModel.Phone + "</i><br>";
+            Massege += "<b>E-Mail</b> <i>" + BackModel.Email + "</i><br>";
+            if (!BackModel.Delivery) Massege += "<b>Доставка по адресу:</b>  <i>" + BackModel.Address + "</i><br>";
+            else Massege += "<b>Способ доставки:</b>  <i>Самовывоз.</i></p>";
+
+            if (!String.IsNullOrEmpty(BackModel.UserComment))
+            {
+                Massege += "<p><b>Комментарий:</b><br /> <i>" + BackModel.UserComment + "</i></p>";
+            }
+
+            Massege += "<p>Заказ на сумму <b>" + model.OrderInfo.Total.ToString("# ###.00#") + " руб</b>.</p>";
+            Massege += "<p>Детали заказа:</p>";
+            Massege += OrderDetail;
+
+            Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
+            Letter.MailTo = Settings.mailTo;
+            Letter.Dublicate = "Dmitry@boriskiny.ru";
+            Letter.Text = Massege;
+            ErrorText = Letter.SendMail();
+            #endregion
+
+            ViewBag.Num = OrderNum.ToString();
+
+            return View("Result", model);
         }
 
         [HttpPost]
@@ -48,33 +129,56 @@ namespace Disly.Controllers
 
             if (id != Guid.Empty && Count > 0)
             {
-                if (OrderId == null)
+                if (OrderId == Guid.Empty)
                 {
-                    OrderId = _repository.CreateOrder();
-
-                    if (OrderId != null)
+                    if (User.Identity.IsAuthenticated)
                     {
+                        OrderId = _repository.CreateOrder(Guid.Parse(User.Identity.Name));
+                    }
+                    else
+                    {
+                        OrderId = _repository.CreateOrder();
+
                         HttpCookie MyCookie = new HttpCookie("order-id");
                         MyCookie.Value = HttpUtility.UrlEncode(OrderId.ToString(), Encoding.UTF8);
                         Response.Cookies.Add(MyCookie);
                     }
                 }
 
-                _repository.addInBasket((Guid)OrderId, id, (int)Count);
+                _repository.addInBasket(OrderId, id, (int)Count);
 
-                OrderModel basketInfo = _repository.getBasketInfo((Guid)OrderId);
-
-                string ProdCount = "<span>" + basketInfo.ProdCount.ToString() + "</span> ";
-                string LL = basketInfo.ProdCount.ToString().Substring(basketInfo.ProdCount.ToString().Length - 1);
-                if (LL == "1" && basketInfo.ProdCount != 11) ProdCount += "товар";
-                else if ((LL == "2" || LL == "3" || LL == "4") && basketInfo.ProdCount != 12 && basketInfo.ProdCount != 13 && basketInfo.ProdCount != 14) ProdCount += "товара";
-                else ProdCount += "товаров";
-
-                return Json(new { Result = "Товар успешно добавлен в корзину", Count = ProdCount, Cost = "<span>" + basketInfo.Total.ToString("# ###.00#") + "</span> руб." }, JsonRequestBehavior.AllowGet);
+                OrderModel basketInfo = _repository.getBasketInfo(OrderId);
+                
+                return Json(new { Result = "Товар успешно добавлен в корзину", Count = basketInfo.ProdCount.ToString(), Cost = basketInfo.Total.ToString("# ###.00#") }, JsonRequestBehavior.AllowGet);
             }
             else
                 return Json(new { Result = "Ошибка. Товар не идентифицирован." }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult Delete(Guid id)
+        {
+            Response.ContentType = "application/json; charset=utf-8";
+
+            if (id != Guid.Empty && OrderId != Guid.Empty)
+            {
+                _repository.removeFromBasket(OrderId, id);
+
+                OrderModel basketInfo = _repository.getBasketInfo(OrderId);
+
+                if (basketInfo != null)
+                {
+                    return Json(new { Result = "Товар удален", Count = basketInfo.ProdCount.ToString(), Cost = basketInfo.Total.ToString("# ###.00#") }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { Result = "Корзина очищена", Count = 0, Cost = 0 }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+                return Json(new { Result = "Ошибка. Товар не идентифицирован." }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
 

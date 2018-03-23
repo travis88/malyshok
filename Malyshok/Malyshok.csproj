@@ -222,6 +222,7 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
+    <Content Include="Content\img\basket.jpg" />
     <Content Include="Content\img\blockquote.png" />
     <Content Include="Content\img\catalog.jpg" />
     <Content Include="Content\img\cert.png" />
@@ -649,6 +650,7 @@
     <Compile Include="Areas\Admin\Models\SiteMapViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SitesViewModel.cs" />
     <Compile Include="Areas\Admin\Service\Transliteration.cs" />
+    <Compile Include="Controllers\MergeOrdersController.cs" />
     <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -665,6 +667,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
+    <Compile Include="Models\base\AccountModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
     <Compile Include="Models\ProdViewModel.cs" />
     <Compile Include="Models\BasketViewModel.cs" />
@@ -877,6 +880,10 @@
     <Content Include="Views\Partials\Catalog\Default.cshtml" />
     <Content Include="Views\Prod\Item.cshtml" />
     <Content Include="Views\Basket\Index.cshtml" />
+    <Content Include="Views\Partials\Basket\ShortBlock.cshtml" />
+    <Content Include="Views\Prod\Catalog.cshtml" />
+    <Content Include="Views\MergeOrders\Index.cshtml" />
+    <Content Include="Views\Basket\Result.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

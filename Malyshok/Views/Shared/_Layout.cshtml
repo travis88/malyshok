@@ -20,13 +20,7 @@
     <script src="/Content/plugins/jquery/jquery.js"></script>
     <script src="/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="/Content/plugins/jquery/jquery.ui.js"></script>
-    <script src="/Content/plugins/jquery/jquery.mask.min.js"></script>
-    <script src="/Content/plugins/Slicebox/modernizr.custom.46884.js"></script>
-    <script src="/Content/plugins/Slicebox/jquery.slicebox.js"></script>
     <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>
-    <script src="/Content/plugins/jquery/jquery.cookie.js"></script>
-    <script src="/Content/js/script.js"></script>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body>
@@ -34,15 +28,8 @@
     <div class="scroll-menu">
         <div class="container">
             @{ Html.RenderAction("AdminMenu", "Partials"); }
-            <div class="login-block">
-                @if (Model.UserInfo == null)
-                {
-                    <a href="/user/login">Вход</a><a>/</a><a href="/user/reg">Регистрация</a>
-                }
-                else
-                {
-                    <a href="/user/">@Model.UserInfo.FIO</a><a>/</a><a href="/user/logout">Выход</a>
-                }
+            <div class="menu-basket-info">
+                @{ Html.RenderAction("Basket", "Partials", new { viewName= "Basket/ShortBlock" }); }
             </div>
         </div>
     </div>
@@ -66,7 +53,7 @@
                 <div class="search-block">
                     <div>
                         <form id="search-form" action="/search/" method="post">
-                            <input id="SearchText" class="search-text" placeholder="Поиск..." />
+                            <input id="SearchText" name="SearchText" class="search-text" placeholder="Поиск..." />
                             <button type="submit" class="button">Найти</button>
                         </form>
                     </div>
@@ -143,6 +130,7 @@
     @Html.Raw(Model.SitesInfo.Scripts)
 
     @RenderSection("scripts", false)
+    <script src="/Content/js/script.js"></script>
 </body>
 
 </html>

@@ -26,7 +26,7 @@ namespace Disly.Controllers
 
         public string _path;
         public string _alias;
-        public Guid? OrderId;
+        public Guid OrderId;
 
         protected SitesModel siteModel;
         protected UsersModel UserInfo;
@@ -75,16 +75,16 @@ namespace Disly.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 UserInfo = _repository.getCustomer(new Guid(User.Identity.Name));
+                OrderId = _repository.getOrderId(UserInfo.Id);
             }
             else
             {
-                try
+                OrderId = (MyCookie != null) ? Guid.Parse(HttpUtility.UrlDecode(MyCookie.Value, Encoding.UTF8)) : Guid.Empty;
+
+                if (MyCookie != null && !_repository.CheckOrder(OrderId))
                 {
-                    OrderId = Guid.Parse(HttpUtility.UrlDecode(MyCookie.Value, Encoding.UTF8));
-                }
-                catch
-                {
-                    OrderId = null;
+                    MyCookie.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(MyCookie);
                 }
             }
             
@@ -109,7 +109,7 @@ namespace Disly.Controllers
             }
         }
         
-        public FilterParams getFilter(int defaultPageSize = 20)
+        public FilterParams getFilter(int defaultPageSize = 24)
         {
             string return_url = HttpUtility.UrlDecode(Request.Url.Query);
             // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
@@ -135,7 +135,7 @@ namespace Disly.Controllers
            
             // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
             if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
-                Response.Redirect(StartUrl + return_url);
+                Response.Redirect(Request.Path + return_url);
 
             DateTime? DateNull = new DateTime?();
 

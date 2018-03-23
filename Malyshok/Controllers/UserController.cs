@@ -1,4 +1,5 @@
-﻿using cms.dbModel.entity;
+﻿using cms.dbase;
+using cms.dbModel.entity;
 using Disly.Models;
 using System;
 using System.Web;
@@ -9,14 +10,22 @@ namespace Disly.Controllers
 {
     public class UserController : RootController
     {
+        /// <summary>
+        /// Контекст доступа к базе данных
+        /// </summary>
+        protected AccountRepository _accountRepository;
+
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
         private TypePageViewModel model;
 
+        protected int maxLoginError = 5;
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            _accountRepository = new AccountRepository("cmsdbConnection");
 
             model = new TypePageViewModel
             {
@@ -55,8 +64,7 @@ namespace Disly.Controllers
         {
             return View(model);
         }
-
-        
+                
         public ActionResult ConfirmMail(Guid id)
         {
             var Result = _repository.ConfirmMail(id);
@@ -90,6 +98,122 @@ namespace Disly.Controllers
             return RedirectToAction("index", "Home");
         }
 
+
+        [HttpPost]
+        public ActionResult Login(LogInModel backModel)
+        {
+            try
+            {
+                // Ошибки в форме
+                if (!ModelState.IsValid) return View(model);
+
+                string _login = backModel.Login;
+                string _pass = backModel.Pass;
+                bool _remember = backModel.RememberMe;
+
+                UsersModel UserInfo = _repository.getCustomer(_login);
+
+                // Если пользователь найден
+                if (UserInfo != null)
+                {
+                    if (UserInfo.Disabled)
+                    {
+                        // Оповещение о блокировке
+                        ModelState.AddModelError("", "Пользователь заблокирован и не имеет прав на доступ в систему администрирования");
+                    }
+                    else if (UserInfo.isBlocked && UserInfo.LockDate.Value.AddMinutes(15) >= DateTime.Now)
+                    {
+                        // Оповещение о блокировке
+                        ModelState.AddModelError("", "После " + maxLoginError + " неудачных попыток авторизации Ваш пользователь временно заблокирован.");
+                        ModelState.AddModelError("", "————");
+                        ModelState.AddModelError("", "Вы можете повторить попытку через " + (UserInfo.LockDate.Value.AddMinutes(16) - DateTime.Now).Minutes + " минут");
+                    }
+                    else
+                    {
+                        // Проверка на совпадение пароля
+                        Cripto password = new Cripto(UserInfo.Salt, UserInfo.Hash);
+                        if (password.Verify(_pass.ToCharArray()))
+                        {
+                            // Удачная попытка, Авторизация
+                            FormsAuthentication.SetAuthCookie(UserInfo.Id.ToString(), _remember);
+                            
+                            // Записываем данные об авторизации пользователя
+                            _accountRepository.SuccessLogin(UserInfo.Id, RequestUserInfo.IP);
+
+                            Guid UserOrder = _repository.getOrderId(UserInfo.Id);
+
+                            if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                            {
+                                return RedirectToAction("Index", "MergeOrders");
+                            }
+                            else if (OrderId != Guid.Empty)
+                            {
+                                _repository.transferOrder(OrderId, UserInfo.Id);
+
+                                HttpCookie MyCookie = Request.Cookies["order-id"];
+                                MyCookie.Expires = DateTime.Now.AddDays(-1);
+                                Response.Cookies.Add(MyCookie);
+                            }
+
+                            return RedirectToAction("Index", "User");
+                        }
+                        else
+                        {
+                            // Неудачная попытка
+                            // Записываем данные о попытке авторизации и плучаем кол-во неудавшихся попыток входа
+                            int attemptNum = _repository.FailedLogin(UserInfo.Id, RequestUserInfo.IP);
+                            if (attemptNum == maxLoginError)
+                            {
+                                #region Оповещение о блокировке
+                                // Формируем код востановления пароля
+                                Guid RestoreCode = Guid.NewGuid();
+                                _accountRepository.setRestorePassCode(UserInfo.Id, RestoreCode, RequestUserInfo.IP);
+
+                                // оповещение на e-mail
+                                string Massege = String.Empty;
+                                Mailer Letter = new Mailer();
+                                Letter.Theme = "Блокировка пользователя";
+                                Massege = "<p>Уважаемый " + UserInfo.FIO + ", на сайте " + Request.Url.Host + " было 5 неудачных попыток ввода пароля.<br />В целях безопасности, ваш аккаунт заблокирован.</p>";
+                                Massege += "<p>Для восстановления прав доступа мы сформировали для Вас ссылку, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта и учетная запись будет разблокирована.</p>";
+                                Massege += "<p>Если вы вспомнили пароль и хотите ещё раз пропробовать авторизоваться, то подождите 15 минут. Спустя это время, система позволит Вам сделать ещё попытку.</p>";
+                                Massege += "<p><a href=\"http://" + Request.Url.Host + "/User/ChangePass/" + RestoreCode + "/\">http://" + Request.Url.Host + "/User/ChangePass/" + RestoreCode + "/</a></p>";
+                                Massege += "<p>С уважением, администрация сайта!</p>";
+                                Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
+                                Letter.MailTo = UserInfo.EMail;
+                                Letter.Text = Massege;
+                                string ErrorText = Letter.SendMail();
+                                #endregion
+                                ModelState.AddModelError("", "После " + maxLoginError + " неудачных попыток авторизации Ваш пользователь временно заблокирован.");
+                                ModelState.AddModelError("", "Вам на почту отправлено сообщение с инструкцией по разблокировки и смене пароля.");
+                                ModelState.AddModelError("", "---");
+                                ModelState.AddModelError("", "Если вы хотите попробовать ещё раз, подождите 15 минут.");
+                            }
+                            else
+                            {
+                                // Оповещение об ошибке
+                                string attemptCount = (maxLoginError - attemptNum == 1) ? "Осталась 1 попытка" : "Осталось " + (maxLoginError - attemptNum) + " попытки";
+                                ModelState.AddModelError("", "Пара логин и пароль не подходят.");
+                                ModelState.AddModelError("", attemptCount + " ввода пароля.");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Оповещение о неверном логине
+                    ModelState.AddModelError("", "Такой пользователь не зарегистрирован в системе.");
+                    ModelState.AddModelError("", "Проверьте правильность вводимых данных.");
+                }
+
+
+                return View(model);
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
+
         [HttpPost]
         public ActionResult Reg(regModel backModel)
         {
@@ -98,7 +222,7 @@ namespace Disly.Controllers
                 string PrivateKey = Settings.SecretKey;
                 string EncodedResponse = Request["g-Recaptcha-Response"];
                 bool IsCaptchaValid = (ReCaptchaClass.Validate(PrivateKey, EncodedResponse).ToLower() == "true" ? true : false);
-                bool IsEmailValid = _repository.CheckCustomerMail(backModel.Mail);
+                bool IsEmailValid = _repository.CheckCustomerMail(backModel.Email);
 
 
                 if (IsCaptchaValid)
@@ -114,9 +238,9 @@ namespace Disly.Controllers
                         User.Id = Guid.NewGuid();
                         User.FIO = backModel.UserName;
                         User.Phone = backModel.Phone;
-                        User.EMail = backModel.Mail;
-                        User.Address = backModel.Adress;
-                        User.Organization = backModel.OrgName;
+                        User.EMail = backModel.Email;
+                        User.Address = backModel.Address;
+                        User.Organization = backModel.Organization;
                         User.Salt = NewSalt;
                         User.Hash = NewHash;
                         User.Disabled = true;

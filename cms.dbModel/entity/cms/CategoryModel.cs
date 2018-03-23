@@ -3,6 +3,11 @@ using System.Collections.Generic;
 
 namespace cms.dbModel.entity
 {
+    public class CategoryTree {
+        public CategoryModel[] Tree { get; set; }
+        public int CountItems { get; set; }
+    }
+
     /// <summary>
     /// Категория товара
     /// </summary>
@@ -14,24 +19,9 @@ namespace cms.dbModel.entity
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Название
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
         /// Псевдоним
         /// </summary>
         public string Alias { get; set; }
-
-        /// <summary>
-        /// Дата
-        /// </summary>
-        public DateTime Date { get; set; }
-
-        /// <summary>
-        /// Родитель
-        /// </summary>
-        public Guid? Parent { get; set; }
 
         /// <summary>
         /// Путь к корню
@@ -39,16 +29,42 @@ namespace cms.dbModel.entity
         public string Path { get; set; }
 
         /// <summary>
+        /// Номер уровня вложенности
+        /// </summary>
+        public int Level { get; set; }
+
+        /// <summary>
+        /// Родитель
+        /// </summary>
+        public Guid? Parent { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        public string Title { get; set; }
+
+
+        /// <summary>
+        /// Дата
+        /// </summary>
+        public DateTime Date { get; set; }
+                
+        /// <summary>
+        /// Сортировка
+        /// </summary>
+        public int Sort { get; set; }
+
+        /// <summary>
         /// Кол-во дочерних эл-тов
         /// </summary>
         public int CountChildren { get; set; }
 
         /// <summary>
-        /// Сортировка
+        /// Дочерние элементы
         /// </summary>
-        public int Sort { get; set; }
+        public CategoryModel[] Children { get; set; }
     }
-
+    
     /// <summary>
     /// Хлебные крошки
     /// </summary>

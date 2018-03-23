@@ -2,6 +2,7 @@
 using Disly.Models;
 using System;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Disly.Controllers
@@ -11,7 +12,7 @@ namespace Disly.Controllers
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
         private ProdViewModel model;
-        public int PageSize = 12;
+        public int PageSize = 24;
 
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -29,46 +30,56 @@ namespace Disly.Controllers
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult catalog(string catalog)
+        public ActionResult Index(string path)
         {
             #region Заголовок страницы
-            //ViewBag.Title = currentPage.Title;
-            //ViewBag.Description = currentPage.Desc;
-            //ViewBag.KeyWords = currentPage.Keyw;
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+            }
+            else
+            {
+                ViewBag.Title = "Каталог продукции";
+                ViewBag.Description = "";
+                ViewBag.KeyWords = "";
+            }
             #endregion
-
-            string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
+            
             var filter = getFilter();
             if (OrderId != null)
             {
                 filter.Order = (Guid)OrderId;
             }
-            filter.Size = PageSize;
-            filter.Category = catalog;
+            filter.Category = ("/" + path + "/").Replace("//", "/");
 
-            if (!string.IsNullOrEmpty(catalog))
+            if (!string.IsNullOrEmpty(path))
             {
-                var catalogStart = catalog.Substring(1);
-                catalogStart = (catalogStart.IndexOf("/") > 0) ? "/" + catalogStart.Substring(0, catalogStart.IndexOf("/")) : "/"+ catalogStart;
-
-                model.Categorys = _repository.getProdCatalogModule(catalogStart);
+                model.Categorys = _repository.getProdCatalog("/" + path.Split('/').First() + "/");
             }
 
             model.List = _repository.getProdList(filter);
-
-
-            return View(_ViewName, model);
+            
+            return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Index(string size, string sort, string availability)
+        {
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = addFiltrParam(query, "page", String.Empty);
+            query = addFiltrParam(query, "size", size);
+
+            return Redirect(Request.Path + query);
+        }
 
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult Item(string catalog, string id)
+        public ActionResult Item(string id)
         {
-            
-
             return View(model);
         }
     }

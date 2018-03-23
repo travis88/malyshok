@@ -1,0 +1,15 @@
+﻿ @{ 
+     Layout = null; 
+}
+@model OrderModel
+
+<a href="/basket">
+        @if (Model != null)
+        {
+            <div>@Model.ProdCount шт./ @Model.Total.ToString("# ###.00#") р.</div>
+        }
+        else
+        {
+            <div>Корзина пуста</div> 
+        }
+</a>

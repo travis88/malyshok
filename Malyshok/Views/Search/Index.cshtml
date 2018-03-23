@@ -1,19 +1,62 @@
-﻿@model TypePageViewModel
+﻿@model ProdViewModel
 
 <div class="type-page">
-    <div class="container">
-        @{ Html.RenderAction("BreadCrumb", "Partials"); }
+    @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
 
-        <h1>@ViewBag.Title</h1>
-        @Html.Partial("part/childlist")    
-        <div>            
-            <form class="searchform_dop">                
-                <button class="searchform_btn_dop" type="submit">Найти</button>
-                <div class="searchform_input_wr_dop"><input id="search_focus_dop" class="search-input_dop" type="search" value="@ViewBag.SearchText" name="q" placeholder="Поиск по сайту" /></div>
-            </form>
-            <div id="ya-site-results" onclick="return {'tld': 'ru','language': 'ru','encoding': '','htmlcss': '1.x','updatehash': true}"></div>
-            <script type="text/javascript">(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0];s.type='text/javascript';s.async=true;s.charset='utf-8';s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){Ya.Site.Results.init();})})(window,document,'yandex_site_callbacks');</script>
-        </div>
+    <h1>Поиск</h1>
+
+    <div class="page-text">
+        @if (Model.List != null)
+        {
+            if (Model.List.Data.Any())
+            {
+                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                foreach (var item in Model.List.Data)
+                {
+                    <div class="item_prod shadow-block">
+                        <div class="prod-img"><img src="@item.Photo.Url" /></div>
+                        <div class="prod-info">
+                            <div class="prod-title"><a href="/prod/@item.Id/">@Html.Raw(item.Title)</a></div>
+                            <div class="prod-catalog-link">
+                                <div><a href="/">Игрушки</a> / <a href="/">Игрушки</a></div>
+                            </div>
+                            <div class="row">
+                                <div class="prod-params col-md-6">
+                                    <div><span>Стандарт</span>@item.Standart</div>
+                                    <div><span>Штрих-код</span>@item.Barcode</div>
+                                </div>
+                                <div class="prod-params col-md-6">
+                                    <div><span>Код</span>@item.Standart</div>
+                                    <div>
+                                        <span>Остаток</span>@if (@item.Count > 0)
+                                        { @Html.Raw("есть в наличии")  }
+                                        else
+                                        { @Html.Raw("нет в наличии")  }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="prod-basket-block">
+                                <div class="prod-price"><span>Цена</span>@item.Price.ToString("# ###.00#")</div>
+                                <div class="prod-cert">
+                                    Сертификаты
+                                </div>
+                                <div class="basket-form">
+                                    @{
+                                        var count = item.inBasket;
+                                        string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
+                                        string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
+                                        string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
+                                    }
+                                    <input data-id="@item.Id" value="@inputVal" /> шт.
+                                    <button type="button" class="in-basket @btnStyle">@btnName</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                                }
+                                                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                                            }
+                                        }
     </div>
 </div>

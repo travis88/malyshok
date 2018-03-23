@@ -27,6 +27,6 @@ namespace Import.Core.Models
         /// Стоимость
         /// </summary>
         [XmlAttribute("value")]
-        public decimal Value { get; set; }
+        public string Value { get; set; }
     }
 }

@@ -64,7 +64,7 @@ namespace Import.Core
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
                    .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)))
                    .ForMember(d => d.d_date, opt => opt.MapFrom(src => DateTime.Now))
-                   .ForMember(d => d.uui_parent, opt => opt.MapFrom(src => src.ParentId));
+                   .ForMember(d => d.uui_parent, opt => opt.MapFrom(src => src.ParentId.Equals("0") ? Guid.Empty : Guid.Parse(src.ParentId)));
                 cfg.CreateMap<ProductModel, import_products>()
                    .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
@@ -77,7 +77,7 @@ namespace Import.Core
                 cfg.CreateMap<Price, import_product_prices>()
                     .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
                     .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
-                    .ForMember(d => d.m_value, opt => opt.MapFrom(src => src.Value));
+                    .ForMember(d => d.m_value, opt => opt.MapFrom(src => !String.IsNullOrEmpty(src.Value) ? Decimal.Parse(src.Value.Replace(".", ",")) : 0));
                 cfg.CreateMap<Image, import_product_images>()
                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Name))
@@ -190,8 +190,8 @@ namespace Import.Core
                                                               {
                                                                   ProductId = s.Id,
                                                                   Title = g.Title,
-                                                                  Value = g.Value
-                                                              })
+                                                                  Value = g.Value.Replace(".", ",")
+                                                              }).ToArray()
                                                           })
                                                           .SelectMany(s => s.List)
                                                           .ToArray();
@@ -276,14 +276,15 @@ namespace Import.Core
                                 }
                             }
 
-                            SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
-                            Finalize(db);
-                            SrvcLogger.Debug("{work}", "импорт завершён");
-                            SrvcLogger.Debug("{work}", String.Format("кол-во ошибок {0}", countFalse));
-                            SrvcLogger.Debug("{work}", String.Format("кол-во успешных процессов {0}", countSuccess));
                         }
                     }
                 }
+
+                SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
+                //Finalize();
+                SrvcLogger.Debug("{work}", "импорт завершён");
+                SrvcLogger.Debug("{work}", String.Format("кол-во ошибок {0}", countFalse));
+                SrvcLogger.Debug("{work}", String.Format("кол-во успешных процессов {0}", countSuccess));
             }
         }
 
@@ -459,22 +460,20 @@ namespace Import.Core
         /// Запускает хранимку для переноса данных из буферных таблиц в боевые
         /// </summary>
         /// <param name="db"></param>
-        private static void Finalize(dbModel db)
+        private static void Finalize()
         {
-            if (db.Command != null)
+            using (var db = new dbModel(connection))
             {
-                db.Command.CommandTimeout = 1200000;
-            }
-
-            try
-            {
-                //db.import();
-                countSuccess++;
-            }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-                countFalse++;
+                try
+                {
+                    //db.import();
+                    countSuccess++;
+                }
+                catch (Exception e)
+                {
+                    SrvcLogger.Error("{error}", e.ToString());
+                    countFalse++;
+                }
             }
         }
     }

@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CatalogList xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<CatalogItem ID="f25ec2f0-fdbb-11e2-8e1c-00151789ae70" title="Акция! Снижение цены!" parentId="0"/>
+	<CatalogItem ID="6bffcf86-fe54-11e2-8e1c-00151789ae70" title="Акция! Снижение цены!" parentId="f25ec2f0-fdbb-11e2-8e1c-00151789ae70"/>
+	<CatalogItem ID="fdd17f81-0889-11e6-8154-00151789ae70" title="Велосипеды Самокаты" parentId="0"/>
+	<CatalogItem ID="a042e45d-0919-11e6-8154-00151789ae70" title="Велосипеды" parentId="fdd17f81-0889-11e6-8154-00151789ae70"/>
+	<CatalogItem ID="fdd17f82-0889-11e6-8154-00151789ae70" title="Самокаты" parentId="fdd17f81-0889-11e6-8154-00151789ae70"/>
+	<CatalogItem ID="512428d8-0e88-11e1-8f0b-0002b33a3ecf" title="Игрушки" parentId="0"/>
+	<CatalogItem ID="ae424656-48a9-11e1-a4cf-001517fd9cc5" title="Конструкторы" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428f9-0e88-11e1-8f0b-0002b33a3ecf" title="Конструкторы" parentId="ae424656-48a9-11e1-a4cf-001517fd9cc5"/>
+	<CatalogItem ID="290edb7a-ccaa-11e1-9497-00151789ae70" title="Конструкторы &quot;Кроха&quot;" parentId="ae424656-48a9-11e1-a4cf-001517fd9cc5"/>
+	<CatalogItem ID="512428fa-0e88-11e1-8f0b-0002b33a3ecf" title="Конструкторы BRICK" parentId="ae424656-48a9-11e1-a4cf-001517fd9cc5"/>
+	<CatalogItem ID="2898b2c3-5605-11e1-a4cf-001517fd9cc5" title="Конструкторы металлические" parentId="ae424656-48a9-11e1-a4cf-001517fd9cc5"/>
+	<CatalogItem ID="512428d9-0e88-11e1-8f0b-0002b33a3ecf" title="Куклы" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="ae424657-48a9-11e1-a4cf-001517fd9cc5" title="Дома и мебель для кукол" parentId="512428d9-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e3-0e88-11e1-8f0b-0002b33a3ecf" title="Куклы в коробке" parentId="512428d9-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e4-0e88-11e1-8f0b-0002b33a3ecf" title="Куклы и пупсы" parentId="512428d9-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e5-0e88-11e1-8f0b-0002b33a3ecf" title="Куклы Киров" parentId="512428d9-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="2898b2c4-5605-11e1-a4cf-001517fd9cc5" title="Куклы Россия" parentId="512428d9-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="c6c23ea9-7e3f-11e6-8bfd-00151789ae70" title="Одежда для кукол" parentId="512428d9-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428da-0e88-11e1-8f0b-0002b33a3ecf" title="Машины" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="debc95bb-3844-11e1-a4cf-001517fd9cc5" title="Аккумуляторные машины" parentId="512428da-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e6-0e88-11e1-8f0b-0002b33a3ecf" title="Другие машины" parentId="512428da-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e7-0e88-11e1-8f0b-0002b33a3ecf" title="Инерционные" parentId="512428da-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="debc95bc-3844-11e1-a4cf-001517fd9cc5" title="Каталки для детей" parentId="512428da-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e8-0e88-11e1-8f0b-0002b33a3ecf" title="Металлические" parentId="512428da-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e9-0e88-11e1-8f0b-0002b33a3ecf" title="Радиоуправляемые" parentId="512428da-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="ddee2e2c-459b-11e6-9f92-00151789ae70" title="ТЕХНОПАРК" parentId="512428da-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428db-0e88-11e1-8f0b-0002b33a3ecf" title="Мягкая игрушка" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="a3588761-ca73-11e1-9497-00151789ae70" title="Качалки" parentId="512428db-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="56cae9e3-fbce-11e1-8c3a-00151789ae70" title="Мягкая игрушка" parentId="512428db-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="6ee565ad-8f0d-11e3-885a-00151789ae70" title="Мягкая игрушка г. Н.Новгород" parentId="512428db-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428ea-0e88-11e1-8f0b-0002b33a3ecf" title="Мягкая игрушка г. Смоленск" parentId="512428db-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428eb-0e88-11e1-8f0b-0002b33a3ecf" title="Мягкая игрушка ТМ &quot;Лава&quot;" parentId="512428db-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428ec-0e88-11e1-8f0b-0002b33a3ecf" title="Мягкая игрушка ТМ &quot;Мульти-Пульти&quot;" parentId="512428db-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="05802db5-7183-11e1-a77f-001517fd9cc5" title="Мягкая игрушка ТМ ВВ" parentId="512428db-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428dc-0e88-11e1-8f0b-0002b33a3ecf" title="Мячи" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428ed-0e88-11e1-8f0b-0002b33a3ecf" title="Мячи разные" parentId="512428dc-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428ee-0e88-11e1-8f0b-0002b33a3ecf" title="Мячи футбольные, волейбольные, баскетбольные" parentId="512428dc-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428ef-0e88-11e1-8f0b-0002b33a3ecf" title="Мячи ЧПО им.В.И.Чапаева" parentId="512428dc-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="b950b9e7-9085-11e6-9868-00151789ae70" title="Наборы для творчества" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="8f318f49-9437-11e6-9868-00151789ae70" title="Аппликация" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="581d12da-907e-11e6-9868-00151789ae70" title="Выжигание" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="1fd6e6ff-9442-11e6-9868-00151789ae70" title="Вышивка" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="726a61d5-9078-11e6-9868-00151789ae70" title="Гравюры" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="c1bbcb32-8ebc-11e6-9868-00151789ae70" title="Каррас" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="749c510b-9054-11e2-a109-00151789ae70" title="Картина из пластилина и объемная лепка" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="46969f83-9532-11e6-9868-00151789ae70" title="Картины мозаикой" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="2abbdc69-9501-11e6-9868-00151789ae70" title="Картины по номерам" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="581d130b-907e-11e6-9868-00151789ae70" title="Материалы для лепки, песок" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="726a61f2-9078-11e6-9868-00151789ae70" title="Материалы для рисования" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="1fd6e6ec-9442-11e6-9868-00151789ae70" title="Моделирование и конструирование" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="4948687a-9075-11e6-9868-00151789ae70" title="Мыловарение" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="8470add4-385a-11e1-a4cf-001517fd9cc5" title="Наборы для творчества" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="581d130a-907e-11e6-9868-00151789ae70" title="Опыты,фокусы" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="581d12f3-907e-11e6-9868-00151789ae70" title="Плетение (из разных материалов)" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="726a61ce-9078-11e6-9868-00151789ae70" title="Поделки из гипса" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="581d12ee-907e-11e6-9868-00151789ae70" title="Роспись" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="9644666a-8fac-11e2-a109-00151789ae70" title="Сборные модели" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="581d12de-907e-11e6-9868-00151789ae70" title="Свечи своими руками" parentId="b950b9e7-9085-11e6-9868-00151789ae70"/>
+	<CatalogItem ID="ae424655-48a9-11e1-a4cf-001517fd9cc5" title="Настольные игры" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428ff-0e88-11e1-8f0b-0002b33a3ecf" title="Детские настольные игры" parentId="ae424655-48a9-11e1-a4cf-001517fd9cc5"/>
+	<CatalogItem ID="512428f7-0e88-11e1-8f0b-0002b33a3ecf" title="Игры" parentId="ae424655-48a9-11e1-a4cf-001517fd9cc5"/>
+	<CatalogItem ID="51242906-0e88-11e1-8f0b-0002b33a3ecf" title="Спортивные настольные игры" parentId="ae424655-48a9-11e1-a4cf-001517fd9cc5"/>
+	<CatalogItem ID="0bcb8952-8af2-11e6-aab3-00151789ae70" title="Нордпласт" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242900-0e88-11e1-8f0b-0002b33a3ecf" title="Машины,техника (Нордпласт)" parentId="0bcb8952-8af2-11e6-aab3-00151789ae70"/>
+	<CatalogItem ID="0bcb8953-8af2-11e6-aab3-00151789ae70" title="Паркинги (Нордпласт)" parentId="0bcb8952-8af2-11e6-aab3-00151789ae70"/>
+	<CatalogItem ID="0bcb8951-8af2-11e6-aab3-00151789ae70" title="Пирамиды,логические игры (Нордпласт)" parentId="0bcb8952-8af2-11e6-aab3-00151789ae70"/>
+	<CatalogItem ID="0bcb8959-8af2-11e6-aab3-00151789ae70" title="Прочее (Нордпласт)" parentId="0bcb8952-8af2-11e6-aab3-00151789ae70"/>
+	<CatalogItem ID="0bcb8955-8af2-11e6-aab3-00151789ae70" title="Толокары и каталки (Нордпласт)" parentId="0bcb8952-8af2-11e6-aab3-00151789ae70"/>
+	<CatalogItem ID="133c0353-3df5-11e6-9f92-00151789ae70" title="Оружие" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="133c0355-3df5-11e6-9f92-00151789ae70" title="Водное оружие" parentId="133c0353-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="51242901-0e88-11e1-8f0b-0002b33a3ecf" title="Оружие и аксессуары" parentId="133c0353-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="133c0356-3df5-11e6-9f92-00151789ae70" title="Пневматическое оружие" parentId="133c0353-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="512428dd-0e88-11e1-8f0b-0002b33a3ecf" title="Пластмасса разная" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="2059fa0d-7707-11e1-9cb1-001517fd9cc5" title="Заводные игрушки" parentId="512428dd-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428f1-0e88-11e1-8f0b-0002b33a3ecf" title="Пластмасса прочая" parentId="512428dd-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="a4d29762-b59f-11e3-9f62-00151789ae70" title="Полесье" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="47d82044-8489-11e6-8bfd-00151789ae70" title="Каталки для детей (Полесье)" parentId="a4d29762-b59f-11e3-9f62-00151789ae70"/>
+	<CatalogItem ID="693cffb6-8951-11e6-aab3-00151789ae70" title="Кегли,кольцебросы,спортивные игры (Полесье)" parentId="a4d29762-b59f-11e3-9f62-00151789ae70"/>
+	<CatalogItem ID="693cffb2-8951-11e6-aab3-00151789ae70" title="Конструкторы (Полесье)" parentId="a4d29762-b59f-11e3-9f62-00151789ae70"/>
+	<CatalogItem ID="51242904-0e88-11e1-8f0b-0002b33a3ecf" title="Машины,техника (Полесье)" parentId="a4d29762-b59f-11e3-9f62-00151789ae70"/>
+	<CatalogItem ID="25edbc6d-8a36-11e6-aab3-00151789ae70" title="Паркинги (Полесье)" parentId="a4d29762-b59f-11e3-9f62-00151789ae70"/>
+	<CatalogItem ID="693cffb7-8951-11e6-aab3-00151789ae70" title="Пластмасса прочая (Полесье)" parentId="a4d29762-b59f-11e3-9f62-00151789ae70"/>
+	<CatalogItem ID="693cffb3-8951-11e6-aab3-00151789ae70" title="Товары для девочек (Полесье)" parentId="a4d29762-b59f-11e3-9f62-00151789ae70"/>
+	<CatalogItem ID="693cffb8-8951-11e6-aab3-00151789ae70" title="Товары для мальчиков (Полесье)" parentId="a4d29762-b59f-11e3-9f62-00151789ae70"/>
+	<CatalogItem ID="8763e562-e588-11e7-9657-00151789ae70" title="Совтехстром" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="d9ac0d11-00d8-11e8-a7f3-00151789ae70" title="Каталки для детей (Уфа)" parentId="8763e562-e588-11e7-9657-00151789ae70"/>
+	<CatalogItem ID="8763e563-e588-11e7-9657-00151789ae70" title="Машины и техника (Уфа)" parentId="8763e562-e588-11e7-9657-00151789ae70"/>
+	<CatalogItem ID="8763e564-e588-11e7-9657-00151789ae70" title="Прочее (Уфа)" parentId="8763e562-e588-11e7-9657-00151789ae70"/>
+	<CatalogItem ID="8763e566-e588-11e7-9657-00151789ae70" title="Спорт (Уфа)" parentId="8763e562-e588-11e7-9657-00151789ae70"/>
+	<CatalogItem ID="8763e565-e588-11e7-9657-00151789ae70" title="Товары для девочек (Уфа)" parentId="8763e562-e588-11e7-9657-00151789ae70"/>
+	<CatalogItem ID="133c0354-3df5-11e6-9f92-00151789ae70" title="Товары для девочек" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="c6c23e84-7e3f-11e6-8bfd-00151789ae70" title="Бытовая техника" parentId="133c0354-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="c6c23e83-7e3f-11e6-8bfd-00151789ae70" title="Наборы &quot;Магазин&quot;" parentId="133c0354-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="c6c23e85-7e3f-11e6-8bfd-00151789ae70" title="Наборы &quot;Маленькая хозяйка&quot;" parentId="133c0354-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="6e951502-7e32-11e6-8bfd-00151789ae70" title="Наборы для волос, украшения,аксессуары" parentId="133c0354-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="6e951501-7e32-11e6-8bfd-00151789ae70" title="Наборы доктора" parentId="133c0354-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="6e9514cc-7e32-11e6-8bfd-00151789ae70" title="Посуда,продукты" parentId="133c0354-3df5-11e6-9f92-00151789ae70"/>
+	<CatalogItem ID="0bcb895d-8af2-11e6-aab3-00151789ae70" title="Товары для мальчиков" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="1b0d0547-9c3d-11e6-9868-00151789ae70" title="Наборы героев,солдатиков" parentId="0bcb895d-8af2-11e6-aab3-00151789ae70"/>
+	<CatalogItem ID="51242908-0e88-11e1-8f0b-0002b33a3ecf" title="Наборы инструментов" parentId="0bcb895d-8af2-11e6-aab3-00151789ae70"/>
+	<CatalogItem ID="512428f2-0e88-11e1-8f0b-0002b33a3ecf" title="Автотреки" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428f3-0e88-11e1-8f0b-0002b33a3ecf" title="Батареичные игрушки" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="cf9f2ca3-8ac2-11e6-aab3-00151789ae70" title="Гаражи, Паркинги" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="8a05248b-3611-11e1-8091-0002b33a3ecf" title="Дерево" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428f4-0e88-11e1-8f0b-0002b33a3ecf" title="Доски" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428f5-0e88-11e1-8f0b-0002b33a3ecf" title="Железные дороги" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428f6-0e88-11e1-8f0b-0002b33a3ecf" title="Животные" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242907-0e88-11e1-8f0b-0002b33a3ecf" title="Игры - коврики" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428f8-0e88-11e1-8f0b-0002b33a3ecf" title="Коляски для кукол, аксессуары" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="e160f9e7-3a98-11e1-a4cf-001517fd9cc5" title="Корзины для игрушек, палатки" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428fb-0e88-11e1-8f0b-0002b33a3ecf" title="Кубики" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="b7328ea9-1750-11e2-b312-00151789ae70" title="Кукольные театры" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428fc-0e88-11e1-8f0b-0002b33a3ecf" title="Мозаики" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428fd-0e88-11e1-8f0b-0002b33a3ecf" title="Музыкальные инструменты" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428fe-0e88-11e1-8f0b-0002b33a3ecf" title="Мыльные пузыри" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="cf9f2ca5-8ac2-11e6-aab3-00151789ae70" title="Обучающие и развивающие игры и игрушки" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="8e330129-0ca0-11e8-a186-00151789ae70" title="Обучающие игры Дьенеша и Кюизенера" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="9a5b7ed2-9d16-11e7-9657-00151789ae70" title="Ортопедические коврики" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242902-0e88-11e1-8f0b-0002b33a3ecf" title="Пазлы" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="debc95bd-3844-11e1-a4cf-001517fd9cc5" title="Роботы, трансформеры" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242905-0e88-11e1-8f0b-0002b33a3ecf" title="Спорт" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242909-0e88-11e1-8f0b-0002b33a3ecf" title="Шары воздушные" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428f0-0e88-11e1-8f0b-0002b33a3ecf" title="Электронные развивающие игры" parentId="512428d8-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428de-0e88-11e1-8f0b-0002b33a3ecf" title="Книги" parentId="0"/>
+	<CatalogItem ID="5124290a-0e88-11e1-8f0b-0002b33a3ecf" title="Алтей" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="d336db47-e27c-11e3-a9ee-00151789ae70" title="Алфея" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="5124290b-0e88-11e1-8f0b-0002b33a3ecf" title="Амадеос" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="5124290c-0e88-11e1-8f0b-0002b33a3ecf" title="АСТ" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="6a6a8aaa-44d6-11e5-a36b-00151789ae70" title="Атберг" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="5124290d-0e88-11e1-8f0b-0002b33a3ecf" title="Букстар" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="d079a401-e845-11e1-9497-00151789ae70" title="Книги, канцтовары" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="bdfed49d-03b1-11e6-8154-00151789ae70" title="Махаон" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="214227cc-4d89-11e1-a4cf-001517fd9cc5" title="Омега" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="5124290e-0e88-11e1-8f0b-0002b33a3ecf" title="Проф Пресс" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="5124290f-0e88-11e1-8f0b-0002b33a3ecf" title="Росмэн" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="c0e5ada4-8b10-11e2-a109-00151789ae70" title="ТМ Умка" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242910-0e88-11e1-8f0b-0002b33a3ecf" title="Фламинго" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242911-0e88-11e1-8f0b-0002b33a3ecf" title="Эксмо" parentId="512428de-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428df-0e88-11e1-8f0b-0002b33a3ecf" title="Надувная продукция" parentId="0"/>
+	<CatalogItem ID="6c2306d0-8853-11e1-9cb1-001517fd9cc5" title="Надувная продукция" parentId="512428df-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e0-0e88-11e1-8f0b-0002b33a3ecf" title="Новый год" parentId="0"/>
+	<CatalogItem ID="95b59252-1da8-11e2-8d61-00151789ae70" title="Гирлянды" parentId="512428e0-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="95b59251-1da8-11e2-8d61-00151789ae70" title="Дед мороз, снегурочка" parentId="512428e0-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="95b59254-1da8-11e2-8d61-00151789ae70" title="Елки" parentId="512428e0-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="95b59250-1da8-11e2-8d61-00151789ae70" title="Елочные украшения" parentId="512428e0-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="95b59255-1da8-11e2-8d61-00151789ae70" title="Карнавальные наборы" parentId="512428e0-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="95b59253-1da8-11e2-8d61-00151789ae70" title="Мишура" parentId="512428e0-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242912-0e88-11e1-8f0b-0002b33a3ecf" title="Сувениры" parentId="512428e0-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="d2cfa0e4-1e66-11e2-9bdd-00151789ae70" title="Украшения для дома" parentId="512428e0-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e1-0e88-11e1-8f0b-0002b33a3ecf" title="Сопутствующие товары" parentId="0"/>
+	<CatalogItem ID="51242913-0e88-11e1-8f0b-0002b33a3ecf" title="Игры настольные№1" parentId="512428e1-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242914-0e88-11e1-8f0b-0002b33a3ecf" title="Открытки" parentId="512428e1-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="04ac1210-d431-11e3-80ae-00151789ae70" title="Школьные и праздничные товары" parentId="512428e1-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="512428e2-0e88-11e1-8f0b-0002b33a3ecf" title="Товары для малышей" parentId="0"/>
+	<CatalogItem ID="8d91367b-48a9-11e1-a4cf-001517fd9cc5" title="Неваляшки" parentId="512428e2-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242916-0e88-11e1-8f0b-0002b33a3ecf" title="Пирамиды" parentId="512428e2-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242903-0e88-11e1-8f0b-0002b33a3ecf" title="Пластизоль" parentId="512428e2-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242917-0e88-11e1-8f0b-0002b33a3ecf" title="Погремушки,мобили,коврики для малышей" parentId="512428e2-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242918-0e88-11e1-8f0b-0002b33a3ecf" title="Умница ТМ" parentId="512428e2-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="502dd015-7008-11e1-a77f-001517fd9cc5" title="Ходунки" parentId="512428e2-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="290edb7b-ccaa-11e1-9497-00151789ae70" title="Юлы" parentId="512428e2-0e88-11e1-8f0b-0002b33a3ecf"/>
+	<CatalogItem ID="51242919-0e88-11e1-8f0b-0002b33a3ecf" title="1" parentId="0"/>
+	<CatalogItem ID="dca2ac8d-b1ee-11e5-ae0d-99ffd7d932e0" title="Инвентарь и хозяйственные принадлежности" parentId="0"/>
+	<CatalogItem ID="8a0524b3-3611-11e1-8091-0002b33a3ecf" title="Ледянки, ватрушки" parentId="0"/>
+	<CatalogItem ID="a4d29763-b59f-11e3-9f62-00151789ae70" title="Песочные наборы" parentId="0"/>
+	<CatalogItem ID="f3b3b858-764f-11e5-9579-00151789ae70" title="Символ года (год Собаки)" parentId="0"/>
+	<CatalogItem ID="ea10a24b-b2b3-11e5-ae0d-99ffd7d932e0" title="Товары" parentId="0"/>
+	<CatalogItem ID="ca3ce265-6c2f-11e1-a77f-001517fd9cc5" title="Экспедирование ТМЦ" parentId="0"/>
+</CatalogList>

@@ -281,7 +281,7 @@ namespace Import.Core
                 }
 
                 SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
-                //Finalize();
+                Finalizer();
                 SrvcLogger.Debug("{work}", "импорт завершён");
                 SrvcLogger.Debug("{work}", String.Format("кол-во ошибок {0}", countFalse));
                 SrvcLogger.Debug("{work}", String.Format("кол-во успешных процессов {0}", countSuccess));
@@ -460,13 +460,13 @@ namespace Import.Core
         /// Запускает хранимку для переноса данных из буферных таблиц в боевые
         /// </summary>
         /// <param name="db"></param>
-        private static void Finalize()
+        private static void Finalizer()
         {
             using (var db = new dbModel(connection))
             {
                 try
                 {
-                    //db.import();
+                    db.import();
                     countSuccess++;
                 }
                 catch (Exception e)

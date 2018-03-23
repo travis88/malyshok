@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Import.Core.Models;
+using LinqToDB;
 using LinqToDB.Data;
 using System;
 using System.Collections.Generic;
@@ -104,6 +105,14 @@ namespace Import.Core
                 Percent = Step = CountProducts = 0;
             }
 
+            #region чистка буферных таблиц после предыдущего импорта
+            using (var db = new dbModel(connection))
+            {
+                db.import_catalogss.Delete();
+                db.import_productss.Delete();
+            }
+            #endregion
+
             if (files != null)
             {
                 files = files.OrderBy(o => o.FullName)
@@ -120,162 +129,172 @@ namespace Import.Core
 
                         using (var db = new dbModel(connection))
                         {
-                            if (file.FullName.Contains("catalog"))
+                            using (var tr = db.BeginTransaction())
                             {
-                                try
+                                if (file.FullName.Contains("catalog"))
                                 {
-                                    SrvcLogger.Debug("{work}", "категории начало");
-                                    var serializer = new XmlSerializer(typeof(CatalogList));
-                                    var arrayOfCatalogs = (CatalogList)serializer.Deserialize(fileStream);
-                                    var distinctCatalogs = (from c in arrayOfCatalogs.Catalogs
-                                                            select c).GroupBy(g => g.Id)
-                                                                     .Select(s => s.First()).ToArray();
-                                    var catalogs = Mapper.Map<List<import_catalogs>>(distinctCatalogs);
-                                    AddCategories(db, catalogs);
-                                    SrvcLogger.Debug("{work}", "категории конец");
-                                    countSuccess++;
+                                    try
+                                    {
+                                        SrvcLogger.Debug("{work}", "категории начало");
+                                        var serializer = new XmlSerializer(typeof(CatalogList));
+                                        var arrayOfCatalogs = (CatalogList)serializer.Deserialize(fileStream);
+                                        var distinctCatalogs = (from c in arrayOfCatalogs.Catalogs
+                                                                select c).GroupBy(g => g.Id)
+                                                                         .Select(s => s.First()).ToArray();
+                                        var catalogs = Mapper.Map<List<import_catalogs>>(distinctCatalogs);
+                                        AddCategories(db, catalogs);
+                                        SrvcLogger.Debug("{work}", "категории конец");
+                                        countSuccess++;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        SrvcLogger.Error("{error}", "ошибка при импорте каталогов");
+                                        SrvcLogger.Error("{error}", e.ToString());
+                                        countFalse++;
+                                    }
                                 }
-                                catch (Exception e)
+                                else if (file.FullName.Contains("product"))
                                 {
-                                    SrvcLogger.Error("{error}", "ошибка при импорте каталогов");
-                                    SrvcLogger.Error("{error}", e.ToString());
-                                    countFalse++;
-                                }
-                            }
-                            else if (file.FullName.Contains("product"))
-                            {
-                                try
-                                {
-                                    #region продукция
-                                    SrvcLogger.Debug("{work}", "продукция начало");
-                                    var serializer = new XmlSerializer(typeof(ArrayOfProducts));
-                                    var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(fileStream);
-                                    var distinctProducts = (from p in arrayOfProducts.Products
-                                                            select p).GroupBy(g => g.Id)
-                                                                     .Select(s => s.First()).ToArray();
-                                    var products = Mapper.Map<List<import_products>>(distinctProducts);
-                                    AddProducts(db, products);
-                                    SrvcLogger.Debug("{work}", "продукция конец");
-                                    #endregion
+                                    try
+                                    {
+                                        #region продукция
+                                        SrvcLogger.Debug("{work}", "продукция начало");
+                                        var serializer = new XmlSerializer(typeof(ArrayOfProducts));
+                                        var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(fileStream);
+                                        var distinctProducts = (from p in arrayOfProducts.Products
+                                                                select p).GroupBy(g => g.Id)
+                                                                         .Select(s => s.First()).ToArray();
+                                        var products = Mapper.Map<List<import_products>>(distinctProducts);
+                                        AddProducts(db, products);
+                                        SrvcLogger.Debug("{work}", "продукция конец");
+                                        #endregion
 
-                                    #region связи штрих-кодов и товаров
-                                    SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров начало");
-                                    var queryBarcodeList = (from p in distinctProducts
-                                                            select new { p.Id, p.BarcodeList })
-                                                            .Select(s => new
-                                                            {
-                                                                List = s.BarcodeList
-                                                                .Select(g => new Barcode
-                                                                {
-                                                                    ProductId = s.Id,
-                                                                    Value = g.Value
-                                                                }).ToArray()
-                                                            })
-                                                            .SelectMany(s => s.List)
-                                                            .ToArray();
-
-                                    var barcodeProdLinks = Mapper.Map<List<import_product_barcodes>>(queryBarcodeList);
-                                    AddBarcodeProdLinks(db, barcodeProdLinks);
-                                    SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров конец");
-                                    #endregion
-
-                                    #region связи цен и товаров
-                                    SrvcLogger.Debug("{work}", "связи цен и товаров начало");
-                                    var queryPriceList = (from p in distinctProducts
-                                                          select new { p.Id, p.PriceList })
-                                                          .Select(s => new
-                                                          {
-                                                              List = s.PriceList
-                                                              .Select(g => new Price
-                                                              {
-                                                                  ProductId = s.Id,
-                                                                  Title = g.Title,
-                                                                  Value = g.Value.Replace(".", ",")
-                                                              }).ToArray()
-                                                          })
-                                                          .SelectMany(s => s.List)
-                                                          .ToArray();
-
-                                    var priceProdLinks = Mapper.Map<List<import_product_prices>>(queryPriceList);
-                                    AddPriceProdLinks(db, priceProdLinks);
-                                    SrvcLogger.Debug("{work}", "связи цен и товаров конец");
-                                    #endregion
-
-                                    #region связи изображений и товаров
-                                    SrvcLogger.Debug("{work}", "связи изображений и товаров начало");
-                                    var queryImageList = (from p in distinctProducts
-                                                          select new { p.Id, p.ImageList })
-                                                          .Select(s => new
-                                                          {
-                                                              List = s.ImageList
-                                                              .Select(g => new Image
-                                                              {
-                                                                  ProductId = s.Id,
-                                                                  Name = g.Name,
-                                                                  IsMain = g.IsMain
-                                                              }).ToArray()
-                                                          })
-                                                          .SelectMany(s => s.List)
-                                                          .ToArray();
-
-                                    var imageProdLinks = Mapper.Map<List<import_product_images>>(queryImageList);
-                                    AddImageProdLinks(db, imageProdLinks);
-                                    SrvcLogger.Debug("{work}", "связи изображений и товаров конец");
-                                    #endregion
-
-                                    #region связи сертификатов и товаров
-                                    SrvcLogger.Debug("{work}", "связи сертификатов и товаров начало");
-                                    var queryCertificateList = (from p in distinctProducts
-                                                                select new { p.Id, p.Certificates })
+                                        #region связи штрих-кодов и товаров
+                                        SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров начало");
+                                        var queryBarcodeList = (from p in distinctProducts
+                                                                select new { p.Id, p.BarcodeList })
                                                                 .Select(s => new
                                                                 {
-                                                                    List = s.Certificates
-                                                                    .Select(g => new Certificate
+                                                                    List = s.BarcodeList
+                                                                    .Select(g => new Barcode
                                                                     {
                                                                         ProductId = s.Id,
-                                                                        Name = g.Name,
-                                                                        IsHygienic = g.IsHygienic
+                                                                        Value = g.Value
                                                                     }).ToArray()
                                                                 })
                                                                 .SelectMany(s => s.List)
                                                                 .ToArray();
 
-                                    var certificateProdLinks = Mapper.Map<List<import_product_certificates>>(queryCertificateList);
-                                    AddCertificateProdLinks(db, certificateProdLinks);
-                                    SrvcLogger.Debug("{work}", "связи сертификатов и товаров конец");
-                                    #endregion
+                                        var barcodeProdLinks = Mapper.Map<List<import_product_barcodes>>(queryBarcodeList);
+                                        AddBarcodeProdLinks(db, barcodeProdLinks);
+                                        SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров конец");
+                                        #endregion
 
-                                    #region связи категорий и товаров
-                                    SrvcLogger.Debug("{work}", "связи категорий и товаров начало");
-                                    var queryCatalogList = (from p in distinctProducts
-                                                            select new { p.Id, p.Categories })
-                                                            .Select(s => new
-                                                            {
-                                                                List = s.Categories
-                                                                .Select(g => new CatalogProductLink
+                                        #region связи цен и товаров
+                                        SrvcLogger.Debug("{work}", "связи цен и товаров начало");
+                                        var queryPriceList = (from p in distinctProducts
+                                                              select new { p.Id, p.PriceList })
+                                                              .Select(s => new
+                                                              {
+                                                                  List = s.PriceList
+                                                                  .Select(g => new Price
+                                                                  {
+                                                                      ProductId = s.Id,
+                                                                      Title = g.Title,
+                                                                      Value = g.Value.Replace(".", ",")
+                                                                  }).ToArray()
+                                                              })
+                                                              .SelectMany(s => s.List)
+                                                              .ToArray();
+
+                                        var priceProdLinks = Mapper.Map<List<import_product_prices>>(queryPriceList);
+                                        AddPriceProdLinks(db, priceProdLinks);
+                                        SrvcLogger.Debug("{work}", "связи цен и товаров конец");
+                                        #endregion
+
+                                        #region связи изображений и товаров
+                                        SrvcLogger.Debug("{work}", "связи изображений и товаров начало");
+                                        var queryImageList = (from p in distinctProducts
+                                                              select new { p.Id, p.ImageList })
+                                                              .Select(s => new
+                                                              {
+                                                                  List = s.ImageList
+                                                                  .Select(g => new Image
+                                                                  {
+                                                                      ProductId = s.Id,
+                                                                      Name = g.Name,
+                                                                      IsMain = g.IsMain
+                                                                  }).ToArray()
+                                                              })
+                                                              .SelectMany(s => s.List)
+                                                              .ToArray();
+
+                                        var imageProdLinks = Mapper.Map<List<import_product_images>>(queryImageList);
+                                        AddImageProdLinks(db, imageProdLinks);
+                                        SrvcLogger.Debug("{work}", "связи изображений и товаров конец");
+                                        #endregion
+
+                                        #region связи сертификатов и товаров
+                                        SrvcLogger.Debug("{work}", "связи сертификатов и товаров начало");
+                                        var queryCertificateList = (from p in distinctProducts
+                                                                    select new { p.Id, p.Certificates })
+                                                                    .Select(s => new
+                                                                    {
+                                                                        List = s.Certificates
+                                                                        .Select(g => new Certificate
+                                                                        {
+                                                                            ProductId = s.Id,
+                                                                            Name = g.Name,
+                                                                            IsHygienic = g.IsHygienic
+                                                                        }).ToArray()
+                                                                    })
+                                                                    .SelectMany(s => s.List)
+                                                                    .ToArray();
+
+                                        var certificateProdLinks = Mapper.Map<List<import_product_certificates>>(queryCertificateList);
+                                        AddCertificateProdLinks(db, certificateProdLinks);
+                                        SrvcLogger.Debug("{work}", "связи сертификатов и товаров конец");
+                                        #endregion
+
+                                        #region связи категорий и товаров
+                                        SrvcLogger.Debug("{work}", "связи категорий и товаров начало");
+                                        var queryCatalogList = (from p in distinctProducts
+                                                                select new { p.Id, p.Categories })
+                                                                .Select(s => new
                                                                 {
-                                                                    ProductId = s.Id,
-                                                                    CatalogId = g.Id
-                                                                }).ToArray()
-                                                            })
-                                                            .SelectMany(s => s.List)
-                                                            .ToArray();
+                                                                    List = s.Categories
+                                                                        .Select(g => new CatalogProductLink
+                                                                        {
+                                                                            ProductId = s.Id,
+                                                                            CatalogId = g.Id
+                                                                        }).ToArray()
+                                                                })
+                                                                .SelectMany(s => s.List)
+                                                                .Distinct()
+                                                                .ToArray();
 
-                                    var catalogProdLinks = Mapper.Map<List<import_product_categories>>(queryCatalogList);
-                                    AddCatalogProdLinks(db, catalogProdLinks);
-                                    SrvcLogger.Debug("{work}", "связи категорий и товаров конец");
-                                    #endregion
+                                        var uniqueCatalogProds = queryCatalogList
+                                            .GroupBy(g => new { g.CatalogId, g.ProductId }, (key, group) => new CatalogProductLink
+                                            {
+                                                ProductId = key.ProductId,
+                                                CatalogId = key.CatalogId
+                                            });
 
-                                    countSuccess++;
-                                }
-                                catch (Exception e)
-                                {
-                                    SrvcLogger.Error("{error}", "ошибка при импорте продукции");
-                                    SrvcLogger.Error("{error}", e.ToString());
-                                    countFalse++;
+                                        var catalogProdLinks = Mapper.Map<List<import_product_categories>>(uniqueCatalogProds);
+                                        AddCatalogProdLinks(db, catalogProdLinks);
+                                        SrvcLogger.Debug("{work}", "связи категорий и товаров конец");
+                                        #endregion
+
+                                        countSuccess++;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        SrvcLogger.Error("{error}", "ошибка при импорте продукции");
+                                        SrvcLogger.Error("{error}", e.ToString());
+                                        countFalse++;
+                                    }
                                 }
                             }
-
                         }
                     }
                 }
@@ -466,7 +485,7 @@ namespace Import.Core
             {
                 try
                 {
-                    db.import();
+                    //db.import();
                     countSuccess++;
                 }
                 catch (Exception e)

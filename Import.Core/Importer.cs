@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Xml.Serialization;
 
 namespace Import.Core
@@ -57,6 +59,16 @@ namespace Import.Core
         private static ProductModel[] distinctProducts = null;
 
         /// <summary>
+        /// Параметры для рассылки оповещения по результатам импорта
+        /// </summary>
+        private static EmailParamsHelper emailHelper = null;
+
+        /// <summary>
+        /// Текст письма
+        /// </summary>
+        private static string EmailBody = null;
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         static Importer()
@@ -101,7 +113,7 @@ namespace Import.Core
         /// </summary>
         public static void DoImport(FileInfo[] files)
         {
-            Cleaning();
+            Preparing();
 
             if (files != null)
             {
@@ -118,7 +130,7 @@ namespace Import.Core
                         using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                         {
                             SrvcLogger.Debug("{preparing}", String.Format("XML-данные успешно прочитаны из файла {0}", file.Name));
-                            
+
                             var helper = new InsertHelper
                             {
                                 FileStream = fileStream,
@@ -145,9 +157,15 @@ namespace Import.Core
                     }
                     SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
                     Finalizer(db);
-                    SrvcLogger.Debug("{work}", "импорт завершён");
-                    SrvcLogger.Debug("{work}", String.Format("кол-во ошибок {0}", countFalse));
-                    SrvcLogger.Debug("{work}", String.Format("кол-во успешных процессов {0}", countSuccess));
+
+                    string falses = String.Format("кол-во ошибок {0}", countFalse);
+                    string successes = String.Format("кол-во успешных процессов {0}", countSuccess);
+                    string completedMessage = String.Format("импорт завершён {0} {1}; {2} {3}",
+                        Environment.NewLine, falses, Environment.NewLine, successes);
+                    SrvcLogger.Debug("{work}", completedMessage);
+
+                    EmailBody += completedMessage;
+                    SendEmail(EmailBody);
                 }
             }
         }
@@ -155,9 +173,11 @@ namespace Import.Core
         /// <summary>
         /// Обнуляем значения свойств и чистим буферный таблицы перед новым импортом
         /// </summary>
-        private static void Cleaning()
+        private static void Preparing()
         {
             distinctProducts = null;
+            emailHelper = new EmailParamsHelper();
+            EmailBody = String.Empty;
             countSuccess = countFalse = 0;
             if (!IsCompleted)
             {
@@ -200,14 +220,16 @@ namespace Import.Core
                         AddCertificateProdLinks(insert);
                         break;
                 }
-
+                
                 SrvcLogger.Debug("{work}", String.Format("{0} конец", title));
                 countSuccess++;
             }
             catch (Exception e)
             {
+                string errorMessage = e.ToString();
+                EmailBody += String.Format("<p>{0}</p>", errorMessage);
                 SrvcLogger.Error("{error}", String.Format("ошибка при импорте {0}", title));
-                SrvcLogger.Error("{error}", e.ToString());
+                SrvcLogger.Error("{error}", errorMessage);
                 countFalse++;
             }
         }
@@ -232,7 +254,9 @@ namespace Import.Core
             }
             catch (Exception e)
             {
-                SrvcLogger.Error("{error}", e.ToString());
+                string errorMessage = e.ToString();
+                EmailBody += String.Format("<p>{0}</p>", errorMessage);
+                SrvcLogger.Error("{error}", errorMessage);
                 countFalse++;
             }
         }
@@ -486,8 +510,44 @@ namespace Import.Core
             }
             catch (Exception e)
             {
-                SrvcLogger.Error("{error}", e.ToString());
+                string errorMessage = e.ToString();
+                EmailBody += String.Format("<p>{0}</p>", errorMessage);
+                SrvcLogger.Error("{error}", errorMessage);
                 countFalse++;
+            }
+        }
+
+        /// <summary>
+        /// Рассылает оповещения
+        /// </summary>
+        /// <param name="body"></param>
+        private static void SendEmail(string body)
+        {
+            try
+            {
+                SrvcLogger.Debug("{work}", "рассылка оповещения");
+                foreach (var emailTo in emailHelper.EmailTo)
+                {
+                    var from = new MailAddress(emailHelper.EmailFromAddress, emailHelper.EmailFromName);
+                    var to = new MailAddress(emailTo);
+
+                    var message = new MailMessage(from, to);
+                    message.Subject = "Импорт товаров Малышок-ПрессМарк";
+                    message.Body = body;
+                    message.IsBodyHtml = true;
+
+                    var smtp = new SmtpClient(emailHelper.EmailHost, emailHelper.EmailPort);
+                    smtp.Credentials = new NetworkCredential(emailHelper.EmailFromAddress, emailHelper.EmailPassword);
+                    smtp.EnableSsl = emailHelper.EmailEnableSsl;
+
+                    smtp.Send(message);
+                }
+                SrvcLogger.Debug("{work}", "рассылка оповещения проведена");
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Debug("{error}", "рассылка оповещений завершилась ошибкой");
+                SrvcLogger.Debug("{error}", e.ToString());
             }
         }
     }

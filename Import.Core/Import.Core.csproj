@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity.cs" />
+    <Compile Include="Helpers\EntityHelper.cs" />
+    <Compile Include="Helpers\InsertHelper.cs" />
     <Compile Include="Importer.cs" />
     <Compile Include="Models\Barcode.cs" />
     <Compile Include="Models\CatalogList.cs" />

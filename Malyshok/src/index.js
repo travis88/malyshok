@@ -20,7 +20,9 @@ class ImportInfo extends Component {
                 count: 0,
                 step: 0,
                 time: `${dd}.${MM}.${yyyy} ${HH}:${mm}:${ss}`,
-                isCompleted: false
+                isCompleted: false,
+                steps: [],
+                total: ''
             }
         };
         this.loadFromServer = this.loadFromServer.bind(this);
@@ -42,16 +44,15 @@ class ImportInfo extends Component {
     }
 
     render() {
+        const steps = this.state.data.steps.map((s) => <Steps.Step title={s} />);
         return (
             <div className="import-info">
-
                 <Steps current={this.state.data.step}>
-                    <Steps.Step title="загрузка" />
-                    <Steps.Step title="обработка" />
-                    <Steps.Step title="финализация" />
+                    {steps}
                 </Steps>
                 <CircularProgressbar percentage={this.state.data.percent} />
                 <h1>Кол-во продуктов: {this.state.data.count}</h1>
+                <p>Затраченное время: {this.state.data.total}</p>
                 <p>{this.state.data.time}</p>
           </div>
         );
@@ -59,6 +60,6 @@ class ImportInfo extends Component {
 }
 
 ReactDOM.render(
-    <ImportInfo url="/admin/import/importprocessed" pollInterval={1000} />,
+    <ImportInfo url="/admin/import/importprocessed" pollInterval={100} />,
     document.getElementById('content')
 ); 

@@ -58,15 +58,31 @@ namespace Disly.Areas.Admin.Controllers
 
             return View(model);
         }
+        
+        [OutputCache(Location = OutputCacheLocation.None)]
+        public ActionResult ImportProcessed()
+        {
+            var result = new
+            {
+                count = Importer.CountProducts,
+                percent = Importer.Percent,
+                step = Importer.Step,
+                time = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"),
+                isCompleted = Importer.IsCompleted,
+                steps = Importer.Steps,
+                total = Importer.Total
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
-        [MultiButton(MatchFormKey = "action", MatchFormValue = "xml-btn")]
-        public ActionResult IndexPost(IEnumerable<HttpPostedFileBase> upload)
+        public void FileUpload(IEnumerable<HttpPostedFileBase> upload)
         {
             if (upload != null)
             {
                 string importDir = Server.MapPath(Settings.UserFiles + Settings.ImportDir);
-                
+
                 // чистим папку от предыдущих файлов
                 DirectoryInfo di = new DirectoryInfo(importDir);
                 if (di.Exists)
@@ -92,24 +108,10 @@ namespace Disly.Areas.Admin.Controllers
                 }
 
                 FileInfo[] files = di.GetFiles("*.xml");
+                Importer.Step = 1;
+                Importer.Percent = 20;
                 Importer.DoImport(files);
             }
-            return View(model);
-        }
-        
-        [OutputCache(Location = OutputCacheLocation.None)]
-        public ActionResult ImportProcessed()
-        {
-            var result = new
-            {
-                count = Importer.CountProducts,
-                percent = Importer.Percent,
-                step = Importer.Step,
-                time = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"),
-                isCompleted = Importer.IsCompleted
-            };
-
-            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

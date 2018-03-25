@@ -34,9 +34,18 @@ namespace Import.Core
         public static int Percent { get; set; } = 0;
 
         /// <summary>
-        /// Шаг
+        /// Текущий шаг
         /// </summary>
         public static int Step { get; set; }
+
+        /// <summary>
+        /// Шаги
+        /// </summary>
+        public static string[] Steps = { "Загрузка файлов",
+                                         "Запись в буфферные таблицы",
+                                         "Совмещение данных",
+                                         "Импорт завершён",
+                                         "Рассылка оповещений" };
 
         /// <summary>
         /// Флаг завершённости
@@ -69,10 +78,26 @@ namespace Import.Core
         private static string EmailBody = null;
 
         /// <summary>
+        /// Время начала
+        /// </summary>
+        private static DateTime Begin;
+
+        /// <summary>
+        /// Время окончания
+        /// </summary>
+        private static DateTime End;
+
+        /// <summary>
+        /// Затраченное время
+        /// </summary>
+        public static string Total;
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         static Importer()
         {
+            // маппинг объектов и сущностей
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<CatalogModel, import_catalogs>()
@@ -155,17 +180,28 @@ namespace Import.Core
                             }
                         }
                     }
+                    Step = 2;
+                    Percent = 40;
                     SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
                     Finalizer(db);
-
+                    Step = 3;
+                    Percent = 60;
                     string falses = String.Format("кол-во ошибок {0}", countFalse);
                     string successes = String.Format("кол-во успешных процессов {0}", countSuccess);
                     string completedMessage = String.Format("импорт завершён {0} {1}; {2} {3}",
                         Environment.NewLine, falses, Environment.NewLine, successes);
                     SrvcLogger.Debug("{work}", completedMessage);
-
+                    Step = 4;
+                    Percent = 80;
                     EmailBody += completedMessage;
                     SendEmail(EmailBody);
+                    Step = 5;
+                    Percent = 100;
+
+                    End = DateTime.Now;
+                    var t = End - Begin;
+                    Total = String.Format("{0} часов {1} минут {2} секунд {3} милисекунд", Math.Truncate(t.TotalHours), 
+                                           Math.Truncate(t.TotalMinutes), Math.Truncate(t.TotalSeconds), Math.Truncate((double)t.Milliseconds));
                 }
             }
         }
@@ -178,6 +214,7 @@ namespace Import.Core
             distinctProducts = null;
             emailHelper = new EmailParamsHelper();
             EmailBody = String.Empty;
+            Begin = DateTime.Now;
             countSuccess = countFalse = 0;
             if (!IsCompleted)
             {
@@ -309,6 +346,7 @@ namespace Import.Core
             };
             AddEntities(entity);
             result = distinctProducts;
+            CountProducts = distinctProducts.Count();
             return result;
         }
 

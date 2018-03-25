@@ -51,6 +51,9 @@ namespace Import.Core
         /// </summary>
         private static int countFalse = 0;
 
+        /// <summary>
+        /// Уникальные продукты
+        /// </summary>
         private static ProductModel[] distinctProducts = null;
 
         /// <summary>
@@ -98,7 +101,7 @@ namespace Import.Core
         /// </summary>
         public static void DoImport(FileInfo[] files)
         {
-            Preparing();
+            Cleaning();
 
             if (files != null)
             {
@@ -115,52 +118,8 @@ namespace Import.Core
                         using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                         {
                             SrvcLogger.Debug("{preparing}", String.Format("XML-данные успешно прочитаны из файла {0}", file.Name));
-
-                            #region comments
-                            //using (var tr = db.BeginTransaction())
-                            //{
-                            //if (file.FullName.Contains("catalog"))
-                            //{
-                            //try
-                            //{
-                            //    SrvcLogger.Debug("{work}", "категории начало");
-                            //    var serializer = new XmlSerializer(typeof(CatalogList));
-                            //    var arrayOfCatalogs = (CatalogList)serializer.Deserialize(fileStream);
-                            //    var distinctCatalogs = (from c in arrayOfCatalogs.Catalogs
-                            //                            select c).GroupBy(g => g.Id)
-                            //                                     .Select(s => s.First()).ToArray();
-                            //    var catalogs = Mapper.Map<List<import_catalogs>>(distinctCatalogs);
-                            //    AddCategories(db, catalogs);
-                            //    SrvcLogger.Debug("{work}", "категории конец");
-                            //    countSuccess++;
-                            //}
-                            //catch (Exception e)
-                            //{
-                            //    SrvcLogger.Error("{error}", "ошибка при импорте каталогов");
-                            //    SrvcLogger.Error("{error}", e.ToString());
-                            //    countFalse++;
-                            //}
-                            //}
-                            //else if (file.FullName.Contains("product"))
-                            //{
-                            //try
-                            //{
-                            #region comments
-                            //SrvcLogger.Debug("{work}", "продукция начало");
-                            //var serializer = new XmlSerializer(typeof(ArrayOfProducts));
-                            //var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(fileStream);
-                            //var distinctProducts = (from p in arrayOfProducts.Products
-                            //                        select p).GroupBy(g => g.Id)
-                            //                                 .Select(s => s.First()).ToArray();
-                            //var products = Mapper.Map<List<import_products>>(distinctProducts);
-                            //AddProducts(db, products);
-                            //SrvcLogger.Debug("{work}", "продукция конец");
-
-                            //AddProducts(fileStream, db);
-                            #endregion
-                            #endregion
-
-                            InsertHelper helper = new InsertHelper
+                            
+                            var helper = new InsertHelper
                             {
                                 FileStream = fileStream,
                                 Db = db,
@@ -182,143 +141,6 @@ namespace Import.Core
                                     }
                                 }
                             }
-
-                            #region comments
-                            #region связи штрих-кодов и товаров
-                            //SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров начало");
-                            //var queryBarcodeList = (from p in distinctProducts
-                            //                        select new { p.Id, p.BarcodeList })
-                            //                        .Select(s => new
-                            //                        {
-                            //                            List = s.BarcodeList
-                            //                            .Select(g => new Barcode
-                            //                            {
-                            //                                ProductId = s.Id,
-                            //                                Value = g.Value
-                            //                            }).ToArray()
-                            //                        })
-                            //                        .SelectMany(s => s.List)
-                            //                        .ToArray();
-
-                            //var barcodeProdLinks = Mapper.Map<List<import_product_barcodes>>(queryBarcodeList);
-                            //AddBarcodeProdLinks(db, barcodeProdLinks);
-                            //SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров конец");
-                            #endregion
-
-                            #region связи цен и товаров
-                            //SrvcLogger.Debug("{work}", "связи цен и товаров начало");
-                            //var queryPriceList = (from p in distinctProducts
-                            //                      select new { p.Id, p.PriceList })
-                            //                      .Select(s => new
-                            //                      {
-                            //                          List = s.PriceList
-                            //                          .Select(g => new Price
-                            //                          {
-                            //                              ProductId = s.Id,
-                            //                              Title = g.Title,
-                            //                              Value = g.Value.Replace(".", ",")
-                            //                          }).ToArray()
-                            //                      })
-                            //                      .SelectMany(s => s.List)
-                            //                      .ToArray();
-
-                            //var uniquePriceProds = queryPriceList
-                            //    .GroupBy(g => new { g.ProductId, g.Title, g.Value }, (key, group) => new Price
-                            //    {
-                            //        ProductId = key.ProductId,
-                            //        Title = key.Title,
-                            //        Value = key.Value
-                            //    });
-
-                            //var priceProdLinks = Mapper.Map<List<import_product_prices>>(uniquePriceProds);
-                            //AddPriceProdLinks(db, priceProdLinks);
-                            //SrvcLogger.Debug("{work}", "связи цен и товаров конец");
-                            #endregion
-
-                            #region связи изображений и товаров
-                            //SrvcLogger.Debug("{work}", "связи изображений и товаров начало");
-                            //var queryImageList = (from p in distinctProducts
-                            //                      select new { p.Id, p.ImageList })
-                            //                      .Select(s => new
-                            //                      {
-                            //                          List = s.ImageList
-                            //                          .Select(g => new Image
-                            //                          {
-                            //                              ProductId = s.Id,
-                            //                              Name = g.Name,
-                            //                              IsMain = g.IsMain
-                            //                          }).ToArray()
-                            //                      })
-                            //                      .SelectMany(s => s.List)
-                            //                      .ToArray();
-
-                            //var imageProdLinks = Mapper.Map<List<import_product_images>>(queryImageList);
-                            //AddImageProdLinks(db, imageProdLinks);
-                            //SrvcLogger.Debug("{work}", "связи изображений и товаров конец");
-                            #endregion
-
-                            #region связи сертификатов и товаров
-                            //SrvcLogger.Debug("{work}", "связи сертификатов и товаров начало");
-                            //var queryCertificateList = (from p in distinctProducts
-                            //                            select new { p.Id, p.Certificates })
-                            //                            .Select(s => new
-                            //                            {
-                            //                                List = s.Certificates
-                            //                                .Select(g => new Certificate
-                            //                                {
-                            //                                    ProductId = s.Id,
-                            //                                    Name = g.Name,
-                            //                                    IsHygienic = g.IsHygienic
-                            //                                }).ToArray()
-                            //                            })
-                            //                            .SelectMany(s => s.List)
-                            //                            .ToArray();
-
-                            //var certificateProdLinks = Mapper.Map<List<import_product_certificates>>(queryCertificateList);
-                            //AddCertificateProdLinks(db, certificateProdLinks);
-                            //SrvcLogger.Debug("{work}", "связи сертификатов и товаров конец");
-                            #endregion
-
-                            #region связи категорий и товаров
-                            //SrvcLogger.Debug("{work}", "связи категорий и товаров начало");
-                            //var queryCatalogList = (from p in distinctProducts
-                            //                        select new { p.Id, p.Categories })
-                            //                        .Select(s => new
-                            //                        {
-                            //                            List = s.Categories
-                            //                                .Select(g => new CatalogProductLink
-                            //                                {
-                            //                                    ProductId = s.Id,
-                            //                                    CatalogId = g.Id
-                            //                                }).ToArray()
-                            //                        })
-                            //                        .SelectMany(s => s.List)
-                            //                        .Distinct()
-                            //                        .ToArray();
-
-                            //var uniqueCatalogProds = queryCatalogList
-                            //    .GroupBy(g => new { g.CatalogId, g.ProductId }, (key, group) => new CatalogProductLink
-                            //    {
-                            //        ProductId = key.ProductId,
-                            //        CatalogId = key.CatalogId
-                            //    });
-
-                            //var catalogProdLinks = Mapper.Map<List<import_product_categories>>(uniqueCatalogProds);
-                            //AddCatalogProdLinks(db, catalogProdLinks);
-                            //SrvcLogger.Debug("{work}", "связи категорий и товаров конец");
-                            #endregion
-
-                            //countSuccess++;
-                            //}
-                            //catch (Exception e)
-                            //{
-                            //    SrvcLogger.Error("{error}", "ошибка при импорте продукции");
-                            //    SrvcLogger.Error("{error}", e.ToString());
-                            //    countFalse++;
-                            //}
-                            //}
-                            //}
-                            #endregion
                         }
                     }
                     SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
@@ -333,19 +155,13 @@ namespace Import.Core
         /// <summary>
         /// Обнуляем значения свойств и чистим буферный таблицы перед новым импортом
         /// </summary>
-        private static void Preparing()
+        private static void Cleaning()
         {
             distinctProducts = null;
             countSuccess = countFalse = 0;
             if (!IsCompleted)
             {
                 Percent = Step = CountProducts = 0;
-            }
-
-            using (var db = new dbModel(connection))
-            {
-                db.import_catalogss.Delete();
-                db.import_productss.Delete();
             }
         }
 
@@ -659,9 +475,12 @@ namespace Import.Core
         {
             try
             {
+                distinctProducts = null;
+
                 using (var tr = db.BeginTransaction())
                 {
                     db.import();
+                    tr.Commit();
                 }
                 countSuccess++;
             }

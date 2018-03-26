@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Import.Core.Helpers;
 using Import.Core.Models;
 using LinqToDB;
 using LinqToDB.Data;
@@ -6,9 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
 using System.Xml.Serialization;
 
 namespace Import.Core
@@ -34,9 +34,18 @@ namespace Import.Core
         public static int Percent { get; set; } = 0;
 
         /// <summary>
-        /// Шаг
+        /// Текущий шаг
         /// </summary>
         public static int Step { get; set; }
+
+        /// <summary>
+        /// Шаги
+        /// </summary>
+        public static string[] Steps = { "Загрузка файлов",
+                                         "Запись в буфферные таблицы",
+                                         "Совмещение данных",
+                                         "Импорт завершён",
+                                         "Рассылка оповещений" };
 
         /// <summary>
         /// Флаг завершённости
@@ -54,10 +63,41 @@ namespace Import.Core
         private static int countFalse = 0;
 
         /// <summary>
+        /// Уникальные продукты
+        /// </summary>
+        private static ProductModel[] distinctProducts = null;
+
+        /// <summary>
+        /// Параметры для рассылки оповещения по результатам импорта
+        /// </summary>
+        private static EmailParamsHelper emailHelper = null;
+        
+        /// <summary>
+        /// Текст письма
+        /// </summary>
+        private static string EmailBody = null;
+
+        /// <summary>
+        /// Время начала
+        /// </summary>
+        private static DateTime Begin;
+
+        /// <summary>
+        /// Время окончания
+        /// </summary>
+        private static DateTime End;
+
+        /// <summary>
+        /// Затраченное время
+        /// </summary>
+        public static string Total;
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         static Importer()
         {
+            // маппинг объектов и сущностей
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<CatalogModel, import_catalogs>()
@@ -98,212 +138,170 @@ namespace Import.Core
         /// </summary>
         public static void DoImport(FileInfo[] files)
         {
-            countSuccess = countFalse = 0;
-
-            if (!IsCompleted)
-            {
-                Percent = Step = CountProducts = 0;
-            }
-
-            #region чистка буферных таблиц после предыдущего импорта
-            using (var db = new dbModel(connection))
-            {
-                db.import_catalogss.Delete();
-                db.import_productss.Delete();
-            }
-            #endregion
+            Preparing();
 
             if (files != null)
             {
                 files = files.OrderBy(o => o.FullName)
                              .Select(s => s).ToArray();
 
-                foreach (var file in files)
+                using (var db = new dbModel(connection))
                 {
-                    SrvcLogger.Debug("{preparing}", "файл для импорта данных '" + file.FullName + "'");
-                    SrvcLogger.Debug("{preparing}", "начало чтения XML-данных");
-
-                    using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
+                    foreach (var file in files)
                     {
-                        SrvcLogger.Debug("{preparing}", String.Format("XML-данные успешно прочитаны из файла {0}", file.Name));
+                        SrvcLogger.Debug("{preparing}", "файл для импорта данных '" + file.FullName + "'");
+                        SrvcLogger.Debug("{preparing}", "начало чтения XML-данных");
 
-                        using (var db = new dbModel(connection))
+                        using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                         {
-                            using (var tr = db.BeginTransaction())
+                            SrvcLogger.Debug("{preparing}", String.Format("XML-данные успешно прочитаны из файла {0}", file.Name));
+
+                            var helper = new InsertHelper
                             {
-                                if (file.FullName.Contains("catalog"))
+                                FileStream = fileStream,
+                                Db = db,
+                                Entity = Entity.Catalogs
+                            };
+
+                            if (file.FullName.Contains("catalog"))
+                            {
+                                InsertWithLogging(helper);
+                            }
+                            else
+                            {
+                                foreach (Entity entity in Enum.GetValues(typeof(Entity)))
                                 {
-                                    try
+                                    if (!entity.Equals(Entity.Catalogs))
                                     {
-                                        SrvcLogger.Debug("{work}", "категории начало");
-                                        var serializer = new XmlSerializer(typeof(CatalogList));
-                                        var arrayOfCatalogs = (CatalogList)serializer.Deserialize(fileStream);
-                                        var distinctCatalogs = (from c in arrayOfCatalogs.Catalogs
-                                                                select c).GroupBy(g => g.Id)
-                                                                         .Select(s => s.First()).ToArray();
-                                        var catalogs = Mapper.Map<List<import_catalogs>>(distinctCatalogs);
-                                        AddCategories(db, catalogs);
-                                        SrvcLogger.Debug("{work}", "категории конец");
-                                        countSuccess++;
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        SrvcLogger.Error("{error}", "ошибка при импорте каталогов");
-                                        SrvcLogger.Error("{error}", e.ToString());
-                                        countFalse++;
-                                    }
-                                }
-                                else if (file.FullName.Contains("product"))
-                                {
-                                    try
-                                    {
-                                        #region продукция
-                                        SrvcLogger.Debug("{work}", "продукция начало");
-                                        var serializer = new XmlSerializer(typeof(ArrayOfProducts));
-                                        var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(fileStream);
-                                        var distinctProducts = (from p in arrayOfProducts.Products
-                                                                select p).GroupBy(g => g.Id)
-                                                                         .Select(s => s.First()).ToArray();
-                                        var products = Mapper.Map<List<import_products>>(distinctProducts);
-                                        AddProducts(db, products);
-                                        SrvcLogger.Debug("{work}", "продукция конец");
-                                        #endregion
-
-                                        #region связи штрих-кодов и товаров
-                                        SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров начало");
-                                        var queryBarcodeList = (from p in distinctProducts
-                                                                select new { p.Id, p.BarcodeList })
-                                                                .Select(s => new
-                                                                {
-                                                                    List = s.BarcodeList
-                                                                    .Select(g => new Barcode
-                                                                    {
-                                                                        ProductId = s.Id,
-                                                                        Value = g.Value
-                                                                    }).ToArray()
-                                                                })
-                                                                .SelectMany(s => s.List)
-                                                                .ToArray();
-
-                                        var barcodeProdLinks = Mapper.Map<List<import_product_barcodes>>(queryBarcodeList);
-                                        AddBarcodeProdLinks(db, barcodeProdLinks);
-                                        SrvcLogger.Debug("{work}", "связи штрих-кодов и товаров конец");
-                                        #endregion
-
-                                        #region связи цен и товаров
-                                        SrvcLogger.Debug("{work}", "связи цен и товаров начало");
-                                        var queryPriceList = (from p in distinctProducts
-                                                              select new { p.Id, p.PriceList })
-                                                              .Select(s => new
-                                                              {
-                                                                  List = s.PriceList
-                                                                  .Select(g => new Price
-                                                                  {
-                                                                      ProductId = s.Id,
-                                                                      Title = g.Title,
-                                                                      Value = g.Value.Replace(".", ",")
-                                                                  }).ToArray()
-                                                              })
-                                                              .SelectMany(s => s.List)
-                                                              .ToArray();
-
-                                        var priceProdLinks = Mapper.Map<List<import_product_prices>>(queryPriceList);
-                                        AddPriceProdLinks(db, priceProdLinks);
-                                        SrvcLogger.Debug("{work}", "связи цен и товаров конец");
-                                        #endregion
-
-                                        #region связи изображений и товаров
-                                        SrvcLogger.Debug("{work}", "связи изображений и товаров начало");
-                                        var queryImageList = (from p in distinctProducts
-                                                              select new { p.Id, p.ImageList })
-                                                              .Select(s => new
-                                                              {
-                                                                  List = s.ImageList
-                                                                  .Select(g => new Image
-                                                                  {
-                                                                      ProductId = s.Id,
-                                                                      Name = g.Name,
-                                                                      IsMain = g.IsMain
-                                                                  }).ToArray()
-                                                              })
-                                                              .SelectMany(s => s.List)
-                                                              .ToArray();
-
-                                        var imageProdLinks = Mapper.Map<List<import_product_images>>(queryImageList);
-                                        AddImageProdLinks(db, imageProdLinks);
-                                        SrvcLogger.Debug("{work}", "связи изображений и товаров конец");
-                                        #endregion
-
-                                        #region связи сертификатов и товаров
-                                        SrvcLogger.Debug("{work}", "связи сертификатов и товаров начало");
-                                        var queryCertificateList = (from p in distinctProducts
-                                                                    select new { p.Id, p.Certificates })
-                                                                    .Select(s => new
-                                                                    {
-                                                                        List = s.Certificates
-                                                                        .Select(g => new Certificate
-                                                                        {
-                                                                            ProductId = s.Id,
-                                                                            Name = g.Name,
-                                                                            IsHygienic = g.IsHygienic
-                                                                        }).ToArray()
-                                                                    })
-                                                                    .SelectMany(s => s.List)
-                                                                    .ToArray();
-
-                                        var certificateProdLinks = Mapper.Map<List<import_product_certificates>>(queryCertificateList);
-                                        AddCertificateProdLinks(db, certificateProdLinks);
-                                        SrvcLogger.Debug("{work}", "связи сертификатов и товаров конец");
-                                        #endregion
-
-                                        #region связи категорий и товаров
-                                        SrvcLogger.Debug("{work}", "связи категорий и товаров начало");
-                                        var queryCatalogList = (from p in distinctProducts
-                                                                select new { p.Id, p.Categories })
-                                                                .Select(s => new
-                                                                {
-                                                                    List = s.Categories
-                                                                        .Select(g => new CatalogProductLink
-                                                                        {
-                                                                            ProductId = s.Id,
-                                                                            CatalogId = g.Id
-                                                                        }).ToArray()
-                                                                })
-                                                                .SelectMany(s => s.List)
-                                                                .Distinct()
-                                                                .ToArray();
-
-                                        var uniqueCatalogProds = queryCatalogList
-                                            .GroupBy(g => new { g.CatalogId, g.ProductId }, (key, group) => new CatalogProductLink
-                                            {
-                                                ProductId = key.ProductId,
-                                                CatalogId = key.CatalogId
-                                            });
-
-                                        var catalogProdLinks = Mapper.Map<List<import_product_categories>>(uniqueCatalogProds);
-                                        AddCatalogProdLinks(db, catalogProdLinks);
-                                        SrvcLogger.Debug("{work}", "связи категорий и товаров конец");
-                                        #endregion
-
-                                        countSuccess++;
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        SrvcLogger.Error("{error}", "ошибка при импорте продукции");
-                                        SrvcLogger.Error("{error}", e.ToString());
-                                        countFalse++;
+                                        helper.Entity = entity;
+                                        InsertWithLogging(helper);
                                     }
                                 }
                             }
                         }
                     }
-                }
+                    Step = 2;
+                    Percent = 40;
+                    SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
+                    Finalizer(db);
+                    Step = 3;
+                    Percent = 60;
+                    string falses = String.Format("кол-во ошибок {0}", countFalse);
+                    string successes = String.Format("кол-во успешных процессов {0}", countSuccess);
+                    string completedMessage = String.Format("импорт завершён {0} {1}; {2} {3}",
+                        Environment.NewLine, falses, Environment.NewLine, successes);
+                    SrvcLogger.Debug("{work}", completedMessage);
+                    Step = 4;
+                    Percent = 80;
+                    EmailBody += completedMessage;
+                    SendEmail(EmailBody);
+                    Step = 5;
+                    Percent = 100;
 
-                SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
-                Finalizer();
-                SrvcLogger.Debug("{work}", "импорт завершён");
-                SrvcLogger.Debug("{work}", String.Format("кол-во ошибок {0}", countFalse));
-                SrvcLogger.Debug("{work}", String.Format("кол-во успешных процессов {0}", countSuccess));
+                    End = DateTime.Now;
+                    var t = End - Begin;
+                    Total = String.Format("{0} часов {1} минут {2} секунд {3} милисекунд", Math.Truncate(t.TotalHours), 
+                                           Math.Truncate(t.TotalMinutes), Math.Truncate(t.TotalSeconds), Math.Truncate((double)t.Milliseconds));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Обнуляем значения свойств и чистим буферный таблицы перед новым импортом
+        /// </summary>
+        private static void Preparing()
+        {
+            try
+            {
+                distinctProducts = null;
+                emailHelper = new EmailParamsHelper();
+                EmailBody = String.Empty;
+                Begin = DateTime.Now;
+                countSuccess = countFalse = 0;
+                if (!IsCompleted)
+                {
+                    Percent = Step = CountProducts = 0;
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Попытка вставки списка данных с логированием
+        /// </summary>
+        /// <param name="insert"></param>
+        private static void InsertWithLogging(InsertHelper insert)
+        {
+            string title = insert.Entity.ToString().ToLower();
+            try
+            {
+                SrvcLogger.Debug("{work}", String.Format("{0} начало", title));
+
+                switch (insert.Entity)
+                {
+                    case Entity.Catalogs:
+                        AddCategories(insert);
+                        break;
+                    case Entity.Products:
+                        distinctProducts = AddProducts(insert);
+                        break;
+                    case Entity.CatalogProductLinks:
+                        AddCatalogProdLinks(insert);
+                        break;
+                    case Entity.Barcodes:
+                        AddBarcodeProdLinks(insert);
+                        break;
+                    case Entity.Prices:
+                        AddPriceProdLinks(insert);
+                        break;
+                    case Entity.Images:
+                        AddImageProdLinks(insert);
+                        break;
+                    case Entity.Certificates:
+                        AddCertificateProdLinks(insert);
+                        break;
+                }
+                
+                SrvcLogger.Debug("{work}", String.Format("{0} конец", title));
+                countSuccess++;
+            }
+            catch (Exception e)
+            {
+                string errorMessage = e.ToString();
+                EmailBody += String.Format("<p>{0}</p>", errorMessage);
+                SrvcLogger.Error("{error}", String.Format("ошибка при импорте {0}", title));
+                SrvcLogger.Error("{error}", errorMessage);
+                countFalse++;
+            }
+        }
+
+        /// <summary>
+        /// Добавляет список сущностей в таблицы
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="db"></param>
+        /// <param name="list"></param>
+        private static void AddEntities<T>(EntityHelper<T> entity)
+        {
+            SrvcLogger.Debug("{work}", String.Format("кол-во {0}: {1}", entity.Title, entity.List.Count()));
+            try
+            {
+                using (var tr = entity.Db.BeginTransaction())
+                {
+                    entity.Db.BulkCopy(entity.List);
+                    tr.Commit();
+                }
+                countSuccess++;
+            }
+            catch (Exception e)
+            {
+                string errorMessage = e.ToString();
+                EmailBody += String.Format("<p>{0}</p>", errorMessage);
+                SrvcLogger.Error("{error}", errorMessage);
+                countFalse++;
             }
         }
 
@@ -312,23 +310,23 @@ namespace Import.Core
         /// </summary>
         /// <param name="db"></param>
         /// <param name="catalogs"></param>
-        private static void AddCategories(dbModel db, IEnumerable<import_catalogs> catalogs)
+        private static void AddCategories(InsertHelper insert)
         {
-            SrvcLogger.Debug("{work}", String.Format("кол-во каталогов {0}", catalogs.Count()));
-            try
+            var serializer = new XmlSerializer(typeof(CatalogList));
+            var arrayOfCatalogs = (CatalogList)serializer.Deserialize(insert.FileStream);
+            var distinctCatalogs = (from c in arrayOfCatalogs.Catalogs
+                                    select c).GroupBy(g => g.Id)
+                                             .Select(s => s.First()).ToArray();
+
+            var list = Mapper.Map<List<import_catalogs>>(distinctCatalogs);
+            string title = insert.Entity.ToString().ToLower();
+            var entity = new EntityHelper<import_catalogs>
             {
-                using (var tr = db.BeginTransaction())
-                {
-                    db.BulkCopy(catalogs);
-                    tr.Commit();
-                }
-                countSuccess++;
-            }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-                countFalse++;
-            }
+                Db = insert.Db,
+                List = list,
+                Title = title
+            };
+            AddEntities(entity);
         }
 
         /// <summary>
@@ -336,119 +334,27 @@ namespace Import.Core
         /// </summary>
         /// <param name="db"></param>
         /// <param name="products"></param>
-        private static void AddProducts(dbModel db, IEnumerable<import_products> products)
+        private static ProductModel[] AddProducts(InsertHelper insert)
         {
-            SrvcLogger.Debug("{work}", String.Format("кол-во товаров {0}", products.Count()));
-            try
-            {
-                using (var tr = db.BeginTransaction())
-                {
-                    db.BulkCopy(products);
-                    tr.Commit();
-                }
-                countSuccess++;
-            }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-                countFalse++;
-            }
-        }
+            ProductModel[] result = null;
+            var serializer = new XmlSerializer(typeof(ArrayOfProducts));
+            var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(insert.FileStream);
+            var distinctProducts = (from p in arrayOfProducts.Products
+                                    select p).GroupBy(g => g.Id)
+                                             .Select(s => s.First()).ToArray();
 
-        /// <summary>
-        /// Добавляет связи изображений с товарами
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="links"></param>
-        private static void AddImageProdLinks(dbModel db, IEnumerable<import_product_images> links)
-        {
-            SrvcLogger.Debug("{work}", String.Format("кол-во изображений {0}", links.Count()));
-            try
+            var list = Mapper.Map<List<import_products>>(distinctProducts);
+            string title = insert.Entity.ToString().ToLower();
+            var entity = new EntityHelper<import_products>
             {
-                using (var tr = db.BeginTransaction())
-                {
-                    db.BulkCopy(links);
-                    tr.Commit();
-                }
-                countSuccess++;
-            }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-                countFalse++;
-            }
-        }
-
-        /// <summary>
-        /// Добавляет связи сертификатов с товарами
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="links"></param>
-        private static void AddCertificateProdLinks(dbModel db, IEnumerable<import_product_certificates> links)
-        {
-            SrvcLogger.Debug("{work}", String.Format("кол-во сертификатов {0}", links.Count()));
-            try
-            {
-                using (var tr = db.BeginTransaction())
-                {
-                    db.BulkCopy(links);
-                    tr.Commit();
-                }
-                countSuccess++;
-            }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-                countFalse++;
-            }
-        }
-
-        /// <summary>
-        /// Добавляет связи штрих-кодов с товарами
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="links"></param>
-        private static void AddBarcodeProdLinks(dbModel db, IEnumerable<import_product_barcodes> links)
-        {
-            SrvcLogger.Debug("{work}", String.Format("кол-во штрих-кодов {0}", links.Count()));
-            try
-            {
-                using (var tr = db.BeginTransaction())
-                {
-                    db.BulkCopy(links);
-                    tr.Commit();
-                }
-                countSuccess++;
-            }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-                countFalse++;
-            }
-        }
-
-        /// <summary>
-        /// Добавляет связи цен с товарами
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="links"></param>
-        private static void AddPriceProdLinks(dbModel db, IEnumerable<import_product_prices> links)
-        {
-            SrvcLogger.Debug("{work}", String.Format("кол-во цен {0}", links.Count()));
-            try
-            {
-                using (var tr = db.BeginTransaction())
-                {
-                    db.BulkCopy(links);
-                    tr.Commit();
-                }
-                countSuccess++;
-            }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-                countFalse++;
-            }
+                Db = insert.Db,
+                List = list,
+                Title = title
+            };
+            AddEntities(entity);
+            result = distinctProducts;
+            CountProducts = distinctProducts.Count();
+            return result;
         }
 
         /// <summary>
@@ -456,43 +362,237 @@ namespace Import.Core
         /// </summary>
         /// <param name="db"></param>
         /// <param name="links"></param>
-        private static void AddCatalogProdLinks(dbModel db, IEnumerable<import_product_categories> links)
+        private static void AddCatalogProdLinks(InsertHelper insert)
         {
-            SrvcLogger.Debug("{work}", String.Format("кол-во каталогов {0}", links.Count()));
-            try
-            {
-                using (var tr = db.BeginTransaction())
+            var queryCatalogList = (from p in distinctProducts
+                                    select new { p.Id, p.Categories })
+                                                            .Select(s => new
+                                                            {
+                                                                List = s.Categories
+                                                                    .Select(g => new CatalogProductLink
+                                                                    {
+                                                                        ProductId = s.Id,
+                                                                        CatalogId = g.Id
+                                                                    }).ToArray()
+                                                            })
+                                                            .SelectMany(s => s.List)
+                                                            .Distinct()
+                                                            .ToArray();
+
+            var uniqueCatalogProds = queryCatalogList
+                .GroupBy(g => new { g.CatalogId, g.ProductId }, (key, group) => new CatalogProductLink
                 {
-                    db.BulkCopy(links);
-                    tr.Commit();
-                }
-                countSuccess++;
-            }
-            catch (Exception e)
+                    ProductId = key.ProductId,
+                    CatalogId = key.CatalogId
+                });
+
+            var list = Mapper.Map<List<import_product_categories>>(uniqueCatalogProds);
+            string title = insert.Entity.ToString().ToLower();
+            var entity = new EntityHelper<import_product_categories>
             {
-                SrvcLogger.Error("{error}", e.ToString());
-                countFalse++;
-            }
+                Db = insert.Db,
+                List = list,
+                Title = title
+            };
+            AddEntities(entity);
+        }
+
+        /// <summary>
+        /// Добавляет связи штрих-кодов с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddBarcodeProdLinks(InsertHelper insert)
+        {
+            var queryBarcodeList = (from p in distinctProducts
+                                    select new { p.Id, p.BarcodeList })
+                                                            .Select(s => new
+                                                            {
+                                                                List = s.BarcodeList
+                                                                .Select(g => new Barcode
+                                                                {
+                                                                    ProductId = s.Id,
+                                                                    Value = g.Value
+                                                                }).ToArray()
+                                                            })
+                                                            .SelectMany(s => s.List)
+                                                            .ToArray();
+
+            var list = Mapper.Map<List<import_product_barcodes>>(queryBarcodeList);
+            string title = insert.Entity.ToString().ToLower();
+            var entity = new EntityHelper<import_product_barcodes>
+            {
+                Db = insert.Db,
+                List = list,
+                Title = title
+            };
+            AddEntities(entity);
+        }
+
+        /// <summary>
+        /// Добавляет связи цен с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddPriceProdLinks(InsertHelper insert)
+        {
+            var queryPriceList = (from p in distinctProducts
+                                  select new { p.Id, p.PriceList })
+                                                  .Select(s => new
+                                                  {
+                                                      List = s.PriceList
+                                                      .Select(g => new Price
+                                                      {
+                                                          ProductId = s.Id,
+                                                          Title = g.Title,
+                                                          Value = g.Value.Replace(".", ",")
+                                                      }).ToArray()
+                                                  })
+                                                  .SelectMany(s => s.List)
+                                                  .ToArray();
+
+            var uniquePriceProds = queryPriceList
+                .GroupBy(g => new { g.ProductId, g.Title, g.Value }, (key, group) => new Price
+                {
+                    ProductId = key.ProductId,
+                    Title = key.Title,
+                    Value = key.Value
+                });
+
+            var list = Mapper.Map<List<import_product_prices>>(uniquePriceProds);
+            string title = insert.Entity.ToString().ToLower();
+            var entity = new EntityHelper<import_product_prices>
+            {
+                Db = insert.Db,
+                List = list,
+                Title = title
+            };
+            AddEntities(entity);
+        }
+
+        /// <summary>
+        /// Добавляет связи изображений с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddImageProdLinks(InsertHelper insert)
+        {
+            var queryImageList = (from p in distinctProducts
+                                  select new { p.Id, p.ImageList })
+                                                  .Select(s => new
+                                                  {
+                                                      List = s.ImageList
+                                                      .Select(g => new Image
+                                                      {
+                                                          ProductId = s.Id,
+                                                          Name = g.Name,
+                                                          IsMain = g.IsMain
+                                                      }).ToArray()
+                                                  })
+                                                  .SelectMany(s => s.List)
+                                                  .ToArray();
+
+            var list = Mapper.Map<List<import_product_images>>(queryImageList);
+            string title = insert.Entity.ToString().ToLower();
+            var entity = new EntityHelper<import_product_images>
+            {
+                Db = insert.Db,
+                List = list,
+                Title = title
+            };
+            AddEntities(entity);
+        }
+
+        /// <summary>
+        /// Добавляет связи сертификатов с товарами
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="links"></param>
+        private static void AddCertificateProdLinks(InsertHelper insert)
+        {
+            var queryCertificateList = (from p in distinctProducts
+                                        select new { p.Id, p.Certificates })
+                                                        .Select(s => new
+                                                        {
+                                                            List = s.Certificates
+                                                            .Select(g => new Certificate
+                                                            {
+                                                                ProductId = s.Id,
+                                                                Name = g.Name,
+                                                                IsHygienic = g.IsHygienic
+                                                            }).ToArray()
+                                                        })
+                                                        .SelectMany(s => s.List)
+                                                        .ToArray();
+
+            var list = Mapper.Map<List<import_product_certificates>>(queryCertificateList);
+            string title = insert.Entity.ToString().ToLower();
+            var entity = new EntityHelper<import_product_certificates>
+            {
+                Db = insert.Db,
+                List = list,
+                Title = title
+            };
+            AddEntities(entity);
         }
 
         /// <summary>
         /// Запускает хранимку для переноса данных из буферных таблиц в боевые
         /// </summary>
         /// <param name="db"></param>
-        private static void Finalizer()
+        private static void Finalizer(dbModel db)
         {
-            using (var db = new dbModel(connection))
+            try
             {
-                try
+                distinctProducts = null;
+
+                using (var tr = db.BeginTransaction())
                 {
-                    //db.import();
-                    countSuccess++;
+                    db.import();
+                    tr.Commit();
                 }
-                catch (Exception e)
+                countSuccess++;
+            }
+            catch (Exception e)
+            {
+                string errorMessage = e.ToString();
+                EmailBody += String.Format("<p>{0}</p>", errorMessage);
+                SrvcLogger.Error("{error}", errorMessage);
+                countFalse++;
+            }
+        }
+
+        /// <summary>
+        /// Рассылает оповещения
+        /// </summary>
+        /// <param name="body"></param>
+        private static void SendEmail(string body)
+        {
+            try
+            {
+                SrvcLogger.Debug("{work}", "рассылка оповещения");
+                foreach (var emailTo in emailHelper.EmailTo)
                 {
-                    SrvcLogger.Error("{error}", e.ToString());
-                    countFalse++;
+                    var from = new MailAddress(emailHelper.EmailFromAddress, emailHelper.EmailFromName);
+                    var to = new MailAddress(emailTo);
+
+                    var message = new MailMessage(from, to);
+                    message.Subject = "Импорт товаров Малышок-ПрессМарк";
+                    message.Body = body;
+                    message.IsBodyHtml = true;
+
+                    var smtp = new SmtpClient(emailHelper.EmailHost, emailHelper.EmailPort);
+                    smtp.Credentials = new NetworkCredential(emailHelper.EmailFromAddress, emailHelper.EmailPassword);
+                    smtp.EnableSsl = emailHelper.EmailEnableSsl;
+
+                    smtp.Send(message);
                 }
+                SrvcLogger.Debug("{work}", "рассылка оповещения проведена");
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Debug("{error}", "рассылка оповещений завершилась ошибкой");
+                SrvcLogger.Debug("{error}", e.ToString());
             }
         }
     }

@@ -8,9 +8,6 @@ module.exports = {
         filename: 'bundle.js',
         sourceMapFilename: "bundle.map"
     },
-    //resolve: {
-    //    extensions: ['', '.js', '.jsx']
-    //},
     module: {
         loaders: [
             {

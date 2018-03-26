@@ -71,7 +71,7 @@ namespace Import.Core
         /// Параметры для рассылки оповещения по результатам импорта
         /// </summary>
         private static EmailParamsHelper emailHelper = null;
-
+        
         /// <summary>
         /// Текст письма
         /// </summary>

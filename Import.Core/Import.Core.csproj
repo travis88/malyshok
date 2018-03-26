@@ -55,6 +55,7 @@
     <Compile Include="Helpers\EntityHelper.cs" />
     <Compile Include="Helpers\InsertHelper.cs" />
     <Compile Include="Helpers\EmailParamsHelper.cs" />
+    <Compile Include="Helpers\ReceiverParamsHelper.cs" />
     <Compile Include="Importer.cs" />
     <Compile Include="Models\Barcode.cs" />
     <Compile Include="Models\CatalogList.cs" />

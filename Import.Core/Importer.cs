@@ -211,14 +211,21 @@ namespace Import.Core
         /// </summary>
         private static void Preparing()
         {
-            distinctProducts = null;
-            emailHelper = new EmailParamsHelper();
-            EmailBody = String.Empty;
-            Begin = DateTime.Now;
-            countSuccess = countFalse = 0;
-            if (!IsCompleted)
+            try
             {
-                Percent = Step = CountProducts = 0;
+                distinctProducts = null;
+                emailHelper = new EmailParamsHelper();
+                EmailBody = String.Empty;
+                Begin = DateTime.Now;
+                countSuccess = countFalse = 0;
+                if (!IsCompleted)
+                {
+                    Percent = Step = CountProducts = 0;
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
             }
         }
 

@@ -67,23 +67,8 @@ namespace Disly.Areas.Admin.Controllers
         {
             // Авторизованного пользователя направляем на главную страницу
             if (_IsAuthenticated) return RedirectToAction("", "Main");
-            else
-            {
-                string UID = RequestUserInfo.CookiesValue(".ASPXAUTHMORE");
-                
-                if (UID != string.Empty)
-                {
-                    AccountModel AccountInfo = _accountRepository.getCmsAccount(new Guid(UID));
-                    // Если пользователь найден
-                    if (AccountInfo != null)
-                    {
-                        FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), false);
-                        return RedirectToAction("Index", "Main");
-                    }
-                }
 
-                return View();
-            }
+            return View();
         }
         
         [HttpPost]

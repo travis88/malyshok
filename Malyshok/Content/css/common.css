@@ -98,7 +98,9 @@ form {
 .basket-block img {
     margin-right: 18px;
 }
-
+.basket-empty {
+    padding: 12px 0;
+}
 .menu_block {
     background: #21aedd;
     color: #ffffff;
@@ -346,6 +348,7 @@ a.button:hover {
     text-decoration: none;
 }
 .btn-blue {
+    position: relative;
     background: #65acda;
     border-color: #65acda;
     color: #ffffff;
@@ -359,6 +362,80 @@ a.button:hover {
     float: right;
 }
 /* prod */
+.pagination {
+    overflow: auto;
+}
+.pagination-size {
+    float: right;
+    margin: 20px 0;
+}
+.pagination-size input {
+    width: 60px;
+}
+.catalog-title {
+    padding: 10px 20px;
+    background: #f2f2f2;
+    color: #4c4c4c;
+    font-size: 17px;
+}
+.catalog-block {
+    background: #fafafa;
+    border: solid 1px #dadada;
+    padding: 20px;
+    margin-bottom: 26px;
+    font-size: 14px;
+}
+.col-left, 
+.col-center, 
+.col-right {
+    width: 33.3%;
+    padding: 0 15px;
+}
+.col-left {
+    float:  left;
+}
+.col-center {
+    overflow: hidden;
+}
+.col-right {
+    float: right;
+}
+.catalog-start {
+    display: none;
+}
+.catalog-item {
+    color: #4c4c4c;
+}
+    .catalog-item a {
+        color: #4c4c4c;
+    }
+    .catalog-item.active a {
+        color: red !important;
+    }
+.lavel-1 {
+}
+    .lavel-1:before {
+        content: "•";
+        margin-right: 5px;
+        color: #dadada;
+    }
+    .lavel-1 a {
+        color: #21aedd;
+    }
+
+.lavel-2 {
+    margin-left: 20px;
+}
+.lavel-3 {
+    margin-left: 40px;
+}
+
+
+
+
+
+
+
 .item_prod {
     margin-bottom: 20px;
     overflow: auto;
@@ -433,11 +510,35 @@ a.button:hover {
     background: url('/Content/img/cert.png') 20px 7px no-repeat;
     cursor: pointer;
 }
+
+/* Basket */
+.menu-basket-info {
+    float: right;
+    background: url('/Content/img/basket.jpg') 0 12px no-repeat;
+    padding: 0 0 0 30px;
+}
+    .menu-basket-info a {
+        display: block;
+        float: left;
+        padding: 15px 5px;
+        font-weight: bold;
+    }
+
+        .menu-basket-info a:hover {
+            color: #ffcd00;
+            text-decoration: none;
+        }
 .basket-form {
     overflow: hidden;
 }
 .basket-form input {
     width: 30px;
+}
+input.chenge-input {
+    border-color: #dd201e !important;
+}
+.basket_item {
+    margin-bottom: 20px;
 }
 .basket-img {
     position: relative;
@@ -541,9 +642,11 @@ select.form-control {
     position: fixed;
     top: 10px;
     left: 10px;
-    width: 10px;
-    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
     background: #ff0300;
+    color: #ffffff;
+    z-index:10000000000;
 }*/
 @media only screen and (max-width: 1200px) {
     .mobile-indicator {

@@ -6,31 +6,27 @@
     <h1>@ViewBag.Title</h1>
 
     <div class="page-text">
-        @if (Model.Categorys != null)
+        @if (Model.Categorys != null && Model.Categorys.CountItems > 0)
         {
+            <div class="catalog-title">
+                Разделы каталога
+            </div>
             <div class="catalog-block">
-                @foreach (var item in Model.Categorys)
-                {
-                    var url = "/prod/?catalog=" + item.Path + item.Alias;
-                    <div>
-                        <a href="@url">@item.Title</a>
-                    </div>
-                }
+                <div class="row"></div>
+                <div class="catalog-start">@Html.Partial("Catalog", Model.Categorys.Tree)</div>
             </div>
         }
         @if (Model.List != null)
         {
             if (Model.List.Data.Any())
             {
-                <div class="filtr-block">
-
-                </div>
+                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
                 foreach (var item in Model.List.Data)
                 {
                     <div class="item_prod shadow-block">
                         <div class="prod-img"><img src="@item.Photo.Url" /></div>
                         <div class="prod-info">
-                            <div class="prod-title"><a href="/prod/item/@item.Id/">@Html.Raw(item.Title)</a></div>
+                            <div class="prod-title"><a href="/prod/@item.Id/">@Html.Raw(item.Title)</a></div>
                             <div class="prod-catalog-link">
                                 <div><a href="/">Игрушки</a> / <a href="/">Игрушки</a></div>
                             </div>
@@ -62,7 +58,7 @@
                                         string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
                                     }
                                     <input data-id="@item.Id" value="@inputVal" /> шт.
-                                    <button type="button" class="in-basket @btnStyle" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="">@btnName</button>
+                                    <button type="button" class="in-basket @btnStyle">@btnName</button>
                                 </div>
                             </div>
                         </div>

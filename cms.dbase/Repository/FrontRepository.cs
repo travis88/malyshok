@@ -558,7 +558,7 @@ namespace cms.dbase
                 var query = db.content_categoriess.Where(w => w.uui_parent == null);
                 if (query.Any())
                 {
-                    var data = query.OrderBy(o => o.n_sort)
+                    var data = query.OrderBy(o => o.c_title)
                                   .Select(s => new CategoryModel()
                                   {
                                       Title = s.c_title,
@@ -571,29 +571,52 @@ namespace cms.dbase
                 return null;
             }
         }
-        public override CategoryModel[] getProdCatalogModule(string ParentPath)
+        public override CategoryTree getProdCatalog(string Path)
         {
+
             using (var db = new CMSdb(_context))
             {
-                ParentPath = (!string.IsNullOrEmpty(ParentPath)) ? ParentPath : "/";
+                Path = (!string.IsNullOrEmpty(Path)) ? Path : "/";
+                
+                var query = db.content_categoriess.Where(w => w.c_path.StartsWith(Path));
 
-                var query = db.content_categoriess.Where(w => w.c_path.IndexOf(ParentPath) == 0);
-                if (query.Any())
+                var temp = query.OrderBy(o => new { o.c_title })
+                    .Select(s => new CategoryModel()
+                    {
+                        Id = s.id,
+                        Title = s.c_title,
+                        Alias = s.c_alias,
+                        Level = s.n_lavel,
+                        Path = s.c_path,
+                        Parent = s.uui_parent
+                    });
+
+                return new CategoryTree
                 {
-                    var data = query.OrderBy(o => new { o.c_path, o.n_sort })
-                                  .Select(s => new CategoryModel()
-                                  {
-                                      Title = s.c_title,
-                                      Alias = s.c_alias,
-                                      Path = s.c_path,
-                                      Id = s.id
-                                  }).ToArray();
-                    return data;
-                }
-
-                return null;
+                    CountItems = temp.Count(),
+                    Tree = createCatalog(temp, Path)
+                };
             }
         }
+        private CategoryModel[] createCatalog(IQueryable<CategoryModel> StartModel, string Path)
+        {
+            var query = StartModel.Where(w => w.Path == Path);
+
+            var data = query.OrderBy(o => new { o.Title })
+                .Select(s => new CategoryModel()
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Alias = s.Alias,
+                    Level = s.Level,
+                    Path = s.Path,
+                    CountChildren = StartModel.Where(w => w.Parent == s.Parent).Count(),
+                    Children = createCatalog(StartModel, s.Path + s.Alias + "/")
+                }).ToArray();
+
+            return data;
+        }
+
         public override ProductList getProdList(FilterParams filter)
         {
             using (var db = new CMSdb(_context))
@@ -647,11 +670,12 @@ namespace cms.dbase
                 }
                 else
                 {
-                    var path = filter.Category.Substring(0, filter.Category.LastIndexOf("/"));
-                    var alias = filter.Category.Substring(filter.Category.LastIndexOf("/") + 1);
+                    filter.Category = (filter.Category + "/").Replace("//", "");
+                    var alias = filter.Category.Split('/').Last();
+                    var path = String.IsNullOrEmpty(alias) ? filter.Category : filter.Category.Replace(alias, "");
                     
                     var query = db.content_categoriess
-                        .Where(w => w.c_path.StartsWith(filter.Category) || (w.c_path == path + "/" && w.c_alias == alias))
+                        .Where(w => w.c_path.StartsWith(filter.Category) || (w.c_path == path && w.c_alias == alias))
                         .Select(s => new { s.id });
 
                     var prodQuery = query
@@ -702,6 +726,7 @@ namespace cms.dbase
             }
         }
 
+        #region Users
         /// <summary>
         /// Проверка пользователя по E-Mail
         /// </summary>
@@ -725,6 +750,8 @@ namespace cms.dbase
                 var data = db.content_userss.Where(w => w.id == Code);
                 if (data.Any())
                 {
+                    data.Set(p => p.b_disable, false).Update();
+
                     return data.Select(s => s.id).FirstOrDefault().ToString();
                 }
                 return null;
@@ -744,6 +771,28 @@ namespace cms.dbase
                         Phone = s.c_phone,
                         EMail = s.c_email,
                         Organization = s.c_organization,
+                        Disabled = s.b_disable,
+                        Vk = s.c_vk,
+                        Facebook = s.c_facebook
+                    })
+                    .SingleOrDefault();
+            }
+        }
+        public override UsersModel getCustomer(string Id)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_userss
+                    .Where(w => w.c_email == Id || w.c_phone == Id || w.c_vk == Id || w.c_facebook == Id)
+                    .Select(s => new UsersModel
+                    {
+                        Id = s.id,
+                        FIO = s.c_name,
+                        EMail = s.c_email,
+                        Salt = s.c_salt,
+                        Hash = s.c_hash,
+                        isBlocked = (s.n_error_count >= 5),
+                        LockDate = s.d_try_login,
                         Disabled = s.b_disable,
                         Vk = s.c_vk,
                         Facebook = s.c_facebook
@@ -773,6 +822,37 @@ namespace cms.dbase
         //public override bool deleteCustomer(Guid id) { }
 
         /// <summary>
+        /// Записываем неудачную попытку входа
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="IP"></param>
+        public override int FailedLogin(Guid id, string IP)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int Num = db.content_userss.Where(w => w.id == id).ToArray().First().n_error_count + 1;
+
+                var data = db.content_userss.Where(w => w.id == id)
+                        .Set(u => u.n_error_count, Num)
+                        .Set(u => u.d_try_login, DateTime.Now)
+                        .Update();
+
+                //// Логирование
+                //insertLog(id, IP, "failed_login", id, String.Empty, "Users", "Неудачная попытка входа");
+
+                //if (Num == 5)
+                //{
+                //    // Логирование
+                //    insertLog(id, IP, "account_lockout", id, String.Empty, "Users", "Блокировка аккаунта");
+                //}
+
+                return Num;
+            }
+        }
+        #endregion
+
+
+        /// <summary>
         /// Заказы
         /// </summary>
         /// <returns></returns>
@@ -780,14 +860,55 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_orderss.Where(w => w.id == OrderId && w.f_status==0);
+                var query = db.content_orderss.Where(w => w.id == OrderId && w.f_status == 0);
                 if (query.Any())
                     return true;
                 else
                     return false;
             }
         }
-        public override Guid? CreateOrder() {
+        public override Guid getOrderId(Guid UserId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                Guid OrderID = Guid.Empty;
+
+                var query = db.content_orderss.Where(w => w.f_user == UserId && w.f_status == 0);
+
+                if (query.Any())
+                    OrderID = query.SingleOrDefault().id;
+
+                return OrderID;
+            }
+        }
+        public override OrderModel getOrder(Guid OrderId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orderss.Where(w => w.id == OrderId);
+                var SummQuery = db.BasketInfo(OrderId);
+                int ProdCount = (SummQuery.First().ProdCount != null) ? (int)SummQuery.First().ProdCount : 0;
+                decimal Total = (SummQuery.First().TotalSum != null) ? (decimal)SummQuery.First().TotalSum : 0;
+
+                var data = query.Select(s => new OrderModel {
+                    Id=s.id,
+                    Num = s.n_num,
+                    Date= s.d_date,
+                    UserName = s.c_user_name,
+                    Organization = s.c_organization,
+                    Email = s.c_email,
+                    Phone = s.c_phone,
+                    Address = s.c_address,
+                    UserComment = s.c_user_comment,
+                    AdminComment = s.c_admin_comment,
+                    ProdCount = ProdCount,
+                    Total = Total
+                });
+
+                return data.SingleOrDefault();
+            }
+        }
+        public override Guid CreateOrder() {
             using (var db = new CMSdb(_context))
             {
                 Guid OrderId = Guid.NewGuid();
@@ -799,11 +920,106 @@ namespace cms.dbase
                 return OrderId;
             }
         }
-        //public override OrderModel[] getOrders(Guid UserId)
-        //{
+        public override Guid CreateOrder(Guid UserId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                Guid OrderId = Guid.NewGuid();
 
-        //}
+                var UserInfo = db.content_userss.Where(w => w.id == UserId);
+                string Org = UserInfo.First().c_organization;
+                string UserName = UserInfo.First().c_name;
+                string Address = UserInfo.First().c_address;
+                string Phone = UserInfo.First().c_phone;
+                string Mail = UserInfo.First().c_email;
 
+                db.content_orderss
+                   .Value(v => v.id, OrderId)
+                   .Value(v => v.f_user, UserId)
+                   .Value(v => v.c_organization, Org)
+                   .Value(v => v.c_user_name, UserName)
+                   .Value(v => v.c_address, Address)
+                   .Value(v => v.c_phone, Phone)
+                   .Value(v => v.c_email, Mail)
+                   .Insert();
+
+                return OrderId;
+            }
+        }
+        public override bool transferOrder(Guid OrderId, Guid UserId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var UserInfo = db.content_userss.Where(w => w.id == UserId);
+                string Org = UserInfo.First().c_organization;
+                string UserName = UserInfo.First().c_name;
+                string Address = UserInfo.First().c_address;
+                string Phone = UserInfo.First().c_phone;
+                string Mail = UserInfo.First().c_email;
+
+                var data = db.content_orderss.Where(w => w.id == OrderId);
+                if (data.Any())
+                {
+                    data
+                        .Set(p => p.f_user, UserId)
+                        .Set(p => p.c_organization, Org)
+                        .Set(p => p.c_user_name, UserName)
+                        .Set(p => p.c_address, Address)
+                        .Set(p => p.c_phone, Phone)
+                        .Set(p => p.c_email, Mail)
+                        .Update();
+
+                    return true;
+                }
+                return false;
+            }
+        }
+        public override int sendOrder(OrderModel OrderInfo)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                int Num = db.content_orderss.Where(w => w.n_num != null).Count();
+
+                var data = db.content_orderss.Where(w => w.id == OrderInfo.Id);
+                if (data.Any())
+                {
+                    data
+                        .Set(p => p.f_status, 1)
+                        .Set(p => p.n_num, Num)
+                        .Set(p => p.d_date, DateTime.Now)
+                        .Set(p => p.c_organization, OrderInfo.Organization)
+                        .Set(p => p.c_user_name, OrderInfo.UserName)
+                        .Set(p => p.c_address, OrderInfo.Address)
+                        .Set(p => p.c_phone, OrderInfo.Phone)
+                        .Set(p => p.c_email, OrderInfo.Email)
+                        .Set(p => p.c_user_comment, OrderInfo.UserComment)
+                        .Update();
+
+                    return Num;
+                }
+                return 0;
+            }
+        }
+
+        public override void removeFromBasket(Guid OrderId, Guid ProdId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_order_detailss.Where(w => w.f_order == OrderId && w.f_prod_id == ProdId);
+
+                if (query.Any())
+                {
+                    query.Delete();
+                }
+
+                int ProdCount = db.content_order_detailss.Where(w => w.f_order == OrderId).Count();
+
+                if (ProdCount == 0)
+                {
+                    db.content_orderss.Where(w => w.id == OrderId).Delete();
+                }
+            }
+        }
 
         public override bool addInBasket(Guid OrderId, Guid ProdId, int Count)
         {
@@ -887,25 +1103,82 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_order_detailss
-                    .Where(w => w.f_order == OrderId)
-                    .Join(db.content_productss, o => o.f_prod_id, p => p.id, (o, p) => p)
-                    .OrderByDescending(o => o.d_date);
-
-                return query.Select(s => new ProductModel
-                {
-                    Id = s.id,
-                    Title = s.c_title,
-                    Code = s.c_code,
-                    Barcode = s.c_barcode,
-                    Price = (decimal)s.m_price,
-                    Standart = s.c_standart,
-                    Count = (int)s.n_count,
-                    Photo = new Photo()
+                return db.content_order_detailss
+                    .Where(w => w.f_order.Equals(OrderId))
+                    .OrderByDescending(o => o.d_date)
+                    .Select(s => new ProductModel
                     {
-                        Url = s.c_photo
+                        Id = s.contentorderdetailscontentproducts.id,
+                        Title = s.contentorderdetailscontentproducts.c_title,
+                        Code = s.contentorderdetailscontentproducts.c_code,
+                        Barcode = s.contentorderdetailscontentproducts.c_barcode,
+                        Price = (decimal)s.contentorderdetailscontentproducts.m_price,
+                        Standart = s.contentorderdetailscontentproducts.c_standart,
+                        Count = s.n_count,
+                        Photo = new Photo()
+                        {
+                            Url = s.contentorderdetailscontentproducts.c_photo
+                        }
+                    }).ToArray();
+            }
+        }
+
+
+        public override ProductList getSearchList(FilterParams filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var BasketList = db.content_order_detailss
+                    .Where(w => w.f_order == filter.Order);
+
+                var query = db.content_productss.Where(w => w.n_count > 0);
+
+                foreach (string param in filter.SearchText.Split(' '))
+                {
+                    if (param != String.Empty)
+                    {
+                        query = query.Where(w => w.c_title.Contains(param) || w.c_code.Contains(param) || w.c_barcode.Contains(param));
                     }
-                }).ToArray();
+                }
+                query = query.OrderBy(w => new { w.d_date, w.c_title });
+
+                int itemCount = query.Count();
+
+                var ProdList = query
+                    .Skip(filter.Size * (filter.Page - 1))
+                    .Take(filter.Size);
+
+                var Prod = (from p in ProdList
+                            join b in BasketList on p.id equals b.f_prod_id into ps
+                            from b in ps.DefaultIfEmpty()
+                            select new { p, b.n_count })
+                            .Select(s => new ProductModel
+                            {
+                                Id = s.p.id,
+                                Title = s.p.c_title,
+                                Code = s.p.c_code,
+                                Barcode = s.p.c_barcode,
+                                Price = (decimal)s.p.m_price,
+                                Standart = s.p.c_standart,
+                                Count = (int)s.p.n_count,
+                                inBasket = s.n_count,
+                                Photo = new Photo()
+                                {
+                                    Url = s.p.c_photo
+                                }
+                            });
+
+                return new ProductList
+                {
+                    Data = Prod.ToArray(),
+                    Pager = new Pager
+                    {
+                        page = filter.Page,
+                        size = filter.Size,
+                        items_count = itemCount,
+                        page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                    }
+                };
             }
         }
     }

@@ -10,6 +10,6 @@ namespace Disly.Models
         public ProductList List { get; set; }
         public ProductModel Item { get; set; }
 
-        public CategoryModel[] Categorys { get; set; }
+        public CategoryTree Categorys { get; set; }
     }
 }

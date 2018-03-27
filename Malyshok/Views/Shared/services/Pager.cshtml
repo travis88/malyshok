@@ -1,11 +1,17 @@
 ﻿@{
     Layout = null;
+    var pageSize = String.IsNullOrEmpty(Request.QueryString["size"]) ? "24" : Request.QueryString["size"];
 }
 
 @if (Model != null)
 {
     <div>
         <nav aria-label="Page navigation">
+            <div class="pagination-size">
+                <form method="post">
+                    Товаров на странице: <input name="size" value="@pageSize" />
+                </form>
+            </div>
             <ul class="pagination">
                 @foreach (PagerFront item in Model)
                 {

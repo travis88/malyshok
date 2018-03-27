@@ -9,23 +9,40 @@ namespace Disly.Models
     /// </summary>
     public class regModel
     {
-        public bool Type { get; set; }
-        public string OrgName { get; set; }
+        /// <summary>
+        /// Тип покупателя  (false - ЮЛ или ИП / true - ФЛ)
+        /// </summary>
+        public bool UserType { get; set; }
 
         /// <summary>
-        /// Название
+        /// Название организации
+        /// </summary>
+        public string Organization { get; set; }
+
+        /// <summary>
+        /// Имя получателя
         /// </summary>
         [Required(ErrorMessage = "Поле «ФИО» не должно быть пустым.")]
         public string UserName { get; set; }
 
+        /// <summary>
+        /// Адрес доставки
+        /// </summary>
         [Required(ErrorMessage = "Поле «Адрес» не должно быть пустым.")]
-        public string Adress { get; set; }
+        public string Address { get; set; }
 
+
+        /// <summary>
+        /// Контактный телефон
+        /// </summary>
         [Required(ErrorMessage = "Поле «Адрес» не должно быть пустым.")]
         public string Phone { get; set; }
 
+        /// <summary>
+        /// Контактный Email
+        /// </summary>
         [Required(ErrorMessage = "Поле «Адрес» не должно быть пустым.")]
-        public string Mail { get; set; }
+        public string Email { get; set; }
 
         public PasswordModel Pass { get; set; }
 

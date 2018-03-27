@@ -6,7 +6,8 @@ namespace Disly.Models
     /// Модель для типовой страницы 
     /// </summary>
     public class BasketViewModel : PageViewModel
-    {         
+    { 
+        public OrderModel OrderInfo { get; set; }
         public ProductModel[] Items { get; set; } 
     }
 }

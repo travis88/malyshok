@@ -15,20 +15,47 @@ $(document).ready(function () {
     if (SummerSt == "display:none") $(".validation-summary-valid").hide();
 
     // Переключатель на форме регистрации
-    $('form input[type=checkbox]#Type').bind({
+    if ($('form input#UserType').is(":checked")) {
+        $('input#Organization')
+            .attr('required', 'required')
+            .closest('.form-group').toggle();
+    }
+    else {
+        $('input#Organization').removeAttr('required');
+    }
+    $('form input[type=checkbox]#UserType').bind({
         change: function () {
-            $('input#OrgName').closest('.form-group').toggle();
+            $('input#Organization').closest('.form-group').toggle();
+            if ($(this).is(":checked")) {
+                $('input#Organization').attr('required', 'required');
+            }
+            else {
+                $('input#Organization').removeAttr('required');
+            }
         }
     });
 
-    // 
-    $('#sb-slider').slicebox({
-        orientation: 'r',
-        cuboidsRandom: true,
-        disperseFactor: 30,
-        autoplay: true,
-        interval: 300000,
+    // Переключатель на форме заказа
+    if ($('form input#Delivery').is(":checked")) {
+        $('input#Address')
+            .attr('required', 'required')
+            .closest('.form-group').toggle();
+    }
+    else {
+        $('input#Address').removeAttr('required');
+    }
+    $('form input[type=checkbox]#Delivery').bind({
+        change: function () {
+            $('input#Address').closest('.form-group').toggle();
+            if ($(this).is(":checked")) {
+                $('input#Address').attr('required', 'required');
+            }
+            else {
+                $('input#Address').removeAttr('required');
+            }
+        }
     });
+    
 
     // Проверка уникальности E-Mail
     $('input#Mail').bind({
@@ -49,14 +76,18 @@ $(document).ready(function () {
     });
 
 
-    // 
+    // Кнопка "Добавить в корзину"
     $('.in-basket').bind({
         click: function () {
             var $Btn = $(this);
             var id = $(this).closest('.basket-form').find('input').attr('data-id');
             var count = $(this).closest('.basket-form').find('input').val();
             count = (count > 0) ? count : 1;
-            $Btn.closest('.basket-form').find('input').val(count);
+            $Btn.closest('.basket-form').find('input')
+                .val(count)
+                .attr('data-count', count)
+                .removeClass('chenge-input');
+
             //$(this).closest('.basket-form').find('input').focus();
             //$(this).closest('.item_prod').next().find('input').focus();
 
@@ -65,459 +96,150 @@ $(document).ready(function () {
                 async: false,
                 url: '/basket/add/' + id + '?count=' + count,
                 error: function () {
-                    $Btn.attr('data-content', 'Ошибка.');
                 },
                 success: function (data) {
-                    var _result = data.Result;
-                    var _count = data.Count;
-                    var _cost = data.Cost;
+                    $Btn.animate({ backgroundColor: "#ffffff" }, 600, function () {
+                            $(this).removeClass('btn-blue')
+                                .addClass('btn-invers')
+                                .removeAttr('style')
+                                .empty()
+                                .append('В корзине');
+                        });
 
-                    $Btn.attr('data-content', _result);
-
-                    // меняем стиль кнопки
-                    $Btn.stop().animate({ backgroundColor: "#ffffff" }, 600).removeClass('btn-blue').addClass('btn-invers');
-                    // меняем заголовок кнопки
-                    $Btn.empty().append('В корзине');
-
-                    $('.basket-counter').empty()
-                        .append('<div class="goods">' + _count + '</div>')
-                        .append(' <div class="cost">' + _cost + '</div>');
+                    changeBasketInfo(data.Count, data.Cost);
                 }
             });
         }
     });
-    //
-    $('.basket-form input').bind({
+    // Кнопка "Удалить из корзину"
+    $('.del-basket').bind({
+        click: function () {
+            var $block = $(this).closest('.basket_item');
+            var id = $block.find('input').attr('data-id');
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: '/basket/delete/' + id + '/',
+                error: function () {
+                },
+                success: function (data) {
+                    $block.slideToggle(800).remove();
+
+                    changeBasketInfo(data.Count, data.Cost);
+                }
+            });
+        }
+    });
+    // поле "Количество" в разделах "Продукция" и "Корзина"
+    $('.basket-form input, .basket_item-counter input').bind({
+        focus: function () { 
+            var _css = $(this).attr('css')
+            if (_css != 'chenge-input')
+                $(this).attr('data-count', $(this).val());
+        },
         keydown: function (e) {
             //alert(e.keyCode);
-            if ((e.keyCode > 47 & e.keyCode < 59) || (e.keyCode > 95 & e.keyCode < 106) || e.keyCode === 8) {
-
+            if ((e.keyCode > 47 & e.keyCode < 59) || (e.keyCode > 95 & e.keyCode < 106) || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 8 || e.keyCode === 46) {
+                // Цифры, стрелки "Вправо" и "Влево", Кнопки "Удалить"
             }
-            else if (e.keyCode === 13 && $(this).val()>=0) {
-                $(this).closest('.basket-form').find('.in-basket').trigger('click');
+            else if (e.keyCode === 13 && $(this).val() >= 0) {
+                // Кнопка "Enter"
+                var _ID = $(this).attr('data-id');
+                var _Value = $(this).val();
+                var $Btn = $(this).closest('.basket-form')
+                    .find('.in-basket')
+                    .removeClass('btn-invers')
+                    .addClass('btn-blue');
+
+                $(this).attr('data-count', _Value).removeClass('chenge-input');
+
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: '/basket/add/' + _ID + '?count=' + _Value,
+                    error: function () {
+                    },
+                    success: function (data) {
+                        changeBasketInfo(data.Count, data.Cost);
+
+                        $Btn.animate({ backgroundColor: "#ffffff", color:"#786de3" }, 600, function () {
+                            $(this).removeClass('btn-blue')
+                                .addClass('btn-invers')
+                                .removeAttr('style')
+                                .empty()
+                                .append('В корзине')
+                                .focus();
+                        });
+                    }
+                });
             }
             else {
                 return false;
             }
         },
-        change: function () {
-            $(this).closest('.basket-form').find('.in-basket').trigger('click');
+        keyup: function (e) {
+            if ((e.keyCode > 47 & e.keyCode < 59) || (e.keyCode > 95 & e.keyCode < 106) || e.keyCode === 8 || e.keyCode === 46) {
+                // Цифры
+                var _nowVal = $(this).val();
+                var _oldVal = $(this).attr('data-count');
+
+                if (_nowVal != _oldVal)
+                    $(this).addClass('chenge-input');
+                else
+                    $(this).removeClass('chenge-input');
+            } 
         }
     });
 
-
-
-
-    $('input[data-type=date').datepicker({ onSelect: function (dateText, inst) { $(this).attr('value', dateText); } });
-
-    $('input[data-mask]').each(function () {
-        $(this).mask($(this).attr('data-mask'));
-    });
+    // Распределение каталога продукции по колонкам
+    var CatalogLength = $('.catalog-item').length;
+    var Ost = CatalogLength % 3;
+    var RowLength = (Ost != 0) ? Math.floor(CatalogLength / 3) + 1 : Math.floor(CatalogLength / 3);
     
+    var $Left = $("<div/>", { "class": "col-left" });
+    $Left.append($('.catalog-item').slice(0, RowLength).clone());
+
+    var $Center = $("<div/>", { "class": "col-center" });
+    $Center.append($('.catalog-item').slice(RowLength, RowLength * 2).clone());
+
+    var $Right = $("<div/>", { "class": "col-right" });
+    $Right.append($('.catalog-item').slice(RowLength * 2, CatalogLength).clone());
+
+    $('.catalog-block .row').empty().append($Left).append($Right).append($Center);
 
     //original photo
     if ($('.show_original,.swipebox').length > 0) {
         $('.show_original').swipebox();
         $(".swipebox").swipebox();
     }
-    
-
-
-
-    // анимация баннеров
-    if ($('.ling_img_on').length > 0) {
-        $('.ling_img_on').each(function () {
-            CaruselSlide($(this));
-        });
-    }
-
-    //share
-    $('body').on('click', '.btn_share', function (e) {
-        e.preventDefault();
-        ShowShare($(this));
-    });
-
-
-    if ($('.geo_area').length > 0) {
-        $('.geo_area').each(function () {
-            GeoCollection($(this));
-        });
-        
-    }
-
-   
-    //coords
-    if ($('.buildmap').length > 0) {
-        $('.buildmap').each(function () {
-            var id = $(this).attr('id');
-            var x = $(this).attr('data-x');
-            var y = $(this).attr('data-y');
-            var title = $(this).attr('data-title');
-            var desc = $(this).attr('data-desc');
-            var zoom = $(this).attr('data-zoom');
-            var height = $(this).attr('data-height');
-            Coords(x, y, title, desc, zoom, height, id);
-        });
-    }
-
-
-    $('.spec_version').on('click', function (event) {
-        event.preventDefault();
-        $.cookie("spec_version", true);
-        location.reload();
-    });
-
 });
 
+function changeBasketInfo(_count, _cost) {
+    if (_count > 0) {
+        var _countTitle = "";
+        var _remainder = _count.substring(_count.length - 1);
 
+        if (_remainder == "1" && _count != 11) _countTitle += " товар";
+        else if ((_remainder == "2" || _remainder == "3" || _remainder == "4") && _count != 12 && _count != 13 && _count != 14) _countTitle += " товара";
+        else _countTitle += " товаров";
 
-function GeoCollection(obj) {
+        $('.basket-counter').empty()
+            .append('<div class="goods"><span>' + _count + '</span> ' + _countTitle + '</div>')
+            .append(' <div class="cost"><span>' + _cost + '</span> руб.</div>');
 
-    //опредлеим центр карты
-    var x_center=0;
-    var y_center = 0;
-    var point_count = obj.find('.geopoint').length;
-    
-
-    obj.find('.geopoint').each(function () {
-        x_center = x_center +   parseFloat($(this).attr('data-x'));
-        y_center = y_center + parseFloat($(this).attr('data-y'));
-    });
-
-
-    function init() {
-        var idmaparea = obj.find('.maplist').attr('id');
-        myMap = new ymaps.Map(idmaparea, {
-            center: [x_center / point_count, y_center / point_count],
-            zoom: 14,
-            controls: []
-        }, {
-                searchControlProvider: 'yandex#search'
-        });
-
-        myMap.controls.add('zoomControl');
-        myMap.behaviors.disable('scrollZoom');
-        var gCollection = new ymaps.GeoObjectCollection();
-
-        obj.find('.geopoint').each(function () {
-            var _placemark = push($(this));
-            
-            gCollection.add(_placemark);
-
-            _placemark.events.add('click', function (e) {
-                gCollection.each(function (geoObject) {
-                    geoObject.options.set({
-                        preset: 'islands#blueDotIcon'
-                    });
-                });
-                var activeGeoObject = e.get('target');
-                activeGeoObject.options.set({
-                    preset: 'islands#redDotIcon'
-                });                
-            });
-        });
-        myMap.geoObjects.add(gCollection);
-
-
-
-       
-    }    
-
-
-    function push(obj) {
-        var x = obj.attr('data-x');
-        var y = obj.attr('data-y');
-        var title = obj.attr('data-title');
-        var addres = obj.attr('data-addres');
-
-        var _placemark = new ymaps.Placemark([x, y],
-            {
-                balloonContent: '<b>' + title + '</b><br> ' + addres
-            },{
-                preset: 'islands#blueDotIcon'
-            });
-     
-
-        return _placemark;
-    }
-
-    
-
-    ymaps.ready(init);
-
-}
-
-
-
-function PhGall() {
-    $(".swipebox").swipebox();
-}
-
-
-function SearchDopWork() {
-    $('.searchform_show_dop').click(function (e) {
-        $('.searchform_dop').toggleClass('show');
-        document.getElementById("search_focus_dop").focus();
-        e.preventDefault();
-    });
-    //hide form
-    $('.searchform_close_dop').click(function (e) {
-        $('.searchform_dop').toggleClass('show');
-        e.preventDefault();
-    });
-
-    $('#search_focus_dop').focusout(function () {
-        setTimeout(function () {
-            $('.searchform_dop').toggleClass('show');
-        }, 400);
-    });
-
-
-    $('.searchform_btn_dop').click(function (e) {
-        var SerachInp = $('#search_focus_dop').val();
-        if (SerachInp === "") {
-            document.getElementById("search_focus_dop").focus();
-        }
-        else {
-            CommitSearchDop();
-        }
-        e.preventDefault();
-    });
-
-
-    $(".searchform_btn_dop").keydown(function (event) {
-        if (event.keyCode == 13) {
-            CommitSearchDop();
-            event.preventDefault();
-        }
-    });
-    $(".searchform_dop").submit(function (e) {
-        CommitSearchDop();
-        e.preventDefault();
-    });
-
-
-
-    function CommitSearchDop() {
-        var SerachInp = $('.search-input_dop').val();
-        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + ".med.cap.ru*&web=0";
-        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
-        var Link = "/Search?searchid=2297106&text=" + SearchText + "&searchtext=" + SerachInp.replace(" ", "%20");
-        if (SearchText != "") {
-            document.location.href = Link;
-        }
-    }
-}
-
-function SearchWork() {
-    //show form
-    $('.searchform_show').click(function (e) {
-        $('.searchform').toggleClass('show');
-        document.getElementById("search_focus").focus();
-        e.preventDefault();
-    });
-    //hide form
-    $('.searchform_close').click(function (e) {
-        $('.searchform').toggleClass('show');
-        e.preventDefault();
-        return false;
-    });
-    
-    $('#search_focus').focusout(function () {
-            $('.searchform').toggleClass('show');
-    });
-
-
-    $('.searchform_btn').click(function (e) {
-        var SerachInp = $('#search_focus').val();
-        if (SerachInp === "") {
-            document.getElementById("search_focus").focus();
-        }
-        else {
-            CommitSearch();
-        }
-        e.preventDefault();
-    });
-    
-    
-    $(".searchform_btn").keydown(function (event) {
-        if (event.keyCode == 13) {
-            CommitSearch();
-            event.preventDefault();
-        }
-    });
-    $(".searchform").submit(function (e) {
-        CommitSearch();
-        e.preventDefault();
-    });
-
-
-
-    function CommitSearch() {
-        var SerachInp = $('.search-input').val();
-        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + ".med.cap.ru*&web=0";
-        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;        
-        var Link = "/Search?searchid=2297106&text=" + SearchText + "&searchtext=" + SerachInp.replace(" ", "%20");
-        if (SearchText != "") {
-            document.location.href = Link;
-        }
-    }
-    //bottom form
-    $('.search-form-bottom').submit(function (e) {
-        CommitSearchBottom();
-        e.preventDefault();
-    });
-    $('.search-form-bottom .bottom-search').click(function (e) {
-        CommitSearchBottom();        
-        e.preventDefault();
-    });
-
-
-    function CommitSearchBottom() {
-        var SerachInp = $('.search-form').val();
-        var EndUrl = "%20url%3Ahttp%3A%2F%2F" + SiteId + "med.cap.ru*&web=0";
-        var SearchText = SerachInp.replace(" ", "%20") + EndUrl;
-        var Link = "/Search?searchid=2297106&text=" + SearchText;
-        document.location.href = Link;        
-    }
-}
-
-
-
-function CaruselSlide(obj) {
-    var WrItem = obj.find('.carousel-inner');
-    var CountLine = WrItem.attr('data-count');//количество одновременно отоброжаемых банннеров 
-
-    var arr = [];
-    var $elem = $("<div/>", { "class": "item active row" });
-
-
-    var ImgLkCount = $('.carousel-inner>div').length;//фактическое количсество баннеров в секции
-    if (CountLine < ImgLkCount) {
-
-        var maxHeight = 0;
-        obj.find('.carousel-inner>div').each(function (index) {
-            arr[index] = $(this);
-            var HeightThis = $(this).outerHeight();
-            if (HeightThis > maxHeight) maxHeight = HeightThis;
-        });
-        WrItem.css('min-height', maxHeight);
-
-        for (var i = 0; i < arr.length; i++) {
-            $elem.append(arr[i]);
-            if (((i + 1) % CountLine == 0) && (i != 0)) {
-                WrItem.append($elem);
-                $elem = $("<div/>", { "class": "item" });
-            }
-        }
-        WrItem.append($elem);
-
-        if (obj.find('.item:last-child').text() == "") {
-            obj.find('.item:last-child').remove();
-        }
-
-        //запуск слайдера
-        obj.carousel({
-            interval: 6500
-        });
-        obj.find('.next').click(function (e) { obj.carousel('next'); e.preventDefault(); });
-        obj.find('.prev').click(function (e) { obj.carousel('prev'); e.preventDefault(); });
+        $('.menu-basket-info div')
+            .empty()
+            .append(_count + ' шт./' + _cost + ' р.');
     }
     else {
-        obj.find('nav').hide();
+        $('.basket-counter').empty()
+            .append('<div class="basket-empty">Корзина пуста</div>')
+
+        $('.menu-basket-info div')
+            .empty()
+            .append('Корзина пуста');
+
+        $('.order-form').before('Корзина пуста').remove();
     }
 }
-
-
-
-function Coords(x, y, title, desc, zoom, height) {
-    ymaps.ready(function () {
-        if (title == '') { title = "Название организации"; }
-        if (desc == '') { desc = "Описание организации"; }
-
-        var ContactMap = new ymaps.Map("map", {
-            center: [x, y],
-            zoom: zoom,
-            controls: ['zoomControl']
-            //controls: ['zoomControl', 'searchControl', 'typeSelector', 'fullscreenControl', 'routeButtonControl']
-        });
-        ContactMap.controls.add('zoomControl', { top: 5 });
-
-        myPlacemark = new ymaps.Placemark([x, y], {
-            balloonContentHeader: title,
-            balloonContentBody: desc,
-            hintContent: title
-        }, {
-            //iconLayout: 'default#image',
-            //iconImageHref: '/img/marker_map.png',
-            //iconImageSize: [26, 39],
-            //iconImageOffset: [-13, -39],
-            hasBalloon: false
-        });
-
-        ContactMap.geoObjects.add(myPlacemark);
-        $('ymaps.ymaps-map').css({ 'height': height + 'px', "width": "inherit" });
-    });
-}
-
-
-function Coords(x, y, title, desc, zoom, height, id) {
-    ymaps.ready(function () {
-        if (title == '') { title = "Название организации"; }
-        if (desc == '') { desc = "Описание организации"; }
-
-        var ContactMap = new ymaps.Map(id, {
-            center: [x, y],
-            zoom: zoom,
-            controls: ['zoomControl']
-            //controls: ['zoomControl', 'searchControl', 'typeSelector', 'fullscreenControl', 'routeButtonControl']
-        });
-        ContactMap.behaviors.disable("scrollZoom");
-        ContactMap.controls.add('zoomControl', { top: 5 });
-
-        myPlacemark = new ymaps.Placemark([x, y], {
-            balloonContentHeader: title,
-            balloonContentBody: desc,
-            hintContent: title
-        }, {                
-                hasBalloon: false
-        });
-
-        ContactMap.geoObjects.add(myPlacemark);
-        $('ymaps.ymaps-map').css({ 'height': height + 'px', "width": "inherit" });
-    });
-}
-
-
-
-
-//поделиться share
-function ShowShare(e) {
-    var x = e.offset().top + 20;
-    var y = e.offset().left;
-    CreateMaskForShare();
-    CreateSharePanel(x, y);
-}
-
-function CreateMaskForShare() {
-    var html = '<div style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:9999;background-color:transparent" id="mask-for-share"></div>';
-    $(document.body).html($(document.body).html() + html);
-}
-
-function CreateSharePanel(x, y) {
-    var code = '<script type="text/javascript" src="//yastatic.net/share/share.js" charset="utf-8"></script>' +
-        '<div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="medium" data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki,moimir,gplus" data-yashareTheme="counter"></div>';
-
-    var html = '<div style="position:absolute;top:' + x + 'px;left:' + y + 'px;text-align:left" id="share-container">' +
-        '<img src="/Content/img/share-arrow.png" alt="" style="margin-bottom:-13px;margin-left:10px">' +
-        '<div style="border:1px solid #d9d9d9;background-color:white;padding:9px;overflow:hidden">' +
-        code;
-    +'</div></div>';
-
-    $('#mask-for-share').html(html);
-}
-
-$(document).on('click', '#mask-for-share', null,
-    function () {
-        document.body.removeChild(document.getElementById('mask-for-share'));
-    });

@@ -26,8 +26,13 @@ namespace Disly
             // Продукция
             routes.MapRoute(
                name: "ProdCatalog",
-               url: "prod/{action}/{id}",
-               defaults: new { controller = "Prod", action = "catalog", id = UrlParameter.Optional }
+               url: "catalog/{*path}",
+               defaults: new { controller = "Prod", action = "Index", path = UrlParameter.Optional }
+            );
+            routes.MapRoute(
+               name: "ProdItem",
+               url: "prod/{id}",
+               defaults: new { controller = "Prod", action = "item" }
             );
 
             // Контакты
@@ -90,6 +95,11 @@ namespace Disly
                defaults: new { controller = "Basket", action = "Index", id = UrlParameter.Optional }
             );
 
+            routes.MapRoute(
+               name: "MergeOrders",
+               url: "MergeOrders/{action}/{id}",
+               defaults: new { controller = "MergeOrders", action = "Index", id = UrlParameter.Optional }
+            );
 
             // Типовая страница (карта сайта)
             routes.MapRoute(

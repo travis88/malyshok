@@ -30,5 +30,5 @@ namespace Disly.Models
         public string text { get; set; }
         public string url { get; set; }
         public bool isChecked { get; set; }
-    }    
+    }
 }

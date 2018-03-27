@@ -63,35 +63,16 @@ namespace Disly.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-
+                OrderId = _repository.getOrderId(new Guid(User.Identity.Name));
             }
             else
             {
                 HttpCookie MyCookie = Request.Cookies["order-id"];
 
-                if (MyCookie != null)
-                {
-                    try
-                    {
-                        OrderId = Guid.Parse(HttpUtility.UrlDecode(MyCookie.Value, Encoding.UTF8));
-
-                        if (_repository.CheckOrder((Guid)OrderId))
-                        {
-                            Model = _repository.getBasketInfo(OrderId);
-                        }
-                        else
-                        {
-                            MyCookie.Expires = DateTime.Now.AddDays(-1);
-                            Response.Cookies.Add(MyCookie);
-                        }
-                    }
-                    catch
-                    {
-                        MyCookie.Expires = DateTime.Now.AddDays(-1);
-                        Response.Cookies.Add(MyCookie);
-                    }
-                }
+                OrderId = (MyCookie != null) ? Guid.Parse(HttpUtility.UrlDecode(MyCookie.Value, Encoding.UTF8)) : Guid.Empty;
             }
+
+            Model = _repository.getBasketInfo(OrderId);
 
             return View(viewName, Model);
         }

@@ -169,6 +169,15 @@ namespace cms.dbModel.entity
         /// Facebook
         /// </summary>
         public string Facebook { get; set; }
+
+        /// <summary>
+        /// Количество неудачных попыток входа
+        /// </summary>
+        public bool isBlocked { get; set; }
+        /// <summary>
+        /// Дата блокировки пользователя
+        /// </summary>
+        public DateTime? LockDate { get; set; }
     }
     
     /// <summary>

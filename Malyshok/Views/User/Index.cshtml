@@ -3,9 +3,37 @@
 <div class="type-page">
     @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
-
     <h1>Личный кабинет</h1>
     <div class="page-text">
-        
+        <p>Добро пожаловать в Ваш лисный кабинет! Здесь Вы сможете проссмотреть историю своих заказов и изменить личные данные.</p>    
+        <div class="row">
+            <div class="col-md-6">
+                <h3>История заказов</h3>
+                <div>Список заказов пуст</div>
+                <div class="orders-list">
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3>Личные данные</h3>
+                <div>E-mail: <a></a></div>
+                <div class="edit-form">
+                    <form id="regForm" name="rgistr" method="post">
+                        @Html.CheckBox("Type", true, new { type = "checkbox", data_size = "normal", title = "Тип", data_toggle = "toggle", data_on = "Юридическое лицо или ИП", data_off = "Физическое лицо", data_width = "388" })
+                        @Html.TextBox("OrgName", "", new { title = "Название организации", @placeholder = "ООО «Прессмарк» или ИП «Иванов»" })
+                        @Html.TextBox("UserName", "", new { title = "ФИО", required = "", @placeholder = "Иванов Иван" })
+                        @Html.TextBox("Adress", "", new { title = "Адрес (адрес доставки)", required = "", @placeholder = "Населенный пункт, Удица, Дома" })
+                        @Html.TextBox("Phone", "", new { title = "Телефон", required = "", @placeholder = "+7 (000) 000-00-00" })@Html.TextBox("Mail", "", new { title = " E-Mail", type = "email", required = "", @placeholder = "user@domain" })
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+@section scripts {
+    @*<link href="/Content/plugins/Disly/DislyControls.css" rel="stylesheet">*@
+    <link href="/Content/plugins/bootstrap/css/bootstrap-toggle.css" rel="stylesheet">
+    <script src="/Content/plugins/bootstrap/js/bootstrap-toggle.js"></script>
+    <script src="/Content/plugins/Disly/DislyControls.js"></script>
+}

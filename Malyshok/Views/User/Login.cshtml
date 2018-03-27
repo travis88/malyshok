@@ -12,7 +12,7 @@
                         <form id="regForm" method="post">
                             @Html.AntiForgeryToken()
                             @Html.TextBox("Login", "", new { title = "Логин / E-Mail", required = "", @placeholder = "mail@domain" })
-                            @Html.Password("Password", "", new { title = "Пароль", required = "", @placeholder = "password" })
+                            @Html.Password("Pass", "", new { title = "Пароль", required = "", @placeholder = "password" })
                         </form>
                         <div class="WelcomeBtn">
                             <button type="submit" form="regForm" class="button btn-blue">Войти</button>

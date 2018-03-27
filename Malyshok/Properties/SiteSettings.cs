@@ -35,7 +35,7 @@ public class Settings
     public static string mailUser = ReadAppSetting("MailFrom");
     public static string mailPass = ReadAppSetting("MailPass");
     public static string mailEncoding = ReadAppSetting("MailEncoding");
-    public static string mailAddresName = ReadAppSetting("MailAddresName");
+    public static string mailAddresName = ReadAppSetting("MailAdresName");
     public static string mailTo = ReadAppSetting("MailTo");
 
     public static string MedCap = ConfigurationManager.AppSettings["MedCap"];

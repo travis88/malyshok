@@ -38,23 +38,34 @@ namespace cms.dbModel
         public abstract bool CheckCustomerMail(string Mail);
         public abstract string ConfirmMail(Guid Code);
         public abstract UsersModel getCustomer(Guid id);
+        public abstract UsersModel getCustomer(string Id);
         public abstract bool createCustomer(UsersModel item);
         //public abstract bool updateCustomer(UsersModel item);
         //public abstract bool deleteCustomer(Guid id);
 
+        public abstract int FailedLogin(Guid id, string IP);
+
         // Продукция
         public abstract CategoryModel[] getProdCatalogModule();
-        public abstract CategoryModel[] getProdCatalogModule(string ParentPath);
+        public abstract CategoryTree getProdCatalog(string Path);
         public abstract ProductList getProdList(FilterParams filter);
 
         // Заказы
         public abstract bool CheckOrder(Guid OrderId);
-        public abstract Guid? CreateOrder();
+        public abstract Guid getOrderId(Guid UserId);
+        public abstract OrderModel getOrder(Guid OrderId);
+        public abstract Guid CreateOrder();
+        public abstract Guid CreateOrder(Guid UserId);
+        public abstract bool transferOrder(Guid OrderId, Guid UserId);
+        public abstract int sendOrder(OrderModel OrderInfo);
+        public abstract void removeFromBasket(Guid OrderId, Guid ProdId);
         //public abstract OrderModel[] getOrders(Guid UserId);
 
         // Корзина
         public abstract bool addInBasket(Guid OrderId, Guid id, int Count);
         public abstract OrderModel getBasketInfo(Guid OrderId);
         public abstract ProductModel[] getBasketItems(Guid OrderId);
+
+        public abstract ProductList getSearchList(FilterParams filter);
     }
 }

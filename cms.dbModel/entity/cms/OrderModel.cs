@@ -7,6 +7,22 @@ using System.Threading.Tasks;
 namespace cms.dbModel.entity
 {
     /// <summary>
+    /// 
+    /// </summary>
+    public class OrdersList
+    {
+        /// <summary>
+        /// Список заказов
+        /// </summary>
+        public IEnumerable<OrderModel> Orders { get; set; }
+
+        /// <summary>
+        /// Пейджер
+        /// </summary>
+        public Pager Pager { get; set; }
+    }
+
+    /// <summary>
     /// Заказ
     /// </summary>
     public class OrderModel
@@ -17,7 +33,7 @@ namespace cms.dbModel.entity
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Номер
+        /// Номер заказа
         /// </summary>
         public int? Num { get; set; }
 
@@ -32,9 +48,44 @@ namespace cms.dbModel.entity
         public OrderStatus Status { get; set; }
 
         /// <summary>
-        /// Пользователь
+        /// Пользователь (зарегистрированный пользователь)
         /// </summary>
         public UsersModel User { get; set; }
+
+        /// <summary>
+        /// Имя получателя
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// Тип покупателя  (false - ЮЛ или ИП / true - ФЛ)
+        /// </summary>
+        public bool UserType { get; set; }
+
+        /// <summary>
+        /// Название организации
+        /// </summary>
+        public string Organization { get; set; }
+
+        /// <summary>
+        /// Контактный Email
+        /// </summary>
+        public string Email { get; set; }
+        
+        /// <summary>
+        /// Контактный телефон
+        /// </summary>
+        public string Phone { get; set; }
+        
+        /// <summary>
+        /// Способ доставки (false - Самовывоз / true - По адресу)
+        /// </summary>
+        public bool Delivery { get; set; }
+
+        /// <summary>
+        /// Адрес доставки
+        /// </summary>
+        public string Address { get; set; }
 
         /// <summary>
         /// Детали 
@@ -52,7 +103,7 @@ namespace cms.dbModel.entity
         public string AdminComment { get; set; }
 
         /// <summary>
-        /// Общая стоимость
+        /// Количество наименований продукции
         /// </summary>
         public int ProdCount { get; set; }
 
@@ -107,18 +158,5 @@ namespace cms.dbModel.entity
         /// Название
         /// </summary>
         public string Title { get; set; }
-    }
-
-    public class OrdersList
-    {
-        /// <summary>
-        /// Список заказов
-        /// </summary>
-        public IEnumerable<OrderModel> Orders { get; set; }
-
-        /// <summary>
-        /// Пейджер
-        /// </summary>
-        public Pager Pager { get; set; }
     }
 }

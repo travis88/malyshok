@@ -22,7 +22,8 @@ class ImportInfo extends Component {
                 time: `${dd}.${MM}.${yyyy} ${HH}:${mm}:${ss}`,
                 isCompleted: false,
                 steps: [],
-                total: ''
+                total: '',
+                log: []
             }
         };
         this.loadFromServer = this.loadFromServer.bind(this);
@@ -44,16 +45,28 @@ class ImportInfo extends Component {
     }
 
     render() {
-        const steps = this.state.data.steps.map((s) => <Steps.Step title={s} />);
+        const steps = this.state.data.steps.map((s, i) => <Steps.Step key={i} title={s} />);
+        const logs = this.state.data.log.map((s, i) => <p key={i}><strong>{s}</strong></p>);
         return (
             <div className="import-info">
-                <Steps current={this.state.data.step}>
-                    {steps}
-                </Steps>
-                <CircularProgressbar percentage={this.state.data.percent} />
-                <h1>Кол-во продуктов: {this.state.data.count}</h1>
-                <p>Затраченное время: {this.state.data.total}</p>
-                <p>{this.state.data.time}</p>
+                <div className="row">
+                    <div className="col-md-12">
+                        <Steps current={this.state.data.step}>
+                            {steps}
+                        </Steps>
+                    </div>
+                    <div className="col-md-6">
+                        <CircularProgressbar percentage={this.state.data.percent} />
+                    </div>
+                    <div className="col-md-6">
+                        <p><strong>Затраченное время:</strong> {this.state.data.total}</p>
+                        <p><strong>Текущее время:</strong> {this.state.data.time}</p>
+                        <div className="alert alert-info">
+                            <h4>Процесс:</h4>
+                            {logs}
+                        </div>
+                    </div>
+                </div>
           </div>
         );
     }

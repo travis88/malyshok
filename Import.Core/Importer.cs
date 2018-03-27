@@ -97,6 +97,9 @@ namespace Import.Core
         /// </summary>
         public static List<string> Log = new List<string>();
 
+        /// <summary>
+        /// Словарь для логирования
+        /// </summary>
         private static Dictionary<string, string> dictionary;
 
         /// <summary>

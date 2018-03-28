@@ -71,7 +71,7 @@ namespace Import.Core
         /// Параметры для рассылки оповещения по результатам импорта
         /// </summary>
         private static EmailParamsHelper emailHelper = null;
-        
+
         /// <summary>
         /// Текст письма
         /// </summary>
@@ -90,7 +90,17 @@ namespace Import.Core
         /// <summary>
         /// Затраченное время
         /// </summary>
-        public static string Total;
+        public static string Total = "0 часов 0 минут 0 секунд 0 милисекунд";
+
+        /// <summary>
+        /// Логгирование
+        /// </summary>
+        public static List<string> Log = new List<string>();
+
+        /// <summary>
+        /// Словарь для логирования
+        /// </summary>
+        private static Dictionary<string, string> dictionary;
 
         /// <summary>
         /// Конструктор
@@ -105,20 +115,24 @@ namespace Import.Core
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
                    .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)))
                    .ForMember(d => d.d_date, opt => opt.MapFrom(src => DateTime.Now))
-                   .ForMember(d => d.uui_parent, opt => opt.MapFrom(src => src.ParentId.Equals("0") ? Guid.Empty : Guid.Parse(src.ParentId)));
+                   .ForMember(d => d.uui_parent, opt =>
+                                    opt.MapFrom(src => src.ParentId.Equals("0")
+                                    ? Guid.Empty : Guid.Parse(src.ParentId)));
                 cfg.CreateMap<ProductModel, import_products>()
                    .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
                    .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
                    .ForMember(d => d.n_count, opt => opt.MapFrom(src => src.Count))
-                   .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date));
-                cfg.CreateMap<Barcode, import_product_barcodes>()
-                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
-                    .ForMember(d => d.c_value, opt => opt.MapFrom(src => src.Value));
-                cfg.CreateMap<Price, import_product_prices>()
-                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
-                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
-                    .ForMember(d => d.m_value, opt => opt.MapFrom(src => !String.IsNullOrEmpty(src.Value) ? Decimal.Parse(src.Value.Replace(".", ",")) : 0));
+                   .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date))
+                   .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.BarcodeList.Select(s => s.Value).FirstOrDefault()))
+                   .ForMember(d => d.c_price_title, opt =>
+                                    opt.MapFrom(src => src.PriceList.Select(s => s.Title).FirstOrDefault()))
+                   .ForMember(d => d.m_price_value, opt =>
+                                    opt.MapFrom(src => src.PriceList.Select(s => !String.IsNullOrEmpty(s.Value)
+                                    ? Decimal.Parse(s.Value.Replace(".", ",")) : 0).FirstOrDefault()))
+                   .ForMember(d => d.c_photo, opt => opt.MapFrom(src => src.ImageList
+                                                                           .Where(w => w.IsMain || !w.IsMain)
+                                                                           .Select(s => s.Name).FirstOrDefault()));
                 cfg.CreateMap<Image, import_product_images>()
                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Name))
@@ -149,12 +163,14 @@ namespace Import.Core
                 {
                     foreach (var file in files)
                     {
-                        SrvcLogger.Debug("{preparing}", "файл для импорта данных '" + file.FullName + "'");
+                        SrvcLogger.Debug("{preparing}", String.Format("файл для импорта данных '{0}'", file.FullName));
                         SrvcLogger.Debug("{preparing}", "начало чтения XML-данных");
+                        Log.Insert(0, String.Format("Чтение файла: {0}", file.Name));
 
                         using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                         {
                             SrvcLogger.Debug("{preparing}", String.Format("XML-данные успешно прочитаны из файла {0}", file.Name));
+                            Log.Insert(0, String.Format("Данные прочитаны"));
 
                             var helper = new InsertHelper
                             {
@@ -163,7 +179,7 @@ namespace Import.Core
                                 Entity = Entity.Catalogs
                             };
 
-                            if (file.FullName.Contains("catalog"))
+                            if (file.FullName.Contains("cat"))
                             {
                                 InsertWithLogging(helper);
                             }
@@ -183,7 +199,10 @@ namespace Import.Core
                     Step = 2;
                     Percent = 40;
                     SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
+                    Log.Insert(0, "Перенос данных из буферных таблиц");
+
                     Finalizer(db);
+
                     Step = 3;
                     Percent = 60;
                     string falses = String.Format("кол-во ошибок {0}", countFalse);
@@ -191,33 +210,50 @@ namespace Import.Core
                     string completedMessage = String.Format("импорт завершён {0} {1}; {2} {3}",
                         Environment.NewLine, falses, Environment.NewLine, successes);
                     SrvcLogger.Debug("{work}", completedMessage);
+                    Log.Insert(0, "Импорт завершён");
+
                     Step = 4;
                     Percent = 80;
                     EmailBody += completedMessage;
-                    SendEmail(EmailBody);
+                    SendEmail(EmailBody, db);
                     Step = 5;
                     Percent = 100;
 
                     End = DateTime.Now;
                     var t = End - Begin;
-                    Total = String.Format("{0} часов {1} минут {2} секунд {3} милисекунд", Math.Truncate(t.TotalHours), 
+                    Total = String.Format("{0} часов {1} минут {2} секунд {3} милисекунд", Math.Truncate(t.TotalHours),
                                            Math.Truncate(t.TotalMinutes), Math.Truncate(t.TotalSeconds), Math.Truncate((double)t.Milliseconds));
                 }
             }
         }
 
         /// <summary>
-        /// Обнуляем значения свойств и чистим буферный таблицы перед новым импортом
+        /// Обнуляем значения свойств перед новым импортом
         /// </summary>
         private static void Preparing()
         {
             try
             {
+                using (var db = new dbModel(connection))
+                {
+                    CleaningTempTables(db);
+                }
+
                 distinctProducts = null;
                 emailHelper = new EmailParamsHelper();
                 EmailBody = String.Empty;
                 Begin = DateTime.Now;
                 countSuccess = countFalse = 0;
+                Total = "0 часов 0 минут 0 секунд 0 милисекунд";
+                Log = new List<string>();
+                dictionary = new Dictionary<string, string>
+                {
+                    { "catalogs", "категории" },
+                    { "products", "товары" },
+                    { "catalogproductlinks", "связи категорий и товаров" },
+                    { "images", "изображения" },
+                    { "certificates", "сертификаты" },
+                };
                 if (!IsCompleted)
                 {
                     Percent = Step = CountProducts = 0;
@@ -251,12 +287,6 @@ namespace Import.Core
                     case Entity.CatalogProductLinks:
                         AddCatalogProdLinks(insert);
                         break;
-                    case Entity.Barcodes:
-                        AddBarcodeProdLinks(insert);
-                        break;
-                    case Entity.Prices:
-                        AddPriceProdLinks(insert);
-                        break;
                     case Entity.Images:
                         AddImageProdLinks(insert);
                         break;
@@ -264,7 +294,7 @@ namespace Import.Core
                         AddCertificateProdLinks(insert);
                         break;
                 }
-                
+
                 SrvcLogger.Debug("{work}", String.Format("{0} конец", title));
                 countSuccess++;
             }
@@ -287,6 +317,8 @@ namespace Import.Core
         private static void AddEntities<T>(EntityHelper<T> entity)
         {
             SrvcLogger.Debug("{work}", String.Format("кол-во {0}: {1}", entity.Title, entity.List.Count()));
+            Log.Insert(0, String.Format("Кол-во {0}: {1}", dictionary[entity.Title], entity.List.Count()));
+
             try
             {
                 using (var tr = entity.Db.BeginTransaction())
@@ -398,79 +430,6 @@ namespace Import.Core
         }
 
         /// <summary>
-        /// Добавляет связи штрих-кодов с товарами
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="links"></param>
-        private static void AddBarcodeProdLinks(InsertHelper insert)
-        {
-            var queryBarcodeList = (from p in distinctProducts
-                                    select new { p.Id, p.BarcodeList })
-                                                            .Select(s => new
-                                                            {
-                                                                List = s.BarcodeList
-                                                                .Select(g => new Barcode
-                                                                {
-                                                                    ProductId = s.Id,
-                                                                    Value = g.Value
-                                                                }).ToArray()
-                                                            })
-                                                            .SelectMany(s => s.List)
-                                                            .ToArray();
-
-            var list = Mapper.Map<List<import_product_barcodes>>(queryBarcodeList);
-            string title = insert.Entity.ToString().ToLower();
-            var entity = new EntityHelper<import_product_barcodes>
-            {
-                Db = insert.Db,
-                List = list,
-                Title = title
-            };
-            AddEntities(entity);
-        }
-
-        /// <summary>
-        /// Добавляет связи цен с товарами
-        /// </summary>
-        /// <param name="db"></param>
-        /// <param name="links"></param>
-        private static void AddPriceProdLinks(InsertHelper insert)
-        {
-            var queryPriceList = (from p in distinctProducts
-                                  select new { p.Id, p.PriceList })
-                                                  .Select(s => new
-                                                  {
-                                                      List = s.PriceList
-                                                      .Select(g => new Price
-                                                      {
-                                                          ProductId = s.Id,
-                                                          Title = g.Title,
-                                                          Value = g.Value.Replace(".", ",")
-                                                      }).ToArray()
-                                                  })
-                                                  .SelectMany(s => s.List)
-                                                  .ToArray();
-
-            var uniquePriceProds = queryPriceList
-                .GroupBy(g => new { g.ProductId, g.Title, g.Value }, (key, group) => new Price
-                {
-                    ProductId = key.ProductId,
-                    Title = key.Title,
-                    Value = key.Value
-                });
-
-            var list = Mapper.Map<List<import_product_prices>>(uniquePriceProds);
-            string title = insert.Entity.ToString().ToLower();
-            var entity = new EntityHelper<import_product_prices>
-            {
-                Db = insert.Db,
-                List = list,
-                Title = title
-            };
-            AddEntities(entity);
-        }
-
-        /// <summary>
         /// Добавляет связи изображений с товарами
         /// </summary>
         /// <param name="db"></param>
@@ -566,12 +525,17 @@ namespace Import.Core
         /// Рассылает оповещения
         /// </summary>
         /// <param name="body"></param>
-        private static void SendEmail(string body)
+        private static void SendEmail(string body, dbModel db)
         {
             try
             {
                 SrvcLogger.Debug("{work}", "рассылка оповещения");
-                foreach (var emailTo in emailHelper.EmailTo)
+                Log.Insert(0, "Рассылка оповещений");
+
+                var receiverEmails = GetAdminEmails(db);
+                receiverEmails.AddRange(emailHelper.EmailTo);
+
+                foreach (var emailTo in receiverEmails)
                 {
                     var from = new MailAddress(emailHelper.EmailFromAddress, emailHelper.EmailFromName);
                     var to = new MailAddress(emailTo);
@@ -587,12 +551,58 @@ namespace Import.Core
 
                     smtp.Send(message);
                 }
+                Log.Insert(0, "Рассылка оповещений завершена");
                 SrvcLogger.Debug("{work}", "рассылка оповещения проведена");
             }
             catch (Exception e)
             {
                 SrvcLogger.Debug("{error}", "рассылка оповещений завершилась ошибкой");
                 SrvcLogger.Debug("{error}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Очищает буферные таблицы
+        /// </summary>
+        private static void CleaningTempTables(dbModel db)
+        {
+            try
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    db.import_productss.Delete();
+                    db.import_catalogss.Delete();
+                    db.import_product_categoriess.Delete();
+                    db.import_product_certificatess.Delete();
+                    db.import_product_imagess.Delete();
+                    tr.Commit();
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Возвращает список email для получения информации по импорту
+        /// </summary>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        private static List<string> GetAdminEmails(dbModel db)
+        {
+            try
+            {
+                string email = db.cms_sitess
+                    .Select(s => s.c_email).FirstOrDefault();
+
+                return email.Split('|')
+                    .Select(s => s.Trim()).ToList();
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+                return null;
             }
         }
     }

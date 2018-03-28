@@ -10,7 +10,6 @@
     </div>
     <div class="dop_info-block"></div>
     <div class="buttons">
-        @*<div data-action="noPreloader-accept" value="xml-btn" class="button icon-sitemap">Выбрать файлы</div>*@
         <label data-action="noPreloader-accept" for="files" class="button icon-sitemap">Загрузить файлы</label>
         @Html.TextBox("upload", null, new { id = "files", type = "file", data_action = "noPreloader-accept", title = "xml-документ", accept = ".xml", @class = "noplagin button icon-sitemap", multiple = "multiple" })
     </div>

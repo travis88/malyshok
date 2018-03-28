@@ -55,6 +55,7 @@ namespace Disly.Areas.Admin.Controllers
             Importer.Percent = 0;
             Importer.Step = 0;
             Importer.CountProducts = 0;
+            Importer.Log = new List<string>();
 
             return View(model);
         }
@@ -70,7 +71,8 @@ namespace Disly.Areas.Admin.Controllers
                 time = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"),
                 isCompleted = Importer.IsCompleted,
                 steps = Importer.Steps,
-                total = Importer.Total
+                total = Importer.Total,
+                log = Importer.Log.ToArray()
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);

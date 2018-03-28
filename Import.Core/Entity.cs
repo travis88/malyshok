@@ -21,16 +21,6 @@
         CatalogProductLinks,
         
         /// <summary>
-        /// Штрих-коды
-        /// </summary>
-        Barcodes,
-        
-        /// <summary>
-        /// Цены
-        /// </summary>
-        Prices,
-        
-        /// <summary>
         /// Изображения
         /// </summary>
         Images,

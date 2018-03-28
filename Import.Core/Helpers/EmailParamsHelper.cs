@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Import.Core.Helpers
 {
@@ -51,12 +48,12 @@ namespace Import.Core.Helpers
         /// </summary>
         public EmailParamsHelper()
         {
-            EmailFromAddress = System.Configuration.ConfigurationManager.AppSettings["Email.From.Address"];
-            EmailFromName = System.Configuration.ConfigurationManager.AppSettings["Email.From.Name"];
-            EmailPassword = System.Configuration.ConfigurationManager.AppSettings["Email.Password"];
-            EmailHost = System.Configuration.ConfigurationManager.AppSettings["Email.Host"];
-            EmailPort = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Email.Port"]);
-            EmailEnableSsl = Boolean.Parse(System.Configuration.ConfigurationManager.AppSettings["Email.EnableSSL"]);
+            EmailFromAddress = System.Configuration.ConfigurationManager.AppSettings["MailFrom"];
+            EmailFromName = System.Configuration.ConfigurationManager.AppSettings["MailAdresName"];
+            EmailPassword = System.Configuration.ConfigurationManager.AppSettings["MailPass"];
+            EmailHost = System.Configuration.ConfigurationManager.AppSettings["MailServer"];
+            EmailPort = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["MailServerPort"]);
+            EmailEnableSsl = Boolean.Parse(System.Configuration.ConfigurationManager.AppSettings["MailServerSSL"]);
             EmailTo = System.Configuration.ConfigurationManager.AppSettings["Email.To"]
                         .Split(';').Where(w => !String.IsNullOrWhiteSpace(w)).Select(s => s).ToArray();
         }

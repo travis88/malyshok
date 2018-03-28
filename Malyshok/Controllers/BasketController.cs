@@ -60,7 +60,7 @@ namespace Disly.Controllers
             foreach (var item in model.Items)
             {
                 OrderDetail += "<div style=\"margin-bottom: 10px; overflow: auto; border-bottom: solid 1px #dadada; padding: 10px;\">";
-                OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"" + Settings.BaseURL + "/" + item.Photo.Url + "\" />";
+                OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"" + Settings.BaseURL + "/" + item.Photo + "\" />";
                 OrderDetail += "<div style=\"overflow: auto;\">";
                 OrderDetail += "<a href=\"" + Settings.BaseURL + "/prod/" + item.Id + "/\"> " + item.Title + "</a>";
                 OrderDetail += "<div><span>Код:</span> " + item.Standart + "</div>";

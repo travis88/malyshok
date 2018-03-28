@@ -44,7 +44,7 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Фото
         /// </summary>
-        public Photo Photo { get; set; }
+        public string Photo { get; set; }
 
         /// <summary>
         /// Кол-во

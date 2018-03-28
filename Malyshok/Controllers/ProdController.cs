@@ -60,7 +60,7 @@ namespace Disly.Controllers
             }
 
             model.List = _repository.getProdList(filter);
-            
+
             return View(model);
         }
 

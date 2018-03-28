@@ -555,7 +555,7 @@ namespace cms.dbase
         public override CategoryModel[] getProdCatalogModule() {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_categoriess.Where(w => w.uui_parent == null);
+                var query = db.content_categoriess.Where(w => w.uui_parent == Guid.Empty && w.b_disabled == false);
                 if (query.Any())
                 {
                     var data = query.OrderBy(o => o.c_title)
@@ -578,7 +578,7 @@ namespace cms.dbase
             {
                 Path = (!string.IsNullOrEmpty(Path)) ? Path : "/";
                 
-                var query = db.content_categoriess.Where(w => w.c_path.StartsWith(Path));
+                var query = db.content_categoriess.Where(w => w.c_path.StartsWith(Path) && w.b_disabled == false);
 
                 var temp = query.OrderBy(o => new { o.c_title })
                     .Select(s => new CategoryModel()
@@ -649,10 +649,7 @@ namespace cms.dbase
                                     Standart = s.p.c_standart,
                                     Count = (int)s.p.n_count,
                                     inBasket = s.n_count,
-                                    Photo = new Photo()
-                                    {
-                                        Url = s.p.c_photo
-                                    }
+                                    Photo = s.p.c_photo
                                 });
 
                     return new ProductList
@@ -673,7 +670,7 @@ namespace cms.dbase
                     filter.Category = (filter.Category + "/").Replace("//", "");
                     var alias = filter.Category.Split('/').Last();
                     var path = String.IsNullOrEmpty(alias) ? filter.Category : filter.Category.Replace(alias, "");
-                    
+
                     var query = db.content_categoriess
                         .Where(w => w.c_path.StartsWith(filter.Category) || (w.c_path == path && w.c_alias == alias))
                         .Select(s => new { s.id });
@@ -702,13 +699,10 @@ namespace cms.dbase
                                     Standart = s.p.c_standart,
                                     Count = (int)s.p.n_count,
                                     inBasket = s.n_count,
-                                    Photo = new Photo()
-                                    {
-                                        Url = s.p.c_photo
-                                    }
+                                    Photo = s.p.c_photo
                                 });
 
-                    var  List = new ProductList
+                    var List = new ProductList
                     {
                         Data = Prod.ToArray(),
                         Pager = new Pager
@@ -1039,7 +1033,7 @@ namespace cms.dbase
                         Title = s.c_title,
                         Barcode = s.c_barcode,
                         Code = s.c_code,
-                        Photo = new Photo { Url = s.c_photo },
+                        Photo = s.c_photo,
                         Price = (decimal)s.m_price
                     })
                     .SingleOrDefault();
@@ -1051,7 +1045,7 @@ namespace cms.dbase
                             .Set(p => p.c_caption, Prod.Title)
                             .Set(p => p.c_code, Prod.Code)
                             .Set(p => p.c_barcode, Prod.Barcode)
-                            .Set(p => p.c_photo, Prod.Photo.Url)
+                            .Set(p => p.c_photo, Prod.Photo)
                             .Set(p => p.m_price, Prod.Price)
                             .Set(p => p.n_count, Count)
                             .Update() > 0;
@@ -1064,7 +1058,7 @@ namespace cms.dbase
                             .Value(v => v.c_caption, Prod.Title)
                             .Value(v => v.c_code, Prod.Code)
                             .Value(v => v.c_barcode, Prod.Barcode)
-                            .Value(v => v.c_photo, Prod.Photo.Url)
+                            .Value(v => v.c_photo, Prod.Photo)
                             .Value(v => v.m_price, Prod.Price)
                             .Value(v => v.n_count, Count)
                             .Insert() > 0;
@@ -1115,10 +1109,7 @@ namespace cms.dbase
                         Price = (decimal)s.contentorderdetailscontentproducts.m_price,
                         Standart = s.contentorderdetailscontentproducts.c_standart,
                         Count = s.n_count,
-                        Photo = new Photo()
-                        {
-                            Url = s.contentorderdetailscontentproducts.c_photo
-                        }
+                        Photo = s.c_photo
                     }).ToArray();
             }
         }
@@ -1162,10 +1153,7 @@ namespace cms.dbase
                                 Standart = s.p.c_standart,
                                 Count = (int)s.p.n_count,
                                 inBasket = s.n_count,
-                                Photo = new Photo()
-                                {
-                                    Url = s.p.c_photo
-                                }
+                                Photo = s.p.c_photo
                             });
 
                 return new ProductList

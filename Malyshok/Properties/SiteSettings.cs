@@ -18,6 +18,7 @@ public class Settings
     public static string LogoDir = ConfigurationManager.AppSettings["LogoDir"];
     public static string OrgDir = ConfigurationManager.AppSettings["OrgDir"];
     public static string SiteMapDir = ConfigurationManager.AppSettings["SiteMapDir"];
+    public static string ProdContent = ConfigurationManager.AppSettings["ProdContent"];
 
 
     public static string EventsDir = ReadAppSetting("EventsDir");

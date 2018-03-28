@@ -103,17 +103,17 @@ namespace Disly.Areas.Admin.Controllers
                         if (domain.SiteId == Domain) { IsRedirect++; }
                     }
                 }
-                
+
 
                 //перенаправляем на первый из своих доменов
-                if(IsRedirect==0)
+                if (IsRedirect == 0)
                 {
                     string url = "http://" + AccountInfo.Domains[0].DomainName + "/Admin/";
                     Response.Redirect(url, true);
                 }
             }
             #endregion
-            
+
             #region  Логи
             try
             {

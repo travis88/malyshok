@@ -64,12 +64,12 @@ namespace Disly.Areas.Admin.Controllers
                 };
             }
 
-            if (model.Item.Photo != null && model.Item.Photo != null && !String.IsNullOrEmpty(model.Item.Photo.Url))
-            {
-                var photo = model.Item.Photo;
-                model.Item.Photo = Files.getInfoImage(photo.Url);
-                model.Item.Photo.Source = photo.Source;
-            }
+            //if (model.Item.Photo != null && model.Item.Photo != null && !String.IsNullOrEmpty(model.Item.Photo.Url))
+            //{
+            //    var photo = model.Item.Photo;
+            //    model.Item.Photo = Files.getInfoImage(photo);
+            //    model.Item.Photo = photo;
+            //}
 
             return View(model);
         }
@@ -121,13 +121,13 @@ namespace Disly.Areas.Admin.Controllers
                     var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
                     int.TryParse(sizes[0], out width);
                     int.TryParse(sizes[1], out height);
-                    bindData.Item.Photo = new Photo()
-                    {
-                        Name = id.ToString() + fileExtension,
-                        Size = Files.FileAnliz.SizeFromUpload(upload),
-                        Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height),
-                        Source = bindData.Item.Photo.Source
-                    };
+                    //bindData.Item.Photo = new Photo()
+                    //{
+                    //    Name = id.ToString() + fileExtension,
+                    //    Size = Files.FileAnliz.SizeFromUpload(upload),
+                    //    Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height),
+                    //    Source = bindData.Item.Photo.Source
+                    //};
                 }
                 #endregion
 
@@ -173,12 +173,12 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             model.Item = _cmsRepository.getProduct(id);
-            if (model.Item != null && model.Item.Photo != null && !string.IsNullOrEmpty(model.Item.Photo.Url))
-            {
-                var photo = model.Item.Photo;
-                model.Item.Photo = Files.getInfoImage(model.Item.Photo.Url);
-                model.Item.Photo.Source = photo.Source;
-            }
+            //if (model.Item != null && model.Item.Photo != null && !string.IsNullOrEmpty(model.Item.Photo.Url))
+            //{
+            //    var photo = model.Item.Photo;
+            //    model.Item.Photo = Files.getInfoImage(model.Item.Photo.Url);
+            //    model.Item.Photo.Source = photo.Source;
+            //}
             model.ErrorInfo = userMessage;
 
             return View("Item", model);
@@ -250,7 +250,7 @@ namespace Disly.Areas.Admin.Controllers
             model.Item = _cmsRepository.getProduct(Id);
             if (model.Item != null)
             {
-                var image = (model.Item.Photo != null) ? model.Item.Photo.Url : null;
+                var image = model.Item.Photo;
                 var res = _cmsRepository.deleteProduct(Id);
                 if (res)
                 {

@@ -33,6 +33,9 @@
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Imaging">
+      <HintPath>bin\Imaging.dll</HintPath>
+    </Reference>
     <Reference Include="linq2db, Version=1.0.7.3, Culture=neutral, PublicKeyToken=f19f8aed7feff67e, processorArchitecture=MSIL">
       <HintPath>..\packages\linq2db.1.0.7.3\lib\net45\linq2db.dll</HintPath>
     </Reference>
@@ -42,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Entity.cs" />
     <Compile Include="Helpers\EntityHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\InsertHelper.cs" />
     <Compile Include="Helpers\EmailParamsHelper.cs" />
     <Compile Include="Helpers\ReceiverParamsHelper.cs" />

@@ -1,4 +1,7 @@
-﻿namespace Import.Core.Helpers
+﻿using System;
+using System.Linq;
+
+namespace Import.Core.Helpers
 {
     /// <summary>
     /// Параметры для получения файлов импорта
@@ -16,12 +19,19 @@
         public string DirName { get; set; }
 
         /// <summary>
+        /// Разрешённые форматы изображений
+        /// </summary>
+        public string[] AllowedPicTypes { get; set; }
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         public ReceiverParamsHelper()
         {
             StartTime = System.Configuration.ConfigurationManager.AppSettings["Import.StartTime"];
             DirName = System.Configuration.ConfigurationManager.AppSettings["Import.DirName"];
+            AllowedPicTypes = System.Configuration.ConfigurationManager.AppSettings["PicTypes"]
+                .Split(',').Where(w => !String.IsNullOrWhiteSpace(w)).ToArray();
         }
     }
 }

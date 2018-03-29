@@ -1,7 +1,7 @@
 ﻿$(window).on('load scroll', function () {
     var nowScroll = $(window).scrollTop();
 
-    if (nowScroll > 165) {
+    if (nowScroll > 140) {
         $('.scroll-menu').css('display', 'block');        
     }
     else {
@@ -143,7 +143,7 @@ $(document).ready(function () {
             if ((e.keyCode > 47 & e.keyCode < 59) || (e.keyCode > 95 & e.keyCode < 106) || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 8 || e.keyCode === 46) {
                 // Цифры, стрелки "Вправо" и "Влево", Кнопки "Удалить"
             }
-            else if (e.keyCode === 13 && $(this).val() >= 0) {
+            else if (e.keyCode === 13 && $(this).val() > 0) {
                 // Кнопка "Enter"
                 var _ID = $(this).attr('data-id');
                 var _Value = $(this).val();
@@ -189,8 +189,42 @@ $(document).ready(function () {
                 else
                     $(this).removeClass('chenge-input');
             } 
+        },
+        blur: function () {
+            var isBasket = $(this).closest('.basket_item-counter').length;
+            if (isBasket > 0) {
+                // Кнопка "Enter"
+                var _ID = $(this).attr('data-id');
+                var _Value = $(this).val();
+
+                $(this).removeClass('chenge-input');
+
+                sendProdCount(_ID, _Value);
+            }
         }
     });
+    $('.count-more').bind({
+        click: function () {
+            var $Input = $(this).closest('.basket_item-counter').find('input');
+            var _ID = $Input.attr('data-id');
+            var _count = parseInt($Input.val()) + 1;
+
+            $Input.val(_count).removeClass('chenge-input');
+            sendProdCount(_ID, _count);
+        }
+    })
+    $('.count-less').bind({
+        click: function () {
+            var $Input = $(this).closest('.basket_item-counter').find('input');
+            var _ID = $Input.attr('data-id');
+            var _count = parseInt($Input.val()) - 1;
+
+            if (_count > 0) {
+                $Input.val(_count).removeClass('chenge-input');
+                sendProdCount(_ID, _count);
+            }
+        }
+    })
 
     // Распределение каталога продукции по колонкам
     var CatalogLength = $('.catalog-item').length;
@@ -228,9 +262,20 @@ function changeBasketInfo(_count, _cost) {
             .append('<div class="goods"><span>' + _count + '</span> ' + _countTitle + '</div>')
             .append(' <div class="cost"><span>' + _cost + '</span> руб.</div>');
 
-        $('.menu-basket-info div')
-            .empty()
+        $('.menu-basket-info div').empty()
             .append(_count + ' шт./' + _cost + ' р.');
+
+        $('.basket-result').empty()
+            .append('<h3>У вас в корзине <span>' + _count + ' ' + _countTitle + '</span> на общую сумму <span>' + _cost + ' руб.</span></h3>');
+
+        $('.bottom-clone').remove();
+
+        if (_count > 3) {
+            var $BottomResult = $("<div/>", { "class": "basket-result bottom-clone" });
+            $BottomResult.append('<h3>У вас в корзине <span>' + _count + ' ' + _countTitle + '</span> на общую сумму <span>' + _cost + ' руб.</span></h3>');
+
+            $('.order-form').before($BottomResult);
+        }
     }
     else {
         $('.basket-counter').empty()
@@ -241,5 +286,20 @@ function changeBasketInfo(_count, _cost) {
             .append('Корзина пуста');
 
         $('.order-form').before('Корзина пуста').remove();
+
+        $('.basket-result').remove();
     }
+}
+
+function sendProdCount(_ID, _count) {
+    $.ajax({
+        type: "POST",
+        async: false,
+        url: '/basket/add/' + _ID + '?count=' + _count,
+        error: function () {
+        },
+        success: function (data) {
+            changeBasketInfo(data.Count, data.Cost);
+        }
+    });
 }

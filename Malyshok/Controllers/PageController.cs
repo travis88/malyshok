@@ -46,6 +46,12 @@ namespace Disly.Controllers
             {
                 return new HttpNotFoundResult();
             }
+            
+            #region Создаем переменные (значения по умолчанию)
+            ViewBag.Title = model.Item.Title;
+            ViewBag.Description = model.Item.Desc;
+            ViewBag.KeyWords = model.Item.Keyw;
+            #endregion
 
             return View(_ViewName,model);
         }

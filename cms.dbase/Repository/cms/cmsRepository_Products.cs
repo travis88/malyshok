@@ -42,7 +42,7 @@ namespace cms.dbase
                         Code = s.First().p.c_code,
                         Barcode = s.First().p.c_barcode,
                         Date = s.First().p.d_date,
-                        Photo = new Photo { Url = s.First().p.c_photo },
+                        Photo = s.First().p.c_photo,
                         Categories = s.Select(c => new CategoryModel
                         {
                             Id = c.c.id,
@@ -96,7 +96,7 @@ namespace cms.dbase
                         Barcode = s.First().p.c_barcode,
                         Description = s.First().p.c_description,
                         Keyword = s.First().p.c_keyword,
-                        Photo = new Photo { Url = s.First().p.c_photo },
+                        Photo = s.First().p.c_photo,
                         Count = (int)s.First().p.n_count,
                         Price = (decimal)s.First().p.m_price,
                         Date = s.First().p.d_date,
@@ -161,7 +161,7 @@ namespace cms.dbase
                         .Set(s => s.c_description, item.Description)
                         .Set(s => s.c_keyword, item.Keyword)
                         .Set(s => s.n_count, item.Count)
-                        .Set(s => s.c_photo, item.Photo != null ? item.Photo.Url : null)
+                        .Set(s => s.c_photo, item.Photo)
                         .Set(s => s.d_date, item.Date)
                         .Set(s => s.c_standart, item.Standart)
                         .Set(s => s.m_price, item.Price)
@@ -195,7 +195,7 @@ namespace cms.dbase
                         .Value(v => v.c_barcode, item.Barcode)
                         .Value(v => v.c_description, item.Description)
                         .Value(v => v.c_keyword, item.Keyword)
-                        .Value(v => v.c_photo, item.Photo != null ? item.Photo.Url : null)
+                        .Value(v => v.c_photo, item.Photo)
                         .Value(v => v.n_count, item.Count)
                         .Value(v => v.m_price, item.Price)
                         .Value(v => v.d_date, item.Date)

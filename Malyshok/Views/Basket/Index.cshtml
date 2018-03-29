@@ -4,28 +4,46 @@
     @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
     <h1>Корзина</h1>
-    <div class="page-text">
+    <div class="page-text page-basket">
         @if (Model.Items.Count() > 0)
         {
+            string ProdCount = "";
+            string LL = Model.OrderInfo.ProdCount.ToString().Substring(Model.OrderInfo.ProdCount.ToString().Length - 1);
+            if (LL == "1" && Model.OrderInfo.Total != 11) { ProdCount = "товар"; }
+            else if ((LL == "2" || LL == "3" || LL == "4") && Model.OrderInfo.Total != 12 && Model.OrderInfo.Total != 13 && Model.OrderInfo.Total != 14) { ProdCount = "товара"; }
+            else { ProdCount = "товаров"; }
+
+            <div class="basket-result">
+                <h3>У вас в корзине <span>@Model.OrderInfo.ProdCount  @ProdCount</span> на общую сумму <span>@Model.OrderInfo.Total.ToString("# ###.00#") руб.</span></h3>
+            </div>
             foreach (var item in Model.Items)
             {
+                var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_preview.jpg") : "";
+                ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
+
                 <div class="basket_item shadow-block">
-                    <div class="basket-img"><img src="@item.Photo.Url" /></div>
+                    <div class="basket-img"><img src="@ProdImg" /></div>
                     <div class="item-info">
                         <div class="basket_item-title"><a href="/prod/item/@item.Id/">@Html.Raw(item.Title)</a></div>
                         <div class="basket_form-block">
-                            <div class="prod-price"><span>Цена</span>@item.Price.ToString("# ###.00#")</div>
+                            <div class="prod-price"><span>Цена</span><b>@item.Price.ToString("# ###.00#")</b> руб.</div>
                             <div class="basket_item-counter">
-                                <div class="count-more"></div>
+                                <div class="count-less">-</div>
                                 <input data-id="@item.Id" value="@item.Count" />
-                                <div class="count-less"></div>
+                                <div class="count-more">+</div>
                             </div>
-                            <div><span>Код</span>@item.Standart</div>
+                            <div class="basket_item-params"><div><span>Код</span>@item.Code</div></div>
                             <div class="basket_delete">
                                 <button type="button" class="del-basket btn-invers">Удалить</button>
                             </div>
                         </div>
                     </div>
+                </div>
+            }
+            if (Model.OrderInfo.ProdCount > 3)
+            {
+                <div class="basket-result bottom-clone">
+                    <h3>У вас в корзине <span>@Model.OrderInfo.ProdCount  @ProdCount</span> на общую сумму <span>@Model.OrderInfo.Total.ToString("# ###.00#") руб.</span></h3>
                 </div>
             }
             <div class="order-form shadow-block">

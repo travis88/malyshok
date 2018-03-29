@@ -81,8 +81,14 @@
             <div class="row">
                 <div class="col-md-4 col-lg-3">
                     @{ Html.RenderAction("Catalog", "Partials"); }
-                    <div class="prod-new">
-                        <a href=""><img src="~/Content/img/prod_new.jpg" /></a>
+                    <div class="prod-new-block">
+                        <div class="title"><a href="">Новинки</a></div>
+                        <div class="new-prod-item">
+                            <a href="/Prod/187213/">
+                                <div class="new-prod-img"><img src="~/ProdContent/4690590083383/4690590083383_preview.jpg" /></div>
+                                <div class="new-prod-title">187213/Машина Технопарк металл.инерц.УАЗ 39625 омон,открыв.дв 6402С в кор/X600-H09022-R/1</div>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-8 col-lg-9">
@@ -98,11 +104,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="title">Контакты:</div>
-                            <div>
+                            <div class="contakt-block">
                                 <div class="telefon">тел.</div>
                                 <div>@Html.Raw(Model.SitesInfo.Phone.Replace("|", "<br />"))</div>
                             </div>
-                            <div>
+                            <div class="contakt-block">
                                 <div class="email">e-mail</div>
                                 <div>@Html.Raw(Model.SitesInfo.Email.Replace("|", "<br />"))</div>
                             </div>
@@ -110,19 +116,21 @@
                         </div>
                         <div class="col-md-6">
                             <div class="title">Режим работы</div>
-                            @Html.Raw(Model.SitesInfo.Worktime.Replace("|", "<br />"))
+                            <div class="contakt-block">
+                                @Html.Raw(Model.SitesInfo.Worktime.Replace("|", "<br />"))
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-md-pull-6">
-                    <div class="adress"><b>@Model.SitesInfo.Adress</b>&nbsp;&nbsp;&nbsp;<a href="/contacts">Схема проезда</a></div>
+                    <div class="adress">@Model.SitesInfo.Adress</div>
+                    <div class="map-link"><a href="/contacts">Схема проезда</a></div>
                     <div class="socseti">
-                        <a href="https://vk.com"><span class="icon-vkontakte"></span></a>
-                        <a href="https://ru-ru.facebook.com/"><span class="icon-facebook"></span></a>
-                        <a href="https://www.instagram.com/"><span class="icon-instagram"></span></a>
+                        <div>Мы в социальных сетях</div>
+                        <a href="https://vk.com" class="vk-link"></a><a href="https://ru-ru.facebook.com/" class="facebook-lik"></a><a href="https://www.instagram.com/" class="instagram-link"></a>
                     </div>
                     <div class="copyright">&copy;&nbsp;2010-@DateTime.Now.Year.ToString()&nbsp;@Model.SitesInfo.LongTitle</div>
-                    <div class="quote">@ViewBag.Quote</div>
+                    <div class="quote">При цитировании информации с сайта ссылка на первоисточник обязательна.</div>
                 </div>
             </div>
         </div>

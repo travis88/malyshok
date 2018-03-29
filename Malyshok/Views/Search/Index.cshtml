@@ -14,8 +14,11 @@
                 Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
                 foreach (var item in Model.List.Data)
                 {
+                    var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_preview.jpg") : "";
+                    ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
+
                     <div class="item_prod shadow-block">
-                        <div class="prod-img"><img src="@item.Photo.Url" /></div>
+                        <div class="prod-img"><img src="@ProdImg" /></div>
                         <div class="prod-info">
                             <div class="prod-title"><a href="/prod/@item.Id/">@Html.Raw(item.Title)</a></div>
                             <div class="prod-catalog-link">
@@ -23,11 +26,11 @@
                             </div>
                             <div class="row">
                                 <div class="prod-params col-md-6">
-                                    <div><span>Стандарт</span>@item.Standart</div>
+                                    <div><span>Код</span>@item.Code</div>
                                     <div><span>Штрих-код</span>@item.Barcode</div>
                                 </div>
                                 <div class="prod-params col-md-6">
-                                    <div><span>Код</span>@item.Standart</div>
+                                    <div><span>Стандарт</span>@item.Standart</div>
                                     <div>
                                         <span>Остаток</span>@if (@item.Count > 0)
                                         { @Html.Raw("есть в наличии")  }
@@ -37,7 +40,7 @@
                                 </div>
                             </div>
                             <div class="prod-basket-block">
-                                <div class="prod-price"><span>Цена</span>@item.Price.ToString("# ###.00#")</div>
+                                <div class="prod-price"><span>Цена</span><b>@item.Price.ToString("# ###.00#")</b> руб.</div>
                                 <div class="prod-cert">
                                     Сертификаты
                                 </div>

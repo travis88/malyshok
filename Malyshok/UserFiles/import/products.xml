@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ArrayOfProducts xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Product ID="e8000096-54d7-1002-8edb-500049ccb746" title="251905/Танк инерц. в пак. 16*8,5*6см/B1483999/1" Code="И000376521 " Count="2" Date="2018-03-26T00:00:00">
+		<BarcodeList>
+			<Barcode value="6934624349266"/>
+		</BarcodeList>
+		<PriceList>
+			<Price name="Оптовая" value="63,80"/>
+		</PriceList>
+		<ImageList>
+			<Image name="6934624349266.jpg" main="true"/>
+		</ImageList>
+		<Certificates/>
+		<Categories>
+			<Category ID="512428DA-0E88-11E1-8F0B-0002B33A3ECF"/>
+		</Categories>
+	</Product>
+</ArrayOfProducts>

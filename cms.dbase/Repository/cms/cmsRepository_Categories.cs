@@ -59,6 +59,8 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                parent = (parent == null) ? Guid.Empty : parent;
+
                 return db.content_categoriess
                     .Where(w => w.uui_parent.Equals(parent))
                     .OrderBy(o => o.n_sort)
@@ -82,6 +84,8 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
+                parent = (parent == null) ? Guid.Empty : parent;
+
                 return db.content_categoriess
                     .Where(w => w.uui_parent.Equals(null))
                     .OrderBy(o => o.c_title)

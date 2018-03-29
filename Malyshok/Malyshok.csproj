@@ -213,12 +213,16 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
-    <Content Include="Content\img\basket.jpg" />
     <Content Include="Content\img\blockquote.png" />
-    <Content Include="Content\img\catalog.jpg" />
+    <Content Include="Content\img\catalog.png" />
     <Content Include="Content\img\cert.png" />
     <Content Include="Content\img\clouds.png" />
+    <Content Include="Content\img\fb.png" />
+    <Content Include="Content\img\fb_color.png" />
+    <Content Include="Content\img\i.png" />
+    <Content Include="Content\img\i_color.png" />
     <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\menu-basket.png" />
     <Content Include="Content\img\nophoto.jpg" />
     <Content Include="Content\img\preloader_planet.svg" />
     <Content Include="Content\img\preloader.svg" />
@@ -239,6 +243,8 @@
     <Content Include="Content\img\special\sand-blind-panel\f3.png" />
     <Content Include="Content\img\special\sand-blind-panel\sel.png" />
     <Content Include="Content\img\special\sand-blind-panel\w_normal.png" />
+    <Content Include="Content\img\vk.png" />
+    <Content Include="Content\img\vk_color.png" />
     <Content Include="Content\img\_nofoto.png" />
     <Content Include="Content\js\menu.js" />
     <Content Include="Content\js\script.js" />
@@ -442,6 +448,15 @@
     <Content Include="Areas\Admin\Views\Orders\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Orders\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Import\Index.cshtml" />
+    <Content Include="ProdContent\4690590083383\4690590083383.jpg" />
+    <Content Include="ProdContent\4690590083383\4690590083383_preview.jpg" />
+    <Content Include="ProdContent\4690590083383\4690590083383_small.jpg" />
+    <Content Include="ProdContent\6934624349266\6934624349266.jpg" />
+    <Content Include="ProdContent\6934624349266\6934624349266_preview.jpg" />
+    <Content Include="ProdContent\6934624349266\6934624349266_small.jpg" />
+    <Content Include="ProdContent\9785993016917\9785993016917.jpg" />
+    <Content Include="ProdContent\9785993016917\9785993016917_preview.jpg" />
+    <Content Include="ProdContent\9785993016917\9785993016917_small.jpg" />
     <Content Include="src\index.js" />
     <Content Include="webpack.config.js" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
@@ -885,7 +900,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\temp\" />
     <Folder Include="src\components\" />
-    <Folder Include="Userfiles\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cms.dbase\cms.dbase.csproj">

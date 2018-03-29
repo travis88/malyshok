@@ -50,6 +50,13 @@ namespace Import.Core.Helpers
                 {
                     SrvcLogger.Debug("{work}", $"Распаковка {archive.Name} не дала результатов");
                 }
+
+                // удаляет временную директорию
+                string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
+                if (Directory.Exists(tempPath))
+                {
+                    Directory.Delete(tempPath);
+                }
             }
             else
             {
@@ -116,6 +123,7 @@ namespace Import.Core.Helpers
         /// <summary>
         /// Разархивирование архива с изображениями
         /// </summary>
+        /// <param name="archive"></param>
         private FileInfo[] ExtractArchive(FileInfo archive)
         {
             SevenZipExtractor.SetLibraryPath(ParamsHelper.SevenZipPath);

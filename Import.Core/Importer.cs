@@ -163,14 +163,14 @@ namespace Import.Core
                 {
                     foreach (var file in files)
                     {
-                        SrvcLogger.Debug("{preparing}", String.Format("файл для импорта данных '{0}'", file.FullName));
+                        SrvcLogger.Debug("{preparing}", $"файл для импорта данных '{file.FullName}'");
                         SrvcLogger.Debug("{preparing}", "начало чтения XML-данных");
                         Log.Insert(0, String.Format("Чтение файла: {0}", file.Name));
 
                         using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                         {
-                            SrvcLogger.Debug("{preparing}", String.Format("XML-данные успешно прочитаны из файла {0}", file.Name));
-                            Log.Insert(0, String.Format("Данные прочитаны"));
+                            SrvcLogger.Debug("{preparing}", $"XML-данные успешно прочитаны из файла {file.Name}");
+                            Log.Insert(0, "Данные прочитаны");
 
                             var helper = new InsertHelper
                             {
@@ -205,10 +205,9 @@ namespace Import.Core
 
                     Step = 3;
                     Percent = 60;
-                    string falses = String.Format("кол-во ошибок {0}", countFalse);
-                    string successes = String.Format("кол-во успешных процессов {0}", countSuccess);
-                    string completedMessage = String.Format("импорт завершён {0} {1}; {2} {3}",
-                        Environment.NewLine, falses, Environment.NewLine, successes);
+                    string falses = $"кол-во ошибок {countFalse}";
+                    string successes = $"кол-во успешных процессов {countSuccess}";
+                    string completedMessage = $"импорт завершён {Environment.NewLine} {falses}; {Environment.NewLine} {successes}";
                     SrvcLogger.Debug("{work}", completedMessage);
                     Log.Insert(0, "Импорт завершён");
 
@@ -221,8 +220,7 @@ namespace Import.Core
 
                     End = DateTime.Now;
                     var t = End - Begin;
-                    Total = String.Format("{0} часов {1} минут {2} секунд {3} милисекунд", Math.Truncate(t.TotalHours),
-                                           Math.Truncate(t.TotalMinutes), Math.Truncate(t.TotalSeconds), Math.Truncate((double)t.Milliseconds));
+                    Total = $"{Math.Truncate(t.TotalHours)} часов {Math.Truncate(t.TotalMinutes)} минут {Math.Truncate(t.TotalSeconds)} секунд {Math.Truncate(t.TotalMilliseconds)} милисекунд";
                 }
             }
         }
@@ -274,7 +272,7 @@ namespace Import.Core
             string title = insert.Entity.ToString().ToLower();
             try
             {
-                SrvcLogger.Debug("{work}", String.Format("{0} начало", title));
+                SrvcLogger.Debug("{work}", $"{title} начало");
 
                 switch (insert.Entity)
                 {
@@ -295,14 +293,14 @@ namespace Import.Core
                         break;
                 }
 
-                SrvcLogger.Debug("{work}", String.Format("{0} конец", title));
+                SrvcLogger.Debug("{work}", $"{title} конец");
                 countSuccess++;
             }
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                EmailBody += String.Format("<p>{0}</p>", errorMessage);
-                SrvcLogger.Error("{error}", String.Format("ошибка при импорте {0}", title));
+                EmailBody += $"<p>{errorMessage}</p>";
+                SrvcLogger.Error("{error}", $"ошибка при импорте {title}");
                 SrvcLogger.Error("{error}", errorMessage);
                 countFalse++;
             }
@@ -316,8 +314,8 @@ namespace Import.Core
         /// <param name="list"></param>
         private static void AddEntities<T>(EntityHelper<T> entity)
         {
-            SrvcLogger.Debug("{work}", String.Format("кол-во {0}: {1}", entity.Title, entity.List.Count()));
-            Log.Insert(0, String.Format("Кол-во {0}: {1}", dictionary[entity.Title], entity.List.Count()));
+            SrvcLogger.Debug("{work}", $"кол-во {entity.Title}: {entity.List.Count()}");
+            Log.Insert(0, $"Кол-во {dictionary[entity.Title]}: {entity.List.Count()}" );
 
             try
             {
@@ -331,7 +329,7 @@ namespace Import.Core
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                EmailBody += String.Format("<p>{0}</p>", errorMessage);
+                EmailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", errorMessage);
                 countFalse++;
             }
@@ -515,7 +513,7 @@ namespace Import.Core
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                EmailBody += String.Format("<p>{0}</p>", errorMessage);
+                EmailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", errorMessage);
                 countFalse++;
             }

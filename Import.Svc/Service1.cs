@@ -117,7 +117,7 @@ namespace Import.Svc
             {
                 DirectoryInfo info = new DirectoryInfo(helperParams.DirName);
                 FileInfo[] files = info.GetFiles("*.xml")
-                                       .Where(w => w.FullName.Contains("cat") || w.FullName.Contains("prod"))
+                                       .Where(w => w.FullName.ToLower().Contains("cat") || w.FullName.Contains("prod"))
                                        .OrderByDescending(p => p.LastWriteTime)
                                        .Take(2)
                                        .ToArray();

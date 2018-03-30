@@ -1,5 +1,6 @@
 ﻿using Import.Core;
 using Import.Core.Helpers;
+using Import.Core.Services;
 using System;
 using System.IO;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Import.Cmd
         {
             ReceiverParamsHelper helperParams = new ReceiverParamsHelper();
 
-            ImageHelper helper = new ImageHelper(helperParams);
+            ImageService helper = new ImageService(helperParams);
             helper.Execute();
         }
     }

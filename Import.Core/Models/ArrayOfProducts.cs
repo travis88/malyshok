@@ -16,6 +16,6 @@ namespace Import.Core.Models
         /// Продукты
         /// </summary>
         [XmlElement(ElementName = "Product")]
-        public ProductModel[] Products { get; set; }
+        public Product[] Products { get; set; }
     }
 }

@@ -16,6 +16,6 @@ namespace Import.Core.Models
         /// Список каталогов
         /// </summary>
         [XmlElement(ElementName = "CatalogItem")]
-        public CatalogModel[] Catalogs { get; set; }
+        public Catalog[] Catalogs { get; set; }
     }
 }

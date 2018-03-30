@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Import.Core.Helpers;
 using Import.Core.Models;
+using Import.Core.Services;
 using LinqToDB;
 using LinqToDB.Data;
 using System;
@@ -65,7 +66,7 @@ namespace Import.Core
         /// <summary>
         /// Уникальные продукты
         /// </summary>
-        private static ProductModel[] distinctProducts = null;
+        private static Product[] distinctProducts = null;
 
         /// <summary>
         /// Параметры для рассылки оповещения по результатам импорта
@@ -110,7 +111,7 @@ namespace Import.Core
             // маппинг объектов и сущностей
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<CatalogModel, import_catalogs>()
+                cfg.CreateMap<Catalog, import_catalogs>()
                    .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
                    .ForMember(d => d.c_alias, opt => opt.MapFrom(src => Transliteration.Translit(src.Title)))
@@ -118,7 +119,7 @@ namespace Import.Core
                    .ForMember(d => d.uui_parent, opt =>
                                     opt.MapFrom(src => src.ParentId.Equals("0")
                                     ? Guid.Empty : Guid.Parse(src.ParentId)));
-                cfg.CreateMap<ProductModel, import_products>()
+                cfg.CreateMap<Product, import_products>()
                    .ForMember(d => d.id, opt => opt.MapFrom(src => src.Id))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Title))
                    .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
@@ -272,7 +273,7 @@ namespace Import.Core
             string title = insert.Entity.ToString().ToLower();
             try
             {
-                SrvcLogger.Debug("{work}", $"{title} начало");
+                SrvcLogger.Debug("{work}", $"{dictionary[title]} начало");
 
                 switch (insert.Entity)
                 {
@@ -293,14 +294,14 @@ namespace Import.Core
                         break;
                 }
 
-                SrvcLogger.Debug("{work}", $"{title} конец");
+                SrvcLogger.Debug("{work}", $"{dictionary[title]} конец");
                 countSuccess++;
             }
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
                 EmailBody += $"<p>{errorMessage}</p>";
-                SrvcLogger.Error("{error}", $"ошибка при импорте {title}");
+                SrvcLogger.Error("{error}", $"ошибка при импорте {dictionary[title]}");
                 SrvcLogger.Error("{error}", errorMessage);
                 countFalse++;
             }
@@ -364,9 +365,9 @@ namespace Import.Core
         /// </summary>
         /// <param name="db"></param>
         /// <param name="products"></param>
-        private static ProductModel[] AddProducts(InsertHelper insert)
+        private static Product[] AddProducts(InsertHelper insert)
         {
-            ProductModel[] result = null;
+            Product[] result = null;
             var serializer = new XmlSerializer(typeof(ArrayOfProducts));
             var arrayOfProducts = (ArrayOfProducts)serializer.Deserialize(insert.FileStream);
             var distinctProducts = (from p in arrayOfProducts.Products

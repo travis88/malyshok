@@ -52,39 +52,26 @@ namespace Import.Core.Services
                 }
 
                 #region удаляет временную директорию
-                //string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
-                //if (Directory.Exists(tempPath))
-                //{
-                //    DirectoryInfo _temp = new DirectoryInfo(tempPath);
-                //    var innerDirectories = _temp.GetDirectories();
-
-                //    foreach (var dir in innerDirectories)
-                //    {
-                //        foreach (var file in dir.GetFiles())
-                //        {
-                //            file.Delete();
-                //        }
-                //        dir.Delete(true);
-                //    }
-
-
-                //    //try
-                //    //{
-                //    //    Directory.Delete(tempPath, true);
-                //    //}
-                //    //catch (IOException)
-                //    //{
-                //    //    Directory.Delete(tempPath, true);
-                //    //}
-                //    //catch (UnauthorizedAccessException)
-                //    //{
-                //    //    Directory.Delete(tempPath, true);
-                //    //}
-                //    //catch (Exception e)
-                //    //{
-                //    //    SrvcLogger.Error("{error}", e.ToString());
-                //    //}
-                //}
+                string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
+                if (Directory.Exists(tempPath))
+                {
+                    try
+                    {
+                        Directory.Delete(tempPath, true);
+                    }
+                    catch (IOException)
+                    {
+                        Directory.Delete(tempPath, true);
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Directory.Delete(tempPath, true);
+                    }
+                    catch (Exception e)
+                    {
+                        SrvcLogger.Error("{error}", e.ToString());
+                    }
+                }
                 #endregion
             }
             else
@@ -195,16 +182,20 @@ namespace Import.Core.Services
             {
                 try
                 {
-                    Bitmap img = (Bitmap)Bitmap.FromFile(item.FullName);
-                    if (String.IsNullOrWhiteSpace(item.Orientation))
+                    using (Bitmap img = (Bitmap)Bitmap.FromFile(item.FullName))
                     {
-                        img = Imaging.Resize(img, item.Width, item.Height, item.PositionTop, item.PositionLeft);
+                        Bitmap _img = null;
+                        if (String.IsNullOrWhiteSpace(item.Orientation))
+                        {
+                            _img = Imaging.Resize(img, item.Width, item.Height, item.PositionTop, item.PositionLeft);
+                        }
+                        else
+                        {
+                            _img = Imaging.Resize(img, item.Width, item.Orientation);
+                        }
+                        _img.Save(item.SavePath, myImageCodecInfo, myEncoderParameters);
+                        _img.Dispose();
                     }
-                    else
-                    {
-                        img = Imaging.Resize(img, item.Width, item.Orientation);
-                    }
-                    img.Save(item.SavePath, myImageCodecInfo, myEncoderParameters);
                 }
                 catch (Exception e)
                 {

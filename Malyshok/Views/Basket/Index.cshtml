@@ -18,7 +18,7 @@
             </div>
             foreach (var item in Model.Items)
             {
-                var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_preview.jpg") : "";
+                var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") : "";
                 ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
 
                 <div class="basket_item shadow-block">

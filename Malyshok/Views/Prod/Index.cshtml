@@ -23,7 +23,7 @@
                 Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
                 foreach (var item in Model.List.Data)
                 {
-                    var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_preview.jpg") : "";
+                    var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") : "";
                     ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
 
                     <div class="item_prod shadow-block">

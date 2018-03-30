@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Disly")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("ru-RU")]
+[assembly: AssemblyCulture("")]
 
 // Установка значения false в параметре ComVisible делает типы в этой сборке невидимыми 
 // для компонентов COM. Если требуется обратиться к типу в этой сборке через 

@@ -5,20 +5,23 @@
 
 @if (Model != null)
 {
-    <div>
+    <div style="overflow:hidden;">
         <nav aria-label="Page navigation">
             <div class="pagination-size">
                 <form method="post">
                     Товаров на странице: <input name="size" value="@pageSize" />
                 </form>
             </div>
-            <ul class="pagination">
-                @foreach (PagerFront item in Model)
-                {
-                    string active = (@item.isChecked) ? "PagerNow active" : "";
-                    <li class="@active"><a href="@item.url">@item.text</a></li>
-                }
-            </ul>
+            @if (Model.Length > 1)
+            {
+                <ul class="pagination">
+                    @foreach (PagerFront item in Model)
+                    {
+                        string active = (@item.isChecked) ? "PagerNow active" : "";
+                        <li class="@active"><a href="@item.url">@item.text</a></li>
+                    }
+                </ul>
+            }
         </nav>
     </div>
 }

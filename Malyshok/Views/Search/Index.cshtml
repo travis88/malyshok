@@ -16,13 +16,22 @@
                 {
                     var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") : "";
                     ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
+                    var split = "";
 
                     <div class="item_prod shadow-block">
                         <div class="prod-img"><img src="@ProdImg" /></div>
                         <div class="prod-info">
                             <div class="prod-title"><a href="/prod/@item.Id/">@Html.Raw(item.Title)</a></div>
                             <div class="prod-catalog-link">
-                                <div><a href="/">Игрушки</a> / <a href="/">Игрушки</a></div>
+                                <div>
+                                    @foreach (var catalog in item.CatalogPath)
+                                    {
+                                        @split <a href="/catalog/@catalog.link">@catalog.text</a>
+
+                                        split = " / ";
+                                    }
+                                </div>
+
                             </div>
                             <div class="row">
                                 <div class="prod-params col-md-6">

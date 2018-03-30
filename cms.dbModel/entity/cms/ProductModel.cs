@@ -67,6 +67,11 @@ namespace cms.dbModel.entity
         public string Standart { get; set; }
 
         /// <summary>
+        /// Массив категорий в которых отображается продукт
+        /// </summary>
+        public Catalog_list[] CatalogPath { get; set; }
+
+        /// <summary>
         /// Категории
         /// </summary>
         public CategoryModel[] Categories { get; set; }

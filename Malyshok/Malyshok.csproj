@@ -448,6 +448,18 @@
     <Content Include="Areas\Admin\Views\Orders\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Orders\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Import\Index.cshtml" />
+    <Content Include="ProdContent\4690590049280\4690590049280_1.jpg" />
+    <Content Include="ProdContent\4690590049280\4690590049280_1_mini.jpg" />
+    <Content Include="ProdContent\4690590049280\4690590049280_1_preview.jpg" />
+    <Content Include="ProdContent\4690590065952\4690590065952_1.jpg" />
+    <Content Include="ProdContent\4690590065952\4690590065952_1_mini.jpg" />
+    <Content Include="ProdContent\4690590065952\4690590065952_1_preview.jpg" />
+    <Content Include="ProdContent\4690590117101\4690590117101_1.jpg" />
+    <Content Include="ProdContent\4690590117101\4690590117101_1_mini.jpg" />
+    <Content Include="ProdContent\4690590117101\4690590117101_1_preview.jpg" />
+    <Content Include="ProdContent\6934621573626\6934621573626_1.jpg" />
+    <Content Include="ProdContent\6934621573626\6934621573626_1_mini.jpg" />
+    <Content Include="ProdContent\6934621573626\6934621573626_1_preview.jpg" />
     <Content Include="src\index.js" />
     <Content Include="webpack.config.js" />
     <None Include="Content\plugins\tinymce\plugins\gallery\plugin.min.js_korkin" />
@@ -890,7 +902,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\temp\" />
-    <Folder Include="ProdContent\" />
     <Folder Include="src\components\" />
   </ItemGroup>
   <ItemGroup>

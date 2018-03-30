@@ -699,7 +699,8 @@ namespace cms.dbase
                                     Standart = s.p.c_standart,
                                     Count = (int)s.p.n_count,
                                     inBasket = s.n_count,
-                                    Photo = s.p.c_photo
+                                    Photo = s.p.c_photo,
+                                    CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
                                 });
 
                     var List = new ProductList
@@ -718,6 +719,26 @@ namespace cms.dbase
                     return List;
                 }
             }
+        }
+        private Catalog_list[] getProdCategorys(string Path, string Titles)
+        {
+            string[] arrID = ("/" + Path).Replace("//", "").Split('/');
+            string[] arrName = ("/" + Titles).Replace("//", "").Split('/');
+
+            Catalog_list[] Categorys = new Catalog_list[arrID.Length];
+
+            for (int i = 0; i< arrID.Length; i++)
+            {
+                string Title = arrName[i];
+                string Link = "/" + string.Join("/", arrID.Take(i + 1));
+
+                Categorys[i] = new Catalog_list
+                {
+                    text = Title,
+                    link = Link
+                };
+            }
+            return Categorys;
         }
 
         #region Users
@@ -1122,7 +1143,7 @@ namespace cms.dbase
                 var BasketList = db.content_order_detailss
                     .Where(w => w.f_order == filter.Order);
 
-                var query = db.content_productss.Where(w => w.n_count > 0);
+                var query = db.sv_productss.Where(w => w.n_count > 0);
 
                 foreach (string param in filter.SearchText.Split(' '))
                 {
@@ -1153,7 +1174,8 @@ namespace cms.dbase
                                 Standart = s.p.c_standart,
                                 Count = (int)s.p.n_count,
                                 inBasket = s.n_count,
-                                Photo = s.p.c_photo
+                                Photo = s.p.c_photo,
+                                CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
                             });
 
                 return new ProductList

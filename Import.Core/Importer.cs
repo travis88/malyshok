@@ -215,7 +215,7 @@ namespace Import.Core
                     Step = 4;
                     Percent = 80;
                     EmailBody += completedMessage;
-                    SendEmail(EmailBody, db);
+                    //SendEmail(EmailBody, db);
                     Step = 5;
                     Percent = 100;
 

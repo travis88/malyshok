@@ -51,7 +51,7 @@ namespace Import.Core.Services
                     SrvcLogger.Debug("{work}", $"распаковка {archive.Name} не дала результатов");
                 }
 
-                // удаляет временную директорию
+                #region удаляет временную директорию
                 //string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
                 //if (Directory.Exists(tempPath))
                 //{
@@ -85,6 +85,7 @@ namespace Import.Core.Services
                 //    //    SrvcLogger.Error("{error}", e.ToString());
                 //    //}
                 //}
+                #endregion
             }
             else
             {

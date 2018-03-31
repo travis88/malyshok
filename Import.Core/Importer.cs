@@ -150,9 +150,7 @@ namespace Import.Core
 
             if (files != null)
             {
-                files = files.Where(w => w != null)
-                             .OrderBy(o => o.FullName)
-                             .ToArray();
+                files = files.Where(w => w != null).ToArray();
 
                 using (var db = new dbModel(connection))
                 {
@@ -218,7 +216,7 @@ namespace Import.Core
                 stopwatch.Stop();
                 TimeSpan time = stopwatch.Elapsed;
                 Total = $"{Math.Truncate(time.TotalHours)} часов {Math.Truncate(time.TotalMinutes)} минут"
-                    + $" {Math.Truncate(time.TotalSeconds)} секунд {Math.Truncate(time.TotalMilliseconds)} милисекунд";
+                    + $" {Math.Truncate(time.TotalSeconds)} секунд {Math.Truncate(time.TotalMilliseconds).ToString().Substring(1)} милисекунд";
 
                 string falses = $"кол-во ошибок: {CountFalse}";
                 string successes = $"кол-во успешных процессов: {CountSuccess}";

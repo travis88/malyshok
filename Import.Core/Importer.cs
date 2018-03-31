@@ -222,22 +222,23 @@ namespace Import.Core
                             }
                         }
                     }
+
+                    stopwatch.Stop();
+                    TimeSpan time = stopwatch.Elapsed;
+                    Total = $"{time.Hours} час. {time.Minutes} мин."
+                        + $" {time.Seconds} сек. {time.Milliseconds} мс.";
+
+                    string falses = $"кол-во ошибок: {CountFalse}";
+                    string successes = $"кол-во успешных процессов: {CountSuccess}";
+                    string completedMessage = $"импорт завершён {falses}; {successes}";
+                    SrvcLogger.Info("{work}", $"импорт завершён");
+                    SrvcLogger.Info("{work}", $"{falses}");
+                    SrvcLogger.Info("{work}", $"{successes}");
+                    Log.Insert(0, "Импорт завершён");
+
+                    emailBody += completedMessage;
+                    SendEmail(emailBody, db);
                 }
-                stopwatch.Stop();
-                TimeSpan time = stopwatch.Elapsed;
-                Total = $"{time.Hours} час. {time.Minutes} мин."
-                    + $" {time.Seconds} сек. {time.Milliseconds} мс.";
-
-                string falses = $"кол-во ошибок: {CountFalse}";
-                string successes = $"кол-во успешных процессов: {CountSuccess}";
-                string completedMessage = $"импорт завершён {falses}; {successes}";
-                SrvcLogger.Info("{work}", $"импорт завершён");
-                SrvcLogger.Info("{work}", $"{falses}");
-                SrvcLogger.Info("{work}", $"{successes}");
-                Log.Insert(0, "Импорт завершён");
-
-                emailBody += completedMessage;
-                //SendEmail(EmailBody, db);
             }
         }
 

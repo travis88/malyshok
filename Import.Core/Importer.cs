@@ -21,9 +21,34 @@ namespace Import.Core
     public static class Importer
     {
         /// <summary>
+        /// Общее кол-во шагов
+        /// </summary>
+        private static int allStepsCount;
+
+        /// <summary>
         /// Строка подключения
         /// </summary>
-        private static string connection = "cmsdbConnection";
+        private const string CONNECTION = "cmsdbConnection";
+
+        /// <summary>
+        /// Уникальные продукты
+        /// </summary>
+        private static Product[] distinctProducts = null;
+
+        /// <summary>
+        /// Параметры для рассылки оповещения по результатам импорта
+        /// </summary>
+        private static EmailParamsHelper emailHelper = null;
+
+        /// <summary>
+        /// Текст письма
+        /// </summary>
+        private static string emailBody = null;
+
+        /// <summary>
+        /// Словарь для логирования
+        /// </summary>
+        private static Dictionary<string, string> dictionary;
 
         /// <summary>
         /// Кол-во продуктов
@@ -38,16 +63,12 @@ namespace Import.Core
         /// <summary>
         /// Текущий шаг
         /// </summary>
-        public static int Step { get; set; }
+        public static int Step { get; set; } = 0;
 
         /// <summary>
         /// Шаги
         /// </summary>
-        public static string[] Steps = { "Загрузка файлов",
-                                         "Запись в буфферные таблицы",
-                                         "Совмещение данных",
-                                         "Импорт завершён",
-                                         "Рассылка оповещений" };
+        public static List<string> Steps = new List<string>();
 
         /// <summary>
         /// Флаг завершённости
@@ -65,34 +86,14 @@ namespace Import.Core
         public static int CountFalse = 0;
 
         /// <summary>
-        /// Уникальные продукты
-        /// </summary>
-        private static Product[] distinctProducts = null;
-
-        /// <summary>
-        /// Параметры для рассылки оповещения по результатам импорта
-        /// </summary>
-        private static EmailParamsHelper emailHelper = null;
-
-        /// <summary>
-        /// Текст письма
-        /// </summary>
-        private static string EmailBody = null;
-
-        /// <summary>
         /// Затраченное время
         /// </summary>
-        public static string Total = "0 часов 0 минут 0 секунд 0 милисекунд";
+        public static string Total = "0 час. 0 мин. 0 сек. 0 мс.";
 
         /// <summary>
         /// Логгирование
         /// </summary>
         public static List<string> Log = new List<string>();
-
-        /// <summary>
-        /// Словарь для логирования
-        /// </summary>
-        private static Dictionary<string, string> dictionary;
 
         /// <summary>
         /// Конструктор
@@ -150,9 +151,27 @@ namespace Import.Core
 
             if (files != null)
             {
+                Step++;
                 files = files.Where(w => w != null).ToArray();
+                if (files.Any(a => a.Name.Contains(".xml")))
+                {
+                    if (files.Any(a => a.Name.Contains(".zip")))
+                    {
+                        SetSteps(3);
+                    }
+                    else
+                    {
+                        SetSteps(1);
+                    }
+                }
+                else if (files.Any(a => a.Name.Contains(".zip")))
+                {
+                    SetSteps(2);
+                }
 
-                using (var db = new dbModel(connection))
+                UpdateCurrentStep();
+
+                using (var db = new dbModel(CONNECTION))
                 {
                     foreach (var file in files)
                     {
@@ -173,7 +192,7 @@ namespace Import.Core
 
                             if (file != null)
                             {
-                                if ( file.FullName.Contains("cat"))
+                                if (file.FullName.Contains("cat"))
                                 {
                                     InsertWithLogging(helper);
                                 }
@@ -187,21 +206,12 @@ namespace Import.Core
                                             InsertWithLogging(helper);
                                         }
                                     }
-
-                                    //Step = 2;
-                                    //Percent = 40;
+                                    Step++;
+                                    
                                     SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
                                     Log.Insert(0, "Перенос данных из буферных таблиц");
-
                                     Finalizer(db);
-
-                                    //Step = 3;
-                                    //Percent = 60;
-
-                                    //Step = 4;
-                                    //Percent = 80;
-                                    //Step = 5;
-                                    //Percent = 100;
+                                    Step++;
                                 }
                                 else if (file.FullName.Contains(".zip"))
                                 {
@@ -215,8 +225,8 @@ namespace Import.Core
                 }
                 stopwatch.Stop();
                 TimeSpan time = stopwatch.Elapsed;
-                Total = $"{Math.Truncate(time.TotalHours)} часов {Math.Truncate(time.TotalMinutes)} минут"
-                    + $" {Math.Truncate(time.TotalSeconds)} секунд {Math.Truncate(time.TotalMilliseconds).ToString().Substring(1)} милисекунд";
+                Total = $"{time.Hours} час. {time.Minutes} мин."
+                    + $" {time.Seconds} сек. {time.Milliseconds} мс.";
 
                 string falses = $"кол-во ошибок: {CountFalse}";
                 string successes = $"кол-во успешных процессов: {CountSuccess}";
@@ -226,7 +236,7 @@ namespace Import.Core
                 SrvcLogger.Info("{work}", $"{successes}");
                 Log.Insert(0, "Импорт завершён");
 
-                EmailBody += completedMessage;
+                emailBody += completedMessage;
                 //SendEmail(EmailBody, db);
             }
         }
@@ -238,17 +248,18 @@ namespace Import.Core
         {
             try
             {
-                using (var db = new dbModel(connection))
+                using (var db = new dbModel(CONNECTION))
                 {
                     CleaningTempTables(db);
                 }
 
                 distinctProducts = null;
                 emailHelper = new EmailParamsHelper();
-                EmailBody = String.Empty;
+                emailBody = String.Empty;
                 CountSuccess = CountFalse = 0;
-                Total = "0 часов 0 минут 0 секунд 0 милисекунд";
+                Total = "0 час. 0 мин. 0 сек. 0 мс.";
                 Log = new List<string>();
+                Steps = new List<string>();
                 dictionary = new Dictionary<string, string>
                 {
                     { "catalogs", "категории" },
@@ -299,12 +310,12 @@ namespace Import.Core
                 }
 
                 SrvcLogger.Info("{work}", $"{dictionary[title]} конец");
-                CountSuccess++;
+                UpdateCurrentStep();
             }
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                EmailBody += $"<p>{errorMessage}</p>";
+                emailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", $"ошибка при импорте {dictionary[title]}");
                 SrvcLogger.Error("{error}", errorMessage);
                 CountFalse++;
@@ -319,7 +330,7 @@ namespace Import.Core
         /// <param name="list"></param>
         private static void AddEntities<T>(EntityHelper<T> entity)
         {
-            SrvcLogger.Info("{work}", $"кол-во {entity.Title}: {entity.List.Count()}");
+            SrvcLogger.Info("{work}", $"{dictionary[entity.Title]} кол-во: {entity.List.Count()}");
             Log.Insert(0, $"Кол-во {dictionary[entity.Title]}: {entity.List.Count()}");
 
             try
@@ -329,14 +340,12 @@ namespace Import.Core
                     entity.Db.BulkCopy(entity.List);
                     tr.Commit();
                 }
-                CountSuccess++;
             }
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                EmailBody += $"<p>{errorMessage}</p>";
+                emailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", errorMessage);
-                CountFalse++;
             }
         }
 
@@ -513,12 +522,12 @@ namespace Import.Core
                     db.import();
                     tr.Commit();
                 }
-                CountSuccess++;
+                UpdateCurrentStep();
             }
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                EmailBody += $"<p>{errorMessage}</p>";
+                emailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", errorMessage);
                 CountFalse++;
             }
@@ -543,24 +552,31 @@ namespace Import.Core
                     var from = new MailAddress(emailHelper.EmailFromAddress, emailHelper.EmailFromName);
                     var to = new MailAddress(emailTo);
 
-                    var message = new MailMessage(from, to);
-                    message.Subject = "Импорт товаров Малышок-ПрессМарк";
-                    message.Body = body;
-                    message.IsBodyHtml = true;
+                    var message = new MailMessage(from, to)
+                    {
+                        Subject = "Сервис импорта сайта Малышок-ПрессМарк",
+                        Body = body,
+                        IsBodyHtml = true
+                    };
 
-                    var smtp = new SmtpClient(emailHelper.EmailHost, emailHelper.EmailPort);
-                    smtp.Credentials = new NetworkCredential(emailHelper.EmailFromAddress, emailHelper.EmailPassword);
-                    smtp.EnableSsl = emailHelper.EmailEnableSsl;
-
+                    var smtp = new SmtpClient(emailHelper.EmailHost, emailHelper.EmailPort)
+                    {
+                        Credentials = new NetworkCredential(emailHelper.EmailFromAddress, emailHelper.EmailPassword),
+                        EnableSsl = emailHelper.EmailEnableSsl,
+                    };
                     smtp.Send(message);
                 }
                 Log.Insert(0, "Рассылка оповещений завершена");
                 SrvcLogger.Info("{work}", "рассылка оповещения проведена");
+                CountSuccess++;
+                Step++;
+                Percent = 100;
             }
             catch (Exception e)
             {
                 SrvcLogger.Info("{error}", "рассылка оповещений завершилась ошибкой");
                 SrvcLogger.Info("{error}", e.ToString());
+                CountFalse++;
             }
         }
 
@@ -607,6 +623,47 @@ namespace Import.Core
                 SrvcLogger.Error("{error}", e.ToString());
                 return null;
             }
+        }
+        
+        /// <summary>
+        /// Возвращает последовательность импорта
+        /// в зависимости от кол-ва
+        /// загруженных файлов
+        /// </summary>
+        /// <param name="caseType"></param>
+        /// <returns></returns>
+        private static void SetSteps(int caseType)
+        {
+            Steps.Add("Загрузка файлов");
+            switch (caseType)
+            {
+                case 1:
+                    Steps.Add("Запись в буферные таблицы");
+                    Steps.Add("Совмещение данных");
+                    allStepsCount = 8;
+                    break;
+                case 2:
+                    Steps.Add("Распаковка архива изображений");
+                    allStepsCount = 3;
+                    break;
+                case 3:
+                    Steps.Add("Запись в буферные таблицы");
+                    Steps.Add("Совмещение данных");
+                    Steps.Add("Распаковка архива изображений");
+                    allStepsCount = 9;
+                    break;
+            }
+            Steps.Add("Рассылка оповещений");
+        }
+
+        /// <summary>
+        /// Обновляет информацию по текущему шагу
+        /// </summary>
+        public static void UpdateCurrentStep()
+        {
+            int delta = 100 / allStepsCount;
+            CountSuccess++;
+            Percent += delta;
         }
     }
 }

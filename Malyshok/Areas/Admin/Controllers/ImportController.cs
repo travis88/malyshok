@@ -70,7 +70,7 @@ namespace Disly.Areas.Admin.Controllers
                 step = Importer.Step,
                 time = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"),
                 isCompleted = Importer.IsCompleted,
-                steps = Importer.Steps,
+                steps = Importer.Steps.ToArray(),
                 total = Importer.Total,
                 log = Importer.Log.ToArray()
             };
@@ -124,8 +124,7 @@ namespace Disly.Areas.Admin.Controllers
                                      di.GetFiles("*.zip")
                                         .OrderByDescending(p => p.LastWriteTime)
                                         .FirstOrDefault() };
-                //Importer.Step = 1;
-                //Importer.Percent = 20;
+                
                 Importer.DoImport(files);
             }
         }

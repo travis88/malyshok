@@ -41,8 +41,10 @@ namespace Import.Core.Services
             var files = ExtractArchive(new FileInfo($"{tempPath}{archive.Name}"), tempPath);
             if (files != null && files.Count() > 0)
             {
+                Importer.Log.Insert(0, $"Кол-во изображений в архиве: {files.Count()}");
                 ResizingImages(files);
-                Importer.CountSuccess++;
+                Importer.Step++;
+                Importer.UpdateCurrentStep();
             }
             else
             {
@@ -173,6 +175,10 @@ namespace Import.Core.Services
             {
                 try
                 {
+                    if (File.Exists(item.SavePath))
+                    {
+                        File.Delete(item.SavePath);
+                    }
                     using (Bitmap img = (Bitmap)Bitmap.FromFile(item.FullName))
                     {
                         Bitmap _img = null;

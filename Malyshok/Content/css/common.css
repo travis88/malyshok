@@ -41,7 +41,7 @@ form {
 .clouds {
     background: url('/Content/img/clouds.png') bottom center repeat-x;
     padding: 30px 0;
-    min-height: 123px;
+    min-height: 140px;
 }
 .logo {
     position: relative;
@@ -58,7 +58,7 @@ form {
     }
 .phone {
     position: absolute;
-    bottom: 3px;
+    bottom: 0;
     right: 0;
     font-size: 18px;
     color: #808080;
@@ -68,29 +68,35 @@ form {
         color: #dd201e;
     }
 .search-block {
-    padding-top: 21px;
+    padding-top: 25px;
 }
     .search-block input,
     .search-block button {
+        font-size: 18px;
         padding: 13px 20px !important;
         min-width: 150px;
     }
     .search-block input {
         width: 361px;
+        margin-right: 15px;
         border-color: #acacac !important;
     }
+        .search-block input:focus {
+            border-color: #65acda !important;
+        }
     .search-block button {
         border-color: #ffcd00;
         background: #ffcd00;
-    }/**/
-
-
-
+    }
+    .search-block button:hover {
+        box-shadow: 2px 3px 20px #cccccc; 
+    }
+    /**/
 .basket-block {
     position: relative;
     float: right;
     text-align: left;
-    margin: 21px 0 0 40px;
+    margin: 25px 0 0 40px;
 }
 .basket-counter {
     float: right;
@@ -113,19 +119,19 @@ form {
 
 
 .menu_block {
-    background: #65acda;
+    background: #21aedd;
     color: #ffffff;
     font-size: 14px;
 }
     .menu_block a {
         color: #ffffff;
-        border-left: solid 1px #65acda;
-        border-right: solid 1px #65acda;
+        border-left: solid 1px #21aedd;
+        border-right: solid 1px #21aedd;
     }
     .menu_block .nav .active a,
     .menu_block .nav a:focus,
     .menu_block .nav a:hover {
-        background: #49c1e9 !important;
+        background: #1ea1ce !important;
         color: #ffffff;
     }
 .login-block {
@@ -139,7 +145,6 @@ form {
     }
         .login-block a:hover {
             color: #ffcd00;
-            text-decoration: none;
         }
 .prod-catalog {
     background: #fafafa url('/Content/img/catalog.png') top right no-repeat;
@@ -173,6 +178,9 @@ form {
     background: #ffffff;
     min-height: 320px;
 }
+    .new-prod-item:hover {
+        box-shadow: 2px 3px 20px #cccccc;
+    }
 .new-prod-img {
     margin: 10px 25px;
 }
@@ -202,28 +210,15 @@ a .new-prod-title {
     margin-bottom: 40px;
 }
 .top-news {
-    padding: 30px 0;
+    padding: 10px 0;
 }
-    .top-news:before {
-        content: "";
-        display: block;
-        border-bottom: solid 1px #d9d9d9;
-        margin-top: 20px;
-    }
 .block-title {
-    overflow: hidden;
-    margin: -20px 0 30px;
+    margin-bottom: 16px;
     font-size: 22px;
     color: #65acda;
     text-transform: uppercase;
-    text-align: center;
 }
 
-    .block-title .title {
-        display: inline-block;
-        padding:0 100px;
-        background: #ffffff;
-    }
 .top_news-item {
     font-size: 14px;
     padding: 20px;

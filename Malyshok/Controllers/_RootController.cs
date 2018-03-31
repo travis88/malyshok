@@ -109,7 +109,7 @@ namespace Disly.Controllers
             }
         }
         
-        public FilterParams getFilter(int defaultPageSize = 24)
+        public FilterParams getFilter(int defaultPageSize = 12)
         {
             string return_url = HttpUtility.UrlDecode(Request.Url.Query);
             // если в URL номер страницы равен значению по умолчанию - удаляем его из URL

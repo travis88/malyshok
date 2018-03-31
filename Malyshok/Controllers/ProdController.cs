@@ -12,7 +12,7 @@ namespace Disly.Controllers
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
         private ProdViewModel model;
-        public int PageSize = 24;
+        public int PageSize = 12;
 
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

@@ -56,7 +56,7 @@ namespace Disly.Controllers
                     isChecked = (s == Model.page.ToString())
                 }).ToArray();
 
-            if (viewModel.Length < 2) viewModel = null;
+            //if (viewModel.Length < 2) viewModel = null;
 
             return View(viewName, viewModel);
         }

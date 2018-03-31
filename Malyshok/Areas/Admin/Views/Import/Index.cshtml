@@ -11,7 +11,7 @@
     <div class="dop_info-block"></div>
     <div class="buttons">
         <label data-action="noPreloader-accept" for="files" class="button icon-sitemap">Загрузить файлы</label>
-        @Html.TextBox("upload", null, new { id = "files", type = "file", data_action = "noPreloader-accept", title = "xml-документ", accept = ".xml", @class = "noplagin button icon-sitemap", multiple = "multiple" })
+        @Html.TextBox("upload", null, new { id = "files", type = "file", data_action = "noPreloader-accept", title = "xml-документ", accept = ".xml, .zip", @class = "noplagin button icon-sitemap", multiple = "multiple" })
     </div>
     <script>
         function uploadFile(uploadId) {

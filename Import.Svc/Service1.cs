@@ -133,6 +133,7 @@ namespace Import.Svc
                 SrvcLogger.Info("{preparing}", $"импорт будет выполнен через: {executeWait / 1000 / 60} мин");
                 Thread.Sleep(executeWait);
                 SrvcLogger.Info("{preparing}", "запуск ядра импорта");
+                SrvcLogger.Info("{work}", $"директория: {helperParams.DirName}");
                 Importer.DoImport(files);
                 Thread.Sleep(1000 * 60 * 2);
             }

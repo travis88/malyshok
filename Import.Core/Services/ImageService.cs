@@ -31,20 +31,26 @@ namespace Import.Core.Services
         /// </summary>
         public void Execute(FileInfo archive)
         {
-            SrvcLogger.Info("{work}", $"директория: {ParamsHelper.DirName}");
+            string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
+            if (!Directory.Exists(tempPath))
+            {
+                Directory.CreateDirectory(tempPath);
+            }
+            archive.CopyTo($"{tempPath}{archive.Name}");
 
-            var files = ExtractArchive(archive);
+            var files = ExtractArchive(new FileInfo($"{tempPath}{archive.Name}"), tempPath);
             if (files != null && files.Count() > 0)
             {
                 ResizingImages(files);
+                Importer.CountSuccess++;
             }
             else
             {
                 SrvcLogger.Info("{work}", $"распаковка {archive.Name} не дала результатов");
+                Importer.CountFalse++;
             }
 
             #region удаляет временную директорию
-            string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
             if (Directory.Exists(tempPath))
             {
                 try
@@ -131,18 +137,12 @@ namespace Import.Core.Services
         /// Разархивирование архива с изображениями
         /// </summary>
         /// <param name="archive"></param>
-        private FileInfo[] ExtractArchive(FileInfo archive)
+        private FileInfo[] ExtractArchive(FileInfo archive, string tempPath)
         {
             FileInfo[] result = null;
             try
             {
                 SrvcLogger.Info("{work}", $"распаковка архива: {archive.Name}");
-                string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
-                if (!Directory.Exists(tempPath))
-                {
-                    Directory.CreateDirectory(tempPath);
-                }
-
                 ZipFile.ExtractToDirectory(archive.FullName, tempPath);
 
                 DirectoryInfo di = new DirectoryInfo(tempPath);

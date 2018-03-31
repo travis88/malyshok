@@ -57,12 +57,12 @@ namespace Import.Core
         /// <summary>
         /// кол-во успешных процессов
         /// </summary>
-        private static int countSuccess = 0;
+        public static int CountSuccess = 0;
 
         /// <summary>
         /// кол-во процессов, завершившихся неудачей
         /// </summary>
-        private static int countFalse = 0;
+        public static int CountFalse = 0;
 
         /// <summary>
         /// Уникальные продукты
@@ -150,20 +150,20 @@ namespace Import.Core
 
             if (files != null)
             {
-                files = files.OrderBy(o => o.FullName)
-                             .Select(s => s).ToArray();
+                files = files.Where(w => w != null)
+                             .OrderBy(o => o.FullName)
+                             .ToArray();
 
                 using (var db = new dbModel(connection))
                 {
                     foreach (var file in files)
                     {
-                        SrvcLogger.Info("{preparing}", $"файл для импорта данных '{file.FullName}'");
-                        SrvcLogger.Info("{preparing}", "начало чтения XML-данных");
-                        Log.Insert(0, String.Format("Чтение файла: {0}", file.Name));
+                        SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
+                        Log.Insert(0, $"Чтение данных: {file.Name}");
 
                         using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                         {
-                            SrvcLogger.Info("{preparing}", $"XML-данные успешно прочитаны из файла {file.Name}");
+                            SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
                             Log.Insert(0, "Данные прочитаны");
 
                             var helper = new InsertHelper
@@ -173,41 +173,44 @@ namespace Import.Core
                                 Entity = Entity.Catalogs
                             };
 
-                            if (file.FullName.Contains("cat"))
+                            if (file != null)
                             {
-                                InsertWithLogging(helper);
-                            }
-                            else if (file.FullName.Contains("prod"))
-                            {
-                                foreach (Entity entity in Enum.GetValues(typeof(Entity)))
+                                if ( file.FullName.Contains("cat"))
                                 {
-                                    if (!entity.Equals(Entity.Catalogs))
-                                    {
-                                        helper.Entity = entity;
-                                        InsertWithLogging(helper);
-                                    }
+                                    InsertWithLogging(helper);
                                 }
+                                else if (file.FullName.Contains("prod"))
+                                {
+                                    foreach (Entity entity in Enum.GetValues(typeof(Entity)))
+                                    {
+                                        if (!entity.Equals(Entity.Catalogs))
+                                        {
+                                            helper.Entity = entity;
+                                            InsertWithLogging(helper);
+                                        }
+                                    }
 
-                                //Step = 2;
-                                //Percent = 40;
-                                SrvcLogger.Info("{work}", "запуск переноса данных из буферных таблиц");
-                                Log.Insert(0, "Перенос данных из буферных таблиц");
+                                    //Step = 2;
+                                    //Percent = 40;
+                                    SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
+                                    Log.Insert(0, "Перенос данных из буферных таблиц");
 
-                                Finalizer(db);
+                                    Finalizer(db);
 
-                                //Step = 3;
-                                //Percent = 60;
+                                    //Step = 3;
+                                    //Percent = 60;
 
-                                //Step = 4;
-                                //Percent = 80;
-                                //Step = 5;
-                                //Percent = 100;
-                            }
-                            else if (file.FullName.Contains(".zip"))
-                            {
-                                ReceiverParamsHelper receiverParams = new ReceiverParamsHelper();
-                                ImageService imageService = new ImageService(receiverParams);
-                                imageService.Execute(file);
+                                    //Step = 4;
+                                    //Percent = 80;
+                                    //Step = 5;
+                                    //Percent = 100;
+                                }
+                                else if (file.FullName.Contains(".zip"))
+                                {
+                                    ReceiverParamsHelper receiverParams = new ReceiverParamsHelper();
+                                    ImageService imageService = new ImageService(receiverParams);
+                                    imageService.Execute(file);
+                                }
                             }
                         }
                     }
@@ -217,10 +220,12 @@ namespace Import.Core
                 Total = $"{Math.Truncate(time.TotalHours)} часов {Math.Truncate(time.TotalMinutes)} минут"
                     + $" {Math.Truncate(time.TotalSeconds)} секунд {Math.Truncate(time.TotalMilliseconds)} милисекунд";
 
-                string falses = $"кол-во ошибок {countFalse}";
-                string successes = $"кол-во успешных процессов {countSuccess}";
-                string completedMessage = $"импорт завершён {Environment.NewLine} {falses}; {Environment.NewLine} {successes}";
-                SrvcLogger.Info("{work}", completedMessage);
+                string falses = $"кол-во ошибок: {CountFalse}";
+                string successes = $"кол-во успешных процессов: {CountSuccess}";
+                string completedMessage = $"импорт завершён {falses}; {successes}";
+                SrvcLogger.Info("{work}", $"импорт завершён");
+                SrvcLogger.Info("{work}", $"{falses}");
+                SrvcLogger.Info("{work}", $"{successes}");
                 Log.Insert(0, "Импорт завершён");
 
                 EmailBody += completedMessage;
@@ -243,7 +248,7 @@ namespace Import.Core
                 distinctProducts = null;
                 emailHelper = new EmailParamsHelper();
                 EmailBody = String.Empty;
-                countSuccess = countFalse = 0;
+                CountSuccess = CountFalse = 0;
                 Total = "0 часов 0 минут 0 секунд 0 милисекунд";
                 Log = new List<string>();
                 dictionary = new Dictionary<string, string>
@@ -296,7 +301,7 @@ namespace Import.Core
                 }
 
                 SrvcLogger.Info("{work}", $"{dictionary[title]} конец");
-                countSuccess++;
+                CountSuccess++;
             }
             catch (Exception e)
             {
@@ -304,7 +309,7 @@ namespace Import.Core
                 EmailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", $"ошибка при импорте {dictionary[title]}");
                 SrvcLogger.Error("{error}", errorMessage);
-                countFalse++;
+                CountFalse++;
             }
         }
 
@@ -326,14 +331,14 @@ namespace Import.Core
                     entity.Db.BulkCopy(entity.List);
                     tr.Commit();
                 }
-                countSuccess++;
+                CountSuccess++;
             }
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
                 EmailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", errorMessage);
-                countFalse++;
+                CountFalse++;
             }
         }
 
@@ -510,14 +515,14 @@ namespace Import.Core
                     db.import();
                     tr.Commit();
                 }
-                countSuccess++;
+                CountSuccess++;
             }
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
                 EmailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", errorMessage);
-                countFalse++;
+                CountFalse++;
             }
         }
 

@@ -109,9 +109,23 @@ namespace Disly.Areas.Admin.Controllers
                     }
                 }
 
-                FileInfo[] files = di.GetFiles("*.xml");
-                Importer.Step = 1;
-                Importer.Percent = 20;
+                FileInfo[] files = { di.GetFiles("*.xml")
+                                        .Where(w => w.FullName.ToLower()
+                                        .Contains("cat"))
+                                        .OrderByDescending(p => p.LastWriteTime)
+                                        .FirstOrDefault(),
+
+                                     di.GetFiles("*.xml")
+                                        .Where(w => w.FullName.ToLower()
+                                        .Contains("prod"))
+                                        .OrderByDescending(p => p.LastWriteTime)
+                                        .FirstOrDefault(),
+
+                                     di.GetFiles("*.zip")
+                                        .OrderByDescending(p => p.LastWriteTime)
+                                        .FirstOrDefault() };
+                //Importer.Step = 1;
+                //Importer.Percent = 20;
                 Importer.DoImport(files);
             }
         }

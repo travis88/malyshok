@@ -6,6 +6,7 @@ using LinqToDB;
 using LinqToDB.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -79,16 +80,6 @@ namespace Import.Core
         private static string EmailBody = null;
 
         /// <summary>
-        /// Время начала
-        /// </summary>
-        private static DateTime Begin;
-
-        /// <summary>
-        /// Время окончания
-        /// </summary>
-        private static DateTime End;
-
-        /// <summary>
         /// Затраченное время
         /// </summary>
         public static string Total = "0 часов 0 минут 0 секунд 0 милисекунд";
@@ -153,6 +144,8 @@ namespace Import.Core
         /// </summary>
         public static void DoImport(FileInfo[] files)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             Preparing();
 
             if (files != null)
@@ -164,13 +157,13 @@ namespace Import.Core
                 {
                     foreach (var file in files)
                     {
-                        SrvcLogger.Debug("{preparing}", $"файл для импорта данных '{file.FullName}'");
-                        SrvcLogger.Debug("{preparing}", "начало чтения XML-данных");
+                        SrvcLogger.Info("{preparing}", $"файл для импорта данных '{file.FullName}'");
+                        SrvcLogger.Info("{preparing}", "начало чтения XML-данных");
                         Log.Insert(0, String.Format("Чтение файла: {0}", file.Name));
 
                         using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                         {
-                            SrvcLogger.Debug("{preparing}", $"XML-данные успешно прочитаны из файла {file.Name}");
+                            SrvcLogger.Info("{preparing}", $"XML-данные успешно прочитаны из файла {file.Name}");
                             Log.Insert(0, "Данные прочитаны");
 
                             var helper = new InsertHelper
@@ -184,7 +177,7 @@ namespace Import.Core
                             {
                                 InsertWithLogging(helper);
                             }
-                            else
+                            else if (file.FullName.Contains("prod"))
                             {
                                 foreach (Entity entity in Enum.GetValues(typeof(Entity)))
                                 {
@@ -194,35 +187,44 @@ namespace Import.Core
                                         InsertWithLogging(helper);
                                     }
                                 }
+
+                                //Step = 2;
+                                //Percent = 40;
+                                SrvcLogger.Info("{work}", "запуск переноса данных из буферных таблиц");
+                                Log.Insert(0, "Перенос данных из буферных таблиц");
+
+                                Finalizer(db);
+
+                                //Step = 3;
+                                //Percent = 60;
+
+                                //Step = 4;
+                                //Percent = 80;
+                                //Step = 5;
+                                //Percent = 100;
+                            }
+                            else if (file.FullName.Contains(".zip"))
+                            {
+                                ReceiverParamsHelper receiverParams = new ReceiverParamsHelper();
+                                ImageService imageService = new ImageService(receiverParams);
+                                imageService.Execute(file);
                             }
                         }
                     }
-                    Step = 2;
-                    Percent = 40;
-                    SrvcLogger.Debug("{work}", "запуск переноса данных из буферных таблиц");
-                    Log.Insert(0, "Перенос данных из буферных таблиц");
-
-                    Finalizer(db);
-
-                    Step = 3;
-                    Percent = 60;
-                    string falses = $"кол-во ошибок {countFalse}";
-                    string successes = $"кол-во успешных процессов {countSuccess}";
-                    string completedMessage = $"импорт завершён {Environment.NewLine} {falses}; {Environment.NewLine} {successes}";
-                    SrvcLogger.Debug("{work}", completedMessage);
-                    Log.Insert(0, "Импорт завершён");
-
-                    Step = 4;
-                    Percent = 80;
-                    EmailBody += completedMessage;
-                    //SendEmail(EmailBody, db);
-                    Step = 5;
-                    Percent = 100;
-
-                    End = DateTime.Now;
-                    var t = End - Begin;
-                    Total = $"{Math.Truncate(t.TotalHours)} часов {Math.Truncate(t.TotalMinutes)} минут {Math.Truncate(t.TotalSeconds)} секунд {Math.Truncate(t.TotalMilliseconds)} милисекунд";
                 }
+                stopwatch.Stop();
+                TimeSpan time = stopwatch.Elapsed;
+                Total = $"{Math.Truncate(time.TotalHours)} часов {Math.Truncate(time.TotalMinutes)} минут"
+                    + $" {Math.Truncate(time.TotalSeconds)} секунд {Math.Truncate(time.TotalMilliseconds)} милисекунд";
+
+                string falses = $"кол-во ошибок {countFalse}";
+                string successes = $"кол-во успешных процессов {countSuccess}";
+                string completedMessage = $"импорт завершён {Environment.NewLine} {falses}; {Environment.NewLine} {successes}";
+                SrvcLogger.Info("{work}", completedMessage);
+                Log.Insert(0, "Импорт завершён");
+
+                EmailBody += completedMessage;
+                //SendEmail(EmailBody, db);
             }
         }
 
@@ -241,7 +243,6 @@ namespace Import.Core
                 distinctProducts = null;
                 emailHelper = new EmailParamsHelper();
                 EmailBody = String.Empty;
-                Begin = DateTime.Now;
                 countSuccess = countFalse = 0;
                 Total = "0 часов 0 минут 0 секунд 0 милисекунд";
                 Log = new List<string>();
@@ -273,7 +274,7 @@ namespace Import.Core
             string title = insert.Entity.ToString().ToLower();
             try
             {
-                SrvcLogger.Debug("{work}", $"{dictionary[title]} начало");
+                SrvcLogger.Info("{work}", $"{dictionary[title]} начало");
 
                 switch (insert.Entity)
                 {
@@ -294,7 +295,7 @@ namespace Import.Core
                         break;
                 }
 
-                SrvcLogger.Debug("{work}", $"{dictionary[title]} конец");
+                SrvcLogger.Info("{work}", $"{dictionary[title]} конец");
                 countSuccess++;
             }
             catch (Exception e)
@@ -315,8 +316,8 @@ namespace Import.Core
         /// <param name="list"></param>
         private static void AddEntities<T>(EntityHelper<T> entity)
         {
-            SrvcLogger.Debug("{work}", $"кол-во {entity.Title}: {entity.List.Count()}");
-            Log.Insert(0, $"Кол-во {dictionary[entity.Title]}: {entity.List.Count()}" );
+            SrvcLogger.Info("{work}", $"кол-во {entity.Title}: {entity.List.Count()}");
+            Log.Insert(0, $"Кол-во {dictionary[entity.Title]}: {entity.List.Count()}");
 
             try
             {
@@ -528,7 +529,7 @@ namespace Import.Core
         {
             try
             {
-                SrvcLogger.Debug("{work}", "рассылка оповещения");
+                SrvcLogger.Info("{work}", "рассылка оповещения");
                 Log.Insert(0, "Рассылка оповещений");
 
                 var receiverEmails = GetAdminEmails(db);
@@ -551,12 +552,12 @@ namespace Import.Core
                     smtp.Send(message);
                 }
                 Log.Insert(0, "Рассылка оповещений завершена");
-                SrvcLogger.Debug("{work}", "рассылка оповещения проведена");
+                SrvcLogger.Info("{work}", "рассылка оповещения проведена");
             }
             catch (Exception e)
             {
-                SrvcLogger.Debug("{error}", "рассылка оповещений завершилась ошибкой");
-                SrvcLogger.Debug("{error}", e.ToString());
+                SrvcLogger.Info("{error}", "рассылка оповещений завершилась ошибкой");
+                SrvcLogger.Info("{error}", e.ToString());
             }
         }
 

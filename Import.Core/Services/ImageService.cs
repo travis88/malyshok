@@ -1,9 +1,9 @@
 ﻿using Import.Core.Helpers;
-using SevenZip;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 
 namespace Import.Core.Services
@@ -29,55 +29,45 @@ namespace Import.Core.Services
         /// <summary>
         /// Обрабатывает изображения
         /// </summary>
-        public void Execute()
+        public void Execute(FileInfo archive)
         {
-            if (Directory.Exists(ParamsHelper.DirName))
+            SrvcLogger.Info("{work}", $"директория: {ParamsHelper.DirName}");
+
+            var files = ExtractArchive(archive);
+            if (files != null && files.Count() > 0)
             {
-                SrvcLogger.Debug("{work}", $"директория: {ParamsHelper.DirName}");
-
-                DirectoryInfo di = new DirectoryInfo(ParamsHelper.DirName);
-                FileInfo archive = di.GetFiles("*.rar")
-                    .Where(w => w.FullName.ToLower().Contains("image"))
-                    .OrderByDescending(p => p.LastWriteTime)
-                    .FirstOrDefault();
-
-                var files = ExtractArchive(archive);
-                if (files != null && files.Count() > 0)
-                {
-                    ResizingImages(files);
-                }
-                else
-                {
-                    SrvcLogger.Debug("{work}", $"распаковка {archive.Name} не дала результатов");
-                }
-
-                #region удаляет временную директорию
-                string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
-                if (Directory.Exists(tempPath))
-                {
-                    try
-                    {
-                        Directory.Delete(tempPath, true);
-                    }
-                    catch (IOException)
-                    {
-                        Directory.Delete(tempPath, true);
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        Directory.Delete(tempPath, true);
-                    }
-                    catch (Exception e)
-                    {
-                        SrvcLogger.Error("{error}", e.ToString());
-                    }
-                }
-                #endregion
+                ResizingImages(files);
             }
             else
             {
-                SrvcLogger.Debug("{work}", $"директория {ParamsHelper.DirName} не найдена");
+                SrvcLogger.Info("{work}", $"распаковка {archive.Name} не дала результатов");
             }
+
+            #region удаляет временную директорию
+            string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
+            if (Directory.Exists(tempPath))
+            {
+                try
+                {
+                    Directory.Delete(tempPath, true);
+                    SrvcLogger.Info("{work}", $"директория {tempPath} удалена");
+                }
+                catch (IOException)
+                {
+                    Directory.Delete(tempPath, true);
+                    SrvcLogger.Info("{work}", $"директория {tempPath} удалена");
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    Directory.Delete(tempPath, true);
+                    SrvcLogger.Info("{work}", $"директория {tempPath} удалена");
+                }
+                catch (Exception e)
+                {
+                    SrvcLogger.Error("{error}", e.ToString());
+                }
+            }
+            #endregion
         }
 
         /// <summary>
@@ -144,26 +134,27 @@ namespace Import.Core.Services
         private FileInfo[] ExtractArchive(FileInfo archive)
         {
             FileInfo[] result = null;
-            SevenZipExtractor.SetLibraryPath(ParamsHelper.SevenZipPath);
-            using (SevenZipExtractor zip = new SevenZipExtractor(archive.FullName))
+            try
             {
-                try
+                SrvcLogger.Info("{work}", $"распаковка архива: {archive.Name}");
+                string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
+                if (!Directory.Exists(tempPath))
                 {
-                    SrvcLogger.Debug("{work}", $"распаковка архива: {archive.Name}");
-                    string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
-                    if (!Directory.Exists(tempPath))
-                    {
-                        Directory.CreateDirectory(tempPath);
-                    }
-                    zip.ExtractArchive(tempPath);
+                    Directory.CreateDirectory(tempPath);
+                }
 
-                    DirectoryInfo di = new DirectoryInfo(tempPath);
-                    result = di.GetDirectories().First().GetFiles();
-                }
-                catch (Exception e)
+                ZipFile.ExtractToDirectory(archive.FullName, tempPath);
+
+                DirectoryInfo di = new DirectoryInfo(tempPath);
+                result = di.GetDirectories().First().GetFiles();
+                if (result != null)
                 {
-                    SrvcLogger.Error("{error}", e.ToString());
+                    SrvcLogger.Info("{work}", $"архив распакован, кол-во файлов: {result.Count()}");
                 }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
             }
             return result;
         }

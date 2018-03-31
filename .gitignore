@@ -11,4 +11,5 @@ Web.config
 Web.Release.config
 Web.Debug.config
 Malyshok/node_modules/
+Malyshok/ProdContent/
 

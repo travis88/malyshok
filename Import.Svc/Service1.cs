@@ -21,12 +21,7 @@ namespace Import.Svc
         /// Поток
         /// </summary>
         private static Thread integrationWorker = null;
-
-        /// <summary>
-        /// Параметры из конфига
-        /// </summary>
-        private ReceiverParamsHelper helperParams;
-
+        
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -48,7 +43,7 @@ namespace Import.Svc
             }
             catch (Exception e)
             {
-                SrvcLogger.Fatal("{work}", String.Format("глобальная ошибка {0}", e.ToString()));
+                SrvcLogger.Error("{work}", $"глобальная ошибка {e.ToString()}");
             }
         }
 
@@ -98,8 +93,9 @@ namespace Import.Svc
             {
                 return MilisecondsToWait(_runTime);
             }
-
-            throw new Exception("Ошибка определения времени выполнения");
+            string errorMessage = "ошибка определения времени выполнения";
+            SrvcLogger.Error("{error}", errorMessage);
+            throw new Exception(errorMessage);
         }
 
         /// <summary>
@@ -108,25 +104,35 @@ namespace Import.Svc
         /// <param name="data"></param>
         private void DoIntegration(object data)
         {
-            SrvcLogger.Debug("{preparing}", "I work!");
-
-            helperParams = new ReceiverParamsHelper();
-            SrvcLogger.Debug("{preparing}", String.Format("время запуска интеграции {0}", helperParams.StartTime));
-            SrvcLogger.Debug("{preparing}", String.Format("директория с файлами {0}", helperParams.DirName));
+            SrvcLogger.Info("{preparing}", "I work!");
+            ReceiverParamsHelper helperParams = new ReceiverParamsHelper();
+            SrvcLogger.Info("{preparing}", $"время запуска интеграции {helperParams.StartTime}");
+            SrvcLogger.Info("{preparing}", $"директория с файлами {helperParams.DirName}");
             
             while (enableIntegration)
             {
                 DirectoryInfo info = new DirectoryInfo(helperParams.DirName);
-                FileInfo[] files = info.GetFiles("*.xml")
-                                       .Where(w => w.FullName.ToLower().Contains("cat") || w.FullName.Contains("prod"))
-                                       .OrderByDescending(p => p.LastWriteTime)
-                                       .Take(2)
-                                       .ToArray();
                 
-                var executeWait = MilisecondsToWait(helperParams.StartTime);
-                SrvcLogger.Debug("{preparing}", String.Format("импорт будет выполнен через: {0} {1}", executeWait / 1000 / 60, "мин"));
+                FileInfo[] files = { info.GetFiles("*.xml")
+                                        .Where(w => w.FullName.ToLower()
+                                        .Contains("cat"))
+                                        .OrderByDescending(p => p.LastWriteTime)
+                                        .FirstOrDefault(),
+
+                                     info.GetFiles("*.xml")
+                                        .Where(w => w.FullName.ToLower()
+                                        .Contains("prod"))
+                                        .OrderByDescending(p => p.LastWriteTime)
+                                        .FirstOrDefault(),
+
+                                     info.GetFiles("*.zip")
+                                        .OrderByDescending(p => p.LastWriteTime)
+                                        .FirstOrDefault() };
+                
+                int executeWait = MilisecondsToWait(helperParams.StartTime);
+                SrvcLogger.Info("{preparing}", $"импорт будет выполнен через: {executeWait / 1000 / 60} мин");
                 Thread.Sleep(executeWait);
-                SrvcLogger.Debug("{preparing}", "запуск ядра импорта");
+                SrvcLogger.Info("{preparing}", "запуск ядра импорта");
                 Importer.DoImport(files);
                 Thread.Sleep(1000 * 60 * 2);
             }

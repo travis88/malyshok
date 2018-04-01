@@ -149,7 +149,7 @@ namespace Import.Core
             stopwatch.Start();
             Preparing();
 
-            if (files != null)
+            if (files != null && files.Any(a => a != null))
             {
                 Step++;
                 files = files.Where(w => w != null).ToArray();
@@ -175,23 +175,23 @@ namespace Import.Core
                 {
                     foreach (var file in files)
                     {
-                        SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
-                        Log.Insert(0, $"Чтение данных: {file.Name}");
-
-                        using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
+                        if (file != null)
                         {
-                            SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
-                            Log.Insert(0, "Данные прочитаны");
+                            SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
+                            Log.Insert(0, $"Чтение данных: {file.Name}");
 
-                            var helper = new InsertHelper
+                            using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                             {
-                                FileStream = fileStream,
-                                Db = db,
-                                Entity = Entity.Catalogs
-                            };
+                                SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
+                                Log.Insert(0, "Данные прочитаны");
 
-                            if (file != null)
-                            {
+                                var helper = new InsertHelper
+                                {
+                                    FileStream = fileStream,
+                                    Db = db,
+                                    Entity = Entity.Catalogs
+                                };
+
                                 if (file.FullName.Contains("cat"))
                                 {
                                     InsertWithLogging(helper);
@@ -207,7 +207,7 @@ namespace Import.Core
                                         }
                                     }
                                     Step++;
-                                    
+
                                     SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
                                     Log.Insert(0, "Перенос данных из буферных таблиц");
                                     Finalizer(db);
@@ -224,21 +224,13 @@ namespace Import.Core
                     }
 
                     stopwatch.Stop();
-                    TimeSpan time = stopwatch.Elapsed;
-                    Total = $"{time.Hours} час. {time.Minutes} мин."
-                        + $" {time.Seconds} сек. {time.Milliseconds} мс.";
-
-                    string falses = $"кол-во ошибок: {CountFalse}";
-                    string successes = $"кол-во успешных процессов: {CountSuccess}";
-                    string completedMessage = $"импорт завершён {falses}; {successes}";
-                    SrvcLogger.Info("{work}", $"импорт завершён");
-                    SrvcLogger.Info("{work}", $"{falses}");
-                    SrvcLogger.Info("{work}", $"{successes}");
-                    Log.Insert(0, "Импорт завершён");
-
-                    emailBody += completedMessage;
+                    emailBody += ResultLogging(stopwatch);
                     SendEmail(emailBody, db);
                 }
+            }
+            else
+            {
+                SrvcLogger.Info("{work}", "файлов для импорта не найдено");
             }
         }
 
@@ -625,7 +617,7 @@ namespace Import.Core
                 return null;
             }
         }
-        
+
         /// <summary>
         /// Возвращает последовательность импорта
         /// в зависимости от кол-ва
@@ -655,6 +647,27 @@ namespace Import.Core
                     break;
             }
             Steps.Add("Рассылка оповещений");
+        }
+
+        /// <summary>
+        /// Логирование по завершению импорта
+        /// </summary>
+        /// <param name="stopwatch"></param>
+        /// <returns></returns>
+        private static string ResultLogging(Stopwatch stopwatch)
+        {
+            TimeSpan time = stopwatch.Elapsed;
+            Total = $"{time.Hours} час. {time.Minutes} мин."
+                + $" {time.Seconds} сек. {time.Milliseconds} мс.";
+
+            string falses = $"кол-во ошибок: {CountFalse}";
+            string successes = $"кол-во успешных процессов: {CountSuccess}";
+            SrvcLogger.Info("{work}", $"импорт завершён");
+            SrvcLogger.Info("{work}", $"{falses}");
+            SrvcLogger.Info("{work}", $"{successes}");
+            Log.Insert(0, "Импорт завершён");
+
+            return $"импорт завершён {falses}; {successes}";
         }
 
         /// <summary>

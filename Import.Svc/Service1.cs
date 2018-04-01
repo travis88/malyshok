@@ -88,8 +88,7 @@ namespace Import.Svc
         /// <returns></returns>
         public int MilisecondsToWait(string runTime)
         {
-            TimeSpan _runTime;
-            if (TimeSpan.TryParse(runTime, out _runTime))
+            if (TimeSpan.TryParse(runTime, out TimeSpan _runTime))
             {
                 return MilisecondsToWait(_runTime);
             }
@@ -111,8 +110,11 @@ namespace Import.Svc
             
             while (enableIntegration)
             {
+                int executeWait = MilisecondsToWait(helperParams.StartTime);
+                SrvcLogger.Info("{preparing}", $"импорт будет выполнен через: {executeWait / 1000 / 60} мин");
+                Thread.Sleep(executeWait);
+
                 DirectoryInfo info = new DirectoryInfo(helperParams.DirName);
-                
                 FileInfo[] files = { info.GetFiles("*.xml")
                                         .Where(w => w.FullName.ToLower()
                                         .Contains("cat"))
@@ -129,12 +131,25 @@ namespace Import.Svc
                                         .OrderByDescending(p => p.LastWriteTime)
                                         .FirstOrDefault() };
                 
-                int executeWait = MilisecondsToWait(helperParams.StartTime);
-                SrvcLogger.Info("{preparing}", $"импорт будет выполнен через: {executeWait / 1000 / 60} мин");
-                Thread.Sleep(executeWait);
                 SrvcLogger.Info("{preparing}", "запуск ядра импорта");
                 SrvcLogger.Info("{work}", $"директория: {helperParams.DirName}");
-                Importer.DoImport(files);
+                if (files != null && files.Any(a => a != null))
+                {
+                    string listFiles = "список найденных файлов: ";
+                    foreach (var file in files)
+                    {
+                        if (file != null)
+                        {
+                            listFiles += $"{file.Name}; ";
+                        }
+                    }
+                    SrvcLogger.Info("{work}", $"{listFiles}");
+                    Importer.DoImport(files);
+                }
+                else
+                {
+                    SrvcLogger.Info("{work}", "файлов для импорта не найдено");
+                }
                 Thread.Sleep(1000 * 60 * 2);
             }
         }

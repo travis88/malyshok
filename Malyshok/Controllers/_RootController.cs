@@ -75,7 +75,8 @@ namespace Disly.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 UserInfo = _repository.getCustomer(new Guid(User.Identity.Name));
-                OrderId = _repository.getOrderId(UserInfo.Id);
+                if (UserInfo != null)
+                    OrderId = _repository.getOrderId(UserInfo.Id);
             }
             else
             {

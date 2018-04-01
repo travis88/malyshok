@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\CodecImageParams.cs" />
     <Compile Include="Helpers\ImageSaverHelper.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Helpers\EntityHelper.cs" />

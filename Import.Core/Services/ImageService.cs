@@ -101,6 +101,13 @@ namespace Import.Core.Services
         /// <param name="fi"></param>
         private void ResizingImages(FileInfo[] fi)
         {
+            CodecImageParams codecImageParams = new CodecImageParams
+            {
+                CodecInfo = GetEncoderInfo("image/jpeg"),
+                EncoderParams = new EncoderParameters(1)
+            };
+            codecImageParams.EncoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
+
             foreach (var img in fi)
             {
                 try
@@ -125,7 +132,7 @@ namespace Import.Core.Services
                             new ImageSaverHelper(img.FullName, $"{saveImgPath}\\{imageName}.jpg",
                                                  1150, 0, null, null, "width")
                         };
-                        SaveImages(imageSizes);
+                        SaveImages(imageSizes, codecImageParams);
                     }
                 }
                 catch (Exception e)
@@ -165,12 +172,8 @@ namespace Import.Core.Services
         /// Сохраняет изображение
         /// </summary>
         /// <param name="imagHelper"></param>
-        private void SaveImages(ImageSaverHelper[] imageHelpers)
+        private void SaveImages(ImageSaverHelper[] imageHelpers, CodecImageParams codecImageParams)
         {
-            ImageCodecInfo myImageCodecInfo = GetEncoderInfo("image/jpeg");
-            EncoderParameters myEncoderParameters = new EncoderParameters(1);
-            myEncoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
-
             foreach (var item in imageHelpers)
             {
                 try
@@ -190,7 +193,7 @@ namespace Import.Core.Services
                         {
                             _img = Imaging.Resize(img, item.Width, item.Orientation);
                         }
-                        _img.Save(item.SavePath, myImageCodecInfo, myEncoderParameters);
+                        _img.Save(item.SavePath, codecImageParams.CodecInfo, codecImageParams.EncoderParams);
                         _img.Dispose();
                     }
                 }

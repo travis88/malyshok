@@ -2,6 +2,7 @@
 using Import.Core.Helpers;
 using Import.Core.Services;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Import.Svc
         /// Поток
         /// </summary>
         private static Thread integrationWorker = null;
-        
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -86,11 +87,19 @@ namespace Import.Svc
         /// </summary>
         /// <param name="runTime"></param>
         /// <returns></returns>
-        public int MilisecondsToWait(string runTime)
+        public int[] MilisecondsToWait(string[] runTimes)
         {
-            if (TimeSpan.TryParse(runTime, out TimeSpan _runTime))
+            List<int> startTimeList = new List<int>();
+            foreach (string runTime in runTimes)
             {
-                return MilisecondsToWait(_runTime);
+                if (TimeSpan.TryParse(runTime, out TimeSpan _runTime))
+                {
+                    startTimeList.Add(MilisecondsToWait(_runTime));
+                }
+            }
+            if (startTimeList != null && startTimeList.Count() > 0)
+            {
+                return startTimeList.ToArray();
             }
             string errorMessage = "ошибка определения времени выполнения";
             SrvcLogger.Error("{error}", errorMessage);
@@ -107,11 +116,16 @@ namespace Import.Svc
             ReceiverParamsHelper helperParams = new ReceiverParamsHelper();
             SrvcLogger.Info("{preparing}", $"время запуска интеграции {helperParams.StartTime}");
             SrvcLogger.Info("{preparing}", $"директория с файлами {helperParams.DirName}");
-            
+
             while (enableIntegration)
             {
-                int executeWait = MilisecondsToWait(helperParams.StartTime);
-                SrvcLogger.Info("{preparing}", $"импорт будет выполнен через: {executeWait / 1000 / 60} мин");
+                int[] executeWaitArray = MilisecondsToWait(helperParams.StartTime);
+                int executeWait = executeWaitArray.Min();
+                int hoursWait = executeWait / 1000 / 60 / 60;
+                int minutesWait = (executeWait - (hoursWait * 60 * 60 * 1000)) / 1000 / 60;
+                int secWait = (executeWait - (hoursWait * 60 * 60 * 1000) - (minutesWait * 60 * 1000)) / 1000;
+                SrvcLogger.Info("{preparing}", $"импорт будет выполнен через: " +
+                                $"{hoursWait} час. {minutesWait} мин. {secWait} сек.");
                 Thread.Sleep(executeWait);
 
                 DirectoryInfo info = new DirectoryInfo(helperParams.DirName);
@@ -130,7 +144,7 @@ namespace Import.Svc
                                      info.GetFiles("*.zip")
                                         .OrderByDescending(p => p.LastWriteTime)
                                         .FirstOrDefault() };
-                
+
                 SrvcLogger.Info("{preparing}", "запуск ядра импорта");
                 SrvcLogger.Info("{work}", $"директория: {helperParams.DirName}");
                 if (files != null && files.Any(a => a != null))
@@ -145,12 +159,27 @@ namespace Import.Svc
                     }
                     SrvcLogger.Info("{work}", $"{listFiles}");
                     Importer.DoImport(files);
+
+                    foreach (var file in files)
+                    {
+                        if (file != null && file.Exists)
+                        {
+                            try
+                            {
+                                SrvcLogger.Info("{work}", $"удаление файла: {file}");
+                                file.Delete();
+                            }
+                            catch (Exception e)
+                            {
+                                SrvcLogger.Error("{error}", $"{e.ToString()}");
+                            }
+                        }
+                    }
                 }
                 else
                 {
                     SrvcLogger.Info("{work}", "файлов для импорта не найдено");
                 }
-                Thread.Sleep(1000 * 60 * 2);
             }
         }
     }

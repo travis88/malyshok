@@ -62,7 +62,7 @@ namespace Import.Svc
         /// </summary>
         /// <param name="runTime"></param>
         /// <returns></returns>
-        public static int MilisecondsToWait(TimeSpan runTime)
+        private int MilisecondsToWait(TimeSpan runTime)
         {
             int result = 10000;
             var _currentTime = DateTime.Now.TimeOfDay;
@@ -87,7 +87,7 @@ namespace Import.Svc
         /// </summary>
         /// <param name="runTime"></param>
         /// <returns></returns>
-        public int[] MilisecondsToWait(string[] runTimes)
+        private int[] MilisecondsToWait(string[] runTimes)
         {
             List<int> startTimeList = new List<int>();
             foreach (string runTime in runTimes)

@@ -225,7 +225,7 @@ namespace Import.Core
 
                     stopwatch.Stop();
                     emailBody += ResultLogging(stopwatch);
-                    //SendEmail(emailBody, db);
+                    SendEmail(emailBody, db);
                 }
             }
             else

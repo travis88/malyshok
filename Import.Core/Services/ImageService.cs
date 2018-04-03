@@ -1,5 +1,6 @@
 ﻿using Import.Core.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -155,7 +156,22 @@ namespace Import.Core.Services
                 ZipFile.ExtractToDirectory(archive.FullName, tempPath);
 
                 DirectoryInfo di = new DirectoryInfo(tempPath);
-                result = di.GetDirectories().First().GetFiles();
+                if (di != null)
+                {
+                    if (di.GetDirectories().Count() > 0)
+                    {
+                        List<FileInfo> files = new List<FileInfo>();
+                        foreach (var dir in di.GetDirectories())
+                        {
+                            files.AddRange(dir.GetFiles());
+                        }
+                        result = files.ToArray();
+                    }
+                    else
+                    {
+                        result = di.GetFiles();
+                    }
+                }
                 if (result != null)
                 {
                     SrvcLogger.Info("{work}", $"архив распакован, кол-во файлов: {result.Count()}");

@@ -4,30 +4,30 @@
     <h1>Вход</h1>
 
     <div class="page-text">
+        <p>&nbsp;</p>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-7">
                 <div class="shadow-block login-form">
-                    <p>&nbsp;</p>
                     <div>
-                        <form id="regForm" method="post">
+                        <form id="loginForm" method="post">
                             @Html.AntiForgeryToken()
-                            @Html.TextBox("Login", "", new { title = "Логин / E-Mail", required = "", @placeholder = "mail@domain" })
-                            @Html.Password("Pass", "", new { title = "Пароль", required = "", @placeholder = "password" })
+                            @Html.TextBox("Login", "", new { title = "E-Mail или Номер телефона",  @placeholder = "mail@domain" })
+                            @Html.Password("Pass", "", new { title = "Пароль", @placeholder = "password" })
                         </form>
-                        <div class="WelcomeBtn">
+                        @Html.ValidationSummary(false, "", new { @class = "" })
+                        <div class="login-btn_block">
                             <button type="submit" form="regForm" class="button btn-blue">Войти</button>
                             <a href="/user/reg" class="button btn-invers to-right">Регистрация</a>
                         </div>
-                        <p>&nbsp;</p>
-                        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                        <div class="restore-pass"><a href="/user/RestorePass">Забыли пароль?</a></div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div>
-                    <div>Войти через социальные сети</div>
-                    <div>Вы можете войти в личный кабинет в один клик, через свой профиль в социальной сети.</div>
-                    <div>
+            <div class="col-sm-5">
+                <div class="login-socseti">
+                    <div class="title">Войти через <br/> социальные сети</div>
+                    <div class="description">Вы можете войти в личный кабинет в один клик, через свой профиль в социальной сети.</div>
+                    <div class="socseti-btn">
                         <a href="/User/login_vk"><span class="login-vk"></span></a>
                         <a href="/User/login_vk"><span class="login-fb"></span></a>
                     </div>
@@ -38,7 +38,6 @@
 </div>
 
 @section scripts {
-    <link href="/Content/plugins/Disly/DislyControls.css" rel="stylesheet">
     <script src="/Content/plugins/bootstrap/js/bootstrap-toggle.js"></script>
     <script src="/Content/plugins/Disly/DislyControls.js"></script>
 }

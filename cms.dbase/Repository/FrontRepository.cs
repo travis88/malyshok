@@ -594,27 +594,9 @@ namespace cms.dbase
                 return new CategoryTree
                 {
                     CountItems = temp.Count(),
-                    Tree = createCatalog(temp, Path)
+                    Tree = temp.ToArray()
                 };
             }
-        }
-        private CategoryModel[] createCatalog(IQueryable<CategoryModel> StartModel, string Path)
-        {
-            var query = StartModel.Where(w => w.Path == Path);
-
-            var data = query.OrderBy(o => new { o.Title })
-                .Select(s => new CategoryModel()
-                {
-                    Id = s.Id,
-                    Title = s.Title,
-                    Alias = s.Alias,
-                    Level = s.Level,
-                    Path = s.Path,
-                    CountChildren = StartModel.Where(w => w.Parent == s.Parent).Count(),
-                    Children = createCatalog(StartModel, s.Path + s.Alias + "/")
-                }).ToArray();
-
-            return data;
         }
 
         public override ProductList getProdList(FilterParams filter)
@@ -624,18 +606,25 @@ namespace cms.dbase
                 var BasketList = db.content_order_detailss
                     .Where(w => w.f_order == filter.Order);
 
+                ProductModel[] Prod;
+                int itemCount = 0;
+
                 if (String.IsNullOrEmpty(filter.Category))
                 {
-                    var query = db.content_productss.Where(w => w.n_count > 0);
+                    var query = db.sv_productss.Where(w => w.n_count > 0);
+
+                    if (filter.Date != null)
+                        query = query.Where(w => w.d_date >= filter.Date);
+
                     query = query.OrderBy(w => new { w.d_date, w.c_title });
 
-                    int itemCount = query.Count();
+                    itemCount = query.Count();
 
                     var ProdList = query
                         .Skip(filter.Size * (filter.Page - 1))
                         .Take(filter.Size);
                     
-                    var Prod = (from p in ProdList
+                    Prod = (from p in ProdList
                                 join b in BasketList on p.id equals b.f_prod_id into ps
                                 from b in ps.DefaultIfEmpty()
                                 select new { p, b.n_count })
@@ -650,19 +639,8 @@ namespace cms.dbase
                                     Count = (int)s.p.n_count,
                                     inBasket = s.n_count,
                                     Photo = s.p.c_photo
-                                });
-
-                    return new ProductList
-                    {
-                        Data = Prod.ToArray(),
-                        Pager = new Pager
-                        {
-                            page = filter.Page,
-                            size = filter.Size,
-                            items_count = itemCount,
-                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
-                        }
-                    };
+                                    ,CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
+                                }).ToArray();
 
                 }
                 else
@@ -679,13 +657,13 @@ namespace cms.dbase
                         .Join(db.sv_productss, c => c.id, p => p.f_category, (c, p) => p)
                         .OrderBy(w => new { w.d_date, w.c_title });
 
-                    int itemCount = prodQuery.Count();
+                    itemCount = prodQuery.Count();
 
                     var ProdList = prodQuery
                         .Skip(filter.Size * (filter.Page - 1))
                         .Take(filter.Size);
 
-                    var Prod = (from p in ProdList
+                    Prod = (from p in ProdList
                                 join b in BasketList on p.id equals b.f_prod_id into ps
                                 from b in ps.DefaultIfEmpty()
                                 select new { p, b.n_count })
@@ -701,26 +679,26 @@ namespace cms.dbase
                                     inBasket = s.n_count,
                                     Photo = s.p.c_photo,
                                     CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
-                                });
-
-                    var List = new ProductList
-                    {
-                        Data = Prod.ToArray(),
-                        Pager = new Pager
-                        {
-                            page = filter.Page,
-                            size = filter.Size,
-                            items_count = itemCount,
-                            page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
-                        }
-                    };
-
-
-                    return List;
+                                }).ToArray();
                 }
+
+                var List = new ProductList
+                {
+                    Data = Prod,
+                    Pager = new Pager
+                    {
+                        page = filter.Page,
+                        size = filter.Size,
+                        items_count = itemCount,
+                        page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                    }
+                };
+
+
+                return List;
             }
         }
-        private Catalog_list[] getProdCategorys(string Path, string Titles)
+        public Catalog_list[] getProdCategorys(string Path, string Titles)
         {
             string[] arrID = ("/" + Path).Replace("//", "").Split('/');
             string[] arrName = ("/" + Titles).Replace("//", "").Split('/');
@@ -740,6 +718,51 @@ namespace cms.dbase
             }
             return Categorys;
         }
+
+        public override ProductModel getProdItem(Guid id, Guid Order)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var BasketList = db.content_order_detailss.Where(w => w.f_order == Order);
+
+                var ProdItem = db.content_productss.Where(w => w.id == id);
+
+                var Prod = (from p in ProdItem
+                            join b in BasketList on p.id equals b.f_prod_id into ps
+                            from b in ps.DefaultIfEmpty()
+                            select new { p, b.n_count })
+                            .Select(s => new ProductModel
+                            {
+                                Id = s.p.id,
+                                Title = s.p.c_title,
+                                Code = s.p.c_code,
+                                Barcode = s.p.c_barcode,
+                                Price = (decimal)s.p.m_price,
+                                Standart = s.p.c_standart,
+                                Count = (int)s.p.n_count,
+                                inBasket = s.n_count,
+                                Photo = s.p.c_photo
+                            }).FirstOrDefault();
+
+                return Prod;
+            }
+        }
+        public override Catalog_list[] getCertificates(Guid ProdId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_certificatess
+                    .Where(w => w.f_product == ProdId)
+                    .Select(s => new Catalog_list
+                    {
+                        text = s.c_title,
+                        value = s.c_url,
+                        available = s.b_hygienic
+                    })
+                    .ToArray();
+            }
+        }
+
 
         #region Users
         /// <summary>

@@ -870,28 +870,27 @@
     <Content Include="Views\Press\Rss.cshtml" />
     <Content Include="Views\Press\Index.cshtml" />
     <Content Include="Views\Press\part\Item.cshtml" />
-    <Content Include="Views\Shared\part\childlist.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\Shared\part\childtabs.cshtml" />
     <Content Include="Views\Service\Photo.cshtml" />
     <Content Include="Views\Press\RssSettings.cshtml" />
-    <Content Include="Views\Shared\part\childlist_sitemap.cshtml" />
-    <Content Include="Views\Shared\part\nav.cshtml" />
     <Content Include="Views\Contacts\Index.cshtml" />
     <Content Include="Views\Prod\Index.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Reg.cshtml" />
     <Content Include="Views\User\RegCompleted.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\Partials\Menu\Default.cshtml" />
-    <Content Include="Views\Partials\Basket\Default.cshtml" />
-    <Content Include="Views\Partials\Catalog\Default.cshtml" />
+    <Content Include="Views\Shared\Menu\Default.cshtml" />
+    <Content Include="Views\Shared\Basket\Default.cshtml" />
+    <Content Include="Views\Shared\Prod\Catalog.cshtml" />
     <Content Include="Views\Prod\Item.cshtml" />
     <Content Include="Views\Basket\Index.cshtml" />
-    <Content Include="Views\Partials\Basket\ShortBlock.cshtml" />
-    <Content Include="Views\Prod\Catalog.cshtml" />
+    <Content Include="Views\Shared\Basket\ShortBlock.cshtml" />
+    <Content Include="Views\Shared\Prod\FullCatalog.cshtml" />
     <Content Include="Views\MergeOrders\Index.cshtml" />
     <Content Include="Views\Basket\Result.cshtml" />
+    <Content Include="Views\Shared\Prod\Novelties.cshtml" />
+    <Content Include="Views\Shared\Prod\ProdItem.cshtml" />
+    <Content Include="Views\Shared\Menu\childlist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

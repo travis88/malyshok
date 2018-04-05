@@ -13,67 +13,20 @@
             </div>
             <div class="catalog-block">
                 <div class="row"></div>
-                <div class="catalog-start">@Html.Partial("Catalog", Model.Categorys.Tree)</div>
+                @Html.Partial("Prod/FullCatalog", Model.Categorys.Tree)                
             </div>
         }
         @if (Model.List != null)
         {
             if (Model.List.Data.Any())
             {
-                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                if (Model.List.Pager.page_count > 1)
+                {
+                    Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                }
                 foreach (var item in Model.List.Data)
                 {
-                    var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") : "";
-                    ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
-                    var split = "";
-
-                    <div class="item_prod shadow-block">
-                        <div class="prod-img"><img src="@ProdImg" /></div>
-                        <div class="prod-info">
-                            <div class="prod-title"><a href="/prod/@item.Id/">@Html.Raw(item.Title)</a></div>
-                            <div class="prod-catalog-link">
-                                <div>
-                                    @foreach (var catalog in item.CatalogPath)
-                                    {
-                                        @split <a href="/catalog/@catalog.link">@catalog.text</a>
-
-                                        split = " / "; 
-                                    }
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="prod-params col-md-6">
-                                    <div><span>Код</span>@item.Code</div>
-                                    <div><span>Штрих-код</span>@item.Barcode</div>
-                                </div>
-                                <div class="prod-params col-md-6">
-                                    <div><span>Стандарт</span>@item.Standart</div>
-                                    <div>
-                                        <span>Остаток</span>@if (@item.Count > 0)
-                                        { @Html.Raw("есть в наличии")  }
-                                        else
-                                        { @Html.Raw("нет в наличии")  }
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="prod-basket-block">
-                                <div class="prod-price"><span>Цена</span><b>@item.Price.ToString("# ###.00#")</b> руб.</div>
-                                <div class="prod-cert">
-                                    Сертификаты
-                                </div>
-                                <div class="basket-form">
-                                    @{ 
-                                        var count = item.inBasket;
-                                        string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
-                                        string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
-                                        string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
-                                    }
-                                    <input data-id="@item.Id" value="@inputVal" /> шт.
-                                    <button type="button" class="in-basket @btnStyle">@btnName</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @Html.Partial("Prod/ProdItem", item)
                 }
                 Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
             }

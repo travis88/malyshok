@@ -24,15 +24,15 @@
                 <div class="basket_item shadow-block">
                     <div class="basket-img"><img src="@ProdImg" /></div>
                     <div class="item-info">
-                        <div class="basket_item-title"><a href="/prod/item/@item.Id/">@Html.Raw(item.Title)</a></div>
+                        <div class="basket_item-title"><a href="/prod/@item.Id/">@Html.Raw(item.Title)</a></div>
                         <div class="basket_form-block">
-                            <div class="prod-price"><span>Цена</span><b>@item.Price.ToString("# ###.00#")</b> руб.</div>
+                            <div class="prod-price"><span>Цена</span><b> @item.Price.ToString("# ###.00#")</b> руб.</div>
                             <div class="basket_item-counter">
                                 <div class="count-less">-</div>
                                 <input data-id="@item.Id" value="@item.Count" />
                                 <div class="count-more">+</div>
                             </div>
-                            <div class="basket_item-params"><div><span>Код</span>@item.Code</div></div>
+                            <div class="basket_item-params"><div><span>Код</span> @item.Code</div></div>
                             <div class="basket_delete">
                                 <button type="button" class="del-basket btn-invers">Удалить</button>
                             </div>
@@ -87,7 +87,7 @@
                     </div>
                     <button type="submit" class="btn-red">Оформить заказ</button>
                 </form>
-                <div>
+                <div class="ordering-rules">
                     Нажимая кнопку <b>«Оформить заказ»</b>, Вы подтверждаете свое совершеннолетие,
                     соглашаетесь на обработку персональных данных в соответствии с
                     <a title="Пользовательское соглашение" href="/working-conditions/terms_of_use">Пользовательским соглашением</a>,

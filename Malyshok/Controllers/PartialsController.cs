@@ -44,7 +44,7 @@ namespace Disly.Controllers
         /// </summary>
         /// <param name="viewName"></param>
         /// <returns></returns>
-        public ActionResult Catalog(string viewName = "Catalog/Default")
+        public ActionResult Catalog(string viewName = "Prod/Catalog")
         {
             CategoryModel[] Model = _repository.getProdCatalogModule();
 
@@ -88,5 +88,93 @@ namespace Disly.Controllers
 
             return View(viewName, Model);
         }
+
+        public ActionResult Novelties(string viewName = "Prod/Novelties" )
+        {
+            Random rnd = new Random();
+            var filter = getFilter();
+            filter.Date =  DateTime.Now.AddDays(-14);
+
+            //if (OrderId != null)
+            //{
+            //    filter.Order = (Guid)OrderId;
+            //}
+            var List = _repository.getProdList(filter);
+            ProductModel Model = (List.Data.Length > 0) ? List.Data[new Random().Next(0, List.Data.Length - 1)] : null;
+            
+            return View(viewName, Model);
+        }
+
+
+        public FilterParams getFilter(int defaultPageSize = 12)
+        {
+            string return_url = HttpUtility.UrlDecode(Request.Url.Query);
+            // если в URL номер страницы равен значению по умолчанию - удаляем его из URL
+            try
+            {
+                return_url = (Convert.ToInt32(Request.QueryString["page"]) == 1) ? addFiltrParam(return_url, "page", String.Empty) : return_url;
+            }
+            catch
+            {
+                return_url = addFiltrParam(return_url, "page", String.Empty);
+            }
+            try
+            {
+                return_url = (Convert.ToInt32(Request.QueryString["size"]) == defaultPageSize) ? addFiltrParam(return_url, "size", String.Empty) : return_url;
+            }
+            catch
+            {
+                return_url = addFiltrParam(return_url, "size", String.Empty);
+            }
+            return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
+            return_url = String.IsNullOrEmpty(Request.QueryString["tab"]) ? addFiltrParam(return_url, "tab", String.Empty) : return_url;
+            return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
+
+            // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
+            if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
+                Response.Redirect(Request.Path + return_url);
+
+            DateTime? DateNull = new DateTime?();
+
+            FilterParams result = new FilterParams()
+            {
+                Domain = "main",
+                Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1,
+                Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : defaultPageSize,
+                Type = (String.IsNullOrEmpty(Request.QueryString["type"])) ? String.Empty : Request.QueryString["type"],
+                Category = (String.IsNullOrEmpty(Request.QueryString["category"])) ? String.Empty : Request.QueryString["category"],
+                Group = (String.IsNullOrEmpty(Request.QueryString["group"])) ? String.Empty : Request.QueryString["group"],
+                Lang = (String.IsNullOrEmpty(Request.QueryString["lang"])) ? String.Empty : Request.QueryString["lang"],
+                Date = (String.IsNullOrEmpty(Request.QueryString["date"])) ? DateNull : DateTime.Parse(Request.QueryString["date"]),
+                DateEnd = (String.IsNullOrEmpty(Request.QueryString["dateend"])) ? DateNull : DateTime.Parse(Request.QueryString["dateend"]),
+                SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"],
+                Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
+            };
+
+            return result;
+        }
+
+        public string addFiltrParam(string query, string name, string val)
+        {
+            //string search_Param = @"\b" + name + @"=[\w]*[\b]*&?";
+            string search_Param = @"\b" + name + @"=(.*?)(&|$)";
+            string normal_Query = @"&$";
+
+            Regex delParam = new Regex(search_Param, RegexOptions.CultureInvariant);
+            Regex normalQuery = new Regex(normal_Query);
+            query = delParam.Replace(query, String.Empty);
+            query = normalQuery.Replace(query, String.Empty);
+
+            if (val != String.Empty)
+            {
+                if (query.IndexOf("?") > -1) query += "&" + name + "=" + val;
+                else query += "?" + name + "=" + val;
+            }
+
+            query = query.Replace("?&", "?").Replace("&&", "&");
+
+            return query;
+        }
+
     }
 }

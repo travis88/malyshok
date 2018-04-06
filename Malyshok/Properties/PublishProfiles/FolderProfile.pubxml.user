@@ -72,7 +72,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Import/Index.cshtml">
-      <publishTime>03/28/2018 20:09:38</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Main/Index.cshtml">
       <publishTime>02/13/2018 17:41:31</publishTime>
@@ -285,25 +285,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/26/2018 18:47:38</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>03/30/2018 22:25:33</publishTime>
+      <publishTime>04/03/2018 07:57:13</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>05/22/2017 13:02:04</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>03/30/2018 22:25:33</publishTime>
+      <publishTime>04/03/2018 07:57:13</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>03/30/2018 22:25:31</publishTime>
+      <publishTime>04/03/2018 07:57:12</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>03/30/2018 22:25:31</publishTime>
+      <publishTime>04/03/2018 07:57:12</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>03/30/2018 22:25:34</publishTime>
+      <publishTime>04/03/2018 08:04:54</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>03/30/2018 22:25:34</publishTime>
+      <publishTime>04/03/2018 08:04:54</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>02/13/2018 17:41:41</publishTime>
@@ -312,13 +312,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:41</publishTime>
     </File>
     <File Include="bin/Imaging.dll">
-      <publishTime>10/12/2017 08:41:49</publishTime>
+      <publishTime>03/29/2018 17:24:19</publishTime>
     </File>
     <File Include="bin/Import.Core.dll">
-      <publishTime>03/30/2018 17:29:12</publishTime>
+      <publishTime>04/03/2018 07:57:12</publishTime>
     </File>
     <File Include="bin/Import.Core.pdb">
-      <publishTime>03/30/2018 17:29:12</publishTime>
+      <publishTime>04/03/2018 07:57:12</publishTime>
     </File>
     <File Include="bin/JavaScriptEngineSwitcher.ChakraCore.dll">
       <publishTime>02/26/2018 18:47:38</publishTime>
@@ -438,7 +438,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
     <File Include="Content/css/import-react.css">
-      <publishTime>03/28/2018 20:09:38</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="Content/css/index.css">
       <publishTime>02/26/2018 18:47:38</publishTime>
@@ -2046,22 +2046,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/26/2018 08:04:35</publishTime>
     </File>
     <File Include="ProdContent/4690590049280/4690590049280_1.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/4690590049280/4690590049280_1_mini.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/4690590049280/4690590049280_1_preview.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/4690590065952/4690590065952_1.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/4690590065952/4690590065952_1_mini.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/4690590065952/4690590065952_1_preview.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/4690590083383/4690590083383.jpg">
       <publishTime>03/27/2018 17:48:56</publishTime>
@@ -2073,22 +2073,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/27/2018 17:48:56</publishTime>
     </File>
     <File Include="ProdContent/4690590117101/4690590117101_1.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/4690590117101/4690590117101_1_mini.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/4690590117101/4690590117101_1_preview.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/6934621573626/6934621573626_1.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/6934621573626/6934621573626_1_mini.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/6934621573626/6934621573626_1_preview.jpg">
-      <publishTime>03/30/2018 16:10:42</publishTime>
+      <publishTime>04/02/2018 16:17:36</publishTime>
     </File>
     <File Include="ProdContent/6934624349266/6934624349266.jpg">
       <publishTime>03/27/2018 17:28:20</publishTime>
@@ -2267,6 +2267,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Partials/Menu/Default.cshtml">
       <publishTime>03/13/2018 11:43:20</publishTime>
     </File>
+    <File Include="Views/Partials/Prod/Novelties.cshtml">
+      <publishTime>04/02/2018 20:44:13</publishTime>
+    </File>
     <File Include="Views/PortalDoctors/Index.cshtml">
       <publishTime>01/16/2018 12:49:26</publishTime>
     </File>
@@ -2286,13 +2289,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
     <File Include="Views/Prod/Catalog.cshtml">
-      <publishTime>03/19/2018 15:57:57</publishTime>
+      <publishTime>04/02/2018 18:46:54</publishTime>
     </File>
     <File Include="Views/Prod/Index.cshtml">
-      <publishTime>03/30/2018 22:19:37</publishTime>
+      <publishTime>04/02/2018 18:42:53</publishTime>
     </File>
     <File Include="Views/Prod/Item.cshtml">
-      <publishTime>03/15/2018 19:23:34</publishTime>
+      <publishTime>04/02/2018 19:42:03</publishTime>
     </File>
     <File Include="Views/Search/Index.cshtml">
       <publishTime>03/30/2018 22:19:49</publishTime>
@@ -2322,10 +2325,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/13/2018 11:43:28</publishTime>
     </File>
     <File Include="Views/Shared/services/Pager.cshtml">
-      <publishTime>03/30/2018 22:16:46</publishTime>
+      <publishTime>04/02/2018 17:23:29</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>03/27/2018 17:51:04</publishTime>
+      <publishTime>04/02/2018 20:21:42</publishTime>
     </File>
     <File Include="Views/SpecStructure/Index.cshtml">
       <publishTime>01/16/2018 12:49:26</publishTime>
@@ -2397,7 +2400,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/30/2018 17:36:20</publishTime>
+      <publishTime>04/02/2018 20:01:40</publishTime>
     </File>
     <File Include="webpack.config.js">
       <publishTime>03/26/2018 08:04:35</publishTime>

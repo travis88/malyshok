@@ -1,4 +1,5 @@
 ﻿using cms.dbase;
+using cms.dbModel.entity;
 using Disly.Models;
 using System;
 using System.Linq;
@@ -74,12 +75,82 @@ namespace Disly.Controllers
             return Redirect(Request.Path + query);
         }
 
+        public ActionResult Novelties()
+        {
+            string viewName = "Index";
+            #region Заголовок страницы
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+            }
+            else
+            {
+                ViewBag.Title = "Новинки";
+                ViewBag.Description = "";
+                ViewBag.KeyWords = "";
+            }
+            #endregion
+
+            var filter = getFilter();
+            filter.Date = DateTime.Now.AddDays(-14);
+            if (OrderId != null) filter.Order = (Guid)OrderId;
+            
+            model.List = _repository.getProdList(filter);
+
+            return View(viewName, model);
+        }
+
+        [HttpPost]
+        public ActionResult Novelties(string size, string sort, string availability)
+        {
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = addFiltrParam(query, "page", String.Empty);
+            query = addFiltrParam(query, "size", size);
+
+            return Redirect(Request.Path + query);
+        }
+
+        [HttpPost]
+        public ActionResult Certificates(Guid Id)
+        {
+            Response.ContentType = "application/json; charset=utf-8";
+
+            if (Id != Guid.Empty)
+            {
+                Catalog_list[] certList = _repository.getCertificates(Id);
+
+                return Json(new { Result = "Список сертификатов", Certificates = certList }, JsonRequestBehavior.AllowGet);
+            }
+            else
+                return Json(new { Result = "Ошибка. Товар не идентифицирован." }, JsonRequestBehavior.AllowGet);
+        }
+
+
         /// <summary>
         /// Сраница по умолчанию
         /// </summary>
         /// <returns></returns>
-        public ActionResult Item(string id)
+        public ActionResult Item(Guid id)
         {
+            model.Item = _repository.getProdItem(id, (Guid)OrderId);
+
+            #region Заголовок страницы
+            if (currentPage != null)
+            {
+                ViewBag.Title = currentPage.Title;
+                ViewBag.Description = currentPage.Desc;
+                ViewBag.KeyWords = currentPage.Keyw;
+            }
+            else
+            {
+                ViewBag.Title = model.Item.Title;
+                ViewBag.Description = "";
+                ViewBag.KeyWords = "";
+            }
+            #endregion
+
             return View(model);
         }
     }

@@ -1,0 +1,56 @@
+﻿@model ProductModel
+@{
+    var ProdImg = Model.Photo != null ? Settings.ProdContent + Model.Barcode + "/" + Model.Photo.Replace(".jpg", "_mini.jpg") : "";
+    ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
+    var split = "";
+}
+<div class="item_prod shadow-block">
+    <div class="prod-img"><img src="@ProdImg" /></div>
+    <div class="prod-info">
+        <div class="prod-title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title.Replace(",", ", "))</a></div>
+        <div class="prod-catalog-link">
+            @if (Model.CatalogPath != null)
+            {
+                <div>
+                    @foreach (var catalog in Model.CatalogPath)
+                {
+                        @split <a href="/catalog/@catalog.link">@catalog.text</a>
+
+                        split = " / ";
+                    }
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="prod-params col-md-6">
+                <div><span>Код</span> @Model.Code</div>
+                <div><span>Штрих-код</span> @Model.Barcode</div>
+            </div>
+            <div class="prod-params col-md-6">
+                <div><span>Стандарт</span> @Model.Standart</div>
+                <div>
+                    <span>Остаток</span> @if (Model.Count > 0)
+                    { @Html.Raw("есть в наличии")  }
+                    else
+                    { @Html.Raw("нет в наличии")  }
+                </div>
+            </div>
+        </div>
+        <div class="prod-basket-block">
+            <div class="prod-price"><span>Цена</span><b>@Model.Price.ToString("# ###.00#")</b> руб.</div>
+            <div class="prod-cert">
+                Сертификаты
+            </div>
+            <div class="basket-form">
+                @{
+                    var count = Model.inBasket;
+                    string inputVal = (Model.inBasket > 0) ? Model.inBasket.ToString() : "";
+                    string btnStyle = (Model.inBasket > 0) ? "btn-invers" : "btn-blue";
+                    string btnName = (Model.inBasket > 0) ? "В корзине" : "В корзину";
+                }
+                <input data-id="@Model.Id" value="@inputVal" /> шт.
+                <button type="button" class="in-basket @btnStyle">@btnName</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -49,6 +49,8 @@ namespace cms.dbModel
         public abstract CategoryModel[] getProdCatalogModule();
         public abstract CategoryTree getProdCatalog(string Path);
         public abstract ProductList getProdList(FilterParams filter);
+        public abstract ProductModel getProdItem(Guid id, Guid Order);
+        public abstract Catalog_list[] getCertificates(Guid ProdId);
 
         // Заказы
         public abstract bool CheckOrder(Guid OrderId);

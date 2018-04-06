@@ -226,6 +226,38 @@ $(document).ready(function () {
         }
     })
 
+        //
+    $('.prod-cert').bind({
+        click: function () {
+            $('.cert-panel').remove();
+            var _Id = $(this).parent().find('input').attr('data-id');
+
+            var $Panel = $("<div/>", { "class": "cert-panel" });
+            var $PanelBody = $("<div/>", { "class": "cert-panel_body" });
+            var $btnClose = $("<div/>", { "class": "btn-close" });
+            $btnClose.bind({
+                click: function () {
+                    $('.cert-panel').remove();
+                }
+            });
+            $PanelBody.append($btnClose);
+            
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: '/certificates/' + _Id + '/',
+                error: function () {
+                },
+                success: function (data) {
+                    $PanelBody.append(data.Certificates);
+                }
+            });
+
+            $Panel.append($PanelBody);
+            $(this).closest('.item_prod').append($Panel);
+        }
+    });
+
     // Распределение каталога продукции по колонкам
     var CatalogLength = $('.catalog-item').length;
     var Ost = CatalogLength % 3;

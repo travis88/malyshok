@@ -29,11 +29,12 @@ namespace TransferImage.Cmd
             var products = repository.GetProducts(transferParams.DateCreate);
             if (products != null && products.Count() > 0)
             {
+                SrvcLogger.Info("{info}", $"кол-во товаров: {products.Count()}");
                 var images = GetImages(products);
-                if (images != null)
+                if (images != null && images.Count() > 0)
                 {
                     SrvcLogger.Info("{info}", $"кол-во изображений: {images.Count()}");
-                    ImageHandler handler = new ImageHandler();
+                    ImageHandler handler = new ImageHandler(transferParams);
                     handler.ResizingImages(images);
                     SrvcLogger.Info("{info}", "перенос изображений завершён");
                 }

@@ -10,27 +10,20 @@ namespace TransferImage.Cmd
     class Program
     {
         /// <summary>
-        /// Параметры для переноса
-        /// </summary>
-        private static TransferParams transferParams = new TransferParams();
-
-        /// <summary>
-        /// Репозиторий
-        /// </summary>
-        private static Repository repository = new Repository();
-
-        /// <summary>
         /// Точка входа
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            TransferParams transferParams = new TransferParams();
+            Repository repository = new Repository();
+
             SrvcLogger.Info("{info}", $"перенос изображений из {transferParams.From}");
             var products = repository.GetProducts(transferParams.DateCreate);
             if (products != null && products.Count() > 0)
             {
                 SrvcLogger.Info("{info}", $"кол-во товаров: {products.Count()}");
-                var images = GetImages(products);
+                var images = GetImages(products, transferParams);
                 if (images != null && images.Count() > 0)
                 {
                     SrvcLogger.Info("{info}", $"кол-во изображений: {images.Count()}");
@@ -53,7 +46,7 @@ namespace TransferImage.Cmd
         /// Возвращает список изображений из директории
         /// </summary>
         /// <returns></returns>
-        private static FileInfo[] GetImages(IEnumerable<content_products> products)
+        private static FileInfo[] GetImages(string[] products, TransferParams transferParams)
         {
             try
             {
@@ -66,7 +59,7 @@ namespace TransferImage.Cmd
 
                     return oldDirectory.GetFiles("*_2.jpg")
                         .Where(w => !existingDirs.Any(a => w.Name.Contains(a.Name)))
-                        .Where(w => products.Any(a => w.Name.Contains(a.c_barcode)))
+                        .Where(w => products.Any(a => w.Name.Contains(a)))
                         .ToArray();
                 }
             }

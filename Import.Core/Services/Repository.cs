@@ -17,12 +17,13 @@ namespace Import.Core.Services
         /// Возвращает список товаров
         /// </summary>
         /// <returns></returns>
-        public content_products[] GetProducts(DateTime createDate)
+        public string[] GetProducts(DateTime createDate)
         {
             using (var db = new dbModel(connection))
             {
                 return db.content_productss
                     .Where(w => w.d_create_date >= createDate)
+                    .Select(s => s.c_barcode)
                     .ToArray();
             }
         }

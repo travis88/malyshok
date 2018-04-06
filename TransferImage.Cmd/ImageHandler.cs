@@ -79,15 +79,19 @@ namespace TransferImage.Cmd
                                                  200, 200, "center", "center", null),
                             new ImageSaverHelper(img.FullName, $"{saveImgPath}\\{imageName}_preview.jpg",
                                                  400, 400, "center", "center", null),
-                            new ImageSaverHelper(img.FullName, $"{saveImgPath}\\{imageName}.jpg",
+                            new ImageSaverHelper(img.FullName, $"{saveImgPath}\\{imageName}_1.jpg",
                                                  1150, 0, null, null, "width")
+
+                            //миниатюра      200х200
+                            //предпроссмотр  400х400
+                            //галерея        1150х600   (пропорционально по максимальной стороне)
                         };
 
                         SaveImages(imageSizes, codecImageParams);
                         i++;
                         if (i % 50 == 0)
                         {
-                            SrvcLogger.Error("{info}", $"обработано {i} изображений из {countFiles}");
+                            SrvcLogger.Info("{info}", $"обработано {i} изображений из {countFiles}");
                         }
                     }
                 }

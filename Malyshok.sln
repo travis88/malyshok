@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Malyshok", "Malyshok\Malyshok.csproj", "{3D10B354-F5AD-4568-B4EC-65381A50B8F6}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Import.Cmd", "Import.Cmd\Import.Cmd.csproj", "{A6B319ED-8AF0-4D7C-A002-6373BEA59CA7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Import.Svc", "Import.Svc\Import.Svc.csproj", "{1E65D440-7EF6-4B15-8C7C-2D1824553B48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransferImage.Cmd", "TransferImage.Cmd\TransferImage.Cmd.csproj", "{8B5258F2-9188-4EE2-8108-40921987A627}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{1E65D440-7EF6-4B15-8C7C-2D1824553B48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E65D440-7EF6-4B15-8C7C-2D1824553B48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E65D440-7EF6-4B15-8C7C-2D1824553B48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B5258F2-9188-4EE2-8108-40921987A627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B5258F2-9188-4EE2-8108-40921987A627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B5258F2-9188-4EE2-8108-40921987A627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B5258F2-9188-4EE2-8108-40921987A627}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +65,7 @@ Global
 		{FFA720B3-A6AD-491D-8EB5-E971F9C63374} = {13C7F42A-AAF8-4746-B834-54E78EC7E902}
 		{A6B319ED-8AF0-4D7C-A002-6373BEA59CA7} = {13C7F42A-AAF8-4746-B834-54E78EC7E902}
 		{1E65D440-7EF6-4B15-8C7C-2D1824553B48} = {13C7F42A-AAF8-4746-B834-54E78EC7E902}
+		{8B5258F2-9188-4EE2-8108-40921987A627} = {13C7F42A-AAF8-4746-B834-54E78EC7E902}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3544D2BD-CF04-42EE-97F1-9B168274F7FB}

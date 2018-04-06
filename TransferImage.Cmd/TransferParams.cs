@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 
 namespace TransferImage.Cmd
@@ -24,14 +25,23 @@ namespace TransferImage.Cmd
         public string[] AllowedPicTypes { get; set; }
 
         /// <summary>
+        /// Дата создания продукций
+        /// </summary>
+        public DateTime DateCreate { get; set; }
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         public TransferParams()
         {
-            From = System.Configuration.ConfigurationManager.AppSettings["From"];
-            To = System.Configuration.ConfigurationManager.AppSettings["To"];
-            AllowedPicTypes = System.Configuration.ConfigurationManager.AppSettings["AllowedPicTypes"]
+            From = ConfigurationManager.AppSettings["From"];
+            To = ConfigurationManager.AppSettings["To"];
+            AllowedPicTypes = ConfigurationManager.AppSettings["AllowedPicTypes"]
                 .Split(',').Where(w => !String.IsNullOrWhiteSpace(w)).ToArray();
+            DateTime.TryParseExact(ConfigurationManager.AppSettings["DateCreate"], "dd.MM.yyyy",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out DateTime dateCreate);
+            DateCreate = dateCreate;
         }
     }
 }

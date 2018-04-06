@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Import.Core.Services
 {
@@ -16,11 +17,13 @@ namespace Import.Core.Services
         /// Возвращает список товаров
         /// </summary>
         /// <returns></returns>
-        public content_products[] GetProducts()
+        public content_products[] GetProducts(DateTime createDate)
         {
             using (var db = new dbModel(connection))
             {
-                return db.content_productss.ToArray();
+                return db.content_productss
+                    .Where(w => w.d_create_date >= createDate)
+                    .ToArray();
             }
         }
     }

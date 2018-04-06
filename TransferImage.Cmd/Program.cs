@@ -1,5 +1,9 @@
-﻿using Import.Core.Services;
+﻿using Import.Core;
+using Import.Core.Services;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace TransferImage.Cmd
 {
@@ -21,27 +25,50 @@ namespace TransferImage.Cmd
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            SrvcLogger.Error("{info}", $"перенос изображений из {transferParams.From}");
-            var products = repository.GetProducts();
-            SrvcLogger.Error("{info}", "перенос изображений завершён");
+            SrvcLogger.Info("{info}", $"перенос изображений из {transferParams.From}");
+            var products = repository.GetProducts(transferParams.DateCreate);
+            if (products != null && products.Count() > 0)
+            {
+                var images = GetImages(products);
+                if (images != null)
+                {
+                    SrvcLogger.Info("{info}", $"кол-во изображений: {images.Count()}");
+                    ImageHandler handler = new ImageHandler();
+                    handler.ResizingImages(images);
+                    SrvcLogger.Info("{info}", "перенос изображений завершён");
+                }
+                else
+                {
+                    SrvcLogger.Info("{info}", "подходящих изображений не найдено");
+                }
+            }
+            else
+            {
+                SrvcLogger.Info("{info}", $"товаров с датой создания после {transferParams.DateCreate} не найдено");
+            }
         }
 
         /// <summary>
         /// Возвращает список изображений из директории
         /// </summary>
         /// <returns></returns>
-        private static FileInfo[] GetImages()
+        private static FileInfo[] GetImages(IEnumerable<content_products> products)
         {
-            DirectoryInfo di = new DirectoryInfo(transferParams.From);
-            if (di != null)
+            try
             {
-                var files = di.GetFiles();
-                return null;
+                DirectoryInfo di = new DirectoryInfo(transferParams.From);
+                if (di != null)
+                {
+                    return di.GetFiles("*_2.jpg")
+                        .Where(w => products.Any(a => w.Name.Contains(a.c_barcode)))
+                        .ToArray();
+                }
             }
-            else
+            catch (Exception e)
             {
-                return null;
+                SrvcLogger.Error("{error}", e.ToString());
             }
+            return null;
         }
     }
 }

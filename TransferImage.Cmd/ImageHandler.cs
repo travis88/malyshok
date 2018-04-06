@@ -30,7 +30,7 @@ namespace TransferImage.Cmd
         /// <summary>
         /// Обрабатывает изображения
         /// </summary>
-        private void ResizingImages(FileInfo[] files)
+        public void ResizingImages(FileInfo[] files)
         {
             CodecImageParams codecImageParams = new CodecImageParams
             {

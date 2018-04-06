@@ -17,6 +17,8 @@ namespace TransferImage.Cmd
             Repository repository = new Repository();
 
             SrvcLogger.Info("{info}", $"перенос изображений из {transferParams.From}");
+            SrvcLogger.Info("{info}", $"дата создания не ранее {transferParams.DateCreate}");
+
             var products = repository.GetProducts(transferParams.DateCreate);
             if (products != null && products.Count() > 0)
             {

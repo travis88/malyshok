@@ -57,10 +57,15 @@ namespace TransferImage.Cmd
         {
             try
             {
-                DirectoryInfo di = new DirectoryInfo(transferParams.From);
-                if (di != null)
+                DirectoryInfo oldDirectory = new DirectoryInfo(transferParams.From);
+                DirectoryInfo newDirectory = new DirectoryInfo(transferParams.To);
+
+                if (oldDirectory != null && newDirectory != null)
                 {
-                    return di.GetFiles("*_2.jpg")
+                    var existingDirs = newDirectory.GetDirectories();
+
+                    return oldDirectory.GetFiles("*_2.jpg")
+                        .Where(w => !existingDirs.Any(a => w.Name.Contains(a.Name)))
                         .Where(w => products.Any(a => w.Name.Contains(a.c_barcode)))
                         .ToArray();
                 }

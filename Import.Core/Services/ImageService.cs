@@ -80,6 +80,47 @@ namespace Import.Core.Services
         }
 
         /// <summary>
+        /// Разархивирование архива с изображениями
+        /// </summary>
+        /// <param name="archive"></param>
+        private FileInfo[] ExtractArchive(FileInfo archive, string tempPath)
+        {
+            FileInfo[] result = null;
+            try
+            {
+                SrvcLogger.Info("{work}", $"распаковка архива: {archive.Name}");
+                ZipFile.ExtractToDirectory(archive.FullName, tempPath);
+
+                DirectoryInfo di = new DirectoryInfo(tempPath);
+                if (di != null)
+                {
+                    if (di.GetDirectories().Count() > 0)
+                    {
+                        List<FileInfo> files = new List<FileInfo>();
+                        foreach (var dir in di.GetDirectories())
+                        {
+                            files.AddRange(dir.GetFiles());
+                        }
+                        result = files.ToArray();
+                    }
+                    else
+                    {
+                        result = di.GetFiles();
+                    }
+                }
+                if (result != null)
+                {
+                    SrvcLogger.Info("{work}", $"архив распакован, кол-во файлов: {result.Count()}");
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Возвращает инфу для кодирования
         /// </summary>
         /// <param name="mimeType"></param>
@@ -141,47 +182,6 @@ namespace Import.Core.Services
                     SrvcLogger.Error("{error}", e.ToString());
                 }
             }
-        }
-
-        /// <summary>
-        /// Разархивирование архива с изображениями
-        /// </summary>
-        /// <param name="archive"></param>
-        private FileInfo[] ExtractArchive(FileInfo archive, string tempPath)
-        {
-            FileInfo[] result = null;
-            try
-            {
-                SrvcLogger.Info("{work}", $"распаковка архива: {archive.Name}");
-                ZipFile.ExtractToDirectory(archive.FullName, tempPath);
-
-                DirectoryInfo di = new DirectoryInfo(tempPath);
-                if (di != null)
-                {
-                    if (di.GetDirectories().Count() > 0)
-                    {
-                        List<FileInfo> files = new List<FileInfo>();
-                        foreach (var dir in di.GetDirectories())
-                        {
-                            files.AddRange(dir.GetFiles());
-                        }
-                        result = files.ToArray();
-                    }
-                    else
-                    {
-                        result = di.GetFiles();
-                    }
-                }
-                if (result != null)
-                {
-                    SrvcLogger.Info("{work}", $"архив распакован, кол-во файлов: {result.Count()}");
-                }
-            }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-            }
-            return result;
         }
 
         /// <summary>

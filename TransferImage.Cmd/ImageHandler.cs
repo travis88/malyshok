@@ -1,6 +1,7 @@
 ﻿using Import.Core.Helpers;
 using Import.Core.Services;
 using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -48,6 +49,8 @@ namespace TransferImage.Cmd
         /// </summary>
         public void ResizingImages(FileInfo[] files)
         {
+            int countFiles = files.Count();
+
             CodecImageParams codecImageParams = new CodecImageParams
             {
                 CodecInfo = GetEncoderInfo("image/jpeg"),
@@ -55,15 +58,15 @@ namespace TransferImage.Cmd
             };
             codecImageParams.EncoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
 
+            int i = 0; // итерация
             foreach (var img in files)
             {
                 try
                 {
                     if (transferParams.AllowedPicTypes.Contains(img.Extension.ToLower()))
                     {
-                        string barcode = img.Name.Substring(0, img.Name.LastIndexOf("_"));
-                        string imageName = img.Name.Substring(0, img.Name.LastIndexOf("."));
-                        string saveImgPath = $"{transferParams.To}{barcode}";
+                        string imageName = img.Name.Substring(0, img.Name.LastIndexOf("_"));
+                        string saveImgPath = $"{transferParams.To}{imageName}";
 
                         if (!Directory.Exists(saveImgPath))
                         {
@@ -79,7 +82,49 @@ namespace TransferImage.Cmd
                             new ImageSaverHelper(img.FullName, $"{saveImgPath}\\{imageName}.jpg",
                                                  1150, 0, null, null, "width")
                         };
-                        //SaveImages(imageSizes, codecImageParams);
+
+                        SaveImages(imageSizes, codecImageParams);
+                        i++;
+                        if (i % 50 == 0)
+                        {
+                            SrvcLogger.Error("{info}", $"обработано {i} изображений из {countFiles}");
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    SrvcLogger.Error("{error}", e.ToString());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Сохраняет изображение
+        /// </summary>
+        /// <param name="imagHelper"></param>
+        private void SaveImages(ImageSaverHelper[] imageHelpers, CodecImageParams codecImageParams)
+        {
+            foreach (var item in imageHelpers)
+            {
+                try
+                {
+                    if (File.Exists(item.SavePath))
+                    {
+                        File.Delete(item.SavePath);
+                    }
+                    using (Bitmap img = (Bitmap)Bitmap.FromFile(item.FullName))
+                    {
+                        Bitmap _img = null;
+                        if (String.IsNullOrWhiteSpace(item.Orientation))
+                        {
+                            _img = Imaging.Resize(img, item.Width, item.Height, item.PositionTop, item.PositionLeft);
+                        }
+                        else
+                        {
+                            _img = Imaging.Resize(img, item.Width, item.Orientation);
+                        }
+                        _img.Save(item.SavePath, codecImageParams.CodecInfo, codecImageParams.EncoderParams);
+                        _img.Dispose();
                     }
                 }
                 catch (Exception e)

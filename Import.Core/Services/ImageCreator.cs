@@ -57,6 +57,40 @@ namespace Import.Core.Services
         }
 
         /// <summary>
+        /// Создаёт белый квадрат
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private Bitmap DrawFilledRectangle(int x, int y)
+        {
+            Bitmap bmp = new Bitmap(x, y);
+            using (Graphics graphics = Graphics.FromImage(bmp))
+            {
+                Rectangle ImageSize = new Rectangle(0, 0, x, y);
+                graphics.FillRectangle(Brushes.White, ImageSize);
+            }
+            return bmp;
+        }
+
+        /// <summary>
+        /// Вписывает одно изображение в другое
+        /// </summary>
+        /// <param name="largeBmp"></param>
+        /// <param name="smallBmp"></param>
+        /// <returns></returns>
+        private Bitmap Superimpose(Bitmap largeBmp, Bitmap smallBmp)
+        {
+            using (Graphics graphics = Graphics.FromImage(largeBmp))
+            {
+                int x = (largeBmp.Width - smallBmp.Width) / 2;
+                int y = (largeBmp.Height - smallBmp.Height) / 2;
+                graphics.DrawImage(smallBmp, new Point(x, y));
+                return largeBmp;
+            }
+        }
+
+        /// <summary>
         /// Сохраняет изображение
         /// </summary>
         /// <param name="imagHelper"></param>
@@ -107,40 +141,6 @@ namespace Import.Core.Services
                 {
                     SrvcLogger.Error("{error}", e.ToString());
                 }
-            }
-        }
-
-        /// <summary>
-        /// Создаёт белый квадрат
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        private Bitmap DrawFilledRectangle(int x, int y)
-        {
-            Bitmap bmp = new Bitmap(x, y);
-            using (Graphics graphics = Graphics.FromImage(bmp))
-            {
-                Rectangle ImageSize = new Rectangle(0, 0, x, y);
-                graphics.FillRectangle(Brushes.White, ImageSize);
-            }
-            return bmp;
-        }
-
-        /// <summary>
-        /// Вписывает одно изображение в другое
-        /// </summary>
-        /// <param name="largeBmp"></param>
-        /// <param name="smallBmp"></param>
-        /// <returns></returns>
-        private Bitmap Superimpose(Bitmap largeBmp, Bitmap smallBmp)
-        {
-            using (Graphics graphics = Graphics.FromImage(largeBmp))
-            {
-                int x = (largeBmp.Width - smallBmp.Width) / 2;
-                int y = (largeBmp.Height - smallBmp.Height) / 2;
-                graphics.DrawImage(smallBmp, new Point(x, y));
-                return largeBmp;
             }
         }
     }

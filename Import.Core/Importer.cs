@@ -117,7 +117,9 @@ namespace Import.Core
                    .ForMember(d => d.c_code, opt => opt.MapFrom(src => src.Code))
                    .ForMember(d => d.n_count, opt => opt.MapFrom(src => src.Count))
                    .ForMember(d => d.d_date, opt => opt.MapFrom(src => src.Date))
-                   .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.BarcodeList.Select(s => s.Value).FirstOrDefault()))
+                   .ForMember(d => d.c_barcode, opt => opt.MapFrom(src => src.BarcodeList
+                                                                             .Select(s => s.Value.Trim())
+                                                                             .FirstOrDefault()))
                    .ForMember(d => d.c_price_title, opt =>
                                     opt.MapFrom(src => src.PriceList.Select(s => s.Title).FirstOrDefault()))
                    .ForMember(d => d.m_price_value, opt =>
@@ -125,7 +127,8 @@ namespace Import.Core
                                     ? Decimal.Parse(s.Value.Replace(".", ",")) : 0).FirstOrDefault()))
                    .ForMember(d => d.c_photo, opt => opt.MapFrom(src => src.ImageList
                                                                            .Where(w => w.IsMain || !w.IsMain)
-                                                                           .Select(s => s.Name).FirstOrDefault()));
+                                                                           .Select(s => s.Name.Trim().Replace(" ", ""))
+                                                                           .FirstOrDefault()));
                 cfg.CreateMap<Image, import_product_images>()
                    .ForMember(d => d.f_product, opt => opt.MapFrom(src => src.ProductId))
                    .ForMember(d => d.c_title, opt => opt.MapFrom(src => src.Name))
@@ -225,7 +228,7 @@ namespace Import.Core
 
                     stopwatch.Stop();
                     emailBody += ResultLogging(stopwatch);
-                    //SendEmail(emailBody, db);
+                    SendEmail(emailBody, db);
                 }
             }
             else

@@ -101,7 +101,6 @@ namespace Import.Core.Services
                         }
                         _img.Save(item.SavePath, CodecImageParams.CodecInfo, CodecImageParams.EncoderParams);
                         _img.Dispose();
-                        bg.Dispose();
                     }
                 }
                 catch (Exception e)

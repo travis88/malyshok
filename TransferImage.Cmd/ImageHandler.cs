@@ -40,8 +40,8 @@ namespace TransferImage.Cmd
                 {
                     if (transferParams.AllowedPicTypes.Contains(img.Extension.ToLower()))
                     {
-                        string imageName = $"{img.Name.Substring(0, img.Name.LastIndexOf("_"))}_1";
-                        string saveImgPath = $"{transferParams.To}{imageName}";
+                        string barcode = $"{img.Name.Substring(0, img.Name.LastIndexOf("_"))}";
+                        string saveImgPath = $"{transferParams.To}{barcode}";
 
                         if (!Directory.Exists(saveImgPath))
                         {
@@ -50,11 +50,11 @@ namespace TransferImage.Cmd
 
                         ImageItemHelper[] imageSizes = new ImageItemHelper[]
                         {
-                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_mini.jpg",
+                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{barcode}_1_mini.jpg",
                                                  200, 200, "center", "center", null),
-                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_preview.jpg",
+                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{barcode}_1_preview.jpg",
                                                  400, 400, "center", "center", null),
-                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}.jpg",
+                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{barcode}_1.jpg",
                                                  1150, 600, null, null, "width")
                         };
                         imageCreator.SaveImages(imageSizes);

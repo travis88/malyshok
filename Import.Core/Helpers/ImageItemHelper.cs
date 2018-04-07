@@ -3,7 +3,7 @@
     /// <summary>
     /// Помощник для сохранения изображений под необходимый формат
     /// </summary>
-    public class ImageSaverHelper
+    public class ImageItemHelper
     {
         /// <summary>
         /// Название изображения
@@ -43,7 +43,7 @@
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ImageSaverHelper(string fullName, string path, int width,
+        public ImageItemHelper(string fullName, string path, int width,
                                 int height, string positionTop, 
                                 string positionLeft, string orientation)
         {

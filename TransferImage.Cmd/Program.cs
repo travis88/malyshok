@@ -59,12 +59,10 @@ namespace TransferImage.Cmd
                     var existingDirs = newDirectory
                         .GetDirectories().Select(s => s.Name);
 
-                    var result = oldDirectory.GetFiles("*_2.jpg")
+                    return oldDirectory.GetFiles("*_2.jpg")
                         .Where(w => !existingDirs.Any(a => w.Name.StartsWith(a)))
                         .Where(w => barcodes.Any(a => w.Name.StartsWith(a)))
                         .ToArray();
-
-                    return result;
                 }
             }
             catch (Exception e)

@@ -1,8 +1,6 @@
 ﻿using Import.Core.Helpers;
 using Import.Core.Services;
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
@@ -26,39 +24,16 @@ namespace TransferImage.Cmd
         {
             transferParams = _params;
         }
-
-        /// <summary>
-        /// Возвращает инфу для кодирования
-        /// </summary>
-        /// <param name="mimeType"></param>
-        /// <returns></returns>
-        private ImageCodecInfo GetEncoderInfo(String mimeType)
-        {
-            foreach (var enc in ImageCodecInfo.GetImageEncoders())
-            {
-                if (enc.MimeType.ToLower() == mimeType.ToLower())
-                {
-                    return enc;
-                }
-            }
-            return null;
-        }
-
+        
         /// <summary>
         /// Обрабатывает изображения
         /// </summary>
         public void ResizingImages(FileInfo[] files)
         {
             int countFiles = files.Count();
-
-            CodecImageParams codecImageParams = new CodecImageParams
-            {
-                CodecInfo = GetEncoderInfo("image/jpeg"),
-                EncoderParams = new EncoderParameters(1)
-            };
-            codecImageParams.EncoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 70L);
-
+            ImageCreator imageCreator = new ImageCreator();
             int i = 0; // итерация
+
             foreach (var img in files)
             {
                 try
@@ -73,62 +48,21 @@ namespace TransferImage.Cmd
                             Directory.CreateDirectory(saveImgPath);
                         }
 
-                        ImageSaverHelper[] imageSizes = new ImageSaverHelper[]
+                        ImageItemHelper[] imageSizes = new ImageItemHelper[]
                         {
-                            new ImageSaverHelper(img.FullName, $"{saveImgPath}\\{imageName}_mini.jpg",
+                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_mini.jpg",
                                                  200, 200, "center", "center", null),
-                            new ImageSaverHelper(img.FullName, $"{saveImgPath}\\{imageName}_preview.jpg",
+                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_preview.jpg",
                                                  400, 400, "center", "center", null),
-                            new ImageSaverHelper(img.FullName, $"{saveImgPath}\\{imageName}_1.jpg",
-                                                 1150, 0, null, null, "width")
-
-                            //миниатюра      200х200
-                            //предпроссмотр  400х400
-                            //галерея        1150х600   (пропорционально по максимальной стороне)
+                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_1.jpg",
+                                                 1150, 600, null, null, "width")
                         };
-
-                        SaveImages(imageSizes, codecImageParams);
+                        imageCreator.SaveImages(imageSizes);
                         i++;
-                        if (i % 50 == 0)
+                        if (i % 100 == 0)
                         {
                             SrvcLogger.Info("{info}", $"обработано {i} изображений из {countFiles}");
                         }
-                    }
-                }
-                catch (Exception e)
-                {
-                    SrvcLogger.Error("{error}", e.ToString());
-                }
-            }
-        }
-
-        /// <summary>
-        /// Сохраняет изображение
-        /// </summary>
-        /// <param name="imagHelper"></param>
-        private void SaveImages(ImageSaverHelper[] imageHelpers, CodecImageParams codecImageParams)
-        {
-            foreach (var item in imageHelpers)
-            {
-                try
-                {
-                    if (File.Exists(item.SavePath))
-                    {
-                        File.Delete(item.SavePath);
-                    }
-                    using (Bitmap img = (Bitmap)Bitmap.FromFile(item.FullName))
-                    {
-                        Bitmap _img = null;
-                        if (String.IsNullOrWhiteSpace(item.Orientation))
-                        {
-                            _img = Imaging.Resize(img, item.Width, item.Height, item.PositionTop, item.PositionLeft);
-                        }
-                        else
-                        {
-                            _img = Imaging.Resize(img, item.Width, item.Orientation);
-                        }
-                        _img.Save(item.SavePath, codecImageParams.CodecInfo, codecImageParams.EncoderParams);
-                        _img.Dispose();
                     }
                 }
                 catch (Exception e)

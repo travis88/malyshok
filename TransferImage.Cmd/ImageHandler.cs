@@ -40,7 +40,7 @@ namespace TransferImage.Cmd
                 {
                     if (transferParams.AllowedPicTypes.Contains(img.Extension.ToLower()))
                     {
-                        string imageName = img.Name.Substring(0, img.Name.LastIndexOf("_"));
+                        string imageName = $"{img.Name.Substring(0, img.Name.LastIndexOf("_"))}_1";
                         string saveImgPath = $"{transferParams.To}{imageName}";
 
                         if (!Directory.Exists(saveImgPath))
@@ -54,7 +54,7 @@ namespace TransferImage.Cmd
                                                  200, 200, "center", "center", null),
                             new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_preview.jpg",
                                                  400, 400, "center", "center", null),
-                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_1.jpg",
+                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}.jpg",
                                                  1150, 600, null, null, "width")
                         };
                         imageCreator.SaveImages(imageSizes);

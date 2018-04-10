@@ -109,21 +109,28 @@ namespace Disly.Areas.Admin.Controllers
                     }
                 }
 
-                FileInfo[] files = { di.GetFiles("*.xml")
-                                        .Where(w => w.FullName.ToLower()
-                                        .Contains("cat"))
-                                        .OrderByDescending(p => p.LastWriteTime)
-                                        .FirstOrDefault(),
+                #region comments
+                //FileInfo[] files = { di.GetFiles("*.xml")
+                //                        .Where(w => w.FullName.ToLower()
+                //                        .Contains("cat"))
+                //                        .OrderByDescending(p => p.LastWriteTime)
+                //                        .FirstOrDefault(),
 
-                                     di.GetFiles("*.xml")
-                                        .Where(w => w.FullName.ToLower()
-                                        .Contains("prod"))
-                                        .OrderByDescending(p => p.LastWriteTime)
-                                        .FirstOrDefault(),
+                //                     di.GetFiles("*.xml")
+                //                        .Where(w => w.FullName.ToLower()
+                //                        .Contains("prod"))
+                //                        .OrderByDescending(p => p.LastWriteTime)
+                //                        .FirstOrDefault(),
 
-                                     di.GetFiles("*.zip")
-                                        .OrderByDescending(p => p.LastWriteTime)
-                                        .FirstOrDefault() };
+                //                     di.GetFiles("*.zip")
+                //                        .OrderByDescending(p => p.LastWriteTime)
+                //                        .FirstOrDefault() };
+                #endregion
+
+                FileInfo[] files = di.GetFiles("*.zip")
+                                     .OrderByDescending(p => p.LastWriteTime)
+                                     .Take(2)
+                                     .ToArray();
                 
                 Importer.DoImport(files);
             }

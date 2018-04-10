@@ -60,9 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CodecImageParams.cs" />
-    <Compile Include="Helpers\ImageSaverHelper.cs" />
+    <Compile Include="Helpers\ImageItemHelper.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Helpers\EntityHelper.cs" />
+    <Compile Include="Services\ImageCreator.cs" />
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Helpers\InsertHelper.cs" />
     <Compile Include="Helpers\EmailParamsHelper.cs" />

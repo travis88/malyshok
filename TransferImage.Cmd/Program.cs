@@ -19,11 +19,12 @@ namespace TransferImage.Cmd
             SrvcLogger.Info("{info}", $"перенос изображений из {transferParams.From}");
             SrvcLogger.Info("{info}", $"дата создания не ранее {transferParams.DateCreate}");
 
-            var products = repository.GetProducts(transferParams.DateCreate);
-            if (products != null && products.Count() > 0)
+            var barcodes = repository.GetProducts(transferParams.DateCreate)
+                .Where(w => !String.IsNullOrWhiteSpace(w)).ToArray();
+            if (barcodes != null && barcodes.Count() > 0)
             {
-                SrvcLogger.Info("{info}", $"кол-во товаров: {products.Count()}");
-                var images = GetImages(products, transferParams);
+                SrvcLogger.Info("{info}", $"кол-во товаров: {barcodes.Count()}");
+                var images = GetImages(barcodes, transferParams);
                 if (images != null && images.Count() > 0)
                 {
                     SrvcLogger.Info("{info}", $"кол-во изображений: {images.Count()}");
@@ -46,7 +47,7 @@ namespace TransferImage.Cmd
         /// Возвращает список изображений из директории
         /// </summary>
         /// <returns></returns>
-        private static FileInfo[] GetImages(string[] products, TransferParams transferParams)
+        private static FileInfo[] GetImages(string[] barcodes, TransferParams transferParams)
         {
             try
             {
@@ -55,11 +56,12 @@ namespace TransferImage.Cmd
 
                 if (oldDirectory != null && newDirectory != null)
                 {
-                    var existingDirs = newDirectory.GetDirectories();
+                    var existingDirs = newDirectory
+                        .GetDirectories().Select(s => s.Name);
 
                     return oldDirectory.GetFiles("*_2.jpg")
-                        .Where(w => !existingDirs.Any(a => w.Name.Contains(a.Name)))
-                        .Where(w => products.Any(a => w.Name.Contains(a)))
+                        .Where(w => !existingDirs.Any(a => w.Name.StartsWith(a)))
+                        .Where(w => barcodes.Any(a => w.Name.StartsWith(a)))
                         .ToArray();
                 }
             }

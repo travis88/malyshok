@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -156,9 +157,11 @@ namespace Import.Core
             {
                 Step++;
                 files = files.Where(w => w != null).ToArray();
-                if (files.Any(a => a.Name.Contains(".xml")))
+                var _files = FilesOrdering(files);
+
+                if (_files.Any(a => a.Name.Contains(".xml")))
                 {
-                    if (files.Any(a => a.Name.Contains(".zip")))
+                    if (_files.Any(a => a.Name.Contains(".zip")))
                     {
                         SetSteps(3);
                     }
@@ -167,7 +170,7 @@ namespace Import.Core
                         SetSteps(1);
                     }
                 }
-                else if (files.Any(a => a.Name.Contains(".zip")))
+                else if (_files.Any(a => a.Name.Contains(".zip")))
                 {
                     SetSteps(2);
                 }
@@ -176,7 +179,7 @@ namespace Import.Core
 
                 using (var db = new dbModel(CONNECTION))
                 {
-                    foreach (var file in files)
+                    foreach (var file in _files)
                     {
                         if (file != null)
                         {
@@ -671,6 +674,81 @@ namespace Import.Core
             Log.Insert(0, "Импорт завершён");
 
             return $"импорт завершён {falses}; {successes}";
+        }
+
+        /// <summary>
+        /// Распаковывает архив с файлами импорта
+        /// </summary>
+        /// <returns></returns>
+        private static FileInfo[] ExtractArchive(FileInfo archive)
+        {
+            try
+            {
+                SrvcLogger.Info("{work}", $"распаковка архива: {archive.Name}");
+                ZipFile.ExtractToDirectory(archive.FullName, archive.DirectoryName);
+
+                DirectoryInfo di = new DirectoryInfo(archive.DirectoryName);
+                if (di != null)
+                {
+                    FileInfo[] temp = null;
+
+                    if (di.GetDirectories().Count() > 0)
+                    {
+                        List<FileInfo> files = new List<FileInfo>();
+                        foreach (var dir in di.GetDirectories())
+                        {
+                            files.AddRange(dir.GetFiles());
+                        }
+                        temp = files.ToArray();
+                    }
+                    else
+                    {
+                        temp = di.GetFiles();
+                    }
+                    temp = temp
+                        .Where(w => !w.Name.ToLower().Contains(".zip"))
+                        .ToArray();
+
+                    FileInfo[] result = { temp.Where(w => w.Name.ToLower().Contains(".xml"))
+                                              .Where(w => w.Name.ToLower().Contains("cat"))
+                                              .FirstOrDefault(),
+                                          temp.Where(w => w.Name.ToLower().Contains(".xml"))
+                                              .Where(w => w.Name.ToLower().Contains("prod"))
+                                              .FirstOrDefault() };
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Формирует файлы импорта в нужном порядке
+        /// </summary>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        private static FileInfo[] FilesOrdering(FileInfo[] files)
+        {
+            List<FileInfo> result = new List<FileInfo>();
+
+            if (files.Any(a => a.Name.ToLower().Contains(".zip")))
+            {
+                if (files.Any(a => a.Name.ToLower().Contains("prod")))
+                {
+                    var prodArchive = files.Where(a => a.Name.ToLower().Contains("prod")
+                                                    && a.Name.ToLower().Contains(".zip"))
+                                           .SingleOrDefault();
+                    result.AddRange(ExtractArchive(prodArchive));
+                }
+                var imgArchive = files.Where(w => !w.Name.ToLower().Contains("prod"))
+                                      .SingleOrDefault();
+                result.Add(imgArchive);
+            }
+
+            return result.ToArray();
         }
 
         /// <summary>

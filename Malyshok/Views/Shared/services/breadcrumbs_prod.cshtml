@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+@model Breadcrumbs[]
+
+<div>
+@if (Model != null)
+{
+    <ol class="breadcrumb noprint">
+        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+        <li class="breadcrumb-item"><a href="/catalog">Каталог продукции</a></li>
+        @foreach (var item in Model)
+        {
+            var Link = "/catalog" + item.Url;
+
+            <li class="breadcrumb-item"><a href="@Link">@item.Title</a></li>
+        }
+    </ol>
+}
+</div>
+
+

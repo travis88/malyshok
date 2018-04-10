@@ -17,9 +17,7 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-
-            //currentPage = _repository.getSiteMap("Search");
-
+            
             model = new ProdViewModel
             {
                 SitesInfo = siteModel,

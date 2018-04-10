@@ -159,6 +159,7 @@
     <Content Include="Areas\Admin\Views\Account\MsgSendMail.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Content\css\adaptiv.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\commonless.css" />
     <Content Include="Content\css\iframe_tinymce.css" />
@@ -213,7 +214,12 @@
     <Content Include="Content\fonts\Ubuntu\ubuntu_700italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_italic.svg" />
     <Content Include="Content\fonts\Ubuntu\ubuntu_regular.svg" />
+    <Content Include="Content\img\basket-400.png" />
+    <Content Include="Content\img\basket-400_active.png" />
+    <Content Include="Content\img\basket-992.png" />
+    <Content Include="Content\img\basket-992_active.png" />
     <Content Include="Content\img\blockquote.png" />
+    <Content Include="Content\img\basket_active.png" />
     <Content Include="Content\img\catalog.png" />
     <Content Include="Content\img\cert.png" />
     <Content Include="Content\img\clouds.png" />
@@ -891,6 +897,12 @@
     <Content Include="Views\Shared\Prod\Novelties.cshtml" />
     <Content Include="Views\Shared\Prod\ProdItem.cshtml" />
     <Content Include="Views\Shared\Menu\childlist.cshtml" />
+    <Content Include="Views\Shared\services\breadcrumbs_prod.cshtml" />
+    <Content Include="Views\User\RestorePass.cshtml" />
+    <Content Include="Views\User\MsgSendMail.cshtml" />
+    <Content Include="Views\User\MsgResult.cshtml" />
+    <Content Include="Views\User\MsgFailRestore.cshtml" />
+    <Content Include="Views\User\ChangePass.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

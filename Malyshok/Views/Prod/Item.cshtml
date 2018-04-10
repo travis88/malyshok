@@ -1,50 +1,58 @@
 ﻿@model ProdViewModel
 @{ 
     var item = Model.Item;
-    var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") : "";
+    var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_preview.jpg") : "";
     ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
     var split = "";
 }
 
 
 <div class="type-page">
-    @{ Html.RenderAction("BreadCrumb", "Partials"); }
+    @{ Html.RenderAction("BreadCrumb_Prod", "Partials", new { Path = @ViewBag.Category }); }
 
     <h1>Продукт</h1>
 
     <div class="page-text">
-        <h3>@Html.Raw(item.Title)</h3>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="prod-img"><img src="@ProdImg" /></div>
-            </div>
-            <div class="col-md-6">
-                <div class="item_prod">
-                    <div><span>Код</span> @item.Code</div>
-                    <div><span>Штрих-код</span> @item.Barcode</div>
-                    <div><span>Стандарт</span> @item.Standart</div>
-                    <div>
-                        <span>Остаток</span> @if (@item.Count > 0)
-                        { @Html.Raw("есть в наличии")  }
-                        else
-                        { @Html.Raw("нет в наличии")  }
-                    </div>
-                    <div><span>Цена</span><b> @item.Price.ToString("# ###.00#")</b> руб.</div>
-                    <div class="prod-basket-block">
+        <h3>@Html.Raw(item.Title.Replace(",",", "))</h3>
+        <div class="prod-preview">
+            <img class="preview-img" src="@ProdImg" />
+            <div class="prod-gallery">
 
-                        <div class="prod-cert">
-                            Сертификаты
-                        </div>
-                        <div class="basket-form">
-                            @{
-                                var count = item.inBasket;
-                                string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
-                                string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
-                                string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
-                            }
-                            <input data-id="@item.Id" value="@inputVal" /> шт.
-                            <button type="button" class="in-basket @btnStyle">@btnName</button>
-                        </div>
+            </div>
+        </div>
+        <div class="prod-desc">
+            <div class="prod-property">
+                <div><span>Код</span> @item.Code</div>
+                <div><span>Штрих-код</span> @item.Barcode</div>
+                <div><span>Стандарт</span> @item.Standart</div>
+            </div>
+
+            <div class="prod-property">
+                <div>
+                    <span>Остаток</span> @if (@item.Count > 0)
+                    { @Html.Raw("есть в наличии")  }
+                    else
+                    { @Html.Raw("нет в наличии")  }
+                </div>
+                <div><span>Цена</span><b> @item.Price.ToString("# ###.00#")</b> руб.</div>
+            </div>
+            <div class="basket-form">
+                @{
+                    var count = item.inBasket;
+                    string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
+                    string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
+                    string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
+                }
+                <div class="basket-form_cell">
+                    <input data-id="@item.Id" value="@inputVal" /> шт.
+                </div>
+                <button type="button" class="in-basket @btnStyle">@btnName</button>
+            </div>
+
+            <div class="cert-block">
+                <div class="item_prod">
+                    <div class="prod-cert">
+                        Сертификаты
                     </div>
                 </div>
             </div>

@@ -53,7 +53,7 @@ namespace Disly.Controllers
             {
                 filter.Order = (Guid)OrderId;
             }
-            filter.Category = ("/" + path + "/").Replace("//", "/");
+            ViewBag.Category = filter.Category = ("/" + path + "/").Replace("//", "/");
 
             if (!string.IsNullOrEmpty(path))
             {
@@ -111,8 +111,7 @@ namespace Disly.Controllers
 
             return Redirect(Request.Path + query);
         }
-
-        [HttpPost]
+        
         public ActionResult Certificates(Guid Id)
         {
             Response.ContentType = "application/json; charset=utf-8";
@@ -135,6 +134,7 @@ namespace Disly.Controllers
         public ActionResult Item(Guid id)
         {
             model.Item = _repository.getProdItem(id, (Guid)OrderId);
+            ViewBag.Category = model.Item.CatalogPath;
 
             #region Заголовок страницы
             if (currentPage != null)

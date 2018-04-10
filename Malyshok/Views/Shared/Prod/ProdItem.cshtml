@@ -13,8 +13,9 @@
             {
                 <div>
                     @foreach (var catalog in Model.CatalogPath)
-                {
-                        @split <a href="/catalog/@catalog.link">@catalog.text</a>
+                    {
+                        var Link = "/catalog" + catalog.link;
+                        @split <a href="@Link">@catalog.text</a>
 
                         split = " / ";
                     }

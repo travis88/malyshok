@@ -17,6 +17,7 @@ namespace cms.dbModel
         //public abstract List<SiteMapModel> getSiteMapSiblingElements(string path);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
         public abstract Breadcrumbs[] getBreadCrumb(string Url); //, string domain
+        public abstract Breadcrumbs[] getCatalogBreadCrumb(string Url);
 
         //Banners
         public abstract BannersModel[] getBanners(); //string domain
@@ -44,6 +45,9 @@ namespace cms.dbModel
         //public abstract bool deleteCustomer(Guid id);
 
         public abstract int FailedLogin(Guid id, string IP);
+        public abstract void setRestorePassCode(Guid id, Guid RestoreCode);
+        public abstract bool getCmsAccountCode(Guid RestoreCode);
+        public abstract void changePasByCode(Guid id, string NewSalt, string NewHash);
 
         // Продукция
         public abstract CategoryModel[] getProdCatalogModule();

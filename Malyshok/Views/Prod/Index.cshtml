@@ -1,9 +1,11 @@
 ﻿@model ProdViewModel
 
 <div class="type-page">
-    @{ Html.RenderAction("BreadCrumb", "Partials"); }
-
-    <h1>@ViewBag.Title</h1>
+    @if (!String.IsNullOrEmpty(@ViewBag.Category))
+    {
+        Html.RenderAction("BreadCrumb_Prod", "Partials", new { Path = @ViewBag.Category });
+    }
+     <h1>@ViewBag.Title</h1>
 
     <div class="page-text">
         @if (Model.Categorys != null && Model.Categorys.CountItems > 0)

@@ -345,6 +345,21 @@ namespace cms.dbase
                 return query.ToArray();
             }
         }
+        public override Breadcrumbs[] getCatalogBreadCrumb(string Url)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.SP_site_CategoryPath(Url)
+                    .Select(s => new Breadcrumbs
+                    {
+                        Title = s.c_title,
+                        Url = s.c_path + s.c_alias
+                    });
+
+                return query.ToArray();
+            }
+        }
+
 
         /// <summary>
         /// Получаем новости для модуля на главной странице
@@ -885,6 +900,41 @@ namespace cms.dbase
                 //}
 
                 return Num;
+            }
+        }
+        public override void setRestorePassCode(Guid id, Guid RestoreCode)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_userss.Where(w => w.id == id)
+                        .Set(u => u.с_change_pass_code, RestoreCode)
+                        .Update();
+            }
+        }
+        public override bool getCmsAccountCode(Guid RestoreCode)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                bool result = false;
+
+                int count = db.content_userss.Where(w => w.с_change_pass_code == RestoreCode).Count();
+                if (count > 0) result = true;
+
+                return result;
+            }
+        }
+        public override void changePasByCode(Guid RestoreCode, string NewSalt, string NewHash)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                Guid? Code = null;
+                var data = db.content_userss.Where(w => w.с_change_pass_code == RestoreCode)
+                        .Set(u => u.c_salt, NewSalt)
+                        .Set(u => u.c_hash, NewHash)
+                        .Set(u => u.d_try_login, DateTime.Now)
+                        .Set(u => u.n_error_count, 0)
+                        .Set(u => u.с_change_pass_code, Code)
+                        .Update();
             }
         }
         #endregion

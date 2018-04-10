@@ -17,20 +17,20 @@ $(document).ready(function () {
     // Переключатель на форме регистрации
     if ($('form input#UserType').is(":checked")) {
         $('input#Organization')
-            .attr('required', 'required')
+            .removeAttr('required')
             .closest('.form-group').toggle();
     }
     else {
-        $('input#Organization').removeAttr('required');
+        $('input#Organization').attr('required', 'required');
     }
     $('form input[type=checkbox]#UserType').bind({
         change: function () {
             $('input#Organization').closest('.form-group').toggle();
             if ($(this).is(":checked")) {
-                $('input#Organization').attr('required', 'required');
+                $('input#Organization').removeAttr('required');
             }
             else {
-                $('input#Organization').removeAttr('required');
+                $('input#Organization').attr('required', 'required');
             }
         }
     });
@@ -38,20 +38,20 @@ $(document).ready(function () {
     // Переключатель на форме заказа
     if ($('form input#Delivery').is(":checked")) {
         $('input#Address')
-            .attr('required', 'required')
+            .removeAttr('required')
             .closest('.form-group').toggle();
     }
     else {
-        $('input#Address').removeAttr('required');
+        $('input#Address').attr('required', 'required');
     }
     $('form input[type=checkbox]#Delivery').bind({
         change: function () {
             $('input#Address').closest('.form-group').toggle();
             if ($(this).is(":checked")) {
-                $('input#Address').attr('required', 'required');
+                $('input#Address').removeAttr('required');
             }
             else {
-                $('input#Address').removeAttr('required');
+                $('input#Address').attr('required', 'required');
             }
         }
     });
@@ -247,9 +247,19 @@ $(document).ready(function () {
                 async: false,
                 url: '/certificates/' + _Id + '/',
                 error: function () {
+                    $PanelBody.append('<div>Нет данных о сертификатах</div>');
                 },
                 success: function (data) {
-                    $PanelBody.append(data.Certificates);
+                    for (var i = 0; i < data.Certificates.length; i = i + 1)
+                    {
+                        var item = data.Certificates[i];
+                        $PanelBody.append('<div class="cert-link" data-link="' + item.value + '">' + item.text + '</div>');
+                    }
+
+                    if (data.Certificates.length == 0)
+                    {
+                        $PanelBody.append('<div>Нет данных о сертификатах</div>');
+                    }
                 }
             });
 
@@ -257,6 +267,12 @@ $(document).ready(function () {
             $(this).closest('.item_prod').append($Panel);
         }
     });
+
+    // Новинки
+    var bodyHeight = ~~(($('.body_block').height() - $('.prod-catalog').height()) / 370);
+    if (bodyHeight < 1) bodyHeight = 1;
+    $('div.new-prod-item:lt(' + bodyHeight + ')').css('display', 'block');
+
 
     // Распределение каталога продукции по колонкам
     var CatalogLength = $('.catalog-item').length;

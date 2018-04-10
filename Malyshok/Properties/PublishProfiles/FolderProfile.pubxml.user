@@ -285,25 +285,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/26/2018 18:47:38</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>04/03/2018 07:57:13</publishTime>
+      <publishTime>04/05/2018 19:52:26</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>05/22/2017 13:02:04</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>04/03/2018 07:57:13</publishTime>
+      <publishTime>04/05/2018 19:52:26</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>04/03/2018 07:57:12</publishTime>
+      <publishTime>04/05/2018 19:52:24</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>04/03/2018 07:57:12</publishTime>
+      <publishTime>04/05/2018 19:52:24</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>04/03/2018 08:04:54</publishTime>
+      <publishTime>04/05/2018 19:52:28</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>04/03/2018 08:04:54</publishTime>
+      <publishTime>04/05/2018 19:52:28</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>02/13/2018 17:41:41</publishTime>
@@ -315,10 +315,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/29/2018 17:24:19</publishTime>
     </File>
     <File Include="bin/Import.Core.dll">
-      <publishTime>04/03/2018 07:57:12</publishTime>
+      <publishTime>04/05/2018 19:52:24</publishTime>
     </File>
     <File Include="bin/Import.Core.pdb">
-      <publishTime>04/03/2018 07:57:12</publishTime>
+      <publishTime>04/05/2018 19:52:24</publishTime>
     </File>
     <File Include="bin/JavaScriptEngineSwitcher.ChakraCore.dll">
       <publishTime>02/26/2018 18:47:38</publishTime>
@@ -426,7 +426,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:45</publishTime>
     </File>
     <File Include="Content/css/common.css">
-      <publishTime>03/30/2018 20:38:42</publishTime>
+      <publishTime>04/05/2018 19:50:27</publishTime>
     </File>
     <File Include="Content/css/commonless.css">
       <publishTime>02/13/2018 17:41:31</publishTime>
@@ -918,10 +918,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/05/2017 16:14:25</publishTime>
     </File>
     <File Include="Content/img/fb.png">
-      <publishTime>03/27/2018 12:00:25</publishTime>
+      <publishTime>04/04/2018 14:28:16</publishTime>
     </File>
     <File Include="Content/img/fb_color.png">
-      <publishTime>03/27/2018 12:00:25</publishTime>
+      <publishTime>04/04/2018 14:31:55</publishTime>
     </File>
     <File Include="Content/img/foot_logo.png">
       <publishTime>10/30/2017 15:23:17</publishTime>
@@ -933,10 +933,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/17/2018 07:11:48</publishTime>
     </File>
     <File Include="Content/img/i.png">
-      <publishTime>03/27/2018 12:00:25</publishTime>
+      <publishTime>04/04/2018 14:29:45</publishTime>
     </File>
     <File Include="Content/img/i_color.png">
-      <publishTime>03/27/2018 12:00:25</publishTime>
+      <publishTime>04/04/2018 14:32:30</publishTime>
     </File>
     <File Include="Content/img/logo.png">
       <publishTime>03/27/2018 18:21:39</publishTime>
@@ -1032,10 +1032,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/08/2017 09:44:36</publishTime>
     </File>
     <File Include="Content/img/vk.png">
-      <publishTime>03/27/2018 12:00:25</publishTime>
+      <publishTime>04/04/2018 14:27:57</publishTime>
     </File>
     <File Include="Content/img/vk_color.png">
-      <publishTime>03/27/2018 12:00:25</publishTime>
+      <publishTime>04/04/2018 14:32:13</publishTime>
     </File>
     <File Include="Content/img/youtube-ico.png">
       <publishTime>11/28/2017 15:26:31</publishTime>
@@ -1047,7 +1047,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
     <File Include="Content/js/script.js">
-      <publishTime>03/28/2018 19:59:46</publishTime>
+      <publishTime>04/04/2018 17:54:45</publishTime>
     </File>
     <File Include="Content/js/spec.js">
       <publishTime>02/13/2018 17:41:31</publishTime>
@@ -2151,7 +2151,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/16/2018 08:50:11</publishTime>
     </File>
     <File Include="Views/Basket/Index.cshtml">
-      <publishTime>03/29/2018 17:55:46</publishTime>
+      <publishTime>04/04/2018 09:31:51</publishTime>
     </File>
     <File Include="Views/Basket/Result.cshtml">
       <publishTime>03/23/2018 11:12:20</publishTime>
@@ -2253,7 +2253,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/16/2018 12:49:26</publishTime>
     </File>
     <File Include="Views/Page/Index.cshtml">
-      <publishTime>03/15/2018 10:06:00</publishTime>
+      <publishTime>04/04/2018 17:25:21</publishTime>
     </File>
     <File Include="Views/Partials/Basket/Default.cshtml">
       <publishTime>03/26/2018 20:18:13</publishTime>
@@ -2292,22 +2292,34 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/02/2018 18:46:54</publishTime>
     </File>
     <File Include="Views/Prod/Index.cshtml">
-      <publishTime>04/02/2018 18:42:53</publishTime>
+      <publishTime>04/05/2018 18:33:26</publishTime>
     </File>
     <File Include="Views/Prod/Item.cshtml">
-      <publishTime>04/02/2018 19:42:03</publishTime>
+      <publishTime>04/05/2018 18:16:38</publishTime>
     </File>
     <File Include="Views/Search/Index.cshtml">
-      <publishTime>03/30/2018 22:19:49</publishTime>
+      <publishTime>03/04/2018 11:42:21</publishTime>
     </File>
     <File Include="Views/Service/Photo.cshtml">
       <publishTime>02/13/2018 17:41:32</publishTime>
+    </File>
+    <File Include="Views/Shared/Basket/Default.cshtml">
+      <publishTime>03/26/2018 20:18:13</publishTime>
+    </File>
+    <File Include="Views/Shared/Basket/ShortBlock.cshtml">
+      <publishTime>03/23/2018 15:01:16</publishTime>
     </File>
     <File Include="Views/Shared/footer.cshtml">
       <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
     <File Include="Views/Shared/menu.cshtml">
       <publishTime>02/13/2018 17:41:32</publishTime>
+    </File>
+    <File Include="Views/Shared/Menu/childlist.cshtml">
+      <publishTime>04/04/2018 17:26:36</publishTime>
+    </File>
+    <File Include="Views/Shared/Menu/Default.cshtml">
+      <publishTime>03/13/2018 11:43:20</publishTime>
     </File>
     <File Include="Views/Shared/part/childlist.cshtml">
       <publishTime>02/13/2018 17:41:32</publishTime>
@@ -2321,6 +2333,18 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Shared/part/nav.cshtml">
       <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
+    <File Include="Views/Shared/Prod/Catalog.cshtml">
+      <publishTime>03/16/2018 18:01:18</publishTime>
+    </File>
+    <File Include="Views/Shared/Prod/FullCatalog.cshtml">
+      <publishTime>02/04/2018 18:46:54</publishTime>
+    </File>
+    <File Include="Views/Shared/Prod/Novelties.cshtml">
+      <publishTime>04/05/2018 18:29:41</publishTime>
+    </File>
+    <File Include="Views/Shared/Prod/ProdItem.cshtml">
+      <publishTime>04/04/2018 16:36:42</publishTime>
+    </File>
     <File Include="Views/Shared/services/breadcrumbs.cshtml">
       <publishTime>03/13/2018 11:43:28</publishTime>
     </File>
@@ -2328,7 +2352,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/02/2018 17:23:29</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>04/02/2018 20:21:42</publishTime>
+      <publishTime>04/04/2018 17:13:01</publishTime>
     </File>
     <File Include="Views/SpecStructure/Index.cshtml">
       <publishTime>01/16/2018 12:49:26</publishTime>
@@ -2355,13 +2379,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/16/2018 08:50:11</publishTime>
     </File>
     <File Include="Views/User/Index.cshtml">
-      <publishTime>03/20/2018 15:15:57</publishTime>
+      <publishTime>04/04/2018 12:58:33</publishTime>
     </File>
     <File Include="Views/User/Login.cshtml">
-      <publishTime>03/20/2018 13:09:52</publishTime>
+      <publishTime>04/05/2018 19:40:59</publishTime>
     </File>
     <File Include="Views/User/Reg.cshtml">
-      <publishTime>03/23/2018 08:44:35</publishTime>
+      <publishTime>04/05/2018 18:48:25</publishTime>
     </File>
     <File Include="Views/User/RegCompleted.cshtml">
       <publishTime>03/13/2018 10:36:50</publishTime>

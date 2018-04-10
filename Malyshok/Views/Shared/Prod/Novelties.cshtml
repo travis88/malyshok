@@ -1,19 +1,26 @@
-﻿@model ProductModel
+﻿@model ProductModel[]
 @{ 
     Layout = null;
 }
 
 @if (Model != null)
 {
-    var ProdImg = Model.Photo != null ? Settings.ProdContent + Model.Barcode + "/" + Model.Photo.Replace(".jpg", "_mini.jpg") : "";
-    ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
     <div class="prod-new-block">
         <div class="title"><a href="/Novelties">Новинки</a></div>
-        <div class="new-prod-item">
-            <a href="/prod/@Model.Id/">
-                <div class="new-prod-img"><img src="@ProdImg" /></div>
-                <div class="new-prod-title">@Model.Title</div>
-            </a>
-        </div>
+        @foreach (ProductModel item in Model)
+        {
+            if (item != null)
+            {
+                var ProdImg = item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") : "";
+                ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
+
+                <div class="new-prod-item">
+                    <a href="/prod/@item.Id/">
+                        <div class="new-prod-img"><img src="@ProdImg" /></div>
+                        <div class="new-prod-title">@item.Title.Replace(",",", ")</div>
+                    </a>
+                </div>
+            }
+        }
     </div>
 }

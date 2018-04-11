@@ -631,7 +631,7 @@ namespace cms.dbase
                     if (filter.Date != null)
                         query = query.Where(w => w.d_date >= filter.Date);
 
-                    query = query.OrderBy(w => new { w.d_date, w.c_title });
+                    query = query.OrderByDescending(w => new { w.d_date });
 
                     itemCount = query.Count();
 
@@ -653,16 +653,19 @@ namespace cms.dbase
                                     Standart = s.p.c_standart,
                                     Count = (int)s.p.n_count,
                                     inBasket = s.n_count,
-                                    Photo = s.p.c_photo
-                                    ,CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
+                                    Photo = s.p.c_photo,
+                                    Date = s.p.d_date,
+                                    CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
                                 }).ToArray();
 
                 }
                 else
                 {
                     filter.Category = (filter.Category + "/").Replace("//", "");
+                    string[] arrID = filter.Category.Split('/');
+
                     var alias = filter.Category.Split('/').Last();
-                    var path = String.IsNullOrEmpty(alias) ? filter.Category : filter.Category.Replace(alias, "");
+                    var path = String.IsNullOrEmpty(alias) ? filter.Category : string.Join("/", arrID.Take(arrID.Length - 1)) + "/";
 
                     var query = db.content_categoriess
                         .Where(w => w.c_path.StartsWith(filter.Category) || (w.c_path == path && w.c_alias == alias))
@@ -670,7 +673,7 @@ namespace cms.dbase
 
                     var prodQuery = query
                         .Join(db.sv_productss, c => c.id, p => p.f_category, (c, p) => p)
-                        .OrderBy(w => new { w.d_date, w.c_title });
+                        .OrderByDescending(w => new { w.d_date });
 
                     itemCount = prodQuery.Count();
 
@@ -693,6 +696,7 @@ namespace cms.dbase
                                     Count = (int)s.p.n_count,
                                     inBasket = s.n_count,
                                     Photo = s.p.c_photo,
+                                    Date = s.p.d_date,
                                     CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
                                 }).ToArray();
                 }
@@ -1248,6 +1252,7 @@ namespace cms.dbase
                                 Count = (int)s.p.n_count,
                                 inBasket = s.n_count,
                                 Photo = s.p.c_photo,
+                                Date = s.p.d_date,
                                 CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
                             });
 

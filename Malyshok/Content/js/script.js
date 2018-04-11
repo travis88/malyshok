@@ -1,11 +1,11 @@
 ﻿$(window).on('load scroll', function () {
     var nowScroll = $(window).scrollTop();
 
-    if (nowScroll > 140) {
-        $('.scroll-menu').css('display', 'block');        
+    if (nowScroll < 140) {
+        $('.scroll-menu').css('display', 'none');        
     }
-    else {
-        $('.scroll-menu').css('display', 'none');
+    else if ($('.scroll-menu').css('display') == 'none') {
+        $('.scroll-menu').css('display', 'block');
     }
 });
 
@@ -276,21 +276,21 @@ $(document).ready(function () {
 
     // Распределение каталога продукции по колонкам
     var CatalogLength = $('.catalog-item').length;
-    var Ost = CatalogLength % 3;
-    var RowLength = (Ost != 0) ? Math.floor(CatalogLength / 3) + 1 : Math.floor(CatalogLength / 3);
+    var Ost = CatalogLength % 2;
+    var RowLength = (Ost != 0) ? Math.floor(CatalogLength / 2) + 1 : Math.floor(CatalogLength / 2);
     
     var $Left = $("<div/>", { "class": "col-left" });
     $Left.append($('.catalog-item').slice(0, RowLength).clone());
 
-    var $Center = $("<div/>", { "class": "col-center" });
-    $Center.append($('.catalog-item').slice(RowLength, RowLength * 2).clone());
-
     var $Right = $("<div/>", { "class": "col-right" });
-    $Right.append($('.catalog-item').slice(RowLength * 2, CatalogLength).clone());
+    $Right.append($('.catalog-item').slice(RowLength, CatalogLength).clone());
 
-    $('.catalog-block .row').empty().append($Left).append($Right).append($Center);
+    $('.catalog-block .row').empty().append($Left).append($Right);
 
     //original photo
+    //$('.swipebox').each(function () {
+    //    $(this).swipebox();
+    //});
     if ($('.show_original,.swipebox').length > 0) {
         $('.show_original').swipebox();
         $(".swipebox").swipebox();

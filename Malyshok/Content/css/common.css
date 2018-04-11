@@ -18,7 +18,7 @@ form {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000000;
+    z-index: 99998;
     color: #ffffff;
     font-size: 14px;
 }
@@ -513,14 +513,13 @@ a.button:hover {
     margin-bottom: 26px;
     font-size: 14px;
 }
-.col-left, 
-.col-center, 
+.col-left,
 .col-right {
-    width: 33%;
+    width: 50%;
 }
 .col-left {
     float: left;
-    padding: 0 5px 0 15px;
+    padding: 0 2% 0 8%;
 }
 .col-center {
     width: 34%;
@@ -529,13 +528,18 @@ a.button:hover {
 }
 .col-right {
     float: right;
-    padding: 0 15px 0 5px;
+    padding: 0 8% 0 2%;
 }
 .catalog-start {
     display: none;
 }
 .catalog-item {
     color: #4c4c4c;
+    line-height: 13px;
+    font-size: 12px;
+}
+.catalog-item div {
+    overflow:hidden;
 }
     .catalog-item a {
         color: #4c4c4c;
@@ -543,8 +547,13 @@ a.button:hover {
     .catalog-item.active a {
         color: red !important;
     }
+.lavel-1 {
+    margin-top: 4px;
+}
     .lavel-1:before {
         content: "•";
+        display: block;
+        float: left;
         margin-right: 5px;
         color: #dadada;
     }
@@ -554,10 +563,10 @@ a.button:hover {
     }
 
 .lavel-2 {
-    margin-left: 20px;
+    margin: 2px 0 2px 13px;
 }
 .lavel-3 {
-    margin-left: 40px;
+    margin-left: 30px;
 }
 
 
@@ -568,21 +577,38 @@ a.button:hover {
     margin-bottom: 20px;
     min-height: 230px;
 }
+.nameplate-new {
+    display:block;
+    width: 50px;
+    position: absolute;
+    top: 6px;
+    left: -6px;
+}
 .prod-img {
     position: relative;
     float: left;
     border: solid 1px #cccccc;
     background: url('/Content/img/_nofoto.png') center no-repeat;
     background-clip: content-box;
-    background-size:contain;
+    background-size: contain;
     width: 200px;
-    height:200px;
+    height: 200px;
     margin-right: 20px;
     cursor: pointer;
 }
 .prod-img img {
     width: 100%;
 }
+    .prod-img:before {
+        content: '\e8bc';
+        font-family: fontello;
+        display: block;
+        position: absolute;
+        bottom: 6px;
+        left: 6px;
+        color: #21aedd;
+        font-size: 20px;
+    }
 .prod-info {
     overflow: hidden;
 }
@@ -955,4 +981,15 @@ input.chenge-input {
     border: solid 1px;
     border-radius: 5px;
     outline: none;
+    cursor: pointer;
+}
+.body_block .button-xs {
+    padding: 4px 12px;
+    text-transform: uppercase;
+    border: solid 1px;
+    border-radius: 5px;
+    outline: none;
+    font-size: 13px;
+    line-height: 13px;
+    cursor: pointer;
 }

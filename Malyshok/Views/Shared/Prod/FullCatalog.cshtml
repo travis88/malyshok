@@ -12,7 +12,7 @@
         var Lavel = "lavel-" + (item.Level - 1);
 
         <div class="catalog-item @Lavel @isActive">
-            <a href="@url">@item.Title</a>
+            <div><a href="@url">@item.Title</a></div>
         </div>
 
         foreach (var item2 in Model.Where(p => p.Parent == item.Id))
@@ -22,7 +22,7 @@
             var _Lavel = "lavel-" + (item2.Level - 1);
 
             <div class="catalog-item @_Lavel @_isActive">
-                <a href="@_url">@item2.Title</a>
+                <div><a href="@_url">@item2.Title</a></div>
             </div>
         }
     }

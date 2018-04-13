@@ -891,6 +891,7 @@
     <Content Include="Views\User\MsgResult.cshtml" />
     <Content Include="Views\User\MsgFailRestore.cshtml" />
     <Content Include="Views\User\ChangePass.cshtml" />
+    <Content Include="Views\Prod\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

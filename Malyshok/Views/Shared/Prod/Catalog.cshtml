@@ -1,14 +1,44 @@
-﻿ @{ 
+﻿@{ 
      Layout = null; 
 }
+@model CategoryModel[]
 
 <div class="prod-catalog">
     <div class="title">Каталог</div>
     @if (Model != null)
     {
-        foreach (var item in Model)
+        foreach (var item in Model.Where(p => p.Level == 1))
         {
-            <div class="catalog_item"><a href="/catalog/@item.Alias">@item.Title</a></div>
+            <div class="catalog_item">
+                <a href="/catalog/@item.Alias">@item.Title</a>
+                <div class="catalog-child_list">
+                    @foreach (var child_l1 in Model.Where(p => p.Parent == item.Id))
+                    {
+                        var thisAlias = (Request.Path.Split('/').Last()).ToLower();
+                        var thisPath = String.Join("/", Request.Path.Replace("/catalog", "").Split('/')).ToLower();
+                        thisPath = thisPath.Substring(thisPath.IndexOf("/"), thisPath.LastIndexOf("/") + 1);
+
+                        var url = "/catalog" + child_l1.Path + child_l1.Alias;
+                        var isActive = (child_l1.Alias.ToLower() == thisAlias && child_l1.Path.ToLower() == thisPath) ? "active" : "";
+                        var Lavel = "lavel-" + (child_l1.Level - 1);
+
+                        <div class="catalog-item @Lavel @isActive">
+                            <div><a href="@url">@child_l1.Title</a></div>
+                        </div>
+
+                        foreach (var child_l2 in Model.Where(p => p.Parent == child_l1.Id))
+                        {
+                            var _url = "/catalog" + child_l2.Path + child_l2.Alias;
+                            var _isActive = (child_l2.Alias.ToLower() == thisAlias && child_l2.Path.ToLower() == thisPath) ? "active" : "";
+                            var _Lavel = "lavel-" + (child_l2.Level - 1);
+
+                            <div class="catalog-item @_Lavel @_isActive">
+                                <div><a href="@_url">@child_l2.Title</a></div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
         }
     }
 </div>

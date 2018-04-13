@@ -70,6 +70,16 @@ public class FilterParams
     /// </summary>
     public string Lang { get; set; }
 
+    /// <summary>
+    /// Сортировка
+    /// </summary>
+    public string Sort { get; set; }
+    
+    /// <summary>
+    /// Сортировка
+    /// </summary>
+    public string Available { get; set; }
+
     public static T Extend<T>(FilterParams f)
         where T: FilterParams, new()
     {
@@ -86,6 +96,8 @@ public class FilterParams
             Date = f.Date,
             DateEnd = f.DateEnd,
             SearchText = f.SearchText,
+            Sort = f.Sort,
+            Available = f.Available,
             Lang = f.Lang
         };
     }

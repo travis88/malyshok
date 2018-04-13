@@ -53,7 +53,7 @@ namespace Disly.Controllers
                 filter.Order = (Guid)OrderId;
             }
 
-            model.List = _repository.getSearchList(filter);
+            model.List = _repository.getProdList(filter);
 
 
 

@@ -1,29 +1,34 @@
 ﻿@model CategoryModel[]
+@{ 
+    var colCount = (Model.Length % 2==0 ) ? Model.Length / 2 : Model.Length / 2 + 1;
+}
 
-<div class="catalog-start">
-    @foreach (var item in Model.Where(p => p.Level == 2))
-    {
-        var thisAlias = (Request.Path.Split('/').Last()).ToLower();
-        var thisPath = String.Join("/", Request.Path.Replace("/catalog", "").Split('/')).ToLower();
-        thisPath = thisPath.Substring(thisPath.IndexOf("/"), thisPath.LastIndexOf("/") + 1);
+<div class="catalog-tree">
 
-        var url = "/catalog" + item.Path + item.Alias;
-        var isActive = (item.Alias.ToLower() == thisAlias && item.Path.ToLower() == thisPath) ? "active" : "";
-        var Lavel = "lavel-" + (item.Level - 1);
+</div>
+<div class="catalog-list">
+    <div class="row">
+        <div class="col-md-6">
+            @for (int i = 0; i < colCount; i++)
+            {
+                var item = Model[i];
+                var url = "/catalog" + item.Path + item.Alias;
 
-        <div class="catalog-item @Lavel @isActive">
-            <div><a href="@url">@item.Title</a></div>
+                <div class="catalog-item">
+                    <div><a href="@url">@item.Title</a></div>
+                </div>
+            }
         </div>
+        <div class="col-md-6">
+            @for (int i = colCount; i < Model.Length; i++)
+            {
+                var item = Model[i];
+                var url = "/catalog" + item.Path + item.Alias;
 
-        foreach (var item2 in Model.Where(p => p.Parent == item.Id))
-        {
-            var _url = "/catalog" + item2.Path + item2.Alias;
-            var _isActive = (item2.Alias.ToLower() == thisAlias && item2.Path.ToLower() == thisPath) ? "active" : "";
-            var _Lavel = "lavel-" + (item2.Level - 1);
-
-            <div class="catalog-item @_Lavel @_isActive">
-                <div><a href="@_url">@item2.Title</a></div>
-            </div>
-        }
-    }
+                <div class="catalog-item">
+                    <div><a href="@url">@item.Title</a></div>
+                </div>
+            }
+        </div>
+    </div>
 </div>

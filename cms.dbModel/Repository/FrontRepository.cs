@@ -1,6 +1,7 @@
 ﻿using cms.dbModel.entity;
 using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace cms.dbModel
 {
@@ -71,7 +72,7 @@ namespace cms.dbModel
         public abstract bool addInBasket(Guid OrderId, Guid id, int Count);
         public abstract OrderModel getBasketInfo(Guid OrderId);
         public abstract ProductModel[] getBasketItems(Guid OrderId);
-
-        public abstract ProductList getSearchList(FilterParams filter);
+        
+        public abstract Catalog_list[] getfiltrParams(string type);
     }
 }

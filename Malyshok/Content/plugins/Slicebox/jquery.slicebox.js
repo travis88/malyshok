@@ -218,7 +218,7 @@
 		interval: 3000,
 		// the fallback will just fade out / fade in the items
 		// this is the time fr the fade effect
-		fallbackFadeSpeed : 300,
+		fallbackFadeSpeed : 3000,
 		// callbacks
 		onBeforeChange : function( position ) { return false; },
 		onAfterChange : function( position ) { return false; },

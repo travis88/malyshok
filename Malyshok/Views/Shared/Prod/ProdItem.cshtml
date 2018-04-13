@@ -11,7 +11,7 @@
     <div class="prod-img">
         @if (@ProdImg != "")
         {
-            <a class="swipebox" href="@bigImg"><img src="@ProdImg" /></a>
+            <a class="swipebox" title="@Html.Raw(Model.Title.Replace(",", ", ")) (@Model.Barcode)" href="@bigImg"><img src="@ProdImg" /></a>
         }
         @if (isNew)
             {

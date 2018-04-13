@@ -16,8 +16,8 @@
                 {
                     @Html.Partial("Prod/ProdItem", item)
                 }
-                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
             }
+            Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
         }
     </div>
 </div>

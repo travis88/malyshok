@@ -187,6 +187,9 @@ form {
 .catalog_item a:hover {
     background: #d9d9d9;
 }
+.catalog-child_list {
+    display: none;
+}
 .prod-new-block .title {
     padding: 15px 0;
     font-size: 22px;
@@ -501,17 +504,34 @@ a.button:hover {
     width: 60px;
 }
 .catalog-title {
-    padding: 10px 20px;
+    padding: 15px 20px;
     background: #f2f2f2;
     color: #4c4c4c;
+    font-size: 20px;
+    line-height: 26px;
+}
+.catalog-title div {
+    float: right;
+}
+    .catalog-title span:before {
+    font-family: fontello;
     font-size: 17px;
 }
-.catalog-block {
+.catalog-type_tree:before {
+    content: '\ecc3';
+}
+.catalog-type_list:before {
+    content: '\ecc2';
+}
+
+.catalog-tree,
+.catalog-list {
     background: #fafafa;
     border: solid 1px #dadada;
     padding: 20px;
     margin-bottom: 26px;
     font-size: 14px;
+    display: none;
 }
 .col-left,
 .col-right {
@@ -534,32 +554,27 @@ a.button:hover {
     display: none;
 }
 .catalog-item {
-    color: #4c4c4c;
+    color: #21aedd;
+    font-weight: bold;
     line-height: 13px;
     font-size: 12px;
+    margin-bottom: 4px;
 }
-.catalog-item div {
-    overflow:hidden;
-}
-    .catalog-item a {
-        color: #4c4c4c;
-    }
-    .catalog-item.active a {
-        color: red !important;
-    }
-.lavel-1 {
-    margin-top: 4px;
-}
-    .lavel-1:before {
+    .catalog-item:before {
         content: "•";
         display: block;
         float: left;
         margin-right: 5px;
         color: #dadada;
     }
-    .lavel-1 a {
+.catalog-item div {
+    overflow:hidden;
+}
+    .catalog-item a {
         color: #21aedd;
-        font-weight: bold;
+    }
+    .catalog-item.active a {
+        color: #dd201e !important;
     }
 
 .lavel-2 {
@@ -572,6 +587,31 @@ a.button:hover {
 
 
 /* prod.list */
+.prod-sort {
+    background: #f2f2f2;
+    margin-bottom: 30px;
+}
+.sort-form {
+    overflow: hidden;
+    padding: 8px 20px 0 20px;
+}
+.sort-form div {
+    float: left;
+    margin-right: 30px;
+}
+.load-line {
+    float: none;
+    height:3px;
+    margin-top: 5px;
+}
+    .load-line .progress {
+        width: 0;
+        height: 3px;
+        background: #65acda;
+    }
+.info-from {
+    display: none;
+}
 .item_prod {
     position: relative;
     margin-bottom: 20px;
@@ -961,7 +1001,8 @@ input.chenge-input {
 
 
 /* ----------- Элементы формы ----------- */
-.body_block input:not([type=checkbox]) {
+.body_block input:not([type=checkbox]),
+.body_block select {
     padding: 7px 15px;
     resize: none;
     -webkit-box-sizing: border-box;

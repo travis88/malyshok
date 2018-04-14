@@ -42,7 +42,7 @@ namespace cms.dbase
                         Code = s.c_code,
                         Barcode = s.c_barcode,
                         Date = s.d_date,
-                        Photo = $"/productcontent/{s.c_barcode}/{s.c_photo}",
+                        Photo = $"/prodcontent/{s.c_barcode}/{s.c_photo}",
                         Categories = s.contentproductcategorieslinkscontentproductss
                             .Select(d => new CategoryModel
                             {

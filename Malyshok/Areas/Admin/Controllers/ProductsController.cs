@@ -46,7 +46,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Index()
         {
             model.List = _cmsRepository.getProducts(filter);
-            model.CategoryFilters = _cmsRepository.getCategoryFilters();
+            model.CategoryFilters = _cmsRepository.getCategoryFilters(Guid.Empty);
             ViewBag.Category = Request.Params["category"];
             return View(model);
         }
@@ -79,8 +79,10 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Save(Guid id, ProductViewModel bindData, HttpPostedFileBase upload)
         {
-            ErrorMessage userMessage = new ErrorMessage();
-            userMessage.title = "Информация";
+            ErrorMessage userMessage = new ErrorMessage()
+            {
+                title = "Информация"
+            };
 
             if (ModelState.IsValid)
             {
@@ -239,8 +241,10 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult Delete(Guid Id)
         {
             // записываем информацию о результатах
-            ErrorMessage userMessage = new ErrorMessage();
-            userMessage.title = "Информация";
+            ErrorMessage userMessage = new ErrorMessage()
+            {
+                title = "Информация"
+            };
 
             userMessage.info = "Ошибка, Запись не удалена";
             userMessage.buttons = new ErrorMassegeBtn[]{

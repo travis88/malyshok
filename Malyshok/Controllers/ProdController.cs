@@ -13,6 +13,7 @@ namespace Disly.Controllers
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
         private ProdViewModel model;
+        private SelectList sortList;
         public int PageSize = 12;
 
 
@@ -53,24 +54,25 @@ namespace Disly.Controllers
             {
                 filter.Order = (Guid)OrderId;
             }
-            filter.Category = ("/" + path + "/").Replace("//", "/");
+            ViewBag.Category = filter.Category = ("/" + path + "/").Replace("//", "/");
 
-            if (!string.IsNullOrEmpty(path))
-            {
-                model.Categorys = _repository.getProdCatalog("/" + path.Split('/').First() + "/");
-            }
-
+            model.Categorys = _repository.getProdCatalog(("/" + path + "/").Replace("//", "/"));
             model.List = _repository.getProdList(filter);
+
+            model.sortParams = _repository.getfiltrParams("sort");
+            model.availableParams = _repository.getfiltrParams("available");
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Index(string size, string sort, string availability)
+        public ActionResult Index(string size, string sort, string available)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
+            query = String.IsNullOrEmpty(sort) ? addFiltrParam(query, "sort", String.Empty) : addFiltrParam(query, "sort", sort);
+            query = String.IsNullOrEmpty(available) ? addFiltrParam(query, "available", String.Empty) :addFiltrParam(query, "available", available);
 
             return Redirect(Request.Path + query);
         }
@@ -99,6 +101,9 @@ namespace Disly.Controllers
             
             model.List = _repository.getProdList(filter);
 
+            model.sortParams = _repository.getfiltrParams("sort");
+            model.availableParams = _repository.getfiltrParams("available");
+
             return View(viewName, model);
         }
 
@@ -111,8 +116,7 @@ namespace Disly.Controllers
 
             return Redirect(Request.Path + query);
         }
-
-        [HttpPost]
+        
         public ActionResult Certificates(Guid Id)
         {
             Response.ContentType = "application/json; charset=utf-8";
@@ -127,6 +131,31 @@ namespace Disly.Controllers
                 return Json(new { Result = "Ошибка. Товар не идентифицирован." }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult List(string path, string size, string page, string sort, string available)
+        {
+            FilterParams filter = new FilterParams();
+            filter.Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1;
+            filter.Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : PageSize;
+            if (OrderId != null)
+            {
+                filter.Order = (Guid)OrderId;
+            }
+            filter.Category = ("/" + path + "/").Replace("//", "/");
+            filter.Sort = sort;
+            filter.Available = available;
+
+            string query = HttpUtility.UrlDecode(Request.Url.Query);
+            query = (String.IsNullOrEmpty(page) || page == 1.ToString()) ? addFiltrParam(query, "page", String.Empty) : addFiltrParam(query, "page", page); 
+            query = (String.IsNullOrEmpty(size) || size == PageSize.ToString())? addFiltrParam(query, "size", String.Empty): addFiltrParam(query, "size", size);
+            query = String.IsNullOrEmpty(sort) ? addFiltrParam(query, "sort", String.Empty) : addFiltrParam(query, "sort", sort);
+            query = String.IsNullOrEmpty(available) ? addFiltrParam(query, "available", String.Empty) : addFiltrParam(query, "available", available);
+            ViewBag.NewUrl = query;
+
+            model.List = _repository.getProdList(filter);
+
+            return View(model);
+        }
 
         /// <summary>
         /// Сраница по умолчанию
@@ -135,6 +164,7 @@ namespace Disly.Controllers
         public ActionResult Item(Guid id)
         {
             model.Item = _repository.getProdItem(id, (Guid)OrderId);
+            ViewBag.Category = model.Item.CatalogPath;
 
             #region Заголовок страницы
             if (currentPage != null)

@@ -5,6 +5,7 @@ using LinqToDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace cms.dbase
 {
@@ -345,6 +346,21 @@ namespace cms.dbase
                 return query.ToArray();
             }
         }
+        public override Breadcrumbs[] getCatalogBreadCrumb(string Url)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.SP_site_CategoryPath(Url)
+                    .Select(s => new Breadcrumbs
+                    {
+                        Title = s.c_title,
+                        Url = s.c_path + s.c_alias
+                    });
+
+                return query.ToArray();
+            }
+        }
+
 
         /// <summary>
         /// Получаем новости для модуля на главной странице
@@ -555,16 +571,18 @@ namespace cms.dbase
         public override CategoryModel[] getProdCatalogModule() {
             using (var db = new CMSdb(_context))
             {
-                var query = db.content_categoriess.Where(w => w.uui_parent == Guid.Empty && w.b_disabled == false);
+                var query = db.content_categoriess.Where(w => w.b_disabled == false);
                 if (query.Any())
                 {
                     var data = query.OrderBy(o => o.c_title)
                                   .Select(s => new CategoryModel()
                                   {
+                                      Id = s.id,
                                       Title = s.c_title,
                                       Alias = s.c_alias,
-                                      Parent = s.uui_parent,
-                                      Id = s.id
+                                      Level = s.n_lavel,
+                                      Path = s.c_path,
+                                      Parent = s.uui_parent
                                   }).ToArray();
                     return data;
                 }
@@ -573,12 +591,11 @@ namespace cms.dbase
         }
         public override CategoryTree getProdCatalog(string Path)
         {
-
             using (var db = new CMSdb(_context))
             {
                 Path = (!string.IsNullOrEmpty(Path)) ? Path : "/";
-                
-                var query = db.content_categoriess.Where(w => w.c_path.StartsWith(Path) && w.b_disabled == false);
+              
+                var query = db.content_categoriess.Where(w => w.c_path == Path && w.b_disabled == false);
 
                 var temp = query.OrderBy(o => new { o.c_title })
                     .Select(s => new CategoryModel()
@@ -611,12 +628,42 @@ namespace cms.dbase
 
                 if (String.IsNullOrEmpty(filter.Category))
                 {
-                    var query = db.sv_productss.Where(w => w.n_count > 0);
+                    var query = db.sv_productss.Where(w => w.id !=null);
 
                     if (filter.Date != null)
                         query = query.Where(w => w.d_date >= filter.Date);
 
-                    query = query.OrderBy(w => new { w.d_date, w.c_title });
+                    if (!String.IsNullOrEmpty(filter.SearchText))
+                    {
+                        foreach (string param in filter.SearchText.Split(' '))
+                        {
+                            if (param != String.Empty)
+                            {
+                                query = query.Where(w => w.c_title.Contains(param) || w.c_code.Contains(param) || w.c_barcode.Contains(param));
+                            }
+                        }
+                    }
+
+                    if (String.IsNullOrEmpty(filter.Available))
+                        query = query.Where(w => w.n_count > 0);
+                    else if (filter.Available == "no")
+                        query = query.Where(w => w.n_count < 1);
+
+                    if (String.IsNullOrEmpty(filter.Sort))
+                        query = query.OrderByDescending(w => new { w.d_date });
+                    else if (filter.Sort == "date_desc")
+                        query = query.OrderBy(w => new { w.d_date });
+                    else if (filter.Sort == "price")
+                        query = query.OrderByDescending(w => new { w.m_price });
+                    else if (filter.Sort == "price_desc")
+                        query = query.OrderBy(w => new { w.m_price });
+                    else if (filter.Sort == "code")
+                        query = query.OrderBy(w => new { w.c_code });
+                    else if (filter.Sort == "name")
+                        query = query.OrderBy(w => new { w.c_title });
+                    else if (filter.Sort == "category")
+                        query = query.OrderBy(w => new { w.f_category_names });
+
 
                     itemCount = query.Count();
 
@@ -638,24 +685,46 @@ namespace cms.dbase
                                     Standart = s.p.c_standart,
                                     Count = (int)s.p.n_count,
                                     inBasket = s.n_count,
-                                    Photo = s.p.c_photo
-                                    ,CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
+                                    Photo = s.p.c_photo,
+                                    Date = s.p.d_date,
+                                    CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
                                 }).ToArray();
 
                 }
                 else
                 {
                     filter.Category = (filter.Category + "/").Replace("//", "");
+                    string[] arrID = filter.Category.Split('/');
+
                     var alias = filter.Category.Split('/').Last();
-                    var path = String.IsNullOrEmpty(alias) ? filter.Category : filter.Category.Replace(alias, "");
+                    var path = String.IsNullOrEmpty(alias) ? filter.Category : string.Join("/", arrID.Take(arrID.Length - 1)) + "/";
 
                     var query = db.content_categoriess
                         .Where(w => w.c_path.StartsWith(filter.Category) || (w.c_path == path && w.c_alias == alias))
                         .Select(s => new { s.id });
 
                     var prodQuery = query
-                        .Join(db.sv_productss, c => c.id, p => p.f_category, (c, p) => p)
-                        .OrderBy(w => new { w.d_date, w.c_title });
+                        .Join(db.sv_productss, c => c.id, p => p.f_category, (c, p) => p);
+
+                    if (String.IsNullOrEmpty(filter.Available))
+                        prodQuery = prodQuery.Where(w => w.n_count > 0);
+                    else if (filter.Available == "no")
+                        prodQuery = prodQuery.Where(w => w.n_count < 1);
+
+                    if (String.IsNullOrEmpty(filter.Sort))
+                        prodQuery = prodQuery.OrderByDescending(w => new { w.d_date });
+                    else if (filter.Sort == "date_desc")
+                        prodQuery = prodQuery.OrderBy(w => new { w.d_date });
+                    else if (filter.Sort == "price")
+                        prodQuery = prodQuery.OrderBy(w => new { w.m_price });
+                    else if (filter.Sort == "price_desc")
+                        prodQuery = prodQuery.OrderByDescending(w => new { w.m_price });
+                    else if (filter.Sort == "code")
+                        prodQuery = prodQuery.OrderBy(w => new { w.c_code });
+                    else if (filter.Sort == "name")
+                        prodQuery = prodQuery.OrderBy(w => new { w.c_title });
+                    else if (filter.Sort == "category")
+                        prodQuery = prodQuery.OrderBy(w => new { w.f_category_names });
 
                     itemCount = prodQuery.Count();
 
@@ -678,6 +747,7 @@ namespace cms.dbase
                                     Count = (int)s.p.n_count,
                                     inBasket = s.n_count,
                                     Photo = s.p.c_photo,
+                                    Date = s.p.d_date,
                                     CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
                                 }).ToArray();
                 }
@@ -885,6 +955,41 @@ namespace cms.dbase
                 //}
 
                 return Num;
+            }
+        }
+        public override void setRestorePassCode(Guid id, Guid RestoreCode)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_userss.Where(w => w.id == id)
+                        .Set(u => u.с_change_pass_code, RestoreCode)
+                        .Update();
+            }
+        }
+        public override bool getCmsAccountCode(Guid RestoreCode)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                bool result = false;
+
+                int count = db.content_userss.Where(w => w.с_change_pass_code == RestoreCode).Count();
+                if (count > 0) result = true;
+
+                return result;
+            }
+        }
+        public override void changePasByCode(Guid RestoreCode, string NewSalt, string NewHash)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                Guid? Code = null;
+                var data = db.content_userss.Where(w => w.с_change_pass_code == RestoreCode)
+                        .Set(u => u.c_salt, NewSalt)
+                        .Set(u => u.c_hash, NewHash)
+                        .Set(u => u.d_try_login, DateTime.Now)
+                        .Set(u => u.n_error_count, 0)
+                        .Set(u => u.с_change_pass_code, Code)
+                        .Update();
             }
         }
         #endregion
@@ -1159,59 +1264,19 @@ namespace cms.dbase
         }
 
 
-        public override ProductList getSearchList(FilterParams filter)
+        public override Catalog_list[] getfiltrParams(string type)
         {
             using (var db = new CMSdb(_context))
             {
-                var BasketList = db.content_order_detailss
-                    .Where(w => w.f_order == filter.Order);
-
-                var query = db.sv_productss.Where(w => w.n_count > 0);
-
-                foreach (string param in filter.SearchText.Split(' '))
-                {
-                    if (param != String.Empty)
+                return db.content_filtr_paremss
+                    .Where(w => w.type == type)
+                    .OrderBy(o => o.id)
+                    .Select(s => new Catalog_list
                     {
-                        query = query.Where(w => w.c_title.Contains(param) || w.c_code.Contains(param) || w.c_barcode.Contains(param));
-                    }
-                }
-                query = query.OrderBy(w => new { w.d_date, w.c_title });
-
-                int itemCount = query.Count();
-
-                var ProdList = query
-                    .Skip(filter.Size * (filter.Page - 1))
-                    .Take(filter.Size);
-
-                var Prod = (from p in ProdList
-                            join b in BasketList on p.id equals b.f_prod_id into ps
-                            from b in ps.DefaultIfEmpty()
-                            select new { p, b.n_count })
-                            .Select(s => new ProductModel
-                            {
-                                Id = s.p.id,
-                                Title = s.p.c_title,
-                                Code = s.p.c_code,
-                                Barcode = s.p.c_barcode,
-                                Price = (decimal)s.p.m_price,
-                                Standart = s.p.c_standart,
-                                Count = (int)s.p.n_count,
-                                inBasket = s.n_count,
-                                Photo = s.p.c_photo,
-                                CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
-                            });
-
-                return new ProductList
-                {
-                    Data = Prod.ToArray(),
-                    Pager = new Pager
-                    {
-                        page = filter.Page,
-                        size = filter.Size,
-                        items_count = itemCount,
-                        page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
-                    }
-                };
+                        text = s.text,
+                        value = s.value
+                    })
+                    .ToArray();
             }
         }
     }

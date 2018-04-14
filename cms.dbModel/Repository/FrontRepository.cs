@@ -1,6 +1,7 @@
 ﻿using cms.dbModel.entity;
 using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace cms.dbModel
 {
@@ -17,6 +18,7 @@ namespace cms.dbModel
         //public abstract List<SiteMapModel> getSiteMapSiblingElements(string path);
         public abstract SiteMapModel[] getSiteMapChild(Guid ParentId);
         public abstract Breadcrumbs[] getBreadCrumb(string Url); //, string domain
+        public abstract Breadcrumbs[] getCatalogBreadCrumb(string Url);
 
         //Banners
         public abstract BannersModel[] getBanners(); //string domain
@@ -44,6 +46,9 @@ namespace cms.dbModel
         //public abstract bool deleteCustomer(Guid id);
 
         public abstract int FailedLogin(Guid id, string IP);
+        public abstract void setRestorePassCode(Guid id, Guid RestoreCode);
+        public abstract bool getCmsAccountCode(Guid RestoreCode);
+        public abstract void changePasByCode(Guid id, string NewSalt, string NewHash);
 
         // Продукция
         public abstract CategoryModel[] getProdCatalogModule();
@@ -67,7 +72,7 @@ namespace cms.dbModel
         public abstract bool addInBasket(Guid OrderId, Guid id, int Count);
         public abstract OrderModel getBasketInfo(Guid OrderId);
         public abstract ProductModel[] getBasketItems(Guid OrderId);
-
-        public abstract ProductList getSearchList(FilterParams filter);
+        
+        public abstract Catalog_list[] getfiltrParams(string type);
     }
 }

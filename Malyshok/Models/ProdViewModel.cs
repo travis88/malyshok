@@ -1,4 +1,5 @@
 ﻿using cms.dbModel.entity;
+using System.Web.Mvc;
 
 namespace Disly.Models
 {
@@ -11,5 +12,8 @@ namespace Disly.Models
         public ProductModel Item { get; set; }
 
         public CategoryTree Categorys { get; set; }
+
+        public Catalog_list[] sortParams { get; set; }
+        public Catalog_list[] availableParams { get; set; }
     }
 }

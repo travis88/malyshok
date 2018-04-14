@@ -1,0 +1,151 @@
+﻿/*.mobile-indicator {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    min-width: 10px;
+    min-height: 10px;
+    background: #ff0300;
+    color: #ffffff;
+    z-index: 10000000000;
+}*/
+
+@media only screen and (max-width: 1200px) {
+    .mobile-indicator
+
+{
+    background: #ffe400;
+}
+
+.clouds {
+    padding: 20px 0 10px;
+}
+
+.search-block {
+    padding: 36px 30px 10px;
+}
+
+    .search-block input,
+    .search-block button {
+        font-size: 16px;
+        padding: 8px 20px !important;
+        height: 38px;
+    }
+
+.basket-block {
+    padding: 36px 0 10px;
+}
+
+.basket-counter {
+    font-size: 16px;
+    line-height: 19px;
+    width: 195px;
+    min-height: 38px;
+    padding-left: 70px;
+    background: url('/Content/img/basket-992.png') bottom left no-repeat;
+}
+
+    .basket-counter:hover {
+        background: url('/Content/img/basket-992_active.png') bottom left no-repeat;
+    }
+
+.goods {
+    margin-bottom: 0;
+}
+
+.basket-empty {
+    padding: 10px 0;
+}
+
+}
+
+@media only screen and (max-width: 992px) {
+    .mobile-indicator {
+        background: #9cff00;
+    }
+
+    .clouds {
+        padding: 10px 0 0;
+    }
+
+    .logo {
+        width: 200px;
+    }
+
+    .phone {
+        bottom: 10px;
+        font-size: 15px;
+    }
+
+        .phone span {
+            font-size: 17px;
+        }
+
+    .search-block {
+        padding: 13px 30px 10px;
+    }
+
+        .search-block input,
+        .search-block button {
+            font-size: 14px;
+            padding: 8px 10px !important;
+            height: 39px;
+        }
+        .search-block input {
+            width: 220px;
+            border-radius: 5px 0 0 5px;
+        }
+        .search-block button.icon-btn {
+            display: inline-block;
+        }
+        .search-block button.big-btn {
+            display: none;
+        }
+
+    .basket-block {
+        padding: 13px 0 10px;
+    }
+
+    .basket-counter {
+        font-size: 16px;
+        width: 195px;
+        min-height: 39px;
+        padding-left: 70px;
+        background: url('/Content/img/basket-992.png') bottom left no-repeat;
+    }
+
+        .basket-counter:hover {
+            background: url('/Content/img/basket-992_active.png') bottom left no-repeat;
+        }
+
+    .goods {
+        margin-bottom: 0;
+    }
+
+    .basket-empty {
+        padding: 10px 0;
+    }
+
+    .nav > li > a,
+    .login-block a {
+        padding: 8px 5px;
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .mobile-indicator {
+        background: #00ffe4;
+    }
+}
+
+@media only screen and (max-width: 620px) {
+    .mobile-indicator {
+        background: #003cff;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .mobile-indicator {
+        background: #d200ff;
+    }
+}

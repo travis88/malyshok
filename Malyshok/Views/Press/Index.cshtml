@@ -24,7 +24,7 @@
                         </div>
                     }
                 }
-                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager, inputSize = false });
             }
         </div>
     }

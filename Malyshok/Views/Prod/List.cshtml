@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+}
+@model ProdViewModel
+
+<a class="info-from" href="@ViewBag.NewUrl">@ViewBag.NewUrl</a>
+@if (Model.List != null)
+{
+    if (Model.List.Data.Any())
+    {
+
+        if (Model.List.Pager.page_count > 1)
+        {
+            Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+        }
+        foreach (var item in Model.List.Data)
+        {
+                    @Html.Partial("Prod/ProdItem", item)
+        }
+    }
+    else
+    {
+        <div>Нет данных</div>
+    }
+
+    Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+}
+else
+{
+    <div>Нет данных</div>
+}

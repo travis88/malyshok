@@ -15,6 +15,7 @@
 
     <link href="/Content/plugins/mobileGallery/swipebox.css" rel="stylesheet">
     <link href="/Content/css/common.css" rel="stylesheet" />
+    <link href="/Content/css/adaptiv.css" rel="stylesheet" />
 
     <script src="/Content/plugins/jquery/jquery.js"></script>
     <script src="/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
@@ -26,10 +27,10 @@
     <div class="mobile-indicator"></div>
     <div class="scroll-menu">
         <div class="container">
-            @{ Html.RenderAction("AdminMenu", "Partials"); }
             <div class="menu-basket-info">
                 @{ Html.RenderAction("Basket", "Partials", new { viewName= "Basket/ShortBlock" }); }
             </div>
+            @{ Html.RenderAction("AdminMenu", "Partials"); }
         </div>
     </div>
     <div class="head_block">
@@ -50,35 +51,33 @@
                     @{ Html.RenderAction("Basket", "Partials"); }
                 </div>
                 <div class="search-block">
-                    <div>
-                        <form id="search-form" action="/search/" method="post">
-                            <input id="SearchText" name="SearchText" class="search-text" placeholder="Поиск..." />
-                            <button type="submit" class="button">Найти</button>
-                        </form>
-                    </div>
+                    <form id="search-form" action="/search/" method="post">
+                        <input id="SearchText" name="SearchText" class="search-text" placeholder="Поиск..." /><button type="submit" class="search-btn icon-btn icon-search"></button>
+                        <button type="submit" class="search-btn big-btn">Найти</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
     <div class="menu_block">
         <div class="container">
-            @{ Html.RenderAction("AdminMenu", "Partials"); }
             <div class="login-block">
                 @if (Model.UserInfo == null)
                 {
-                    <a href="/user/login">Вход</a><a>/</a><a href="/user/reg">Регистрация</a>
+                    <a href="/user/login">Вход</a><a class="hidden-xs hidden-sm">/</a><a class="hidden-xs hidden-sm" href="/user/reg">Регистрация</a>
                 }
                 else
                 {
                     <a href="/user/">@Model.UserInfo.FIO</a><a>/</a><a href="/user/logout">Выход</a>
                 }
             </div>
+            @{ Html.RenderAction("AdminMenu", "Partials"); }
         </div>
     </div>
     <div class="body_block">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 col-lg-3">
+                <div class="col-md-4 col-lg-3 hidden-xs hidden-sm">
                     @{ Html.RenderAction("Catalog", "Partials"); }
                     @{ Html.RenderAction("Novelties", "Partials"); }
                 </div>
@@ -90,47 +89,49 @@
     </div>
     <div class="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-md-push-6">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="title">Контакты:</div>
-                            <div class="contakt-block">
-                                <div class="telefon">тел.</div>
-                                <div>@Html.Raw(Model.SitesInfo.Phone.Replace("|", "<br />"))</div>
-                            </div>
-                            <div class="contakt-block">
-                                <div class="email">e-mail</div>
-                                <div>@Html.Raw(Model.SitesInfo.Email.Replace("|", "<br />"))</div>
-                            </div>
+            <div style="overflow:hidden;">
+                <div class="row">
+                    <div class="col-xs-12 col-md-4 col-md-push-8 col-lg-6 col-lg-push-6">
+                        <div class="row">
+                            <div class="col-xs-6 col-md-12 col-lg-6">
+                                <div class="title">Контакты:</div>
+                                <div class="contakt-block">
+                                    <div class="telefon">тел.</div>
+                                    <div>@Html.Raw(Model.SitesInfo.Phone.Replace("|", "<br />"))</div>
+                                </div>
+                                <div class="contakt-block">
+                                    <div class="email">e-mail</div>
+                                    <div>@Html.Raw(Model.SitesInfo.Email.Replace("|", "<br />"))</div>
+                                </div>
 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="title">Режим работы</div>
-                            <div class="contakt-block">
-                                @Html.Raw(Model.SitesInfo.Worktime.Replace("|", "<br />"))
+                            </div>
+                            <div class="col-xs-6 col-md-12 col-lg-6">
+                                <div class="title">Режим работы</div>
+                                <div class="contakt-block">
+                                    @Html.Raw(Model.SitesInfo.Worktime.Replace("|", "<br />"))
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 col-md-pull-6">
-                    <div class="adress">@Model.SitesInfo.Adress</div>
-                    <div class="map-link"><a href="/contacts">Схема проезда</a></div>
-                    @if (!String.IsNullOrEmpty(Model.SitesInfo.Instagramm) || !String.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki) ||
+                    <div class="col-xs-12 col-md-8 col-md-pull-4 col-lg-6 col-lg-pull-6">
+                        <div class="adress">@Model.SitesInfo.Adress</div>
+                        <div class="map-link"><a href="/contacts">Схема проезда</a></div>
+                        @if (!String.IsNullOrEmpty(Model.SitesInfo.Instagramm) || !String.IsNullOrEmpty(Model.SitesInfo.Odnoklassniki) ||
                         !String.IsNullOrEmpty(Model.SitesInfo.Vk) || !String.IsNullOrEmpty(Model.SitesInfo.Facebook))
                     {
-                        <div class="socseti">
-                            <div>Мы в социальных сетях</div>
-                            @if (!String.IsNullOrEmpty(Model.SitesInfo.Vk))
+                            <div class="socseti">
+                                <div>Мы в социальных сетях</div>
+                                @if (!String.IsNullOrEmpty(Model.SitesInfo.Vk))
                             {<a href="@Model.SitesInfo.Vk" class="vk-link"></a>}
-                            @if (!String.IsNullOrEmpty(Model.SitesInfo.Facebook))
+                                @if (!String.IsNullOrEmpty(Model.SitesInfo.Facebook))
                             {<a href="@Model.SitesInfo.Facebook" class="facebook-lik"></a>}
-                            @if (!String.IsNullOrEmpty(Model.SitesInfo.Instagramm))
+                                @if (!String.IsNullOrEmpty(Model.SitesInfo.Instagramm))
                             {<a href="@Model.SitesInfo.Instagramm" class="instagram-link"></a>}
-                        </div>
+                            </div>
                     }
-                    <div class="copyright">&copy;&nbsp;2010-@DateTime.Now.Year.ToString()&nbsp;@Model.SitesInfo.LongTitle</div>
-                    <div class="quote">При цитировании информации с сайта ссылка на первоисточник обязательна.</div>
+                        <div class="copyright">&copy;&nbsp;2010-@DateTime.Now.Year.ToString()&nbsp;@Model.SitesInfo.LongTitle</div>
+                        <div class="quote">При цитировании информации с сайта ссылка на первоисточник обязательна.</div>
+                    </div>
                 </div>
             </div>
         </div>

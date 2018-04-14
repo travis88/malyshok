@@ -1,17 +1,21 @@
 ﻿@{
     Layout = null;
     var pageSize = String.IsNullOrEmpty(Request.QueryString["size"]) ? "12" : Request.QueryString["size"];
+    bool inputSize = ViewBag.inputSize == "true" ? true : false;
 }
 
 @if (Model != null)
 {
     <div style="overflow:hidden;">
         <nav aria-label="Page navigation">
-            <div class="pagination-size">
-                <form method="post">
-                    Товаров на странице: <input name="size" value="@pageSize" />
-                </form>
-            </div>
+            @if (inputSize)
+            {
+                <div class="pagination-size">
+                    <form method="post">
+                        Товаров на странице: <input name="size" value="@pageSize" />
+                    </form>
+                </div>
+            }
             @if (Model.Length > 1)
             {
                 <ul class="pagination">

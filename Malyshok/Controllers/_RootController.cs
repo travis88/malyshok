@@ -133,7 +133,9 @@ namespace Disly.Controllers
             return_url = (!Convert.ToBoolean(Request.QueryString["disabled"])) ? addFiltrParam(return_url, "disabled", String.Empty) : return_url;
             return_url = String.IsNullOrEmpty(Request.QueryString["tab"]) ? addFiltrParam(return_url, "tab", String.Empty) : return_url;
             return_url = String.IsNullOrEmpty(Request.QueryString["searchtext"]) ? addFiltrParam(return_url, "searchtext", String.Empty) : return_url;
-           
+            return_url = String.IsNullOrEmpty(Request.QueryString["sort"]) ? addFiltrParam(return_url, "sort", String.Empty) : return_url;
+            return_url = String.IsNullOrEmpty(Request.QueryString["available"]) ? addFiltrParam(return_url, "available", String.Empty) : return_url;
+
             // Если парамметры из адресной строки равны значениям по умолчанию - удаляем их из URL
             if (return_url.ToLower() != HttpUtility.UrlDecode(Request.Url.Query).ToLower())
                 Response.Redirect(Request.Path + return_url);
@@ -152,6 +154,8 @@ namespace Disly.Controllers
                 Date = (String.IsNullOrEmpty(Request.QueryString["date"])) ? DateNull : DateTime.Parse(Request.QueryString["date"]),
                 DateEnd = (String.IsNullOrEmpty(Request.QueryString["dateend"])) ? DateNull : DateTime.Parse(Request.QueryString["dateend"]),
                 SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"],
+                Sort = (String.IsNullOrEmpty(Request.QueryString["sort"])) ? String.Empty : Request.QueryString["sort"],
+                Available = (String.IsNullOrEmpty(Request.QueryString["available"])) ? String.Empty : Request.QueryString["available"],
                 Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
             };
             

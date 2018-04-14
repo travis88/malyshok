@@ -46,6 +46,12 @@ namespace Disly
                url: "certificates/{id}",
                defaults: new { controller = "Prod", action = "Certificates", id = UrlParameter.Optional }
             );
+            // Список продуктов
+            routes.MapRoute(
+               name: "ProdList",
+               url: "prod-list/{*path}",
+               defaults: new { controller = "Prod", action = "List", path = UrlParameter.Optional }
+            );
 
             // Контакты
             routes.MapRoute(

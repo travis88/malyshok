@@ -79,7 +79,7 @@
                             @Html.CheckBox("Delivery", true, new { type = "checkbox", data_size = "normal", title = "Способ доставки", data_toggle = "toggle", data_on = "Самовывоз", data_off = "Доставка", data_width = "250" })
                         </div>
                         <div class="col-md-8">
-                            @Html.TextBox("Address", Model.OrderInfo.Address, new { title = "Адрес (адрес доставки)", @placeholder = "Населенный пункт, Удица, Дома" })
+                            @Html.TextBox("Address", Model.OrderInfo.Address, new { title = "Адрес (адрес доставки)", @placeholder = "Населенный пункт, Улица, Дом" })
                         </div>
                     </div>
                     <div>

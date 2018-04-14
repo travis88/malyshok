@@ -17,9 +17,7 @@ namespace Disly.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-
-            //currentPage = _repository.getSiteMap("Search");
-
+            
             model = new ProdViewModel
             {
                 SitesInfo = siteModel,
@@ -55,7 +53,7 @@ namespace Disly.Controllers
                 filter.Order = (Guid)OrderId;
             }
 
-            model.List = _repository.getSearchList(filter);
+            model.List = _repository.getProdList(filter);
 
 
 

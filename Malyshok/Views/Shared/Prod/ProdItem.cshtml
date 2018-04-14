@@ -1,20 +1,45 @@
 ﻿@model ProductModel
 @{
     var ProdImg = Model.Photo != null ? Settings.ProdContent + Model.Barcode + "/" + Model.Photo.Replace(".jpg", "_mini.jpg") : "";
+    var bigImg = Settings.ProdContent + Model.Barcode + "/" + Model.Photo;
     ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
     var split = "";
+    var isNew = Model.Date > DateTime.Now.AddDays(-14);
 }
 <div class="item_prod shadow-block">
-    <div class="prod-img"><img src="@ProdImg" /></div>
+    
+    <div class="prod-img">
+        @if (@ProdImg != "")
+        {
+            <a class="swipebox" title="@Html.Raw(Model.Title.Replace(",", ", ")) (@Model.Barcode)" href="@bigImg"><img src="@ProdImg" /></a>
+        }
+        @if (isNew)
+            {
+            <a class="nameplate-new" href="/Novelties">
+                <svg viewBox="0 0 50 30" width="100%" height="100%">
+                    <polygon fill="#DB0029" points="50,0 0,0 0,20 50,20 45,10 "></polygon>
+                    <polygon fill="#991313" points="5,20 0,20 5,30 "></polygon>
+                    <g>
+                        <path fill="#ffffff" d="M16.3,15h-1.4L9.5,8.2V15H7.9V5.2h1.4l5.4,6.8V5.2h1.6V15z"></path>
+                        <path fill="#ffffff" d="M19,15V5.2h5.7v1.6h-3.9v2.4h3.5v1.6h-3.5v2.5h4.1V15H19z"></path>
+                        <path fill="#ffffff" d="M39.4,5.2L36.6,15H35l-2.4-7.1L30.3,15h-1.6l-2.9-9.8h1.9l2,7l2.2-7h1.7l2.2,7l2-7H39.4z"></path>
+                    </g>
+                </svg>
+            </a>
+        }
+    </div>
     <div class="prod-info">
-        <div class="prod-title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title.Replace(",", ", "))</a></div>
+        <div class="prod-title">
+            <a href="/prod/@Model.Id/">@Html.Raw(Model.Title.Replace(",", ", "))</a>
+        </div>
         <div class="prod-catalog-link">
             @if (Model.CatalogPath != null)
             {
                 <div>
                     @foreach (var catalog in Model.CatalogPath)
-                {
-                        @split <a href="/catalog/@catalog.link">@catalog.text</a>
+                    {
+                        var Link = "/catalog" + catalog.link;
+                        @split <a href="@Link">@catalog.text</a>
 
                         split = " / ";
                     }

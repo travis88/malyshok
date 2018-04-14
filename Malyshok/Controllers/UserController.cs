@@ -81,6 +81,70 @@ namespace Disly.Controllers
             }
         }
 
+        /// <summary>
+        /// Форма "Напомнить пароль"
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult RestorePass()
+        {
+            // Авторизованного пользователя направляем на главную страницу
+            if (User.Identity.IsAuthenticated) return RedirectToAction("", "User");
+            else return View(model);
+        }
+
+        /// <summary>
+        /// Форма "Изменить пароль"
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ChangePass(Guid id)
+        {
+            // Авторизованного пользователя направляем на главную страницу
+            if (User.Identity.IsAuthenticated) return RedirectToAction("", "User");
+            
+            // Проверка кода востановления пароля
+            if (!_repository.getCmsAccountCode(id))
+                ViewName = "MsgFailRestore";
+            else
+                ViewName = "ChangePass";
+
+            return View(ViewName, model);
+        }
+
+        /// <summary>
+        /// Сообщение об отправке письма для смены пароля
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MsgSendMail()
+        {
+            // Авторизованного пользователя направляем на главную страницу
+            if (User.Identity.IsAuthenticated) return RedirectToAction("", "User");
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Сообщение о некоректности кода востановления пароля
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MsgFailRestore()
+        {
+            // Авторизованного пользователя направляем на главную страницу
+            if (User.Identity.IsAuthenticated) return RedirectToAction("", "User");
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Сообщение о смене пароля
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MsgResult()
+        {
+            // Авторизованного пользователя направляем на главную страницу
+            if (User.Identity.IsAuthenticated) return RedirectToAction("", "User");
+
+            return View(model);
+        }
 
         /// <summary>
         /// Закрываем сеанс работы с личным кабинетом
@@ -167,7 +231,7 @@ namespace Disly.Controllers
                                 #region Оповещение о блокировке
                                 // Формируем код востановления пароля
                                 Guid RestoreCode = Guid.NewGuid();
-                                _accountRepository.setRestorePassCode(UserInfo.Id, RestoreCode, RequestUserInfo.IP);
+                                _repository.setRestorePassCode(UserInfo.Id, RestoreCode);
 
                                 // оповещение на e-mail
                                 string Massege = String.Empty;
@@ -307,6 +371,85 @@ namespace Disly.Controllers
             else
                 return Json(new { Result = "ошибка проверки E-Mail" }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult RestorePass(RestoreModel model)
+        {
+            try
+            {
+                string _login = model.Email;
+                UsersModel UserInfo = _repository.getCustomer(_login);
+
+                // Ошибки в форме
+                if (!ModelState.IsValid)
+                {
+                    // пустое поле
+                    if (_login == null || _login == "")
+                    {
+                        ModelState.AddModelError("", "Поле \"E-Mail\" не заполнено. Для восстановления пароля введите адрес почты.");
+                    }
+                    return View(model);
+                }
+
+                // существует ли адрес
+                if (UserInfo != null)
+                {
+                    // Формируем код востановления пароля
+                    Guid RestoreCode = Guid.NewGuid();
+                    _repository.setRestorePassCode(UserInfo.Id, RestoreCode);
+
+                    #region оповещение на e-mail
+                    string Massege = String.Empty;
+                    Mailer Letter = new Mailer();
+                    Letter.Theme = "Изменение пароля";
+                    Massege = "<p>Уважаемый " + UserInfo.FIO + ", Вы отправили запрос на смену пароля на сайте " + Request.Url.Host + ".</p>";
+                    Massege += "<p>Для вас сформирована ссылка, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта.</p>";
+                    Massege += "<p><a href=\"http://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/\">http://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/</a></p>";
+                    Massege += "<p>С уважением, администрация сайта!</p>";
+                    Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
+                    Letter.MailTo = UserInfo.EMail;
+                    Letter.Text = Massege;
+                    string ErrorText = Letter.SendMail();
+                    #endregion
+
+                    return RedirectToAction("MsgSendMail", "User");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Адрес почты заполнен неверно. Попробуйте ещё раз");
+                }
+                return View(model);
+
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ChangePass(Guid id, PasswordModel BackModel)
+        {
+            if (ModelState.IsValid)
+            {
+                string NewPass = BackModel.Password;
+
+                Cripto pass = new Cripto(NewPass.ToCharArray());
+                string NewSalt = pass.Salt;
+                string NewHash = pass.Hash;
+
+                _repository.changePasByCode(id, NewSalt, NewHash);
+
+                return RedirectToAction("MsgResult", "User");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Ошибки в заполнении формы.");
+            }
+
+            return View(model);
+        }
+
     }
 }
 

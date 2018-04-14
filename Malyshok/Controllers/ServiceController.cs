@@ -13,9 +13,10 @@ namespace Disly.Controllers
 {
     public class ServiceController : RootController
     {
-        public ActionResult Pager(Pager Model, string startUrl, string viewName = "Services/Pager")
+        public ActionResult Pager(Pager Model, string startUrl, bool inputSize = true, string viewName = "Services/Pager")
         {
             ViewBag.PagerSize = string.IsNullOrEmpty(Request.QueryString["size"]) ? Model.size.ToString() : Request.QueryString["size"];
+            ViewBag.inputSize = inputSize.ToString().ToLower();
             string qwer = String.Empty;
 
             int PagerLinkSize = 2;

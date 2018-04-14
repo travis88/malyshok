@@ -1,35 +1,83 @@
 ﻿@model ProdViewModel
 
 <div class="type-page">
-    @{ Html.RenderAction("BreadCrumb", "Partials"); }
-
-    <h1>@ViewBag.Title</h1>
+    @if (!String.IsNullOrEmpty(@ViewBag.Category))
+    {
+        Html.RenderAction("BreadCrumb_Prod", "Partials", new { Path = @ViewBag.Category });
+    }
+     <h1>@ViewBag.Title</h1>
 
     <div class="page-text">
         @if (Model.Categorys != null && Model.Categorys.CountItems > 0)
         {
             <div class="catalog-title">
                 Разделы каталога
+                <div class="btn-group btn-group-xs">
+                    <span class="btn btn-primary catalog-type_tree"></span>
+                    <span class="btn btn-default catalog-type_list"></span>
+                </div>
             </div>
-            <div class="catalog-block">
-                <div class="row"></div>
-                @Html.Partial("Prod/FullCatalog", Model.Categorys.Tree)                
-            </div>
+            @Html.Partial("Prod/FullCatalog", Model.Categorys.Tree)
         }
         @if (Model.List != null)
         {
-            if (Model.List.Data.Any())
-            {
-                if (Model.List.Pager.page_count > 1)
+            <div class="prod-sort">
+                <form class="sort-form" method="post">
+                    <div class="">
+                        Сортировать по: 
+                        @*@Html.DropDownList("sort", new SelectList(Model.sortParams, "value", "text", 0), new { @title = "сортировка", @class = "sort_select" })*@
+                        <select id="sort" name="sort" class="sort_select">
+                            @if (Model.sortParams != null)
+                            {
+                                foreach (Catalog_list item in Model.sortParams)
+                                {
+                                    var Selected = (Request.QueryString["sort"] == item.value) ? "selected=\"Selected\"" : "";
+                                    <option @Selected value="@item.value">@item.text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="">
+                        Показывать: 
+                        <select id="available" name="available" class="sort_select">
+                            @if (Model.availableParams != null)
+                            {
+                                foreach (Catalog_list item in Model.availableParams)
+                                {
+                                    var Selected = (Request.QueryString["available"] == item.value) ? "selected=\"Selected\"" : "";
+                                    <option @Selected value="@item.value">@item.text</option>
+                                }
+                            }
+                         </select>
+                    </div>
+                </form>
+                <div class="load-line">
+                    <div class="progress"></div>
+                </div>
+            </div>
+            <div class="prod-list">
+                @if (Model.List.Data.Any())
                 {
-                    Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                    if (Model.List.Pager.page_count > 1)
+                    {
+                        Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                    }
+                    foreach (var item in Model.List.Data)
+                    {
+                        @Html.Partial("Prod/ProdItem", item)
+                    }
                 }
-                foreach (var item in Model.List.Data)
+                else
                 {
-                    @Html.Partial("Prod/ProdItem", item)
+                    <div>Нет данных</div>
                 }
-                Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
-            }
+
+                @{ Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager }); }
+            </div>
+                    }
+        else
+        {
+        <div>Нет данных</div>
         }
     </div>
 </div>

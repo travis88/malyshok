@@ -84,24 +84,45 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult BreadCrumb(string viewName = "services/BreadCrumbs")
         {
-            Breadcrumbs[] Model = _repository.getBreadCrumb(HttpContext.Request.Url.PathAndQuery);
+            string path = HttpContext.Request.Url.PathAndQuery;
+            if (path.IndexOf("?") > -1)
+                path = path.Substring(0, path.IndexOf("?"));
+
+            Breadcrumbs[] Model = _repository.getBreadCrumb(path);
+
+            return View(viewName, Model);
+        }
+        public ActionResult BreadCrumb_Prod(string Path, string viewName = "services/BreadCrumbs_prod")
+        {
+            Breadcrumbs[] Model = _repository.getCatalogBreadCrumb(Path);
 
             return View(viewName, Model);
         }
 
-        public ActionResult Novelties(string viewName = "Prod/Novelties" )
+
+        public ActionResult Novelties(int Count = 10, string viewName = "Prod/Novelties" )
         {
+
             Random rnd = new Random();
             var filter = getFilter();
             filter.Date =  DateTime.Now.AddDays(-14);
-
-            //if (OrderId != null)
-            //{
-            //    filter.Order = (Guid)OrderId;
-            //}
+            filter.Size = 100;
             var List = _repository.getProdList(filter);
-            ProductModel Model = (List.Data.Length > 0) ? List.Data[new Random().Next(0, List.Data.Length - 1)] : null;
-            
+
+            Count = (List.Data.Length < Count) ? List.Data.Length : Count;
+
+            ProductModel[] Model = new ProductModel[Count];
+            int[] Selected = new int[Count];
+
+            for (int i = 0; i < Count; i++) {
+                int Num = new Random().Next(0, List.Data.Length - 1);
+                while (Selected.Contains(Num)) {
+                    Num = new Random().Next(0, List.Data.Length - 1);
+                }
+                Selected[i] = Num;
+                Model[i] = (List.Data.Length > 0) ? List.Data[Num] : null;
+            }
+                        
             return View(viewName, Model);
         }
 

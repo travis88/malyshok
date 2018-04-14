@@ -81,32 +81,27 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                var query = (from p in db.content_productss
-                             join l in db.content_product_categories_linkss on p.id equals l.f_product
-                             join c in db.content_categoriess on l.f_category equals c.id
-                             where p.id.Equals(id)
-                             select new { p, c });
-
-                return query.ToArray()
-                    .GroupBy(o => new { o.p.id })
+                return db.content_productss
+                    .Where(w => w.id.Equals(id))
                     .Select(s => new ProductModel
                     {
-                        Id = s.Key.id,
-                        Title = s.First().p.c_title,
-                        Code = s.First().p.c_code,
-                        Barcode = s.First().p.c_barcode,
-                        Description = s.First().p.c_description,
-                        Keyword = s.First().p.c_keyword,
-                        Photo = s.First().p.c_photo,
-                        Count = (int)s.First().p.n_count,
-                        Price = (decimal)s.First().p.m_price,
-                        Date = s.First().p.d_date,
-                        Standart = s.First().p.c_standart,
-                        Categories = s.Select(c => new CategoryModel
-                        {
-                            Id = c.c.id,
-                            Title = c.c.c_title
-                        }).ToArray()
+                        Id = s.id,
+                        Title = s.c_title,
+                        Code = s.c_code,
+                        Barcode = s.c_barcode,
+                        Description = s.c_description,
+                        Keyword = s.c_keyword,
+                        Photo = $"/prodcontent/{s.c_barcode}/{s.c_photo}",
+                        Count = (int)s.n_count,
+                        Price = (decimal)s.m_price,
+                        Date = s.d_date,
+                        Standart = s.c_standart,
+                        Categories = s.contentproductcategorieslinkscontentproductss
+                            .Select(d => new CategoryModel
+                            {
+                                Id = d.contentproductcategorieslinkscontentcategories1.id,
+                                Title = d.contentproductcategorieslinkscontentcategories1.c_title
+                            }).ToArray()
                     }).SingleOrDefault();
             }
         }

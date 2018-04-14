@@ -80,14 +80,14 @@ namespace cms.dbase
         /// Возвращает список категорий для фильтрации продукции
         /// </summary>
         /// <returns></returns>
-        public override CategoryFilterModel[] getCategoryFilters(Guid? parent = null)
+        public override CategoryFilterModel[] getCategoryFilters(Guid parent)
         {
             using (var db = new CMSdb(_context))
             {
                 parent = (parent == null) ? Guid.Empty : parent;
 
                 return db.content_categoriess
-                    .Where(w => w.uui_parent.Equals(null))
+                    .Where(w => w.uui_parent.Equals(Guid.Empty))
                     .OrderBy(o => o.c_title)
                     .Select(s => new CategoryFilterModel
                     {

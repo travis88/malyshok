@@ -12,7 +12,7 @@
         {
             foreach (var item in Model.List.Data)
             {
-                string ImgUrl = (item.Photo != null) ? item.Photo.Url : null;
+                string ImgUrl = item.Photo;
                 string text = string.Empty;
 
                 if (ImgUrl == string.Empty || ImgUrl == null)

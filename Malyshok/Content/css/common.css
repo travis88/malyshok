@@ -492,6 +492,32 @@ a.button:hover {
 .to-right {
     float: right;
 }
+
+/* lk */
+.lk-tabs {
+    margin-bottom: 50px;
+}
+.lk-tabs a {
+    margin: 0;
+    padding: 15px 30px;
+    border-bottom: solid 1px #dadada;
+}
+    .lk-tabs a.active {
+        border: solid 1px #dadada;
+        border-bottom: none;
+        border-radius: 5px 5px 0 0;
+    }
+.lk-info > div {
+    margin: 20px 0;
+
+}
+.lk-socseti {
+}
+.lk-socseti_desc {
+    color: #dd201e;
+}
+
+
 /* catalog */
 .pagination {
     overflow: auto;

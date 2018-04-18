@@ -922,6 +922,8 @@ namespace cms.dbase
                     .Value(v => v.c_hash, item.Hash)
                     .Value(v => v.d_register_date, DateTime.Now)
                     .Value(v => v.b_disable, item.Disabled)
+                    .Value(v => v.c_vk, item.Vk)
+                    .Value(v => v.c_facebook, item.Facebook)
                     .Insert() > 0;
             }
         }

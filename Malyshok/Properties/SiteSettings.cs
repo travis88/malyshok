@@ -21,6 +21,14 @@ public class Settings
     public static string ProdContent = ConfigurationManager.AppSettings["ProdContent"];
 
 
+    public static string fbApp = ConfigurationManager.AppSettings["FacebookApp"];
+    public static string fbAppServKey = ConfigurationManager.AppSettings["FacebookServKey"];
+
+    public static string vkApp = ConfigurationManager.AppSettings["vkApp"];
+    public static string vkAppKey = ConfigurationManager.AppSettings["vkAppKey"];
+    public static string vkAppServKey = ConfigurationManager.AppSettings["vkAppServKey"];
+
+
     public static string EventsDir = ReadAppSetting("EventsDir");
     public static string MaterialsDir = ReadAppSetting("MaterialsDir");
     public static string ProductsDir = ReadAppSetting("ProductsDir");

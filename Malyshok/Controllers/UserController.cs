@@ -1,7 +1,10 @@
 ﻿using cms.dbase;
 using cms.dbModel.entity;
 using Disly.Models;
+using Newtonsoft.Json;
 using System;
+using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -41,6 +44,7 @@ namespace Disly.Controllers
         [Authorize]
         public ActionResult Index()
         {
+
             return View(model);
         }
         
@@ -160,6 +164,195 @@ namespace Disly.Controllers
             FormsAuthentication.SignOut();
 
             return RedirectToAction("index", "Home");
+        }
+
+
+        public ActionResult LogIn_vk(string code)
+        {
+            string _BaseUrl = "http://" + Settings.BaseURL + "/user/LogIn_vk";
+
+            string Result = String.Empty;
+
+            if (String.IsNullOrEmpty(code))
+            {
+                // отправляем запрос на авторизацию
+                string GetCode_Url = "https://oauth.vk.com/authorize?client_id=" + Settings.vkApp + "&display=popup&redirect_uri="+ _BaseUrl + "&scope=email&response_type=code&v=5.69";
+                // https://oauth.vk.com/authorize?client_id=6451463&display=popup&redirect_uri=http://malyshok.boriskiny.ru/user/LogIn_vk&scope=email&response_type=code&v=5.69
+
+                Response.Redirect(GetCode_Url);
+            }
+            else
+            {
+                char[] _pass = (DateTime.Now.ToString("DDssmmMMyyyy")).ToCharArray();
+                Cripto password = new Cripto(_pass);
+
+                UsersModel UserInfoVK = new UsersModel();
+                UserInfoVK.Id = Guid.NewGuid();
+                UserInfoVK.Disabled = false;
+                UserInfoVK.Salt = password.Salt;
+                UserInfoVK.Hash = password.Hash;
+
+                // Получаем ID пользователя и токин
+                string GetTokin_Url = "https://oauth.vk.com/access_token?client_id=" + Settings.vkApp + "&client_secret=" + Settings.vkAppKey + "&redirect_uri="+ _BaseUrl + "&code=" + code;
+                //https://oauth.vk.com/access_token?client_id=6451463&client_secret=l73VY4WmhPlFWIjwZn0E&redirect_uri=http://malyshok.boriskiny.ru/user/LogIn_vk&code=180492224ad13be116
+                WebClient client = new WebClient();
+                client.Encoding = Encoding.UTF8;
+                string json = client.DownloadString(GetTokin_Url);
+                VkLoginModel vkEnterUser = JsonConvert.DeserializeObject<VkLoginModel>(json);
+
+                UserInfoVK.Vk = vkEnterUser.user_id.ToString();
+                Result = "<div>" + json + "</div>";
+
+                // Получаем данные пользователя
+                string GetUserInfo_Url = "https://api.vk.com/method/users.get?user_id=" + vkEnterUser.user_id + "&fields=domain,nickname,country,city,contacts&v=5.69";
+                //https://api.vk.com/method/users.get?user_id=&fields=domain,nickname,country,city,contacts,has_photo,connections,photo_200_orig&access_token=&v=5.69
+                client = new WebClient();
+                client.Encoding = Encoding.UTF8;
+                json = client.DownloadString(GetUserInfo_Url);
+                Result += "---<br /><div>" + json + "</div>";
+
+                ViewBag.Result = Result;
+                VkUserInfo vkUser = JsonConvert.DeserializeObject<VkUserInfo>(json);
+                
+                UsersModel UserInfo = _repository.getCustomer(vkUser.response[0].id.ToString());
+
+                // Если пользователь найден
+                if (UserInfo != null)
+                {
+                    // Удачная попытка, Авторизация
+                    FormsAuthentication.SetAuthCookie(UserInfo.Id.ToString(), false);
+
+                    // Записываем данные об авторизации пользователя
+                    _accountRepository.SuccessLogin(UserInfo.Id, RequestUserInfo.IP);
+
+                    Guid UserOrder = _repository.getOrderId(UserInfo.Id);
+
+                    if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                    {
+                        return RedirectToAction("Index", "MergeOrders");
+                    }
+                    else if (OrderId != Guid.Empty)
+                    {
+                        _repository.transferOrder(OrderId, UserInfo.Id);
+
+                        HttpCookie MyCookie = Request.Cookies["order-id"];
+                        MyCookie.Expires = DateTime.Now.AddDays(-1);
+                        Response.Cookies.Add(MyCookie);
+                    }
+
+                    return RedirectToAction("Index", "User");
+                }
+                else
+                {
+                    UserInfoVK.FIO = vkUser.response[0].last_name + " " + vkUser.response[0].first_name;
+                    UserInfoVK.Phone = "";
+                    UserInfoVK.EMail = "";
+                    UserInfoVK.Address = vkUser.response[0].city.title;
+
+                    _repository.createCustomer(UserInfoVK);
+
+                    // Удачная попытка, Авторизация
+                    FormsAuthentication.SetAuthCookie(UserInfoVK.Id.ToString(), false);
+
+                    Guid UserOrder = _repository.getOrderId(UserInfoVK.Id);
+
+                    if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                    {
+                        return RedirectToAction("Index", "MergeOrders");
+                    }
+                    else if (OrderId != Guid.Empty)
+                    {
+                        _repository.transferOrder(OrderId, UserInfoVK.Id);
+
+                        HttpCookie MyCookie = Request.Cookies["order-id"];
+                        MyCookie.Expires = DateTime.Now.AddDays(-1);
+                        Response.Cookies.Add(MyCookie);
+                    }
+
+                    return RedirectToAction("Index", "User");
+                }
+            }
+
+            return View(model);
+        }
+        public ActionResult LogIn_facebook(string code)
+        {
+            //if (String.IsNullOrEmpty(code))
+            //{
+            //    // отправляем запрос на авторизацию
+            //    string GetCode_Url = "https://www.facebook.com/v2.11/dialog/oauth?client_id=" + Settings.fbApp + "&redirect_uri=http://musicman.tv/Account/LogIn_facebook/";
+
+            //    Response.Redirect(GetCode_Url);
+            //}
+            //else
+            //{
+            //    // Получаем ID пользователя и токин
+            //    string GetTokin_Url = "https://graph.facebook.com/oauth/access_token?client_id=" + Settings.fbApp + "&redirect_uri=http://musicman.tv/Account/LogIn_facebook/&scope=email&client_secret=" + Settings.fbAppServKey + "&code=" + code;
+            //    WebClient client = new WebClient();
+            //    client.Encoding = Encoding.UTF8;
+            //    string json = client.DownloadString(GetTokin_Url);
+            //    FbLoginModel fbEnterUser = JsonConvert.DeserializeObject<FbLoginModel>(json);
+
+            //    // Получаем данные пользователя
+            //    string GetUserInfo_Url = "https://graph.facebook.com/me?fields=id,first_name,last_name,name,email&access_token=" + fbEnterUser.access_token;
+            //    client = new WebClient();
+            //    client.Encoding = Encoding.UTF8;
+            //    json = client.DownloadString(GetUserInfo_Url);
+            //    FbUserInfo fbUser = JsonConvert.DeserializeObject<FbUserInfo>(json);
+
+            //    AccountModel AccountInfo = db.getAccount(fbUser.id);
+
+            //    // Если пользователь найден
+            //    if (AccountInfo != null)
+            //    {
+            //        // Удачная попытка, Авторизация
+            //        FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), false);
+
+            //        // Записываем данные об авторизации пользователя
+            //        db.SuccessLogin(AccountInfo.id, UserIP);
+
+            //        Response.Redirect("/" + AccountInfo.PageName);
+            //    }
+            //    else
+            //    {
+            //        char[] _pass = (DateTime.Now.ToString("DDssmmMMyyyy")).ToCharArray();
+            //        Cripto password = new Cripto(_pass);
+            //        string NewSalt = password.Salt;
+            //        string NewHash = password.Hash;
+
+            //        AccountModel User = new AccountModel();
+            //        User.id = Guid.NewGuid();
+            //        User.PageName = String.IsNullOrEmpty(Transliteration.Translit(fbUser.name)) ? "fb" + fbUser.id : Transliteration.Translit(fbUser.name);
+            //        User.Name = fbUser.first_name;
+            //        User.LastName = fbUser.last_name;
+            //        //if (fbUser.has_photo) User.Photo = fbUser.photo_200_orig;
+            //        User.Mail = "";
+            //        User.Salt = NewSalt;
+            //        User.Hash = NewHash;
+            //        User.Group = "user";
+            //        User.Category = new string[] { "user" };
+            //        User.Disabled = false;
+            //        User.fbId = fbUser.id;
+
+            //        db.createAccount(User, UserIP);
+
+            //        // Удачная попытка, Авторизация
+            //        FormsAuthentication.SetAuthCookie(User.id.ToString(), false);
+
+            //        // Записываем данные об авторизации пользователя
+            //        db.SuccessLogin(User.id, UserIP);
+
+            //        Response.Redirect("/" + User.PageName);
+            //    }
+
+            //    ErrorMassege userMassege = new ErrorMassege();
+            //    userMassege.title = "Информация";
+            //    userMassege.info = json;
+
+            //    model.ErrorInfo = userMassege;
+            //}
+
+            return View(model);
         }
 
 
@@ -449,7 +642,6 @@ namespace Disly.Controllers
 
             return View(model);
         }
-
     }
 }
 

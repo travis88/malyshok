@@ -927,7 +927,36 @@ namespace cms.dbase
                     .Insert() > 0;
             }
         }
-        //public override bool updateCustomer(UsersModel item) { }
+        public override UsersModel updateCustomer(UsersModel item) {
+            using (var db = new CMSdb(_context))
+            {
+                var data = db.content_userss.Where(w => w.id == item.Id);
+                if (data.Any())
+                {
+                    data
+                        .Set(p => p.c_name, item.FIO)
+                        .Set(p => p.c_phone, item.Phone)
+                        .Set(p => p.c_address, item.Address)
+                        .Set(p => p.c_organization, item.Organization)
+                        .Update();
+
+                    data.Select(s => new UsersModel
+                    {
+                        Id = s.id,
+                        FIO = s.c_name,
+                        Address = s.c_address,
+                        Phone = s.c_phone,
+                        EMail = s.c_email,
+                        Organization = s.c_organization,
+                        Disabled = s.b_disable,
+                        Vk = s.c_vk,
+                        Facebook = s.c_facebook
+                    })
+                    .SingleOrDefault();
+                }
+                return null;
+            }
+        }
         //public override bool deleteCustomer(Guid id) { }
 
         /// <summary>
@@ -1023,6 +1052,42 @@ namespace cms.dbase
                     OrderID = query.SingleOrDefault().id;
 
                 return OrderID;
+            }
+        }
+        public override OrdersList getOrderList(Guid UserId, FilterParams filter)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_orderss
+                    .Where(w => w.f_user == UserId)
+                    .Select(s => new OrderModel
+                    {
+                        Id = s.id,
+                        Num = s.n_num,
+                        Date = s.d_date,
+                        Total = s.contentorderdetailscontentorderss.Sum(d => d.m_price * d.n_count)
+                    });
+
+                int itemCount = query.Count();
+
+                var OrderList = query
+                        .Skip(filter.Size * (filter.Page - 1))
+                        .Take(filter.Size)
+                        .ToArray();
+
+                var List = new OrdersList
+                {
+                    Orders = OrderList,
+                    Pager = new Pager
+                    {
+                        page = filter.Page,
+                        size = filter.Size,
+                        items_count = itemCount,
+                        page_count = (itemCount % filter.Size > 0) ? (itemCount / filter.Size) + 1 : itemCount / filter.Size
+                    }
+                };
+
+                return List;
             }
         }
         public override OrderModel getOrder(Guid OrderId)

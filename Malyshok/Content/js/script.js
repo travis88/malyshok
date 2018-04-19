@@ -57,7 +57,7 @@ $(document).ready(function () {
     });
     
     // Проверка уникальности E-Mail
-    $('input#Mail').bind({
+    $('input#Email').bind({
         change: function () {
             var $obj = $('.check-mail').empty();
 

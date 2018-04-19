@@ -20,7 +20,8 @@ namespace Disly.Controllers
 
         public const String Name = "Error";
         public const String ActionName_Custom = "Custom";
-        private TypePageViewModel model;
+        private OrdersViewModel model;
+        public int PageSize = 20;
 
         protected int maxLoginError = 5;
 
@@ -30,7 +31,7 @@ namespace Disly.Controllers
 
             _accountRepository = new AccountRepository("cmsdbConnection");
 
-            model = new TypePageViewModel
+            model = new OrdersViewModel
             {
                 SitesInfo = siteModel,
                 UserInfo = UserInfo
@@ -47,20 +48,27 @@ namespace Disly.Controllers
 
             return View(model);
         }
-        
+
+        [Authorize]
+        public ActionResult Orders(string size, string page, string sort)
+        {
+            FilterParams filter = new FilterParams();
+            filter.Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1;
+            filter.Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : PageSize;
+            filter.Sort = sort;
+
+            model.List = _repository.getOrderList(model.UserInfo.Id, filter);
+            return View(model);
+        }
+
         public ActionResult Login()
         {
-            //string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
 
             return View(model);
         }
         
         public ActionResult Reg()
         {
-            //string _ViewName = (ViewName != String.Empty) ? ViewName : "~/Views/Error/CustomError.cshtml";
-
-
             return View(model);
         }
         
@@ -166,7 +174,11 @@ namespace Disly.Controllers
             return RedirectToAction("index", "Home");
         }
 
-
+        /// <summary>
+        /// Авторизация пользователя через VK
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public ActionResult LogIn_vk(string code)
         {
             string _BaseUrl = "http://" + Settings.BaseURL + "/user/LogIn_vk";
@@ -177,8 +189,7 @@ namespace Disly.Controllers
             {
                 // отправляем запрос на авторизацию
                 string GetCode_Url = "https://oauth.vk.com/authorize?client_id=" + Settings.vkApp + "&display=popup&redirect_uri="+ _BaseUrl + "&scope=email&response_type=code&v=5.69";
-                // https://oauth.vk.com/authorize?client_id=6451463&display=popup&redirect_uri=http://malyshok.boriskiny.ru/user/LogIn_vk&scope=email&response_type=code&v=5.69
-
+                
                 Response.Redirect(GetCode_Url);
             }
             else
@@ -194,7 +205,6 @@ namespace Disly.Controllers
 
                 // Получаем ID пользователя и токин
                 string GetTokin_Url = "https://oauth.vk.com/access_token?client_id=" + Settings.vkApp + "&client_secret=" + Settings.vkAppKey + "&redirect_uri="+ _BaseUrl + "&code=" + code;
-                //https://oauth.vk.com/access_token?client_id=6451463&client_secret=l73VY4WmhPlFWIjwZn0E&redirect_uri=http://malyshok.boriskiny.ru/user/LogIn_vk&code=180492224ad13be116
                 WebClient client = new WebClient();
                 client.Encoding = Encoding.UTF8;
                 string json = client.DownloadString(GetTokin_Url);
@@ -205,7 +215,6 @@ namespace Disly.Controllers
 
                 // Получаем данные пользователя
                 string GetUserInfo_Url = "https://api.vk.com/method/users.get?user_id=" + vkEnterUser.user_id + "&fields=domain,nickname,country,city,contacts&v=5.69";
-                //https://api.vk.com/method/users.get?user_id=&fields=domain,nickname,country,city,contacts,has_photo,connections,photo_200_orig&access_token=&v=5.69
                 client = new WebClient();
                 client.Encoding = Encoding.UTF8;
                 json = client.DownloadString(GetUserInfo_Url);
@@ -275,6 +284,11 @@ namespace Disly.Controllers
 
             return View(model);
         }
+        /// <summary>
+        /// Авторизация пользователя через facebook
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public ActionResult LogIn_facebook(string code)
         {
             //if (String.IsNullOrEmpty(code))
@@ -355,6 +369,24 @@ namespace Disly.Controllers
             return View(model);
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult Index(UsersModel backModel)
+        {
+            backModel.Id = model.UserInfo.Id;
+            backModel.EMail = model.UserInfo.EMail;
+
+            // Ошибки в форме
+            if (!String.IsNullOrEmpty(backModel.FIO)
+                && String.IsNullOrEmpty(backModel.Phone)
+                && String.IsNullOrEmpty(backModel.Address))
+                return View(model);
+
+            model.UserInfo = _repository.updateCustomer(backModel);
+
+
+            return View(model);
+        }
 
         [HttpPost]
         public ActionResult Login(LogInModel backModel)

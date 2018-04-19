@@ -671,6 +671,7 @@
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\base\AccountModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
+    <Compile Include="Models\OrdersViewModel.cs" />
     <Compile Include="Models\SocSetiModel.cs" />
     <Compile Include="Models\ProdViewModel.cs" />
     <Compile Include="Models\BasketViewModel.cs" />
@@ -894,6 +895,7 @@
     <Content Include="Views\User\ChangePass.cshtml" />
     <Content Include="Views\Prod\List.cshtml" />
     <Content Include="Views\User\Login_vk.cshtml" />
+    <Content Include="Views\User\Orders.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

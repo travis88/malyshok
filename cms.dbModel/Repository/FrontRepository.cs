@@ -41,7 +41,7 @@ namespace cms.dbModel
         public abstract UsersModel getCustomer(Guid id);
         public abstract UsersModel getCustomer(string Id);
         public abstract bool createCustomer(UsersModel item);
-        //public abstract bool updateCustomer(UsersModel item);
+        public abstract UsersModel updateCustomer(UsersModel item);
         //public abstract bool deleteCustomer(Guid id);
 
         public abstract int FailedLogin(Guid id, string IP);
@@ -59,6 +59,7 @@ namespace cms.dbModel
         // Заказы
         public abstract bool CheckOrder(Guid OrderId);
         public abstract Guid getOrderId(Guid UserId);
+        public abstract OrdersList getOrderList(Guid UserId, FilterParams filter);
         public abstract OrderModel getOrder(Guid OrderId);
         public abstract Guid CreateOrder();
         public abstract Guid CreateOrder(Guid UserId);

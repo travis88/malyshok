@@ -1,4 +1,4 @@
-﻿@model TypePageViewModel
+﻿@model OrdersViewModel
 
 <div class="type-page">
     @{ Html.RenderAction("BreadCrumb", "Partials"); }
@@ -7,7 +7,8 @@
 
     <h1>Личный кабинет</h1>
     <div class="page-text">
-        <p>Добро пожаловать в Ваш личный кабинет! Здесь Вы сможете просмотреть историю своих заказов и изменить личные данные.</p>
+        <p>Добро пожаловать в Ваш личный кабинет!</p>
+        <p>Здесь Вы сможете просмотреть историю своих заказов и изменить личные данные.</p>
         <p>&nbsp;</p>
         <div class="lk-tabs">
             <a href="/user/orders/">Истории заказов</a><a href="/user/" class="active">Личные данные</a>
@@ -37,7 +38,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        @Html.TextBox("UserName", Model.UserInfo.FIO, new { title = "ФИО", required = "", @placeholder = "Иванов Иван" })
+                        @Html.TextBox("FIO", Model.UserInfo.FIO, new { title = "ФИО", required = "", @placeholder = "Иванов Иван" })
                     </div>
                     <div class="col-md-6">
                         @Html.TextBox("Phone", Model.UserInfo.Phone, new { title = "Телефон", required = "", @placeholder = "+7 (000) 000-00-00" })
@@ -45,9 +46,6 @@
                 </div>
                 <div>
                     @Html.TextBox("Address", Model.UserInfo.Address, new { title = "Адрес (адрес доставки)", @placeholder = "Населенный пункт, Улица, Дом" })
-                </div>
-                <div>
-                    @Html.TextArea("UserComment", "", new { title = "Комментарий", rows = 5, @placeholder = "Если вы хотите оставить комментарий к заказу - напишите его сюда" })
                 </div>
                 <button type="submit" class="btn-invers">Сохранить</button>
                 <a href="/user/ChangePass" class="button btn-blue to-right">

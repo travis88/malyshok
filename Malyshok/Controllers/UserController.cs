@@ -209,16 +209,8 @@ namespace Disly.Controllers
 
                 // Получаем ID пользователя и токин
                 string GetTokin_Url = "https://oauth.vk.com/access_token?client_id=" + Settings.vkApp + "&client_secret=" + Settings.vkAppKey + "&redirect_uri="+ _BaseUrl + "&code=" + code;
-<<<<<<< HEAD
                 WebClient client = new WebClient();
                 client.Encoding = Encoding.UTF8;
-=======
-                //https://oauth.vk.com/access_token?client_id=6451463&client_secret=l73VY4WmhPlFWIjwZn0E&redirect_uri=http://malyshok.boriskiny.ru/user/LogIn_vk&code=180492224ad13be116
-                WebClient client = new WebClient()
-                {
-                    Encoding = Encoding.UTF8
-                };
->>>>>>> 1aeaab8b714defb3c95f8edd12972f3be0c0823a
                 string json = client.DownloadString(GetTokin_Url);
                 VkLoginModel vkEnterUser = JsonConvert.DeserializeObject<VkLoginModel>(json);
 
@@ -227,16 +219,12 @@ namespace Disly.Controllers
 
                 // Получаем данные пользователя
                 string GetUserInfo_Url = "https://api.vk.com/method/users.get?user_id=" + vkEnterUser.user_id + "&fields=domain,nickname,country,city,contacts&v=5.69";
-<<<<<<< HEAD
                 client = new WebClient();
                 client.Encoding = Encoding.UTF8;
-=======
-                //https://api.vk.com/method/users.get?user_id=&fields=domain,nickname,country,city,contacts,has_photo,connections,photo_200_orig&access_token=&v=5.69
                 client = new WebClient()
                 {
                     Encoding = Encoding.UTF8
                 };
->>>>>>> 1aeaab8b714defb3c95f8edd12972f3be0c0823a
                 json = client.DownloadString(GetUserInfo_Url);
                 Result += "---<br /><div>" + json + "</div>";
 
@@ -304,17 +292,12 @@ namespace Disly.Controllers
 
             return View(model);
         }
-<<<<<<< HEAD
         /// <summary>
         /// Авторизация пользователя через facebook
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public ActionResult LogIn_facebook(string code)
-=======
-
         public ActionResult LogIn_fb(string code)
->>>>>>> 1aeaab8b714defb3c95f8edd12972f3be0c0823a
         {
             string fbAction = "https://localhost:44323/user/LogIn_fb";
             if (String.IsNullOrEmpty(code))

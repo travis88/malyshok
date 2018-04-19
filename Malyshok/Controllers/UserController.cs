@@ -162,12 +162,14 @@ namespace Disly.Controllers
         /// Закрываем сеанс работы с личным кабинетом
         /// </summary>
         /// <returns></returns>
-        public ActionResult logOut()
+        public ActionResult LogOut()
         {
-            HttpCookie MyCookie = new HttpCookie("."+Settings.SiteTitle);
-            MyCookie.Expires = DateTime.Now.AddDays(-1d);
-            MyCookie.Value = HttpUtility.UrlEncode("", System.Text.Encoding.UTF8);
-            MyCookie.Domain = "." + Settings.BaseURL;
+            HttpCookie MyCookie = new HttpCookie("." + Settings.SiteTitle)
+            {
+                Expires = DateTime.Now.AddDays(-1d),
+                Value = HttpUtility.UrlEncode("", System.Text.Encoding.UTF8),
+                Domain = "." + Settings.BaseURL
+            };
             Response.Cookies.Add(MyCookie);
             FormsAuthentication.SignOut();
 
@@ -197,16 +199,26 @@ namespace Disly.Controllers
                 char[] _pass = (DateTime.Now.ToString("DDssmmMMyyyy")).ToCharArray();
                 Cripto password = new Cripto(_pass);
 
-                UsersModel UserInfoVK = new UsersModel();
-                UserInfoVK.Id = Guid.NewGuid();
-                UserInfoVK.Disabled = false;
-                UserInfoVK.Salt = password.Salt;
-                UserInfoVK.Hash = password.Hash;
+                UsersModel UserInfoVK = new UsersModel()
+                {
+                    Id = Guid.NewGuid(),
+                    Disabled = false,
+                    Salt = password.Salt,
+                    Hash = password.Hash
+                };
 
                 // Получаем ID пользователя и токин
                 string GetTokin_Url = "https://oauth.vk.com/access_token?client_id=" + Settings.vkApp + "&client_secret=" + Settings.vkAppKey + "&redirect_uri="+ _BaseUrl + "&code=" + code;
+<<<<<<< HEAD
                 WebClient client = new WebClient();
                 client.Encoding = Encoding.UTF8;
+=======
+                //https://oauth.vk.com/access_token?client_id=6451463&client_secret=l73VY4WmhPlFWIjwZn0E&redirect_uri=http://malyshok.boriskiny.ru/user/LogIn_vk&code=180492224ad13be116
+                WebClient client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
+>>>>>>> 1aeaab8b714defb3c95f8edd12972f3be0c0823a
                 string json = client.DownloadString(GetTokin_Url);
                 VkLoginModel vkEnterUser = JsonConvert.DeserializeObject<VkLoginModel>(json);
 
@@ -215,8 +227,16 @@ namespace Disly.Controllers
 
                 // Получаем данные пользователя
                 string GetUserInfo_Url = "https://api.vk.com/method/users.get?user_id=" + vkEnterUser.user_id + "&fields=domain,nickname,country,city,contacts&v=5.69";
+<<<<<<< HEAD
                 client = new WebClient();
                 client.Encoding = Encoding.UTF8;
+=======
+                //https://api.vk.com/method/users.get?user_id=&fields=domain,nickname,country,city,contacts,has_photo,connections,photo_200_orig&access_token=&v=5.69
+                client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
+>>>>>>> 1aeaab8b714defb3c95f8edd12972f3be0c0823a
                 json = client.DownloadString(GetUserInfo_Url);
                 Result += "---<br /><div>" + json + "</div>";
 
@@ -284,87 +304,99 @@ namespace Disly.Controllers
 
             return View(model);
         }
+<<<<<<< HEAD
         /// <summary>
         /// Авторизация пользователя через facebook
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
         public ActionResult LogIn_facebook(string code)
+=======
+
+        public ActionResult LogIn_fb(string code)
+>>>>>>> 1aeaab8b714defb3c95f8edd12972f3be0c0823a
         {
-            //if (String.IsNullOrEmpty(code))
-            //{
-            //    // отправляем запрос на авторизацию
-            //    string GetCode_Url = "https://www.facebook.com/v2.11/dialog/oauth?client_id=" + Settings.fbApp + "&redirect_uri=http://musicman.tv/Account/LogIn_facebook/";
+            string fbAction = "https://localhost:44323/user/LogIn_fb";
+            if (String.IsNullOrEmpty(code))
+            {
+                // отправляем запрос на авторизацию
+                string GetCode_Url = $"https://www.facebook.com/v2.11/dialog/oauth?client_id={Settings.fbApp}" +
+                    $"&redirect_uri={fbAction}";
 
-            //    Response.Redirect(GetCode_Url);
-            //}
-            //else
-            //{
-            //    // Получаем ID пользователя и токин
-            //    string GetTokin_Url = "https://graph.facebook.com/oauth/access_token?client_id=" + Settings.fbApp + "&redirect_uri=http://musicman.tv/Account/LogIn_facebook/&scope=email&client_secret=" + Settings.fbAppServKey + "&code=" + code;
-            //    WebClient client = new WebClient();
-            //    client.Encoding = Encoding.UTF8;
-            //    string json = client.DownloadString(GetTokin_Url);
-            //    FbLoginModel fbEnterUser = JsonConvert.DeserializeObject<FbLoginModel>(json);
+                Response.Redirect(GetCode_Url);
+            }
+            else
+            {
+                // Получаем ID пользователя и токин
+                string GetTokin_Url = $"https://graph.facebook.com/oauth/access_token?client_id={Settings.fbApp}" +
+                    $"&redirect_uri={fbAction}/&scope=email&client_secret={Settings.fbAppServKey}&code={code}";
+                WebClient client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
+                string json = client.DownloadString(GetTokin_Url);
+                FbLoginModel fbEnterUser = JsonConvert.DeserializeObject<FbLoginModel>(json);
 
-            //    // Получаем данные пользователя
-            //    string GetUserInfo_Url = "https://graph.facebook.com/me?fields=id,first_name,last_name,name,email&access_token=" + fbEnterUser.access_token;
-            //    client = new WebClient();
-            //    client.Encoding = Encoding.UTF8;
-            //    json = client.DownloadString(GetUserInfo_Url);
-            //    FbUserInfo fbUser = JsonConvert.DeserializeObject<FbUserInfo>(json);
+                // Получаем данные пользователя
+                string GetUserInfo_Url = "https://graph.facebook.com/me?fields=id,first_name,last_name,name,email&access_token=" + fbEnterUser.access_token;
+                client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
+                json = client.DownloadString(GetUserInfo_Url);
+                FbUserInfo fbUser = JsonConvert.DeserializeObject<FbUserInfo>(json);
 
-            //    AccountModel AccountInfo = db.getAccount(fbUser.id);
+                //AccountModel AccountInfo = db.getAccount(fbUser.id);
 
-            //    // Если пользователь найден
-            //    if (AccountInfo != null)
-            //    {
-            //        // Удачная попытка, Авторизация
-            //        FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), false);
+                // Если пользователь найден
+                //if (AccountInfo != null)
+                //{
+                //    // Удачная попытка, Авторизация
+                //    FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), false);
 
-            //        // Записываем данные об авторизации пользователя
-            //        db.SuccessLogin(AccountInfo.id, UserIP);
+                //    // Записываем данные об авторизации пользователя
+                //    db.SuccessLogin(AccountInfo.id, UserIP);
 
-            //        Response.Redirect("/" + AccountInfo.PageName);
-            //    }
-            //    else
-            //    {
-            //        char[] _pass = (DateTime.Now.ToString("DDssmmMMyyyy")).ToCharArray();
-            //        Cripto password = new Cripto(_pass);
-            //        string NewSalt = password.Salt;
-            //        string NewHash = password.Hash;
+                //    Response.Redirect("/" + AccountInfo.PageName);
+                //}
+                //else
+                //{
+                //    char[] _pass = (DateTime.Now.ToString("DDssmmMMyyyy")).ToCharArray();
+                //    Cripto password = new Cripto(_pass);
+                //    string NewSalt = password.Salt;
+                //    string NewHash = password.Hash;
 
-            //        AccountModel User = new AccountModel();
-            //        User.id = Guid.NewGuid();
-            //        User.PageName = String.IsNullOrEmpty(Transliteration.Translit(fbUser.name)) ? "fb" + fbUser.id : Transliteration.Translit(fbUser.name);
-            //        User.Name = fbUser.first_name;
-            //        User.LastName = fbUser.last_name;
-            //        //if (fbUser.has_photo) User.Photo = fbUser.photo_200_orig;
-            //        User.Mail = "";
-            //        User.Salt = NewSalt;
-            //        User.Hash = NewHash;
-            //        User.Group = "user";
-            //        User.Category = new string[] { "user" };
-            //        User.Disabled = false;
-            //        User.fbId = fbUser.id;
+                //    AccountModel User = new AccountModel();
+                //    User.id = Guid.NewGuid();
+                //    User.PageName = String.IsNullOrEmpty(Transliteration.Translit(fbUser.name)) ? "fb" + fbUser.id : Transliteration.Translit(fbUser.name);
+                //    User.Name = fbUser.first_name;
+                //    User.LastName = fbUser.last_name;
+                //    //if (fbUser.has_photo) User.Photo = fbUser.photo_200_orig;
+                //    User.Mail = "";
+                //    User.Salt = NewSalt;
+                //    User.Hash = NewHash;
+                //    User.Group = "user";
+                //    User.Category = new string[] { "user" };
+                //    User.Disabled = false;
+                //    User.fbId = fbUser.id;
 
-            //        db.createAccount(User, UserIP);
+                //    db.createAccount(User, UserIP);
 
-            //        // Удачная попытка, Авторизация
-            //        FormsAuthentication.SetAuthCookie(User.id.ToString(), false);
+                //    // Удачная попытка, Авторизация
+                //    FormsAuthentication.SetAuthCookie(User.id.ToString(), false);
 
-            //        // Записываем данные об авторизации пользователя
-            //        db.SuccessLogin(User.id, UserIP);
+                //    // Записываем данные об авторизации пользователя
+                //    db.SuccessLogin(User.id, UserIP);
 
-            //        Response.Redirect("/" + User.PageName);
-            //    }
+                //    Response.Redirect("/" + User.PageName);
+                //}
 
-            //    ErrorMassege userMassege = new ErrorMassege();
-            //    userMassege.title = "Информация";
-            //    userMassege.info = json;
+                //ErrorMassege userMassege = new ErrorMassege();
+                //userMassege.title = "Информация";
+                //userMassege.info = json;
 
-            //    model.ErrorInfo = userMassege;
-            //}
+                //model.ErrorInfo = userMassege;
+            }
 
             return View(model);
         }
@@ -460,8 +492,10 @@ namespace Disly.Controllers
 
                                 // оповещение на e-mail
                                 string Massege = String.Empty;
-                                Mailer Letter = new Mailer();
-                                Letter.Theme = "Блокировка пользователя";
+                                Mailer Letter = new Mailer()
+                                {
+                                    Theme = "Блокировка пользователя"
+                                };
                                 Massege = "<p>Уважаемый " + UserInfo.FIO + ", на сайте " + Request.Url.Host + " было 5 неудачных попыток ввода пароля.<br />В целях безопасности, ваш аккаунт заблокирован.</p>";
                                 Massege += "<p>Для восстановления прав доступа мы сформировали для Вас ссылку, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта и учетная запись будет разблокирована.</p>";
                                 Massege += "<p>Если вы вспомнили пароль и хотите ещё раз пропробовать авторизоваться, то подождите 15 минут. Спустя это время, система позволит Вам сделать ещё попытку.</p>";
@@ -523,23 +557,27 @@ namespace Disly.Controllers
                         string NewSalt = password.Salt;
                         string NewHash = password.Hash;
 
-                        UsersModel User = new UsersModel();
-                        User.Id = Guid.NewGuid();
-                        User.FIO = backModel.UserName;
-                        User.Phone = backModel.Phone;
-                        User.EMail = backModel.Email;
-                        User.Address = backModel.Address;
-                        User.Organization = backModel.Organization;
-                        User.Salt = NewSalt;
-                        User.Hash = NewHash;
-                        User.Disabled = true;
+                        UsersModel User = new UsersModel()
+                        {
+                            Id = Guid.NewGuid(),
+                            FIO = backModel.UserName,
+                            Phone = backModel.Phone,
+                            EMail = backModel.Email,
+                            Address = backModel.Address,
+                            Organization = backModel.Organization,
+                            Salt = NewSalt,
+                            Hash = NewHash,
+                            Disabled = true
+                        };
 
                         if (_repository.createCustomer(User))
                         {
                             #region Оповещение
                             string Massege = String.Empty;
-                            Mailer Letter = new Mailer();
-                            Letter.Theme = "Регистрация на сайте " + Settings.BaseURL;
+                            Mailer Letter = new Mailer()
+                            {
+                                Theme = "Регистрация на сайте " + Settings.BaseURL  
+                            };
                             Massege = "<p>Здравствуйте, " + User.FIO + "</p>";
                             Massege += "<p>Благодарим Вас за регистрацию на сайте " + Settings.SiteTitle + ". Для подтверждения регистрация и активации вашего аккаунта, пожалуйста, перейдите по ссылке.</p>";
                             Massege += "<p>Если ваша почтовая программа не поддерживает прямые переходы, Вы можете скопировать данную ссылку в адресную строку браузера.</p>";
@@ -625,8 +663,10 @@ namespace Disly.Controllers
 
                     #region оповещение на e-mail
                     string Massege = String.Empty;
-                    Mailer Letter = new Mailer();
-                    Letter.Theme = "Изменение пароля";
+                    Mailer Letter = new Mailer()
+                    {
+                        Theme = "Изменение пароля"
+                    };
                     Massege = "<p>Уважаемый " + UserInfo.FIO + ", Вы отправили запрос на смену пароля на сайте " + Request.Url.Host + ".</p>";
                     Massege += "<p>Для вас сформирована ссылка, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта.</p>";
                     Massege += "<p><a href=\"http://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/\">http://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/</a></p>";

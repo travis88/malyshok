@@ -370,7 +370,11 @@
       <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
     <File Include="Content/css/styles.css">
+<<<<<<< HEAD
+      <publishTime>04/14/2018 11:23:05</publishTime>
+=======
       <publishTime>04/14/2018 14:53:24</publishTime>
+>>>>>>> 97785acfa4dde5c4ec5665c990b3526d3874c391
     </File>
     <File Include="Content/css/styles_login.css">
       <publishTime>02/13/2018 17:41:31</publishTime>

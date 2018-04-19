@@ -275,82 +275,88 @@ namespace Disly.Controllers
 
             return View(model);
         }
-        public ActionResult LogIn_facebook(string code)
+
+        public ActionResult LogIn_fb(string code)
         {
-            //if (String.IsNullOrEmpty(code))
-            //{
-            //    // отправляем запрос на авторизацию
-            //    string GetCode_Url = "https://www.facebook.com/v2.11/dialog/oauth?client_id=" + Settings.fbApp + "&redirect_uri=http://musicman.tv/Account/LogIn_facebook/";
+            string fbAction = "https://localhost:55552/user/LogIn_fb";
+            if (String.IsNullOrEmpty(code))
+            {
+                // отправляем запрос на авторизацию
+                string GetCode_Url = $"https://www.facebook.com/v2.11/dialog/oauth?client_id={Settings.fbApp}" +
+                    $"&redirect_uri={fbAction}";
 
-            //    Response.Redirect(GetCode_Url);
-            //}
-            //else
-            //{
-            //    // Получаем ID пользователя и токин
-            //    string GetTokin_Url = "https://graph.facebook.com/oauth/access_token?client_id=" + Settings.fbApp + "&redirect_uri=http://musicman.tv/Account/LogIn_facebook/&scope=email&client_secret=" + Settings.fbAppServKey + "&code=" + code;
-            //    WebClient client = new WebClient();
-            //    client.Encoding = Encoding.UTF8;
-            //    string json = client.DownloadString(GetTokin_Url);
-            //    FbLoginModel fbEnterUser = JsonConvert.DeserializeObject<FbLoginModel>(json);
+                Response.Redirect(GetCode_Url);
+            }
+            else
+            {
+                // Получаем ID пользователя и токин
+                string GetTokin_Url = $"https://graph.facebook.com/oauth/access_token?client_id={Settings.fbApp}" +
+                    $"&redirect_uri={fbAction}/&scope=email&client_secret={Settings.fbAppServKey}&code={code}";
+                WebClient client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
+                string json = client.DownloadString(GetTokin_Url);
+                FbLoginModel fbEnterUser = JsonConvert.DeserializeObject<FbLoginModel>(json);
 
-            //    // Получаем данные пользователя
-            //    string GetUserInfo_Url = "https://graph.facebook.com/me?fields=id,first_name,last_name,name,email&access_token=" + fbEnterUser.access_token;
-            //    client = new WebClient();
-            //    client.Encoding = Encoding.UTF8;
-            //    json = client.DownloadString(GetUserInfo_Url);
-            //    FbUserInfo fbUser = JsonConvert.DeserializeObject<FbUserInfo>(json);
+                // Получаем данные пользователя
+                string GetUserInfo_Url = "https://graph.facebook.com/me?fields=id,first_name,last_name,name,email&access_token=" + fbEnterUser.access_token;
+                client = new WebClient();
+                client.Encoding = Encoding.UTF8;
+                json = client.DownloadString(GetUserInfo_Url);
+                FbUserInfo fbUser = JsonConvert.DeserializeObject<FbUserInfo>(json);
 
-            //    AccountModel AccountInfo = db.getAccount(fbUser.id);
+                //AccountModel AccountInfo = db.getAccount(fbUser.id);
 
-            //    // Если пользователь найден
-            //    if (AccountInfo != null)
-            //    {
-            //        // Удачная попытка, Авторизация
-            //        FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), false);
+                // Если пользователь найден
+                //if (AccountInfo != null)
+                //{
+                //    // Удачная попытка, Авторизация
+                //    FormsAuthentication.SetAuthCookie(AccountInfo.id.ToString(), false);
 
-            //        // Записываем данные об авторизации пользователя
-            //        db.SuccessLogin(AccountInfo.id, UserIP);
+                //    // Записываем данные об авторизации пользователя
+                //    db.SuccessLogin(AccountInfo.id, UserIP);
 
-            //        Response.Redirect("/" + AccountInfo.PageName);
-            //    }
-            //    else
-            //    {
-            //        char[] _pass = (DateTime.Now.ToString("DDssmmMMyyyy")).ToCharArray();
-            //        Cripto password = new Cripto(_pass);
-            //        string NewSalt = password.Salt;
-            //        string NewHash = password.Hash;
+                //    Response.Redirect("/" + AccountInfo.PageName);
+                //}
+                //else
+                //{
+                //    char[] _pass = (DateTime.Now.ToString("DDssmmMMyyyy")).ToCharArray();
+                //    Cripto password = new Cripto(_pass);
+                //    string NewSalt = password.Salt;
+                //    string NewHash = password.Hash;
 
-            //        AccountModel User = new AccountModel();
-            //        User.id = Guid.NewGuid();
-            //        User.PageName = String.IsNullOrEmpty(Transliteration.Translit(fbUser.name)) ? "fb" + fbUser.id : Transliteration.Translit(fbUser.name);
-            //        User.Name = fbUser.first_name;
-            //        User.LastName = fbUser.last_name;
-            //        //if (fbUser.has_photo) User.Photo = fbUser.photo_200_orig;
-            //        User.Mail = "";
-            //        User.Salt = NewSalt;
-            //        User.Hash = NewHash;
-            //        User.Group = "user";
-            //        User.Category = new string[] { "user" };
-            //        User.Disabled = false;
-            //        User.fbId = fbUser.id;
+                //    AccountModel User = new AccountModel();
+                //    User.id = Guid.NewGuid();
+                //    User.PageName = String.IsNullOrEmpty(Transliteration.Translit(fbUser.name)) ? "fb" + fbUser.id : Transliteration.Translit(fbUser.name);
+                //    User.Name = fbUser.first_name;
+                //    User.LastName = fbUser.last_name;
+                //    //if (fbUser.has_photo) User.Photo = fbUser.photo_200_orig;
+                //    User.Mail = "";
+                //    User.Salt = NewSalt;
+                //    User.Hash = NewHash;
+                //    User.Group = "user";
+                //    User.Category = new string[] { "user" };
+                //    User.Disabled = false;
+                //    User.fbId = fbUser.id;
 
-            //        db.createAccount(User, UserIP);
+                //    db.createAccount(User, UserIP);
 
-            //        // Удачная попытка, Авторизация
-            //        FormsAuthentication.SetAuthCookie(User.id.ToString(), false);
+                //    // Удачная попытка, Авторизация
+                //    FormsAuthentication.SetAuthCookie(User.id.ToString(), false);
 
-            //        // Записываем данные об авторизации пользователя
-            //        db.SuccessLogin(User.id, UserIP);
+                //    // Записываем данные об авторизации пользователя
+                //    db.SuccessLogin(User.id, UserIP);
 
-            //        Response.Redirect("/" + User.PageName);
-            //    }
+                //    Response.Redirect("/" + User.PageName);
+                //}
 
-            //    ErrorMassege userMassege = new ErrorMassege();
-            //    userMassege.title = "Информация";
-            //    userMassege.info = json;
+                //ErrorMassege userMassege = new ErrorMassege();
+                //userMassege.title = "Информация";
+                //userMassege.info = json;
 
-            //    model.ErrorInfo = userMassege;
-            //}
+                //model.ErrorInfo = userMassege;
+            }
 
             return View(model);
         }

@@ -154,12 +154,14 @@ namespace Disly.Controllers
         /// Закрываем сеанс работы с личным кабинетом
         /// </summary>
         /// <returns></returns>
-        public ActionResult logOut()
+        public ActionResult LogOut()
         {
-            HttpCookie MyCookie = new HttpCookie("."+Settings.SiteTitle);
-            MyCookie.Expires = DateTime.Now.AddDays(-1d);
-            MyCookie.Value = HttpUtility.UrlEncode("", System.Text.Encoding.UTF8);
-            MyCookie.Domain = "." + Settings.BaseURL;
+            HttpCookie MyCookie = new HttpCookie("." + Settings.SiteTitle)
+            {
+                Expires = DateTime.Now.AddDays(-1d),
+                Value = HttpUtility.UrlEncode("", System.Text.Encoding.UTF8),
+                Domain = "." + Settings.BaseURL
+            };
             Response.Cookies.Add(MyCookie);
             FormsAuthentication.SignOut();
 
@@ -186,17 +188,21 @@ namespace Disly.Controllers
                 char[] _pass = (DateTime.Now.ToString("DDssmmMMyyyy")).ToCharArray();
                 Cripto password = new Cripto(_pass);
 
-                UsersModel UserInfoVK = new UsersModel();
-                UserInfoVK.Id = Guid.NewGuid();
-                UserInfoVK.Disabled = false;
-                UserInfoVK.Salt = password.Salt;
-                UserInfoVK.Hash = password.Hash;
+                UsersModel UserInfoVK = new UsersModel()
+                {
+                    Id = Guid.NewGuid(),
+                    Disabled = false,
+                    Salt = password.Salt,
+                    Hash = password.Hash
+                };
 
                 // Получаем ID пользователя и токин
                 string GetTokin_Url = "https://oauth.vk.com/access_token?client_id=" + Settings.vkApp + "&client_secret=" + Settings.vkAppKey + "&redirect_uri="+ _BaseUrl + "&code=" + code;
                 //https://oauth.vk.com/access_token?client_id=6451463&client_secret=l73VY4WmhPlFWIjwZn0E&redirect_uri=http://malyshok.boriskiny.ru/user/LogIn_vk&code=180492224ad13be116
-                WebClient client = new WebClient();
-                client.Encoding = Encoding.UTF8;
+                WebClient client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
                 string json = client.DownloadString(GetTokin_Url);
                 VkLoginModel vkEnterUser = JsonConvert.DeserializeObject<VkLoginModel>(json);
 
@@ -206,8 +212,10 @@ namespace Disly.Controllers
                 // Получаем данные пользователя
                 string GetUserInfo_Url = "https://api.vk.com/method/users.get?user_id=" + vkEnterUser.user_id + "&fields=domain,nickname,country,city,contacts&v=5.69";
                 //https://api.vk.com/method/users.get?user_id=&fields=domain,nickname,country,city,contacts,has_photo,connections,photo_200_orig&access_token=&v=5.69
-                client = new WebClient();
-                client.Encoding = Encoding.UTF8;
+                client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
                 json = client.DownloadString(GetUserInfo_Url);
                 Result += "---<br /><div>" + json + "</div>";
 
@@ -301,8 +309,10 @@ namespace Disly.Controllers
 
                 // Получаем данные пользователя
                 string GetUserInfo_Url = "https://graph.facebook.com/me?fields=id,first_name,last_name,name,email&access_token=" + fbEnterUser.access_token;
-                client = new WebClient();
-                client.Encoding = Encoding.UTF8;
+                client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
                 json = client.DownloadString(GetUserInfo_Url);
                 FbUserInfo fbUser = JsonConvert.DeserializeObject<FbUserInfo>(json);
 
@@ -434,8 +444,10 @@ namespace Disly.Controllers
 
                                 // оповещение на e-mail
                                 string Massege = String.Empty;
-                                Mailer Letter = new Mailer();
-                                Letter.Theme = "Блокировка пользователя";
+                                Mailer Letter = new Mailer()
+                                {
+                                    Theme = "Блокировка пользователя"
+                                };
                                 Massege = "<p>Уважаемый " + UserInfo.FIO + ", на сайте " + Request.Url.Host + " было 5 неудачных попыток ввода пароля.<br />В целях безопасности, ваш аккаунт заблокирован.</p>";
                                 Massege += "<p>Для восстановления прав доступа мы сформировали для Вас ссылку, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта и учетная запись будет разблокирована.</p>";
                                 Massege += "<p>Если вы вспомнили пароль и хотите ещё раз пропробовать авторизоваться, то подождите 15 минут. Спустя это время, система позволит Вам сделать ещё попытку.</p>";
@@ -497,23 +509,27 @@ namespace Disly.Controllers
                         string NewSalt = password.Salt;
                         string NewHash = password.Hash;
 
-                        UsersModel User = new UsersModel();
-                        User.Id = Guid.NewGuid();
-                        User.FIO = backModel.UserName;
-                        User.Phone = backModel.Phone;
-                        User.EMail = backModel.Email;
-                        User.Address = backModel.Address;
-                        User.Organization = backModel.Organization;
-                        User.Salt = NewSalt;
-                        User.Hash = NewHash;
-                        User.Disabled = true;
+                        UsersModel User = new UsersModel()
+                        {
+                            Id = Guid.NewGuid(),
+                            FIO = backModel.UserName,
+                            Phone = backModel.Phone,
+                            EMail = backModel.Email,
+                            Address = backModel.Address,
+                            Organization = backModel.Organization,
+                            Salt = NewSalt,
+                            Hash = NewHash,
+                            Disabled = true
+                        };
 
                         if (_repository.createCustomer(User))
                         {
                             #region Оповещение
                             string Massege = String.Empty;
-                            Mailer Letter = new Mailer();
-                            Letter.Theme = "Регистрация на сайте " + Settings.BaseURL;
+                            Mailer Letter = new Mailer()
+                            {
+                                Theme = "Регистрация на сайте " + Settings.BaseURL  
+                            };
                             Massege = "<p>Здравствуйте, " + User.FIO + "</p>";
                             Massege += "<p>Благодарим Вас за регистрацию на сайте " + Settings.SiteTitle + ". Для подтверждения регистрация и активации вашего аккаунта, пожалуйста, перейдите по ссылке.</p>";
                             Massege += "<p>Если ваша почтовая программа не поддерживает прямые переходы, Вы можете скопировать данную ссылку в адресную строку браузера.</p>";
@@ -599,8 +615,10 @@ namespace Disly.Controllers
 
                     #region оповещение на e-mail
                     string Massege = String.Empty;
-                    Mailer Letter = new Mailer();
-                    Letter.Theme = "Изменение пароля";
+                    Mailer Letter = new Mailer()
+                    {
+                        Theme = "Изменение пароля"
+                    };
                     Massege = "<p>Уважаемый " + UserInfo.FIO + ", Вы отправили запрос на смену пароля на сайте " + Request.Url.Host + ".</p>";
                     Massege += "<p>Для вас сформирована ссылка, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта.</p>";
                     Massege += "<p><a href=\"http://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/\">http://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/</a></p>";

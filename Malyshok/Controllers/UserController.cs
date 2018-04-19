@@ -278,7 +278,7 @@ namespace Disly.Controllers
 
         public ActionResult LogIn_fb(string code)
         {
-            string fbAction = "https://localhost:55552/user/LogIn_fb";
+            string fbAction = "https://localhost:44323/user/LogIn_fb";
             if (String.IsNullOrEmpty(code))
             {
                 // отправляем запрос на авторизацию

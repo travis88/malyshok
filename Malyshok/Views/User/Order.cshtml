@@ -1,0 +1,36 @@
+﻿@model OrdersViewModel
+
+<div class="type-page page-basket">
+    @{ Html.RenderAction("BreadCrumb", "Partials"); }
+
+    <h1>История заказов</h1>
+    <div class="page-text">
+        <p>Добро пожаловать в Ваш личный кабинет!</p>
+        <p>Здесь Вы сможете просмотреть историю своих заказов и изменить личные данные.</p>
+        <p>&nbsp;</p>
+        <div class="lk-tabs">
+            <a href="/user/orders/" class="active">Истории заказов</a><a href="/user/">Личные данные</a><a href="/user/password">Изменить пароль</a>
+        </div>
+        @if (Model.Item != null)
+        {
+            string ProdCount = "";
+            string LL = Model.Item.ProdCount.ToString().Substring(Model.Item.ProdCount.ToString().Length - 1);
+            if (LL == "1" && Model.Item.Total != 11) { ProdCount = "товар"; }
+            else if ((LL == "2" || LL == "3" || LL == "4") && Model.Item.Total != 12 && Model.Item.Total != 13 && Model.Item.Total != 14) { ProdCount = "товара"; }
+            else { ProdCount = "товаров"; }
+
+            <div class="basket-result">
+                <h3>В заказе №@Model.Item.Num <span>@Model.Item.ProdCount  @ProdCount</span> на общую сумму <span>@Model.Item.Total.ToString("# ###.00#") руб.</span></h3>
+            </div>
+            if (Model.Item.Details != null)
+            {
+                foreach (var item in Model.Item.Details)
+                {
+
+                    @Html.Partial("Prod/ProdItem_history", item.Product)
+
+                }
+            }
+        }
+    </div>
+</div>

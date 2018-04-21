@@ -8,10 +8,10 @@
     <h1>Личный кабинет</h1>
     <div class="page-text">
         <p>Добро пожаловать в Ваш личный кабинет!</p>
-        <p>Здесь Вы сможете просмотреть историю своих заказов и изменить личные данные.</p>
+        <p>Здесь Вы сможете изменить личные данные и просмотреть историю своих заказов.</p>
         <p>&nbsp;</p>
         <div class="lk-tabs">
-            <a href="/user/orders/">Истории заказов</a><a href="/user/" class="active">Личные данные</a>
+            <a href="/user/orders/">Истории заказов</a><a href="/user/" class="active">Личные данные</a><a href="/user/password">Изменить пароль</a>
         </div>
         <div class="lk-info">
             <div><b>@Model.UserInfo.FIO</b></div>
@@ -48,9 +48,6 @@
                     @Html.TextBox("Address", Model.UserInfo.Address, new { title = "Адрес (адрес доставки)", @placeholder = "Населенный пункт, Улица, Дом" })
                 </div>
                 <button type="submit" class="btn-invers">Сохранить</button>
-                <a href="/user/ChangePass" class="button btn-blue to-right">
-                    Изменить пароль
-                </a>
             </form>
         </div>
     </div>

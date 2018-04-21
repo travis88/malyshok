@@ -61,6 +61,14 @@ namespace Disly.Controllers
             return View(model);
         }
 
+        [Authorize]
+        public ActionResult Order(Guid id)
+        {
+            model.Item = _repository.getOrder(id);
+            model.Item.Details = _repository.getOrderDetails(id);
+            return View(model);
+        }
+
         public ActionResult Login()
         {
 
@@ -105,7 +113,7 @@ namespace Disly.Controllers
         }
 
         /// <summary>
-        /// Форма "Изменить пароль"
+        /// Форма "Изменить пароль" по коду востановления
         /// </summary>
         /// <returns></returns>
         public ActionResult ChangePass(Guid id)
@@ -120,6 +128,16 @@ namespace Disly.Controllers
                 ViewName = "ChangePass";
 
             return View(ViewName, model);
+        }
+
+        /// <summary>
+        /// Форма "Изменить пароль"
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        public ActionResult Password()
+        {
+            return View("ChangePass", model);
         }
 
         /// <summary>
@@ -153,7 +171,7 @@ namespace Disly.Controllers
         public ActionResult MsgResult()
         {
             // Авторизованного пользователя направляем на главную страницу
-            if (User.Identity.IsAuthenticated) return RedirectToAction("", "User");
+            //if (User.Identity.IsAuthenticated) return RedirectToAction("", "User");
 
             return View(model);
         }
@@ -696,6 +714,29 @@ namespace Disly.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Password(PasswordModel BackModel)
+        {
+            if (ModelState.IsValid)
+            {
+                string NewPass = BackModel.Password;
+
+                Cripto pass = new Cripto(NewPass.ToCharArray());
+                string NewSalt = pass.Salt;
+                string NewHash = pass.Hash;
+
+                _repository.changePassword(model.UserInfo.Id, NewSalt, NewHash);
+
+                return RedirectToAction("MsgResult", "User");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Ошибки в заполнении формы.");
+            }
+
+            return View("ChangePass", model);
         }
     }
 }

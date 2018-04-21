@@ -48,6 +48,7 @@ namespace cms.dbModel
         public abstract void setRestorePassCode(Guid id, Guid RestoreCode);
         public abstract bool getCmsAccountCode(Guid RestoreCode);
         public abstract void changePasByCode(Guid id, string NewSalt, string NewHash);
+        public abstract void changePassword(Guid UserId, string NewSalt, string NewHash);
 
         // Продукция
         public abstract CategoryModel[] getProdCatalogModule();
@@ -61,6 +62,7 @@ namespace cms.dbModel
         public abstract Guid getOrderId(Guid UserId);
         public abstract OrdersList getOrderList(Guid UserId, FilterParams filter);
         public abstract OrderModel getOrder(Guid OrderId);
+        public abstract OrderDetails[] getOrderDetails(Guid OrderId);
         public abstract Guid CreateOrder();
         public abstract Guid CreateOrder(Guid UserId);
         public abstract bool transferOrder(Guid OrderId, Guid UserId);

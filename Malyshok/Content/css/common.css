@@ -467,18 +467,21 @@ a .new-prod-title {
 a.button:hover {
     text-decoration: none;
 }
-.btn-blue {
+.btn-blue,
+a.btn-blue {
     position: relative;
     background: #65acda;
     border-color: #65acda;
     color: #ffffff;
 }
-.btn-invers {
+.btn-invers,
+a.btn-invers {
     background: #ffffff;
     border-color: #786de3;
     color: #786de3;
 }
-.btn-red {
+.btn-red,
+a.btn-red {
     position: relative;
     background: #e1706f;
     border-color: #ffffff;
@@ -516,8 +519,28 @@ a.button:hover {
 .lk-socseti_desc {
     color: #dd201e;
 }
-
-
+/* orders */
+.order-item,
+.order-list_title {
+    overflow: hidden;
+    border-bottom: solid 1px #cccccc;
+}
+    .order-item div,
+    .order-list_title div {
+        float: left;
+        padding: 5px 10px;
+    }
+.order-list_title {
+    background: #cccccc;
+    font-weight: bold;
+}
+.order-item_link {
+    width: 110px;
+}
+.order-item_date {
+    width: 200px;
+    text-align: center;
+}
 /* catalog */
 .pagination {
     overflow: auto;
@@ -844,7 +867,8 @@ a.button:hover {
 input.chenge-input {
     border-color: #dd201e !important;
 }
-.basket_item {
+.basket_item,
+.order-details_item {
     margin-bottom: 20px;
     overflow: hidden;
 }
@@ -867,9 +891,30 @@ input.chenge-input {
     font-size: 19px;
     margin-bottom: 30px;
 }
+.order-details_item .title {
+    font-size: 19px;
+    margin-bottom: 10px;
+}
+.order-details_item div {
+    overflow: hidden;
+}
+.order-details_item span {
+    display: block;
+    float: left;
+    width: 120px;
+    color: #cccccc;
+}
+.order-details_item b {
+    color: #dd201e;
+}
 
-.type-page .basket_item-title a {
+.type-page .basket_item-title a,
+.type-page .order-details_item .title a {
     color: #4d4d4d;
+}
+.order-details_item .title {
+    font-size: 19px;
+    margin-bottom: 10px;
 }
 
 .basket_item-counter {

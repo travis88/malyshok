@@ -4,7 +4,20 @@
     <h1>Изменение пароля</h1>
 
     <div class="page-text">
-        <p>&nbsp;</p>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p>Добро пожаловать в Ваш личный кабинет!</p>
+            <p>Здесь Вы сможете просмотреть историю своих заказов и изменить личные данные.</p>
+            <p>&nbsp;</p>
+            <div class="lk-tabs">
+                <a href="/user/orders/">Истории заказов</a><a href="/user/">Личные данные</a><a href="/user/password" class="active">Изменить пароль</a>
+            </div>
+        }
+        else
+        {
+            <p>&nbsp;</p>
+        }
+
         <div class="row">
             <div class="col-sm-6">
                 <div class="shadow-block login-form">
@@ -18,7 +31,10 @@
                         <div class="login-btn_block">
                             <button type="submit" form="loginForm" class="button btn-blue">Изменить пароль</button>
                         </div>
-                        <div class="restore-pass"><a href="/user/login">Вход в личный кабинет</a></div>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <div class="restore-pass"><a href="/user/login">Вход в личный кабинет</a></div>
+                        }
                     </div>
                 </div>
             </div>

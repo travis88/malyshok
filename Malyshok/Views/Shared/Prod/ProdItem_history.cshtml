@@ -1,0 +1,16 @@
+﻿@model ProductModel
+
+@{
+    var ProdImg = Model.Photo != null ? Settings.ProdContent + Model.Barcode + "/" + Model.Photo.Replace(".jpg", "_mini.jpg") : "";
+    ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
+}
+<div class="order-details_item shadow-block">
+    <div class="basket-img"><img src="@ProdImg" /></div>
+    <div class="item-info">
+        <div class="title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
+        <div><span>Код:</span> @Model.Code</div>
+        <div><span>Штрих-код:</span> @Model.Barcode</div>
+        <div><span>Количество:</span> @Model.Count</div>
+        <div class="price"><span>ЦЕНА:</span><b> @Model.Price.ToString("# ###.00#")</b> руб.</div>
+    </div>
+</div>

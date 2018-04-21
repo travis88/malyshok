@@ -896,6 +896,9 @@
     <Content Include="Views\Prod\List.cshtml" />
     <Content Include="Views\User\Login_vk.cshtml" />
     <Content Include="Views\User\Orders.cshtml" />
+    <Content Include="Views\User\Order.cshtml" />
+    <Content Include="Views\Shared\Prod\ProdItem_basket.cshtml" />
+    <Content Include="Views\Shared\Prod\ProdItem_history.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

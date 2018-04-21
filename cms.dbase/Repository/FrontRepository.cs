@@ -940,7 +940,7 @@ namespace cms.dbase
                         .Set(p => p.c_organization, item.Organization)
                         .Update();
 
-                    data.Select(s => new UsersModel
+                    return data.Select(s => new UsersModel
                     {
                         Id = s.id,
                         FIO = s.c_name,
@@ -1022,6 +1022,20 @@ namespace cms.dbase
                         .Update();
             }
         }
+        public override void changePassword(Guid UserId, string NewSalt, string NewHash)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                Guid? Code = null;
+                var data = db.content_userss.Where(w => w.id == UserId)
+                        .Set(u => u.c_salt, NewSalt)
+                        .Set(u => u.c_hash, NewHash)
+                        .Set(u => u.d_try_login, DateTime.Now)
+                        .Set(u => u.n_error_count, 0)
+                        .Set(u => u.с_change_pass_code, Code)
+                        .Update();
+            }
+        }
         #endregion
 
 
@@ -1066,7 +1080,8 @@ namespace cms.dbase
                         Num = s.n_num,
                         Date = s.d_date,
                         Total = s.contentorderdetailscontentorderss.Sum(d => d.m_price * d.n_count)
-                    });
+                    })
+                    .OrderByDescending(o => o.Date);
 
                 int itemCount = query.Count();
 
@@ -1115,6 +1130,31 @@ namespace cms.dbase
                 });
 
                 return data.SingleOrDefault();
+            }
+        }
+        public override OrderDetails[] getOrderDetails(Guid OrderId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var query = db.content_order_detailss
+                    .Where(w => w.f_order == OrderId)
+                    .Select(s => new OrderDetails
+                    {
+                        Id = s.id,
+                        Date = s.d_date,
+                        Product = new ProductModel {
+                            Id = (Guid)s.f_prod_id,
+                            Title =s.c_caption,
+                            Barcode = s.c_barcode,
+                            Code = s.c_code,
+                            Photo = s.c_photo,
+                            Price = s.m_price,
+                            Count = s.n_count
+                        }
+                    })
+                    .OrderByDescending(o => o.Date);
+
+                return query.ToArray();
             }
         }
         public override Guid CreateOrder() {

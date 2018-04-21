@@ -859,7 +859,6 @@
     <Content Include="Content\plugins\tinymce\skins\lightgray\fonts\tinymce.woff" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\services\Pager.cshtml" />
     <Content Include="Views\Shared\services\breadcrumbs.cshtml" />
@@ -899,6 +898,7 @@
     <Content Include="Views\User\Order.cshtml" />
     <Content Include="Views\Shared\Prod\ProdItem_basket.cshtml" />
     <Content Include="Views\Shared\Prod\ProdItem_history.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

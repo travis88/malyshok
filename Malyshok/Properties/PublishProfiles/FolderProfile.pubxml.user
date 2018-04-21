@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Этот файл используется процессом публикации или упаковки вашего веб-проекта. Можно настроить поведение этого процесса,
-изменив этот файл MSBuild. Подробности см. на странице https://go.microsoft.com/fwlink/?LinkID=208121. 
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
@@ -88,7 +88,7 @@
       <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
     <File Include="Areas/Admin/Views/PortalUsers/Item.cshtml">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>04/16/2018 11:51:00</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Products/Index.cshtml">
       <publishTime>04/14/2018 14:53:24</publishTime>
@@ -217,25 +217,25 @@
       <publishTime>02/26/2018 18:47:38</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll">
-      <publishTime>04/18/2018 08:16:59</publishTime>
+      <publishTime>04/21/2018 13:13:07</publishTime>
     </File>
     <File Include="bin/cms.dbase.dll.config">
       <publishTime>05/22/2017 13:02:04</publishTime>
     </File>
     <File Include="bin/cms.dbase.pdb">
-      <publishTime>04/18/2018 08:16:59</publishTime>
+      <publishTime>04/21/2018 13:13:07</publishTime>
     </File>
     <File Include="bin/cms.dbModel.dll">
-      <publishTime>04/18/2018 08:16:56</publishTime>
+      <publishTime>04/21/2018 13:13:05</publishTime>
     </File>
     <File Include="bin/cms.dbModel.pdb">
-      <publishTime>04/18/2018 08:16:56</publishTime>
+      <publishTime>04/21/2018 13:13:05</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>04/18/2018 08:17:05</publishTime>
+      <publishTime>04/21/2018 13:13:54</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>04/18/2018 08:17:05</publishTime>
+      <publishTime>04/21/2018 13:13:54</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>02/13/2018 17:41:41</publishTime>
@@ -346,7 +346,7 @@
       <publishTime>04/10/2018 19:32:00</publishTime>
     </File>
     <File Include="Content/css/common.css">
-      <publishTime>04/17/2018 21:43:45</publishTime>
+      <publishTime>04/21/2018 12:26:48</publishTime>
     </File>
     <File Include="Content/css/commonless.css">
       <publishTime>02/13/2018 17:41:31</publishTime>
@@ -370,11 +370,7 @@
       <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
     <File Include="Content/css/styles.css">
-<<<<<<< HEAD
-      <publishTime>04/14/2018 11:23:05</publishTime>
-=======
       <publishTime>04/14/2018 14:53:24</publishTime>
->>>>>>> 97785acfa4dde5c4ec5665c990b3526d3874c391
     </File>
     <File Include="Content/css/styles_login.css">
       <publishTime>02/13/2018 17:41:31</publishTime>
@@ -926,7 +922,7 @@
       <publishTime>02/13/2018 17:41:31</publishTime>
     </File>
     <File Include="Content/js/script.js">
-      <publishTime>04/13/2018 17:13:55</publishTime>
+      <publishTime>04/18/2018 23:31:08</publishTime>
     </File>
     <File Include="Content/js/spec.js">
       <publishTime>02/13/2018 17:41:31</publishTime>
@@ -1943,7 +1939,7 @@
       <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
     <File Include="Views/Basket/Index.cshtml">
-      <publishTime>04/11/2018 23:35:10</publishTime>
+      <publishTime>04/20/2018 18:37:43</publishTime>
     </File>
     <File Include="Views/Basket/Result.cshtml">
       <publishTime>03/23/2018 11:12:20</publishTime>
@@ -2020,6 +2016,12 @@
     <File Include="Views/Shared/Prod/ProdItem.cshtml">
       <publishTime>04/12/2018 01:13:18</publishTime>
     </File>
+    <File Include="Views/Shared/Prod/ProdItem_basket.cshtml">
+      <publishTime>04/20/2018 18:35:07</publishTime>
+    </File>
+    <File Include="Views/Shared/Prod/ProdItem_history.cshtml">
+      <publishTime>04/21/2018 12:24:39</publishTime>
+    </File>
     <File Include="Views/Shared/services/breadcrumbs.cshtml">
       <publishTime>03/13/2018 11:43:28</publishTime>
     </File>
@@ -2033,13 +2035,13 @@
       <publishTime>04/10/2018 17:31:09</publishTime>
     </File>
     <File Include="Views/User/ChangePass.cshtml">
-      <publishTime>04/10/2018 23:39:30</publishTime>
+      <publishTime>04/21/2018 13:00:01</publishTime>
     </File>
     <File Include="Views/User/Index.cshtml">
-      <publishTime>04/17/2018 21:43:23</publishTime>
+      <publishTime>04/21/2018 12:57:01</publishTime>
     </File>
     <File Include="Views/User/Login.cshtml">
-      <publishTime>04/11/2018 23:44:55</publishTime>
+      <publishTime>04/21/2018 13:08:39</publishTime>
     </File>
     <File Include="Views/User/Login_vk.cshtml">
       <publishTime>04/17/2018 18:21:05</publishTime>
@@ -2048,10 +2050,16 @@
       <publishTime>04/10/2018 23:21:54</publishTime>
     </File>
     <File Include="Views/User/MsgResult.cshtml">
-      <publishTime>04/10/2018 23:39:05</publishTime>
+      <publishTime>04/21/2018 13:04:32</publishTime>
     </File>
     <File Include="Views/User/MsgSendMail.cshtml">
       <publishTime>04/10/2018 23:46:41</publishTime>
+    </File>
+    <File Include="Views/User/Order.cshtml">
+      <publishTime>04/21/2018 12:56:29</publishTime>
+    </File>
+    <File Include="Views/User/Orders.cshtml">
+      <publishTime>04/21/2018 12:45:34</publishTime>
     </File>
     <File Include="Views/User/Reg.cshtml">
       <publishTime>04/11/2018 23:38:56</publishTime>
@@ -2069,7 +2077,7 @@
       <publishTime>02/13/2018 17:41:32</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/17/2018 17:13:45</publishTime>
+      <publishTime>04/18/2018 17:31:01</publishTime>
     </File>
     <File Include="webpack.config.js">
       <publishTime>03/26/2018 08:04:35</publishTime>

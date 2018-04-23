@@ -52,10 +52,12 @@ namespace Disly.Controllers
         [Authorize]
         public ActionResult Orders(string size, string page, string sort)
         {
-            FilterParams filter = new FilterParams();
-            filter.Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1;
-            filter.Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : PageSize;
-            filter.Sort = sort;
+            FilterParams filter = new FilterParams()
+            {
+                Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1,
+                Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : PageSize,
+                Sort = sort
+            };
 
             model.List = _repository.getOrderList(model.UserInfo.Id, filter);
             return View(model);
@@ -201,14 +203,15 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult LogIn_vk(string code)
         {
-            string _BaseUrl = "http://" + Settings.BaseURL + "/user/LogIn_vk";
+            string _BaseUrl = $"http://{Settings.BaseURL}/user/LogIn_vk";
 
             string Result = String.Empty;
 
             if (String.IsNullOrEmpty(code))
             {
                 // отправляем запрос на авторизацию
-                string GetCode_Url = "https://oauth.vk.com/authorize?client_id=" + Settings.vkApp + "&display=popup&redirect_uri="+ _BaseUrl + "&scope=email&response_type=code&v=5.69";
+                string GetCode_Url = $"https://oauth.vk.com/authorize?client_id={Settings.vkApp}" +
+                    $"&display=popup&redirect_uri={_BaseUrl}&scope=email&response_type=code&v=5.69";
                 
                 Response.Redirect(GetCode_Url);
             }
@@ -226,9 +229,12 @@ namespace Disly.Controllers
                 };
 
                 // Получаем ID пользователя и токин
-                string GetTokin_Url = "https://oauth.vk.com/access_token?client_id=" + Settings.vkApp + "&client_secret=" + Settings.vkAppKey + "&redirect_uri="+ _BaseUrl + "&code=" + code;
-                WebClient client = new WebClient();
-                client.Encoding = Encoding.UTF8;
+                string GetTokin_Url = $"https://oauth.vk.com/access_token?client_id={Settings.vkApp}" +
+                    $"&client_secret={Settings.vkAppKey}&redirect_uri={_BaseUrl}&code={code}";
+                WebClient client = new WebClient()
+                {
+                    Encoding = Encoding.UTF8
+                };
                 string json = client.DownloadString(GetTokin_Url);
                 VkLoginModel vkEnterUser = JsonConvert.DeserializeObject<VkLoginModel>(json);
 
@@ -236,9 +242,9 @@ namespace Disly.Controllers
                 Result = "<div>" + json + "</div>";
 
                 // Получаем данные пользователя
-                string GetUserInfo_Url = "https://api.vk.com/method/users.get?user_id=" + vkEnterUser.user_id + "&fields=domain,nickname,country,city,contacts&v=5.69";
-                client = new WebClient();
-                client.Encoding = Encoding.UTF8;
+                string GetUserInfo_Url = $"https://api.vk.com/method/users.get?user_id={vkEnterUser.user_id}" +
+                    $"&fields=domain,nickname,country,city,contacts&v=5.69";
+                
                 client = new WebClient()
                 {
                     Encoding = Encoding.UTF8
@@ -248,8 +254,9 @@ namespace Disly.Controllers
 
                 ViewBag.Result = Result;
                 VkUserInfo vkUser = JsonConvert.DeserializeObject<VkUserInfo>(json);
-                
-                UsersModel UserInfo = _repository.getCustomer(vkUser.response[0].id.ToString());
+                var userResponse = vkUser.response[0];
+
+                UsersModel UserInfo = _repository.getCustomer(userResponse.id.ToString());
 
                 // Если пользователь найден
                 if (UserInfo != null)
@@ -279,10 +286,10 @@ namespace Disly.Controllers
                 }
                 else
                 {
-                    UserInfoVK.FIO = vkUser.response[0].last_name + " " + vkUser.response[0].first_name;
+                    UserInfoVK.FIO = $"{userResponse.last_name} {userResponse.first_name}";
                     UserInfoVK.Phone = "";
                     UserInfoVK.EMail = "";
-                    UserInfoVK.Address = vkUser.response[0].city.title;
+                    UserInfoVK.Address = userResponse.city.title;
 
                     _repository.createCustomer(UserInfoVK);
 
@@ -328,9 +335,13 @@ namespace Disly.Controllers
             }
             else
             {
+                //if (!Request.Url.IsDefaultPort)
+                //{
+                //    fbAction = fbAction.Replace("https://localhost:44323", "http://localhost:55552");
+                //}
                 // Получаем ID пользователя и токин
-                string GetTokin_Url = $"https://graph.facebook.com/oauth/access_token?client_id={Settings.fbApp}" +
-                    $"&redirect_uri={fbAction}/&scope=email&client_secret={Settings.fbAppServKey}&code={code}";
+                string GetTokin_Url = $"https://graph.facebook.com/v2.12/oauth/access_token?client_id={Settings.fbApp}" +
+                    $"&redirect_uri={HttpUtility.UrlEncode(fbAction)}/&scope=email&client_secret={HttpUtility.UrlEncode(Settings.fbAppServKey)}&code={HttpUtility.UrlEncode(code)}";
                 WebClient client = new WebClient()
                 {
                     Encoding = Encoding.UTF8

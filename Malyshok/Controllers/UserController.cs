@@ -237,81 +237,101 @@ namespace Disly.Controllers
                 };
                 string json = client.DownloadString(GetTokin_Url);
                 VkLoginModel vkEnterUser = JsonConvert.DeserializeObject<VkLoginModel>(json);
-
                 UserInfoVK.Vk = vkEnterUser.user_id.ToString();
-                Result = "<div>" + json + "</div>";
 
-                // Получаем данные пользователя
-                string GetUserInfo_Url = $"https://api.vk.com/method/users.get?user_id={vkEnterUser.user_id}" +
-                    $"&fields=domain,nickname,country,city,contacts&v=5.69";
+                string currentUser = User.Identity.Name;
+                if (String.IsNullOrEmpty(currentUser))
+                {
+                    Result = "<div>" + json + "</div>";
+
+                    // Получаем данные пользователя
+                    string GetUserInfo_Url = $"https://api.vk.com/method/users.get?user_id={vkEnterUser.user_id}" +
+                        $"&fields=domain,nickname,country,city,contacts&v=5.69";
                 
-                client = new WebClient()
-                {
-                    Encoding = Encoding.UTF8
-                };
-                json = client.DownloadString(GetUserInfo_Url);
-                Result += "---<br /><div>" + json + "</div>";
-
-                ViewBag.Result = Result;
-                VkUserInfo vkUser = JsonConvert.DeserializeObject<VkUserInfo>(json);
-                var userResponse = vkUser.response[0];
-
-                UsersModel UserInfo = _repository.getCustomer(userResponse.id.ToString());
-
-                // Если пользователь найден
-                if (UserInfo != null)
-                {
-                    // Удачная попытка, Авторизация
-                    FormsAuthentication.SetAuthCookie(UserInfo.Id.ToString(), false);
-
-                    // Записываем данные об авторизации пользователя
-                    _accountRepository.SuccessLogin(UserInfo.Id, RequestUserInfo.IP);
-
-                    Guid UserOrder = _repository.getOrderId(UserInfo.Id);
-
-                    if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                    client = new WebClient()
                     {
-                        return RedirectToAction("Index", "MergeOrders");
-                    }
-                    else if (OrderId != Guid.Empty)
+                        Encoding = Encoding.UTF8
+                    };
+                    json = client.DownloadString(GetUserInfo_Url);
+                    Result += "---<br /><div>" + json + "</div>";
+
+                    ViewBag.Result = Result;
+                    VkUserInfo vkUser = JsonConvert.DeserializeObject<VkUserInfo>(json);
+                    var userResponse = vkUser.response[0];
+
+                    UsersModel UserInfo = _repository.getCustomer(userResponse.id.ToString());
+
+                    // Если пользователь найден
+                    if (UserInfo != null)
                     {
-                        _repository.transferOrder(OrderId, UserInfo.Id);
+                        // Записываем данные об авторизации пользователя
+                        _accountRepository.SuccessLogin(UserInfo.Id, RequestUserInfo.IP);
 
-                        HttpCookie MyCookie = Request.Cookies["order-id"];
-                        MyCookie.Expires = DateTime.Now.AddDays(-1);
-                        Response.Cookies.Add(MyCookie);
+                        // Удачная попытка, Авторизация
+                        Authorization(UserInfo);
+
+                        #region comments
+                        //FormsAuthentication.SetAuthCookie(UserInfo.Id.ToString(), false);
+
+                        //Guid UserOrder = _repository.getOrderId(UserInfo.Id);
+
+                        //if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                        //{
+                        //    return RedirectToAction("Index", "MergeOrders");
+                        //}
+                        //else if (OrderId != Guid.Empty)
+                        //{
+                        //    _repository.transferOrder(OrderId, UserInfo.Id);
+
+                        //    HttpCookie MyCookie = Request.Cookies["order-id"];
+                        //    MyCookie.Expires = DateTime.Now.AddDays(-1);
+                        //    Response.Cookies.Add(MyCookie);
+                        //}
+
+                        //return RedirectToAction("Index", "User");
+                        #endregion
                     }
+                    else
+                    {
+                        UserInfoVK.FIO = $"{userResponse.last_name} {userResponse.first_name}";
+                        UserInfoVK.Phone = "";
+                        UserInfoVK.EMail = "";
+                        UserInfoVK.Address = userResponse.city.title;
 
-                    return RedirectToAction("Index", "User");
+                        _repository.createCustomer(UserInfoVK);
+
+                        // Удачная попытка, Авторизация
+                        Authorization(UserInfoVK);
+
+                        #region comments
+                        //FormsAuthentication.SetAuthCookie(UserInfoVK.Id.ToString(), false);
+
+                        //Guid UserOrder = _repository.getOrderId(UserInfoVK.Id);
+
+                        //if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                        //{
+                        //    return RedirectToAction("Index", "MergeOrders");
+                        //}
+                        //else if (OrderId != Guid.Empty)
+                        //{
+                        //    _repository.transferOrder(OrderId, UserInfoVK.Id);
+
+                        //    HttpCookie MyCookie = Request.Cookies["order-id"];
+                        //    MyCookie.Expires = DateTime.Now.AddDays(-1);
+                        //    Response.Cookies.Add(MyCookie);
+                        //}
+
+                        //return RedirectToAction("Index", "User");
+                        #endregion
+                    }
                 }
                 else
                 {
-                    UserInfoVK.FIO = $"{userResponse.last_name} {userResponse.first_name}";
-                    UserInfoVK.Phone = "";
-                    UserInfoVK.EMail = "";
-                    UserInfoVK.Address = userResponse.city.title;
-
-                    _repository.createCustomer(UserInfoVK);
-
-                    // Удачная попытка, Авторизация
-                    FormsAuthentication.SetAuthCookie(UserInfoVK.Id.ToString(), false);
-
-                    Guid UserOrder = _repository.getOrderId(UserInfoVK.Id);
-
-                    if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                    if (!String.IsNullOrWhiteSpace(UserInfoVK.Vk))
                     {
-                        return RedirectToAction("Index", "MergeOrders");
+                        UsersModel user = _repository.SetCustromerSocialNetwork(Guid.Parse(currentUser), "vk", UserInfoVK.Vk);
+                        Authorization(user);
                     }
-                    else if (OrderId != Guid.Empty)
-                    {
-                        _repository.transferOrder(OrderId, UserInfoVK.Id);
-
-                        HttpCookie MyCookie = Request.Cookies["order-id"];
-                        MyCookie.Expires = DateTime.Now.AddDays(-1);
-                        Response.Cookies.Add(MyCookie);
-                    }
-
-                    return RedirectToAction("Index", "User");
                 }
             }
 
@@ -748,6 +768,31 @@ namespace Disly.Controllers
             }
 
             return View("ChangePass", model);
+        }
+
+        /// <summary>
+        /// Авторизация
+        /// </summary>
+        private ActionResult Authorization(UsersModel userInfo)
+        {
+            FormsAuthentication.SetAuthCookie(userInfo.Id.ToString(), false);
+
+            Guid UserOrder = _repository.getOrderId(userInfo.Id);
+
+            if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+            {
+                return RedirectToAction("Index", "MergeOrders");
+            }
+            else if (OrderId != Guid.Empty)
+            {
+                _repository.transferOrder(OrderId, userInfo.Id);
+
+                HttpCookie MyCookie = Request.Cookies["order-id"];
+                MyCookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(MyCookie);
+            }
+
+            return RedirectToAction("Index", "User");
         }
     }
 }

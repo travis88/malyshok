@@ -42,6 +42,7 @@ namespace cms.dbModel
         public abstract UsersModel getCustomer(string Id);
         public abstract bool createCustomer(UsersModel item);
         public abstract UsersModel updateCustomer(UsersModel item);
+        public abstract UsersModel SetCustromerSocialNetwork(Guid userId, string type, string socialId);
         //public abstract bool deleteCustomer(Guid id);
 
         public abstract int FailedLogin(Guid id, string IP);

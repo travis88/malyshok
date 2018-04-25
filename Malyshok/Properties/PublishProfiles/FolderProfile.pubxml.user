@@ -232,10 +232,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/24/2018 06:27:19</publishTime>
     </File>
     <File Include="bin/Disly.dll">
-      <publishTime>04/24/2018 08:08:44</publishTime>
+      <publishTime>04/25/2018 05:55:16</publishTime>
     </File>
     <File Include="bin/Disly.pdb">
-      <publishTime>04/24/2018 08:08:44</publishTime>
+      <publishTime>04/25/2018 05:55:16</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>03/23/2018 06:35:21</publishTime>
@@ -244,7 +244,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/23/2018 06:35:21</publishTime>
     </File>
     <File Include="bin/Imaging.dll">
-      <publishTime>06/10/2017 16:06:08</publishTime>
+      <publishTime>10/06/2017 16:06:08</publishTime>
     </File>
     <File Include="bin/Import.Core.dll">
       <publishTime>04/24/2018 06:27:19</publishTime>
@@ -298,7 +298,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:04:40</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Mvc.resources.dll">
-      <publishTime>01/10/2013 20:56:22</publishTime>
+      <publishTime>10/01/2013 20:56:22</publishTime>
     </File>
     <File Include="bin/ru/System.Web.Razor.resources.dll">
       <publishTime>01/28/2015 04:02:40</publishTime>
@@ -2045,6 +2045,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Views/User/Login_vk.cshtml">
       <publishTime>04/18/2018 17:09:47</publishTime>
+    </File>
+    <File Include="Views/User/MergeUsers.cshtml">
+      <publishTime>04/25/2018 05:25:16</publishTime>
     </File>
     <File Include="Views/User/MsgFailRestore.cshtml">
       <publishTime>04/14/2018 10:44:23</publishTime>

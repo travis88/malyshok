@@ -282,7 +282,7 @@ namespace Disly.Controllers
 
                         // Удачная попытка, Авторизация
                         FormsAuthentication.SetAuthCookie(UserInfoVK.Id.ToString(), false);
-                        MergeOrders(UserInfoVK);
+                        //MergeOrders(UserInfoVK);
                     }
                 }
                 else
@@ -291,7 +291,7 @@ namespace Disly.Controllers
                     {
                         var existingVkUser = _repository.getCustomer(UserInfoVK.Vk);
                         var authorizedUser = _repository.getCustomer(Guid.Parse(currentUser));
-                        if (existingVkUser != null)
+                        if (existingVkUser != null && (existingVkUser.Id != authorizedUser.Id))
                         {
                             UsersMergeViewModel mergeModel = new UsersMergeViewModel
                             {
@@ -306,8 +306,8 @@ namespace Disly.Controllers
                         else
                         {
                             UsersModel user = _repository.SetCustromerSocialNetwork(Guid.Parse(currentUser), "vk", UserInfoVK.Vk);
-                            return RedirectToAction("Index", "User");
                         }
+                        return RedirectToAction("Index", "User");
                     }
                 }
             }

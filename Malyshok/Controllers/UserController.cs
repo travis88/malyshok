@@ -268,28 +268,8 @@ namespace Disly.Controllers
                         _accountRepository.SuccessLogin(UserInfo.Id, RequestUserInfo.IP);
 
                         // Удачная попытка, Авторизация
-                        Authorization(UserInfo);
-
-                        #region comments
-                        //FormsAuthentication.SetAuthCookie(UserInfo.Id.ToString(), false);
-
-                        //Guid UserOrder = _repository.getOrderId(UserInfo.Id);
-
-                        //if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
-                        //{
-                        //    return RedirectToAction("Index", "MergeOrders");
-                        //}
-                        //else if (OrderId != Guid.Empty)
-                        //{
-                        //    _repository.transferOrder(OrderId, UserInfo.Id);
-
-                        //    HttpCookie MyCookie = Request.Cookies["order-id"];
-                        //    MyCookie.Expires = DateTime.Now.AddDays(-1);
-                        //    Response.Cookies.Add(MyCookie);
-                        //}
-
-                        //return RedirectToAction("Index", "User");
-                        #endregion
+                        FormsAuthentication.SetAuthCookie(UserInfo.Id.ToString(), false);
+                        MergeOrders(UserInfo);
                     }
                     else
                     {
@@ -301,36 +281,33 @@ namespace Disly.Controllers
                         _repository.createCustomer(UserInfoVK);
 
                         // Удачная попытка, Авторизация
-                        Authorization(UserInfoVK);
-
-                        #region comments
-                        //FormsAuthentication.SetAuthCookie(UserInfoVK.Id.ToString(), false);
-
-                        //Guid UserOrder = _repository.getOrderId(UserInfoVK.Id);
-
-                        //if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
-                        //{
-                        //    return RedirectToAction("Index", "MergeOrders");
-                        //}
-                        //else if (OrderId != Guid.Empty)
-                        //{
-                        //    _repository.transferOrder(OrderId, UserInfoVK.Id);
-
-                        //    HttpCookie MyCookie = Request.Cookies["order-id"];
-                        //    MyCookie.Expires = DateTime.Now.AddDays(-1);
-                        //    Response.Cookies.Add(MyCookie);
-                        //}
-
-                        //return RedirectToAction("Index", "User");
-                        #endregion
+                        FormsAuthentication.SetAuthCookie(UserInfoVK.Id.ToString(), false);
+                        MergeOrders(UserInfoVK);
                     }
                 }
                 else
                 {
                     if (!String.IsNullOrWhiteSpace(UserInfoVK.Vk))
                     {
-                        UsersModel user = _repository.SetCustromerSocialNetwork(Guid.Parse(currentUser), "vk", UserInfoVK.Vk);
-                        Authorization(user);
+                        var existingVkUser = _repository.getCustomer(UserInfoVK.Vk);
+                        var authorizedUser = _repository.getCustomer(Guid.Parse(currentUser));
+                        if (existingVkUser != null)
+                        {
+                            UsersMergeViewModel mergeModel = new UsersMergeViewModel
+                            {
+                                Users = new UsersModel[]
+                                {
+                                    authorizedUser,
+                                    existingVkUser
+                                }
+                            };
+                            return View("MergeUsers", mergeModel);
+                        }
+                        else
+                        {
+                            UsersModel user = _repository.SetCustromerSocialNetwork(Guid.Parse(currentUser), "vk", UserInfoVK.Vk);
+                            return RedirectToAction("Index", "User");
+                        }
                     }
                 }
             }
@@ -771,12 +748,10 @@ namespace Disly.Controllers
         }
 
         /// <summary>
-        /// Авторизация
+        /// Слияние заказов
         /// </summary>
-        private ActionResult Authorization(UsersModel userInfo)
+        private ActionResult MergeOrders(UsersModel userInfo)
         {
-            FormsAuthentication.SetAuthCookie(userInfo.Id.ToString(), false);
-
             Guid UserOrder = _repository.getOrderId(userInfo.Id);
 
             if (OrderId != Guid.Empty && UserOrder != Guid.Empty)

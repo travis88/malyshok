@@ -5,9 +5,12 @@
     ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
    }
 <div class="basket_item shadow-block">
-    <div class="basket-img"><img src="@ProdImg" /></div>
+    <div class="basket_item-mobyle-title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
+    <div class="basket-img"><span class="loop"></span><img src="@ProdImg" /></div>
     <div class="item-info">
         <div class="basket_item-title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
+        <div class="basket_item-mobyle-params"><div><span>Код</span> @Model.Code</div></div>
+        <div class="basket_item-mobyle-params"><div><span>Штрихкод</span> @Model.Barcode</div></div>
         <div class="basket_form-block">
             <div class="prod-price"><span>Цена</span><b> @Model.Price.ToString("# ###.00#")</b> руб.</div>
             <div class="basket_item-counter">

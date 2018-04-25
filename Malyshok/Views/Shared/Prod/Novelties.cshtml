@@ -5,7 +5,7 @@
 
 @if (Model != null)
 {
-    <div class="prod-new-block">
+    <div class="new-prod-block">
         <div class="title"><a href="/Novelties">Новинки</a></div>
         @foreach (ProductModel item in Model)
         {
@@ -16,8 +16,9 @@
 
                 <div class="new-prod-item">
                     <a href="/prod/@item.Id/">
-                        <div class="new-prod-img"><img src="@ProdImg" /></div>
-                        <div class="new-prod-title">@item.Title.Replace(",",", ")</div>
+                        <img src="@ProdImg" />
+                        @*<div class="new-prod-img"></div>*@
+                        @*<div class="new-prod-title">@item.Title.Replace(",",", ")</div>*@
                     </a>
                 </div>
             }

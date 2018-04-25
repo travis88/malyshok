@@ -160,11 +160,10 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Content\css\adaptiv.css" />
+    <Content Include="Content\css\main.css" />
     <Content Include="Content\css\common.css" />
-    <Content Include="Content\css\commonless.css" />
     <Content Include="Content\css\iframe_tinymce.css" />
     <Content Include="Content\css\import-react.css" />
-    <Content Include="Content\css\index.css" />
     <Content Include="Content\css\print.css" />
     <Content Include="Content\css\spec_style.css" />
     <Content Include="Content\css\styles_popUp.css" />
@@ -220,6 +219,7 @@
     <Content Include="Content\img\basket-992_active.png" />
     <Content Include="Content\img\blockquote.png" />
     <Content Include="Content\img\basket_active.png" />
+    <Content Include="Content\img\catalog.jpg" />
     <Content Include="Content\img\catalog.png" />
     <Content Include="Content\img\cert.png" />
     <Content Include="Content\img\clouds.png" />
@@ -846,7 +846,6 @@
     <Content Include="Areas\Admin\Views\PhotoAlbums\Index.cshtml" />
     <Content Include="Areas\Admin\Views\PhotoAlbums\Item.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\Modal\Sites.cshtml" />
-    <Content Include="Content\css\commonless.less" />
     <Content Include="Content\css\theme\green.less" />
     <Content Include="Content\css\theme\purple.less" />
     <None Include="Content\plugins\datatables\i18n\ru.json" />

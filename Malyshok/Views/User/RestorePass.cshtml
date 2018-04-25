@@ -2,30 +2,25 @@
     @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
     <h1>Напомнить пароль</h1>
-
-    <div class="page-text">
-        <p>&nbsp;</p>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="shadow-block login-form">
-                    <div>
-                        <form id="loginForm" method="post">
-                            @Html.TextBox("Email", "", new { title = "E-Mail",  @placeholder = "mail@domain" })
-                        </form>
-                        <div class="login-btn_block">
-                            <button type="submit" form="loginForm" class="button btn-blue">Напомнить пароль</button>
-                        </div>
-                        <div class="restore-pass"><a href="/user/login">Вход в личный кабинет</a></div>
-                    </div>
+    <p>&nbsp;</p>
+    <div class="col-sm-6">
+        <div class="shadow-block login-form">
+            <div>
+                <form id="loginForm" method="post">
+                    @Html.TextBox("Email", "", new { title = "E-Mail", @placeholder = "mail@domain" })
+                </form>
+                <div class="login-btn_block">
+                    <button type="submit" form="loginForm" class="button btn-blue">Напомнить пароль</button>
                 </div>
+                <div class="restore-pass"><a href="/user/login">Вход в личный кабинет</a></div>
             </div>
-            <div class="col-sm-6">
-                <div class="description">
-                    <p>Восстановление пароля производится по адресу электронной почты.</p>
-                    <p>Чтобы восстановить пароль, введите в поле адрес электронной почты, с помощью которого Вы раньше входили в систему. Если адрес введен правильно, ситема сгенирирует Вам персональную ссылку для смены пароля и отправит её на указанный адрес электронной почты.</p>
-                    <p>В случае утраты адреса почты, или невозможности зайти в неё, обратитесь к администратору.</p>
-                </div>
-            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="description">
+            <p>Восстановление пароля производится по адресу электронной почты.</p>
+            <p>Чтобы восстановить пароль, введите в поле адрес электронной почты, с помощью которого Вы раньше входили в систему. Если адрес введен правильно, ситема сгенирирует Вам персональную ссылку для смены пароля и отправит её на указанный адрес электронной почты.</p>
+            <p>В случае утраты адреса почты, или невозможности зайти в неё, обратитесь к администратору.</p>
         </div>
     </div>
 </div>

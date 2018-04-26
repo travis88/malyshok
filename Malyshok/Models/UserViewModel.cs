@@ -35,15 +35,18 @@ namespace Disly.Models
         /// <summary>
         /// Контактный телефон
         /// </summary>
-        [Required(ErrorMessage = "Поле «Адрес» не должно быть пустым.")]
+        [Required(ErrorMessage = "Поле «Телефон» не должно быть пустым.")]
         public string Phone { get; set; }
 
         /// <summary>
         /// Контактный Email
         /// </summary>
-        [Required(ErrorMessage = "Поле «Адрес» не должно быть пустым.")]
+        [Required(ErrorMessage = "Поле «Email» не должно быть пустым.")]
         public string Email { get; set; }
 
+        /// <summary>
+        /// Пароль
+        /// </summary>
         public PasswordModel Pass { get; set; }
 
         public bool Compliance { get; set; }

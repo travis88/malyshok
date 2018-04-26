@@ -52,10 +52,12 @@ namespace Disly.Controllers
         [Authorize]
         public ActionResult Orders(string size, string page, string sort)
         {
-            FilterParams filter = new FilterParams();
-            filter.Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1;
-            filter.Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : PageSize;
-            filter.Sort = sort;
+            FilterParams filter = new FilterParams()
+            {
+                Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1,
+                Size = (Convert.ToInt32(Request.QueryString["size"]) > 0) ? Convert.ToInt32(Request.QueryString["size"]) : PageSize,
+                Sort = sort
+            };
 
             model.List = _repository.getOrderList(model.UserInfo.Id, filter);
             return View(model);
@@ -201,14 +203,15 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult LogIn_vk(string code)
         {
-            string _BaseUrl = "http://" + Settings.BaseURL + "/user/LogIn_vk";
+            string _BaseUrl = $"http://{Settings.BaseURL}/user/LogIn_vk";
 
             string Result = String.Empty;
 
             if (String.IsNullOrEmpty(code))
             {
                 // отправляем запрос на авторизацию
-                string GetCode_Url = "https://oauth.vk.com/authorize?client_id=" + Settings.vkApp + "&display=popup&redirect_uri="+ _BaseUrl + "&scope=email&response_type=code&v=5.69";
+                string GetCode_Url = $"https://oauth.vk.com/authorize?client_id={Settings.vkApp}" +
+                    $"&display=popup&redirect_uri={_BaseUrl}&scope=email&response_type=code&v=5.69";
                 
                 Response.Redirect(GetCode_Url);
             }
@@ -226,85 +229,86 @@ namespace Disly.Controllers
                 };
 
                 // Получаем ID пользователя и токин
-                string GetTokin_Url = "https://oauth.vk.com/access_token?client_id=" + Settings.vkApp + "&client_secret=" + Settings.vkAppKey + "&redirect_uri="+ _BaseUrl + "&code=" + code;
-                WebClient client = new WebClient();
-                client.Encoding = Encoding.UTF8;
-                string json = client.DownloadString(GetTokin_Url);
-                VkLoginModel vkEnterUser = JsonConvert.DeserializeObject<VkLoginModel>(json);
-
-                UserInfoVK.Vk = vkEnterUser.user_id.ToString();
-                Result = "<div>" + json + "</div>";
-
-                // Получаем данные пользователя
-                string GetUserInfo_Url = "https://api.vk.com/method/users.get?user_id=" + vkEnterUser.user_id + "&fields=domain,nickname,country,city,contacts&v=5.69";
-                client = new WebClient();
-                client.Encoding = Encoding.UTF8;
-                client = new WebClient()
+                string GetTokin_Url = $"https://oauth.vk.com/access_token?client_id={Settings.vkApp}" +
+                    $"&client_secret={Settings.vkAppKey}&redirect_uri={_BaseUrl}&code={code}";
+                WebClient client = new WebClient()
                 {
                     Encoding = Encoding.UTF8
                 };
-                json = client.DownloadString(GetUserInfo_Url);
-                Result += "---<br /><div>" + json + "</div>";
+                string json = client.DownloadString(GetTokin_Url);
+                VkLoginModel vkEnterUser = JsonConvert.DeserializeObject<VkLoginModel>(json);
+                UserInfoVK.Vk = vkEnterUser.user_id.ToString();
 
-                ViewBag.Result = Result;
-                VkUserInfo vkUser = JsonConvert.DeserializeObject<VkUserInfo>(json);
-                
-                UsersModel UserInfo = _repository.getCustomer(vkUser.response[0].id.ToString());
-
-                // Если пользователь найден
-                if (UserInfo != null)
+                string currentUser = User.Identity.Name;
+                if (String.IsNullOrEmpty(currentUser))
                 {
-                    // Удачная попытка, Авторизация
-                    FormsAuthentication.SetAuthCookie(UserInfo.Id.ToString(), false);
+                    Result = "<div>" + json + "</div>";
 
-                    // Записываем данные об авторизации пользователя
-                    _accountRepository.SuccessLogin(UserInfo.Id, RequestUserInfo.IP);
-
-                    Guid UserOrder = _repository.getOrderId(UserInfo.Id);
-
-                    if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                    // Получаем данные пользователя
+                    string GetUserInfo_Url = $"https://api.vk.com/method/users.get?user_id={vkEnterUser.user_id}" +
+                        $"&fields=domain,nickname,country,city,contacts&v=5.69";
+                
+                    client = new WebClient()
                     {
-                        return RedirectToAction("Index", "MergeOrders");
-                    }
-                    else if (OrderId != Guid.Empty)
+                        Encoding = Encoding.UTF8
+                    };
+                    json = client.DownloadString(GetUserInfo_Url);
+                    Result += "---<br /><div>" + json + "</div>";
+
+                    ViewBag.Result = Result;
+                    VkUserInfo vkUser = JsonConvert.DeserializeObject<VkUserInfo>(json);
+                    var userResponse = vkUser.response[0];
+
+                    UsersModel UserInfo = _repository.getCustomer(userResponse.id.ToString());
+
+                    // Если пользователь найден
+                    if (UserInfo != null)
                     {
-                        _repository.transferOrder(OrderId, UserInfo.Id);
+                        // Записываем данные об авторизации пользователя
+                        _accountRepository.SuccessLogin(UserInfo.Id, RequestUserInfo.IP);
 
-                        HttpCookie MyCookie = Request.Cookies["order-id"];
-                        MyCookie.Expires = DateTime.Now.AddDays(-1);
-                        Response.Cookies.Add(MyCookie);
+                        // Удачная попытка, Авторизация
+                        FormsAuthentication.SetAuthCookie(UserInfo.Id.ToString(), false);
+                        MergeOrders(UserInfo);
                     }
+                    else
+                    {
+                        UserInfoVK.FIO = $"{userResponse.last_name} {userResponse.first_name}";
+                        UserInfoVK.Phone = "";
+                        UserInfoVK.EMail = "";
+                        UserInfoVK.Address = userResponse.city.title;
 
-                    return RedirectToAction("Index", "User");
+                        _repository.createCustomer(UserInfoVK);
+
+                        // Удачная попытка, Авторизация
+                        FormsAuthentication.SetAuthCookie(UserInfoVK.Id.ToString(), false);
+                        //MergeOrders(UserInfoVK);
+                    }
                 }
                 else
                 {
-                    UserInfoVK.FIO = vkUser.response[0].last_name + " " + vkUser.response[0].first_name;
-                    UserInfoVK.Phone = "";
-                    UserInfoVK.EMail = "";
-                    UserInfoVK.Address = vkUser.response[0].city.title;
-
-                    _repository.createCustomer(UserInfoVK);
-
-                    // Удачная попытка, Авторизация
-                    FormsAuthentication.SetAuthCookie(UserInfoVK.Id.ToString(), false);
-
-                    Guid UserOrder = _repository.getOrderId(UserInfoVK.Id);
-
-                    if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+                    if (!String.IsNullOrWhiteSpace(UserInfoVK.Vk))
                     {
-                        return RedirectToAction("Index", "MergeOrders");
+                        var existingVkUser = _repository.getCustomer(UserInfoVK.Vk);
+                        var authorizedUser = _repository.getCustomer(Guid.Parse(currentUser));
+                        if (existingVkUser != null && (existingVkUser.Id != authorizedUser.Id))
+                        {
+                            UsersMergeViewModel mergeModel = new UsersMergeViewModel
+                            {
+                                Users = new UsersModel[]
+                                {
+                                    authorizedUser,
+                                    existingVkUser
+                                }
+                            };
+                            return View("MergeUsers", mergeModel);
+                        }
+                        else
+                        {
+                            UsersModel user = _repository.SetCustromerSocialNetwork(Guid.Parse(currentUser), "vk", UserInfoVK.Vk);
+                        }
+                        return RedirectToAction("Index", "User");
                     }
-                    else if (OrderId != Guid.Empty)
-                    {
-                        _repository.transferOrder(OrderId, UserInfoVK.Id);
-
-                        HttpCookie MyCookie = Request.Cookies["order-id"];
-                        MyCookie.Expires = DateTime.Now.AddDays(-1);
-                        Response.Cookies.Add(MyCookie);
-                    }
-
-                    return RedirectToAction("Index", "User");
                 }
             }
 
@@ -328,9 +332,13 @@ namespace Disly.Controllers
             }
             else
             {
+                //if (!Request.Url.IsDefaultPort)
+                //{
+                //    fbAction = fbAction.Replace("https://localhost:44323", "http://localhost:55552");
+                //}
                 // Получаем ID пользователя и токин
-                string GetTokin_Url = $"https://graph.facebook.com/oauth/access_token?client_id={Settings.fbApp}" +
-                    $"&redirect_uri={fbAction}/&scope=email&client_secret={Settings.fbAppServKey}&code={code}";
+                string GetTokin_Url = $"https://graph.facebook.com/v2.12/oauth/access_token?client_id={Settings.fbApp}" +
+                    $"&redirect_uri={HttpUtility.UrlEncode(fbAction)}/&scope=email&client_secret={HttpUtility.UrlEncode(Settings.fbAppServKey)}&code={HttpUtility.UrlEncode(code)}";
                 WebClient client = new WebClient()
                 {
                     Encoding = Encoding.UTF8
@@ -737,6 +745,29 @@ namespace Disly.Controllers
             }
 
             return View("ChangePass", model);
+        }
+
+        /// <summary>
+        /// Слияние заказов
+        /// </summary>
+        private ActionResult MergeOrders(UsersModel userInfo)
+        {
+            Guid UserOrder = _repository.getOrderId(userInfo.Id);
+
+            if (OrderId != Guid.Empty && UserOrder != Guid.Empty)
+            {
+                return RedirectToAction("Index", "MergeOrders");
+            }
+            else if (OrderId != Guid.Empty)
+            {
+                _repository.transferOrder(OrderId, userInfo.Id);
+
+                HttpCookie MyCookie = Request.Cookies["order-id"];
+                MyCookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(MyCookie);
+            }
+
+            return RedirectToAction("Index", "User");
         }
     }
 }

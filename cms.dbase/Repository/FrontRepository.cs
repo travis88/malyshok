@@ -957,6 +957,33 @@ namespace cms.dbase
                 return null;
             }
         }
+
+        /// <summary>
+        /// Устанавливает идентификатор для социальной сети
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="socialId"></param>
+        /// <returns></returns>
+        public override UsersModel SetCustromerSocialNetwork(Guid userId, string type, string socialId)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                var user = db.content_userss.Where(w => w.id == userId);
+                switch (type)
+                {
+                    case "vk":
+                        user.Set(u => u.c_vk, socialId)
+                            .Update();
+
+                        break;
+                    case "fb":
+                        user.Set(u => u.c_facebook, socialId)
+                            .Update();
+                        break;
+                }
+                return getCustomer(userId);
+            }
+        }
         //public override bool deleteCustomer(Guid id) { }
 
         /// <summary>

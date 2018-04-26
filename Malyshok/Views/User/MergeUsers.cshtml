@@ -1,0 +1,25 @@
+﻿@model  UsersMergeViewModel
+<div class="type-page">
+    @{Html.RenderAction("BreadCrumb", "Partials");}
+
+    <h1>Объединение пользователей</h1>
+
+    <div class="page-text">
+        @if (Model != null)
+        {
+            <div class="row">
+                @foreach (var user in Model.Users)
+                {
+                    <div class="col-md-6">
+                        ФИО: @user.FIO
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script src="/Content/plugins/bootstrap/js/bootstrap-toggle.js"></script>
+    <script src="/Content/plugins/Disly/DislyControls.js"></script>
+}

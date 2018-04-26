@@ -675,6 +675,7 @@
     <Compile Include="Models\SocSetiModel.cs" />
     <Compile Include="Models\ProdViewModel.cs" />
     <Compile Include="Models\BasketViewModel.cs" />
+    <Compile Include="Models\UsersMergeViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Models\ContactsViewModel.cs" />
     <Compile Include="Models\TypePageViewModel.cs" />
@@ -898,6 +899,7 @@
     <Content Include="Views\Shared\Prod\ProdItem_basket.cshtml" />
     <Content Include="Views\Shared\Prod\ProdItem_history.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\User\MergeUsers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

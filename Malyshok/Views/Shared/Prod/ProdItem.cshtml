@@ -7,7 +7,24 @@
     var isNew = Model.Date > DateTime.Now.AddDays(-14);
 }
 <div class="item_prod shadow-block">
-    <div class="prod_item-mobyle-title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
+    <div class="mobile-prod_title">
+        <div class="prod-title">
+            <a href="/prod/@Model.Id/">@Html.Raw(Model.Title.Replace(",", ", "))</a>
+        </div>
+        <div class="prod-catalog-link">
+            @if (Model.CatalogPath != null)
+            {
+                <div>
+                    @foreach (var catalog in Model.CatalogPath)
+                    {
+                        var Link = "/catalog" + catalog.link;
+                        @split <a href="@Link">@catalog.text</a>
+                        split = " / ";
+                    }
+                </div>
+            }
+        </div>
+    </div>
     <div class="prod-img">
         @if (@ProdImg != "")
         {
@@ -30,29 +47,30 @@
         }
     </div>
     <div class="prod-info">
-        <div class="prod-title">
-            <a href="/prod/@Model.Id/">@Html.Raw(Model.Title.Replace(",", ", "))</a>
-        </div>
-        <div class="prod-catalog-link">
-            @if (Model.CatalogPath != null)
-            {
-                <div>
-                    @foreach (var catalog in Model.CatalogPath)
-                    {
-                        var Link = "/catalog" + catalog.link;
-                        @split <a href="@Link">@catalog.text</a>
-
-                        split = " / ";
-                    }
-                </div>
-            }
+        <div class="pc-prod_title">
+            <div class="prod-title">
+                <a href="/prod/@Model.Id/">@Html.Raw(Model.Title.Replace(",", ", "))</a>
+            </div>
+            <div class="prod-catalog-link">
+                @if (Model.CatalogPath != null) {
+                    split = "";
+                    <div>
+                        @foreach (var catalog in Model.CatalogPath)
+                        {
+                            var Link = "/catalog" + catalog.link;
+                            @split <a href="@Link">@catalog.text</a>
+                            split = " / ";
+                        }
+                    </div>
+                }
+            </div>
         </div>
         <div class="row">
-            <div class="prod-params col-sm-6">
+            <div class="prod-params col-xs-6">
                 <div><span>Код</span> @Model.Code</div>
                 <div><span>Штрих-код</span> @Model.Barcode</div>
             </div>
-            <div class="prod-params col-sm-6">
+            <div class="prod-params col-xs-6">
                 <div><span>Стандарт</span> @Model.Standart</div>
                 <div>
                     <span>Остаток</span> 

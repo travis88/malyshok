@@ -201,6 +201,7 @@ function getProdList(Link) {
                 $('.progress').removeAttr('style');
             }, 1200);
 
+            $('body,html').animate({ scrollTop: $('.sort-form').offset().top - 60}, 800);
             $('.prod-list').empty().append(response).animate({ opacity: "1" });
             $('.progress').animate({ width: "100%" }).removeAttr('style');
 

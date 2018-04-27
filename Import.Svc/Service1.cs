@@ -129,23 +129,6 @@ namespace Import.Svc
                 Thread.Sleep(executeWait);
 
                 DirectoryInfo info = new DirectoryInfo(helperParams.DirName);
-                #region comments
-                //FileInfo[] files = { info.GetFiles("*.xml")
-                //                        .Where(w => w.FullName.ToLower()
-                //                        .Contains("cat"))
-                //                        .OrderByDescending(p => p.LastWriteTime)
-                //                        .FirstOrDefault(),
-
-                //                     info.GetFiles("*.xml")
-                //                        .Where(w => w.FullName.ToLower()
-                //                        .Contains("prod"))
-                //                        .OrderByDescending(p => p.LastWriteTime)
-                //                        .FirstOrDefault(),
-
-                //                     info.GetFiles("*.zip")
-                //                        .OrderByDescending(p => p.LastWriteTime)
-                //                        .FirstOrDefault() };
-                #endregion
                 FileInfo[] files = info.GetFiles("*.zip")
                                        .OrderByDescending(p => p.LastWriteTime)
                                        .Take(2)

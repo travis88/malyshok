@@ -14,19 +14,44 @@ namespace Import.Cmd
             ReceiverParamsHelper helperParams = new ReceiverParamsHelper();
 
             DirectoryInfo di = new DirectoryInfo(helperParams.DirName);
-            FileInfo archive = di.GetFiles("*.zip")
-                .Where(w => w.FullName.ToLower().Contains("image"))
-                .OrderByDescending(p => p.LastWriteTime)
-                .FirstOrDefault();
-
-            ImageService helper = new ImageService(helperParams);
-            if (archive != null)
+            FileInfo[] files = di.GetFiles("*.zip")
+                                       .OrderByDescending(p => p.LastWriteTime)
+                                       .Take(2)
+                                       .ToArray();
+            SrvcLogger.Info("{preparing}", "запуск ядра импорта");
+            SrvcLogger.Info("{work}", $"директория: {helperParams.DirName}");
+            if (files != null && files.Any(a => a != null))
             {
-                helper.Execute(archive);
+                string listFiles = "список найденных файлов: ";
+                foreach (var file in files)
+                {
+                    if (file != null)
+                    {
+                        listFiles += $"{file.Name}; ";
+                    }
+                }
+                SrvcLogger.Info("{work}", $"{listFiles}");
+                Importer.DoImport(files);
+
+                foreach (var file in files)
+                {
+                    if (file != null && file.Exists)
+                    {
+                        try
+                        {
+                            SrvcLogger.Info("{work}", $"удаление файла: {file}");
+                            file.Delete();
+                        }
+                        catch (Exception e)
+                        {
+                            SrvcLogger.Error("{error}", $"{e.ToString()}");
+                        }
+                    }
+                }
             }
             else
             {
-                SrvcLogger.Info("{work}", $"директория: {helperParams.DirName} не найдена");
+                SrvcLogger.Info("{work}", "файлов для импорта не найдено");
             }
         }
     }

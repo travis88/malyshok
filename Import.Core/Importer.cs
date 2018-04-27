@@ -12,6 +12,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Import.Core
@@ -149,6 +150,7 @@ namespace Import.Core
         /// </summary>
         public static void DoImport(FileInfo[] files)
         {
+            ReceiverParamsHelper receiverParams = new ReceiverParamsHelper();
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             Preparing();
@@ -221,7 +223,6 @@ namespace Import.Core
                                 }
                                 else if (file.FullName.Contains(".zip"))
                                 {
-                                    ReceiverParamsHelper receiverParams = new ReceiverParamsHelper();
                                     ImageService imageService = new ImageService(receiverParams);
                                     imageService.Execute(file);
                                 }
@@ -232,6 +233,8 @@ namespace Import.Core
                     stopwatch.Stop();
                     emailBody += ResultLogging(stopwatch);
                     SendEmail(emailBody, db);
+                    CreateXmlExport(receiverParams.DirName);
+                    DropImportFiles(_files);
                 }
             }
             else
@@ -573,8 +576,8 @@ namespace Import.Core
             }
             catch (Exception e)
             {
-                SrvcLogger.Info("{error}", "рассылка оповещений завершилась ошибкой");
-                SrvcLogger.Info("{error}", e.ToString());
+                SrvcLogger.Error("{error}", "рассылка оповещений завершилась ошибкой");
+                SrvcLogger.Error("{error}", e.ToString());
                 CountFalse++;
             }
         }
@@ -745,7 +748,10 @@ namespace Import.Core
                 }
                 var imgArchive = files.Where(w => !w.Name.ToLower().Contains("prod"))
                                       .SingleOrDefault();
-                result.Add(imgArchive);
+                if (imgArchive != null)
+                {
+                    result.Add(imgArchive);
+                }
             }
 
             return result.ToArray();
@@ -759,6 +765,84 @@ namespace Import.Core
             int delta = 100 / allStepsCount;
             CountSuccess++;
             Percent += delta;
+        }
+
+        /// <summary>
+        /// Создаёт xml-файл для обратной совместимости
+        /// </summary>
+        /// <param name="path"></param>
+        private static void CreateXmlExport(string path)
+        {
+            try
+            {
+                SrvcLogger.Info("{work}", "создание xml-файла для обратной совместимости");
+                var productList = GetProducts();
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                DataContractSerializer serializer = new DataContractSerializer(typeof(List<ProductExport>));
+                using (FileStream writer = new FileStream($"{path}export_{DateTime.Now.ToString("ddMMyy_HHmm")}.xml", FileMode.Create))
+                {
+                    serializer.WriteObject(writer, productList);
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{work}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Возвращает список продуктов, записанных в бд
+        /// </summary>
+        /// <returns></returns>
+        private static ProductExport[] GetProducts()
+        {
+            using (var db = new dbModel(CONNECTION))
+            {
+                return db.content_productss
+                    .Select(s => new ProductExport
+                    {
+                        Id = s.id
+                    }).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Удаление файлов импорта
+        /// </summary>
+        /// <param name="files"></param>
+        private static void DropImportFiles(FileInfo[] files)
+        {
+            try
+            {
+                SrvcLogger.Info("{work}", "удаление файлов импорта");
+                foreach (var file in files)
+                {
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{work}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Продукция для обратной совместимости с 1с
+        /// </summary>
+        [DataContract]
+        private class ProductExport
+        {
+            /// <summary>
+            /// Идентификатор
+            /// </summary>
+            [DataMember]
+            public Guid Id { get; set; }
         }
     }
 }

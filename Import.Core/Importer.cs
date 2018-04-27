@@ -782,7 +782,7 @@ namespace Import.Core
                     Directory.CreateDirectory(path);
                 }
                 DataContractSerializer serializer = new DataContractSerializer(typeof(List<ProductExport>));
-                using (FileStream writer = new FileStream($"{path}export_{DateTime.Now.ToString("ddMMyy_HHmm")}.xml", FileMode.Create))
+                using (FileStream writer = new FileStream($"{path}export.xml", FileMode.Create))
                 {
                     serializer.WriteObject(writer, productList);
                 }
@@ -802,9 +802,10 @@ namespace Import.Core
             using (var db = new dbModel(CONNECTION))
             {
                 return db.content_productss
+                    .Where(w => w.n_count > 0)
                     .Select(s => new ProductExport
                     {
-                        Id = s.id
+                        Code = s.id
                     }).ToArray();
             }
         }
@@ -842,7 +843,7 @@ namespace Import.Core
             /// Идентификатор
             /// </summary>
             [DataMember]
-            public Guid Id { get; set; }
+            public Guid Code { get; set; }
         }
     }
 }

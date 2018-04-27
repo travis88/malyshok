@@ -805,7 +805,7 @@ namespace Import.Core
                     .Where(w => w.n_count > 0)
                     .Select(s => new ProductExport
                     {
-                        Code = s.id
+                        Code = s.c_code
                     }).ToArray();
             }
         }
@@ -843,7 +843,7 @@ namespace Import.Core
             /// Идентификатор
             /// </summary>
             [DataMember]
-            public Guid Code { get; set; }
+            public string Code { get; set; }
         }
     }
 }

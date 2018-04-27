@@ -114,7 +114,8 @@ namespace Import.Svc
         {
             SrvcLogger.Info("{preparing}", "I work!");
             ReceiverParamsHelper helperParams = new ReceiverParamsHelper();
-            SrvcLogger.Info("{preparing}", $"время запуска интеграции {helperParams.StartTime}");
+            string times = String.Join(";", helperParams.StartTime);
+            SrvcLogger.Info("{preparing}", $"время запуска интеграции {times}");
             SrvcLogger.Info("{preparing}", $"директория с файлами {helperParams.DirName}");
 
             while (enableIntegration)

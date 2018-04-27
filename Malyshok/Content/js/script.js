@@ -87,6 +87,11 @@ $(document).ready(function () {
         $('.show_original').swipebox();
         $(".swipebox").swipebox();
     }
+    $('.prod-img .loop').bind({
+        click: function () {
+            $(this).parent().find('img').trigger('click');
+        }
+    });
 
 
     // Обрабатываем события изменения сортировки и фильтра
@@ -97,9 +102,9 @@ $(document).ready(function () {
     })
     
     // Новинки
-    var bodyHeight = ~~(($('.body_block').height() - $('.prod-catalog').height()) / 370);
+    var bodyHeight = ~~(($('.body_block').height() - $('.prod-catalog').height()) / 280);
     if (bodyHeight < 1) bodyHeight = 1;
-    $('div.new-prod-item:lt(' + bodyHeight + ')').css('display', 'block');
+    $('.body-right div.new-prod-item:lt(' + bodyHeight + ')').css('display', 'block');
 
 
     // Распределение каталога продукции по колонкам
@@ -196,6 +201,7 @@ function getProdList(Link) {
                 $('.progress').removeAttr('style');
             }, 1200);
 
+            $('body,html').animate({ scrollTop: $('.sort-form').offset().top - 60}, 800);
             $('.prod-list').empty().append(response).animate({ opacity: "1" });
             $('.progress').animate({ width: "100%" }).removeAttr('style');
 

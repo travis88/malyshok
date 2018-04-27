@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-    var pageSize = String.IsNullOrEmpty(Request.QueryString["size"]) ? "12" : Request.QueryString["size"];
+    var pageSize = String.IsNullOrEmpty(Request.QueryString["size"]) ? Settings.ProdListSize.ToString() : Request.QueryString["size"];
     bool inputSize = ViewBag.inputSize == "true" ? true : false;
 }
 

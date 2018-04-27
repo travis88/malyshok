@@ -5,17 +5,25 @@
     ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
    }
 <div class="basket_item shadow-block">
-    <div class="basket-img"><img src="@ProdImg" /></div>
+    <div class="mobile-block-visable">
+        <div class="basket_item-title">
+            <a href="/prod/@Model.Id/">@Html.Raw(Model.Title.Replace(",", ", "))</a>
+        </div>
+    </div>
+    <div class="basket-img"><span class="loop"></span><img src="@ProdImg" /></div>
     <div class="item-info">
-        <div class="basket_item-title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
+        <div class="pc-basket_title">
+            <div class="basket_item-title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
+        </div>
+        <div class="basket_item-params"><span>Код</span> @Model.Code</div>
+        <div class="basket_item-params mobile-block-visable"><span>Штрихкод</span> @Model.Barcode</div>
+        <div class="prod-price"><span>Цена</span><b> @Model.Price.ToString("# ###.00#")</b> руб.</div>
         <div class="basket_form-block">
-            <div class="prod-price"><span>Цена</span><b> @Model.Price.ToString("# ###.00#")</b> руб.</div>
             <div class="basket_item-counter">
                 <div class="count-less">-</div>
                 <input data-id="@Model.Id" value="@Model.Count" />
                 <div class="count-more">+</div>
             </div>
-            <div class="basket_item-params"><div><span>Код</span> @Model.Code</div></div>
             <div class="basket_delete">
                 <button type="button" class="del-basket btn-invers">Удалить</button>
             </div>

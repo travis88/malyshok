@@ -20,6 +20,7 @@ public class Settings
     public static string SiteMapDir = ConfigurationManager.AppSettings["SiteMapDir"];
     public static string ProdContent = ConfigurationManager.AppSettings["ProdContent"];
 
+    public static  int ProdListSize = Convert.ToInt32(ReadAppSetting("ProdListSize"));
 
     public static string fbApp = ConfigurationManager.AppSettings["FacebookApp"];
     public static string fbAppServKey = ConfigurationManager.AppSettings["FacebookServKey"];

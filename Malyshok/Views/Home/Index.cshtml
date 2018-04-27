@@ -11,17 +11,25 @@
                     <span>Всегда в наличии мягкие игрушки, металлические машинки, куклы, развивающие игрушки и другие детские товары.</span>
                 </div>
             </li>
-            <li>
-                <a href="/" target="_blank"><img src="/Content/img/slide1.jpg" alt="image1" /></a>
-                <div class="sb-description">
-                    На нашем сайте вы можете приобрести детские игрушки оптом.
-                    <span>Всегда в наличии мягкие игрушки, металлические машинки, куклы, развивающие игрушки и другие детские товары.</span>
-                </div>
-            </li>
+            @*<li>
+                    <a href="/" target="_blank"><img src="/Content/img/slide1.jpg" alt="image1" /></a>
+                    <div class="sb-description">
+                        На нашем сайте вы можете приобрести детские игрушки оптом.
+                        <span>Всегда в наличии мягкие игрушки, металлические машинки, куклы, развивающие игрушки и другие детские товары.</span>
+                    </div>
+                </li>*@
         </ul>
         <div id="shadow" class="shadow"></div>
     </div>
 </div>
+<div class="mobile-catalog">
+    <a href="/catalog/"><img alt="Каталог игрушек" src="/content/img/catalog.jpg" /></a>
+</div>
+
+<div class="mobile-novelties">
+    @{ Html.RenderAction("Novelties", "Partials", new { Count = 4 }); }
+</div>
+
 <div class="top-news">
     <div class="block-title">
         <a href="/press/">Новости</a>
@@ -29,21 +37,30 @@
     <div class="news_list">
         @if (Model.Materials != null)
         {
-            var count = 1;
-            <div class="row">
-                @foreach (var item in Model.Materials)
-                {
-                    var unlook = count > 4 ? "visible-lg" : "";
-                    count = count+1;
-                    <div class="col-sm-4 col-md-6 col-lg-4 @unlook">
-                        <div class="top_news-item">
-                            <a class="title" href="/press/@item.Date.Year/@item.Date.Month/@item.Date.Day/@item.Alias">@Html.Raw(item.Title)</a>
-                            <div class="date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
-                        </div>
+            foreach (var item in Model.Materials)
+            {
+                <a href="/press/@item.Date.Year/@item.Date.Month/@item.Date.Day/@item.Alias">
+                    <div class="top_news-item">
+                        <div class="title">@Html.Raw(item.Title)</div>
+                        <div class="date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
                     </div>
-                    
-                }
-            </div>
+                </a>
+            }
+            @*var count = 1;
+                <div class="row">
+                    @foreach (var item in Model.Materials)
+                    {
+                        var unlook = count > 4 ? "visible-lg" : "";
+                        count = count+1;
+                        <div class="col-sm-4 col-md-6 col-lg-4 @unlook">
+                            <div class="top_news-item">
+                                <a class="title" href="/press/@item.Date.Year/@item.Date.Month/@item.Date.Day/@item.Alias">@Html.Raw(item.Title)</a>
+                                <div class="date"><span>@item.Date.ToString("HH:mm | dd.MM.yyyy")</span></div>
+                            </div>
+                        </div>
+
+                    }
+                </div>*@
         }
     </div>
 </div>
@@ -61,7 +78,7 @@
             cuboidsRandom: true,
             disperseFactor: 30,
             autoplay: true,
-            interval: 300000,
+            interval: 5000,
         });
     </script>
 }

@@ -14,7 +14,7 @@ namespace Disly.Controllers
         public const String ActionName_Custom = "Custom";
         private ProdViewModel model;
         private SelectList sortList;
-        public int PageSize = 12;
+        public int PageSize = Settings.ProdListSize;
 
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

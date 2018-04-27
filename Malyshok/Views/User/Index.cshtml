@@ -15,7 +15,14 @@
         </div>
         <div class="lk-info">
             <div><b>@Model.UserInfo.FIO</b></div>
-            <div><b>E-Mail:</b> <a href="@sendEmail">@Model.UserInfo.EMail</a></div>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div><b>E-Mail:</b>  <form id="orderForm" name="orderForm" method="post">@Html.TextBox("email", "", new { required = "", @placeholder = "mail@domain" })<button type="submit" class="btn-blue">Сохранить</button></form></div>
+            }
+            else
+            { 
+                <div><b>E-Mail:</b> <a href="@sendEmail">@Model.UserInfo.EMail</a></div>
+            }
             <div class="lk-socseti">
                 <div><b>Привязать социальные сети:</b></div>
                 <div class="lk-socseti_desc">Нажмите на иконку, чтобы привязать социальную сеть</div>

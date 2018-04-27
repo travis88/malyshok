@@ -1,25 +1,23 @@
 ﻿@{ 
-     Layout = null; 
+    Layout = null;
 }
 @model SiteMapModel[]
 
 @if (Model != null)
 {
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-    </button>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown visible-xs visible-sm">
-                    <a href="/catalog/">Каталог</a>
-                </li>
-                @foreach (var item in Model)
-                {
-                    string fullPath = item.Path + item.Alias;
-                    string _class = (Request.Path == fullPath) ? "class=active" : "";
-                    <li @_class>
-                        <a href="@fullPath">@item.Title</a>
-                    </li>
-                }
-            </ul>
-        </div>
-}
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <span class="glyphicon glyphicon-menu-hamburger"></span>
+    Главное&nbsp;меню
+</button>
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        @foreach (var item in Model)
+        {
+            string fullPath = item.Path + item.Alias;
+            string _class = (Request.Path == fullPath) ? "class=active" : "";
+            <li @_class>
+                <a href="@fullPath">@item.Title</a>
+            </li>
+        }
+    </ul>
+</div>}

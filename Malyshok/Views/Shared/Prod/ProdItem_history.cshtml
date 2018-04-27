@@ -8,9 +8,13 @@
     <div class="basket-img"><img src="@ProdImg" /></div>
     <div class="item-info">
         <div class="title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
-        <div><span>Код:</span> @Model.Code</div>
-        <div><span>Штрих-код:</span> @Model.Barcode</div>
-        <div><span>Количество:</span> @Model.Count</div>
-        <div class="price"><span>ЦЕНА:</span><b> @Model.Price.ToString("# ###.00#")</b> руб.</div>
+        <div style="display: inline-block; width:40%">
+            <div><span>Код:</span> @Model.Code</div>
+            <div><span>Штрих-код:</span> @Model.Barcode</div>
+        </div>
+        <div style="display: inline-block; width:40%">
+            <div><span>Количество:</span> @Model.Count</div>
+            <div class="price"><span>ЦЕНА:</span><b> @Model.Price.ToString("# ###.00#")</b> руб.</div>
+        </div>
     </div>
 </div>

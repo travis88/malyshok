@@ -134,6 +134,9 @@ namespace Import.Svc
                                        .Take(2)
                                        .ToArray();
 
+                FileInfo[] filesToDrop = info.GetFiles("*.xml");
+                DropFiles(filesToDrop);
+
                 SrvcLogger.Info("{preparing}", "запуск ядра импорта");
                 SrvcLogger.Info("{work}", $"директория: {helperParams.DirName}");
                 if (files != null && files.Any(a => a != null))
@@ -169,6 +172,29 @@ namespace Import.Svc
                 {
                     SrvcLogger.Info("{work}", "файлов для импорта не найдено");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Удаляет файлы с предыдущего импорта
+        /// </summary>
+        /// <param name="files"></param>
+        private void DropFiles(FileInfo[] files)
+        {
+            try
+            {
+                SrvcLogger.Info("{work}", "удаление файлов с предыдущего импорта");
+                foreach (var file in files)
+                {
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
             }
         }
     }

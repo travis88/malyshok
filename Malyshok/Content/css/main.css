@@ -699,7 +699,7 @@ a .new-prod-title {
     margin-bottom: 20px;
     min-height: 230px;
 }
-.mobile-prod_titele {
+.mobile-prod_title {
     display: none;
 }
 .nameplate-new {
@@ -1150,6 +1150,57 @@ a.btn-red {
     float: right;
 }
 /* //-- Страница.Reg */
+
+/* Страница.User */
+.lk-tabs {
+    margin-bottom: 50px;
+}
+    .lk-tabs a {
+        margin: 0;
+        padding: 15px 30px;
+        border-bottom: solid 1px #dadada;
+    }
+        .lk-tabs a.active {
+            border: solid 1px #dadada;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+        }
+.lk-info > div {
+    margin: 20px 0;
+}
+
+.lk-socseti_desc {
+    color: #dd201e;
+}
+/* //-- Страница.User  */
+
+/*  Страница.Orders */
+.order-item,
+.order-list_title {
+    overflow: hidden;
+    border-bottom: solid 1px #cccccc;
+}
+
+    .order-item div,
+    .order-list_title div {
+        float: left;
+        padding: 5px 10px;
+    }
+
+.order-list_title {
+    background: #cccccc;
+    font-weight: bold;
+}
+
+.order-item_link {
+    width: 110px;
+}
+
+.order-item_date {
+    width: 200px;
+    text-align: center;
+}
+/* //-- Страница.Orders */
 /* //-- Контент */
 /* //-- Центральная часть */
 

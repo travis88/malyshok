@@ -705,6 +705,9 @@ namespace cms.dbase
                     var prodQuery = query
                         .Join(db.sv_productss, c => c.id, p => p.f_category, (c, p) => p);
 
+                    if (filter.Date != null)
+                        prodQuery = prodQuery.Where(w => w.d_date >= filter.Date);
+
                     if (String.IsNullOrEmpty(filter.Available))
                         prodQuery = prodQuery.Where(w => w.n_count > 0);
                     else if (filter.Available == "no")

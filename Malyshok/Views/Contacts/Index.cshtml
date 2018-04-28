@@ -9,8 +9,50 @@
         <h1>@ViewBag.Title</h1>
 
         <div class="page-text">
+            <div>
+                @if (!string.IsNullOrEmpty(Model.SitesInfo.Adress))
+                {
+                    <div class="contact_info_it">
+                        <strong>Адрес: </strong>
+                        @Model.SitesInfo.Adress
+                    </div>
+                }
 
-        
+                @if (!string.IsNullOrEmpty(Model.SitesInfo.Phone))
+                {
+                    <div class="contact_info_it">
+                        <strong>Телефон: </strong>
+                        @Model.SitesInfo.Phone
+                    </div>
+
+                }
+                @if (!string.IsNullOrEmpty(Model.SitesInfo.Fax))
+                {
+                    <div class="contact_info_it">
+                        <strong>Факс: </strong>
+                        @Model.SitesInfo.Fax
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.SitesInfo.Email))
+                {
+                    <div class="contact_info_it">
+                        <strong>E-mail приёмной:</strong>
+                        <a href="mailto:@Model.SitesInfo.Email">@Model.SitesInfo.Email</a>
+                    </div>
+                }
+
+                @if (!(Model.SitesInfo.Adress == null))
+                {
+                    <div class="geo_area">
+                        <div style=" width: 100%; height: 300px; padding: 0; margin: 0;" class="maplist" id="maplist-@Model.SitesInfo.Id"></div>
+                        @if (Model.SitesInfo.CoordX != 0 && Model.SitesInfo.CoordY != 0 && Model.SitesInfo.CoordX != null && Model.SitesInfo.CoordY != null)
+                        {
+                            <div class="geopoint" data-title="@Model.SitesInfo.Title" data-addres="@Model.SitesInfo.Adress" data-x="@Model.SitesInfo.CoordX.ToString().Replace(",", ".")" data-y="@Model.SitesInfo.CoordY.ToString().Replace(",", ".")"></div>
+                        }
+                    </div>
+                }
+            </div>
         </div>
     }
 </div>

@@ -98,6 +98,7 @@
       <HintPath>..\packages\NLog.4.4.0\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -671,6 +672,7 @@
     <Compile Include="Areas\Admin\Models\CoreViewModel.cs" />
     <Compile Include="Models\base\AccountModel.cs" />
     <Compile Include="Models\base\ErrorViewModel.cs" />
+    <Compile Include="Models\OrdersXMLModel.cs" />
     <Compile Include="Models\OrdersViewModel.cs" />
     <Compile Include="Models\SocSetiModel.cs" />
     <Compile Include="Models\ProdViewModel.cs" />
@@ -900,6 +902,7 @@
     <Content Include="Views\Shared\Prod\ProdItem_history.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\User\MergeUsers.cshtml" />
+    <Content Include="Views\Prod\Novelties.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

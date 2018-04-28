@@ -1,10 +1,14 @@
 ﻿using cms.dbModel.entity;
 using Disly.Models;
 using System;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Xml.Serialization;
 
 namespace Disly.Controllers
 {
@@ -57,16 +61,48 @@ namespace Disly.Controllers
 
             #region Описываем список заказанной продукции
             model.Items = _repository.getBasketItems(OrderId);
+            BackModel.Details = _repository.getOrderDetails(OrderId);
+
             foreach (var item in model.Items)
             {
                 OrderDetail += "<div style=\"margin-bottom: 10px; overflow: auto; border-bottom: solid 1px #dadada; padding: 10px;\">";
-                OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"" + Settings.BaseURL + "/" + item.Photo + "\" />";
+                OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"http://" + Settings.BaseURL + "/" + Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") + "\" />";
                 OrderDetail += "<div style=\"overflow: auto;\">";
                 OrderDetail += "<a href=\"" + Settings.BaseURL + "/prod/" + item.Id + "/\"> " + item.Title + "</a>";
                 OrderDetail += "<div><span>Код:</span> " + item.Standart + "</div>";
                 OrderDetail += "<div><span>Цена:</span> " + item.Price.ToString("# ###.00#") + "</div>";
                 OrderDetail += "<div><span>Количество:</span> " + item.Count + "шт.</div>";
                 OrderDetail += "</div></div>";
+            }
+            #endregion
+
+            #region Создаем XML файл заказа для 1С
+
+            OrdersXMLModel xmlData = new OrdersXMLModel();
+            xmlData.Num = OrderNum;
+            xmlData.Date = DateTime.Now;
+            xmlData.UserName = BackModel.UserName;
+            xmlData.Organization = BackModel.Organization == null ? String.Empty : BackModel.Organization;
+            xmlData.Email = BackModel.Email;
+            xmlData.Phone = BackModel.Phone;
+            xmlData.Address = BackModel.Delivery ? String.Empty : BackModel.Address;
+            xmlData.Comment = BackModel.UserComment == null ? String.Empty : BackModel.UserComment;
+            xmlData.Details = model.Items
+                .Select(s => new XMLOrderDetails{
+                    Code = s.Code,
+                    Count = s.Count
+                })
+                .ToArray();
+
+            string path = Server.MapPath(Settings.ImportDir + Settings.OrdersDir);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            DataContractSerializer serializer = new DataContractSerializer(typeof(OrdersXMLModel));
+            using (FileStream writer = new FileStream($"{path}order_{OrderNum}.xml", FileMode.Create))
+            {
+                serializer.WriteObject(writer, xmlData);
             }
             #endregion
 

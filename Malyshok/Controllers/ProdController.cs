@@ -79,7 +79,9 @@ namespace Disly.Controllers
 
         public ActionResult Novelties()
         {
-            string viewName = "Index";
+            int daysCount = (Convert.ToInt32(Request.QueryString["days"]) > 0) ? Convert.ToInt32(Request.QueryString["days"]) : Settings.NoveltiesDay;
+
+            string viewName = "Novelties";
             #region Заголовок страницы
             if (currentPage != null)
             {
@@ -96,7 +98,7 @@ namespace Disly.Controllers
             #endregion
 
             var filter = getFilter();
-            filter.Date = DateTime.Now.AddDays(-14);
+            filter.Date = DateTime.Now.AddDays((-1) * daysCount);
             if (OrderId != null) filter.Order = (Guid)OrderId;
             
             model.List = _repository.getProdList(filter);
@@ -108,11 +110,12 @@ namespace Disly.Controllers
         }
 
         [HttpPost]
-        public ActionResult Novelties(string size, string sort, string availability)
+        public ActionResult Novelties(string size, string sort, string days, string availability)
         {
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = addFiltrParam(query, "page", String.Empty);
             query = addFiltrParam(query, "size", size);
+            query = addFiltrParam(query, "days", days.ToString());
 
             return Redirect(Request.Path + query);
         }
@@ -132,7 +135,7 @@ namespace Disly.Controllers
         }
 
         [HttpPost]
-        public ActionResult List(string path, string size, string page, string sort, string available)
+        public ActionResult List(string path, string size, string page, string sort, string days, string available)
         {
             FilterParams filter = new FilterParams();
             filter.Page = (Convert.ToInt32(Request.QueryString["page"]) > 0) ? Convert.ToInt32(Request.QueryString["page"]) : 1;
@@ -144,12 +147,18 @@ namespace Disly.Controllers
             filter.Category = ("/" + path + "/").Replace("//", "/");
             filter.Sort = sort;
             filter.Available = available;
+            if (!String.IsNullOrEmpty(days))
+            {
+                var daysCount = (Convert.ToInt32(days) > 0) ? Convert.ToInt32(days) : Settings.NoveltiesDay;
+                filter.Date = DateTime.Now.AddDays((-1) * daysCount);
+            }
 
             string query = HttpUtility.UrlDecode(Request.Url.Query);
             query = (String.IsNullOrEmpty(page) || page == 1.ToString()) ? addFiltrParam(query, "page", String.Empty) : addFiltrParam(query, "page", page); 
             query = (String.IsNullOrEmpty(size) || size == PageSize.ToString())? addFiltrParam(query, "size", String.Empty): addFiltrParam(query, "size", size);
             query = String.IsNullOrEmpty(sort) ? addFiltrParam(query, "sort", String.Empty) : addFiltrParam(query, "sort", sort);
             query = String.IsNullOrEmpty(available) ? addFiltrParam(query, "available", String.Empty) : addFiltrParam(query, "available", available);
+            query = String.IsNullOrEmpty(days) ? addFiltrParam(query, "days", String.Empty) : addFiltrParam(query, "days", days);
             ViewBag.NewUrl = query;
 
             model.List = _repository.getProdList(filter);

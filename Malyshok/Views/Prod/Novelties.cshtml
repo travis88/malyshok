@@ -1,0 +1,76 @@
+﻿@model ProdViewModel
+
+<div class="type-page">
+    @{ Html.RenderAction("BreadCrumb", "Partials"); }
+
+    <h1>@ViewBag.Title</h1>
+
+    <div class="page-text">
+        @if (Model.List != null)
+        {
+            <div class="prod-sort">
+                <form class="sort-form" method="post">
+                    <div class="">
+                        Сортировать по:
+                        <select id="sort" name="sort" class="sort_select">
+                            @if (Model.sortParams != null)
+                            {
+                                foreach (Catalog_list item in Model.sortParams)
+                                {
+                                    var Selected = (Request.QueryString["sort"] == item.value) ? "selected=\"Selected\"" : "";
+                                    <option @Selected value="@item.value">@item.text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="">
+                        Показывать новинки за
+                        <select name="days" id="days">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option selected value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option  value="14">14</option>
+                        </select>
+                        дней
+                    </div>
+                </form>
+                <div class="load-line">
+                    <div class="progress"></div>
+                </div>
+            </div>
+            <div class="prod-list">
+                @if (Model.List.Data.Any())
+                {
+                    if (Model.List.Pager.page_count > 1)
+                    {
+                        Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
+                    }
+                    foreach (var item in Model.List.Data)
+                    {
+                        @Html.Partial("Prod/ProdItem", item)
+                    }
+                }
+                else
+                {
+                    <div>Нет данных</div>
+                }
+
+                @{ Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager }); }
+            </div>
+        }
+        else
+        {
+            <div>Нет данных</div>
+        }
+    </div>
+</div>

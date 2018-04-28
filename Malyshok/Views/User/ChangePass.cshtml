@@ -18,33 +18,31 @@
             <p>&nbsp;</p>
         }
 
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="shadow-block login-form">
-                    <div>
-                        <form id="loginForm" method="post">
-                            @Html.AntiForgeryToken()
-                            @Html.Password("Password", "", new { minlength = "6", maxlength = "16", autocomplete = "off", @title = "Новый пароль", @placeholder = "Новый пароль" })
-                            @Html.Password("PasswordConfirm", "", new { minlength = "6", maxlength = "16", autocomplete = "off", @title = "Подтверждение пароля", @placeholder = "Подтверждение пароля" })
-                        </form>
-                        @Html.ValidationSummary(false, "", new { @class = "" })
-                        <div class="login-btn_block">
-                            <button type="submit" form="loginForm" class="button btn-blue">Изменить пароль</button>
-                        </div>
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <div class="restore-pass"><a href="/user/login">Вход в личный кабинет</a></div>
-                        }
+        <div class="col-sm-6">
+            <div class="shadow-block login-form">
+                <div>
+                    <form id="loginForm" method="post">
+                        @Html.AntiForgeryToken()
+                        @Html.Password("Password", "", new { minlength = "6", maxlength = "16", autocomplete = "off", @title = "Новый пароль", @placeholder = "Новый пароль" })
+                        @Html.Password("PasswordConfirm", "", new { minlength = "6", maxlength = "16", autocomplete = "off", @title = "Подтверждение пароля", @placeholder = "Подтверждение пароля" })
+                    </form>
+                    @Html.ValidationSummary(false, "", new { @class = "" })
+                    <div class="login-btn_block">
+                        <button type="submit" form="loginForm" class="button btn-blue">Изменить пароль</button>
                     </div>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <div class="restore-pass"><a href="/user/login">Вход в личный кабинет</a></div>
+                    }
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="description">
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>Пароль должен содержать от 6 до 16 символов.</p>
-                    <p>В нем должны содержаться строчные и прописные латинские буквы, цифры, а так же разрешено использовать спецсимволы.</p>
-                </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="description">
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>Пароль должен содержать от 6 до 16 символов.</p>
+                <p>В нем должны содержаться строчные и прописные латинские буквы, цифры, а так же разрешено использовать спецсимволы.</p>
             </div>
         </div>
     </div>

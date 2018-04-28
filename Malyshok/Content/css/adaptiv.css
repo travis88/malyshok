@@ -267,8 +267,7 @@
     }
     /* //-- Страница.Default */
 
-
-    /*
+    /* Страница.Page */
     .breadcrumb {
         margin-bottom: 0;
     }
@@ -284,7 +283,8 @@
     }
     .body_block h3 {
         font-size: 20px;
-    }*/
+    }
+    /* //-- Страница.Page */
 }
 
 @media only screen and (max-width: 767px) {
@@ -391,6 +391,15 @@
     }
     /* //-- Страница.Default */
 
+
+    /* Страница.Page */
+    .body_block input:not([type=checkbox]),
+    .body_block select {
+        padding: 5px;
+    }
+    /* //-- Страница.Page */
+
+
     /* Страница.Prod */
     .prod-preview {
         width: auto;
@@ -427,10 +436,6 @@
     /*
     .lk-tabs a {
         padding: 10px 15px;
-    }
-    .body_block input:not([type=checkbox]),
-    .body_block select {
-        padding: 5px;
     }*/
 }
 @media only screen and (max-width: 530px) {
@@ -536,34 +541,7 @@
             border-radius: 0;
             border: none;
             border-left: solid 3px #dd201e;
-        }
-    
-    
-    .basket-form {
-        clear: both;
-    }
-    .basket_item-title {
-        display: none;
-    }
-    .basket_item-mobyle-title {
-        display: block;
-    }
-    .basket-img {
-        width: auto;
-        float: none;
-        text-align:center;
-        border: none;
-    }
-        .basket-img img {
-            width: auto;
-            border: solid 1px #cccccc;
-        }
-    .basket_item-params {
-        display: none;
-    }
-    .basket_item-mobyle-params {
-        display: block;
-    }*/
+        }*/
 }
 @media only screen and (max-width: 450px) {
     .mobile-indicator {
@@ -609,6 +587,12 @@
     }
     .prod-desc .basket-form {
         margin: 20px 0;
+    }
+    /* //-- Страница.Prod */
+    
+    /* Страница.Prod */
+    .item_news .news-list_date {
+        float: none;
     }
     /* //-- Страница.Prod */
 }

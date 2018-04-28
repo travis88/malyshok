@@ -52,6 +52,12 @@ namespace Disly
                url: "prod-list/{*path}",
                defaults: new { controller = "Prod", action = "List", path = UrlParameter.Optional }
             );
+            // Список продуктов
+            routes.MapRoute(
+               name: "NoveltiesList",
+               url: "novelties-list/{*path}",
+               defaults: new { controller = "Prod", action = "List", path = UrlParameter.Optional }
+            );
 
             // Контакты
             routes.MapRoute(

@@ -97,7 +97,7 @@ $(document).ready(function () {
     // Обрабатываем события изменения сортировки и фильтра
     $('.sort-form select').bind({
         change: function () {
-            getProdList(location.href.replace('catalog', 'prod-list'));
+            getProdList(location.href.toLowerCase().replace('catalog', 'prod-list').replace('novelties', 'novelties-list'));
         }
     })
     
@@ -190,7 +190,9 @@ function sendProdCount(_ID, _count) {
 // Получает список продукции
 function getProdList(Link) {
     $('.progress').animate({ width: "40%" });
-    $('.prod-list').animate({ opacity: "0.2" })
+    $('.prod-list').animate({ opacity: "0.2" });
+    $('body,html').animate({ scrollTop: $('.sort-form').offset().top - 60 }, 800);
+
     $.ajax({
         url: Link,
         type: "POST", //метод отправки
@@ -201,7 +203,6 @@ function getProdList(Link) {
                 $('.progress').removeAttr('style');
             }, 1200);
 
-            $('body,html').animate({ scrollTop: $('.sort-form').offset().top - 60}, 800);
             $('.prod-list').empty().append(response).animate({ opacity: "1" });
             $('.progress').animate({ width: "100%" }).removeAttr('style');
 

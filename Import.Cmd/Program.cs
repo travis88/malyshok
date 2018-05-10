@@ -1,9 +1,8 @@
-﻿using Import.Core;
-using Import.Core.Helpers;
-using Import.Core.Services;
+﻿using Import.Core.Helpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Xml.Serialization;
 
 namespace Import.Cmd
 {
@@ -12,73 +11,47 @@ namespace Import.Cmd
         static void Main(string[] args)
         {
             ReceiverParamsHelper helperParams = new ReceiverParamsHelper();
-
-            DirectoryInfo di = new DirectoryInfo(helperParams.DirName);
-            FileInfo[] files = di.GetFiles("*.zip")
-                                       .OrderByDescending(p => p.LastWriteTime)
-                                       .Take(2)
-                                       .ToArray();
-
-            FileInfo[] filesToDrop = di.GetFiles("*.xml");
-            DropFiles(filesToDrop);
-            SrvcLogger.Info("{preparing}", "запуск ядра импорта");
-            SrvcLogger.Info("{work}", $"директория: {helperParams.DirName}");
-            if (files != null && files.Any(a => a != null))
+            XmlSerializer writer = new XmlSerializer(typeof(OrdersXMLModel));
+            var path = $"{helperParams.DirName}order.xml";
+            using (FileStream file = File.Create(path))
             {
-                string listFiles = "список найденных файлов: ";
-                foreach (var file in files)
-                {
-                    if (file != null)
-                    {
-                        listFiles += $"{file.Name}; ";
-                    }
-                }
-                SrvcLogger.Info("{work}", $"{listFiles}");
-                Importer.DoImport(files);
-
-                foreach (var file in files)
-                {
-                    if (file != null && file.Exists)
-                    {
-                        try
-                        {
-                            SrvcLogger.Info("{work}", $"удаление файла: {file}");
-                            file.Delete();
-                        }
-                        catch (Exception e)
-                        {
-                            SrvcLogger.Error("{error}", $"{e.ToString()}");
-                        }
-                    }
-                }
-            }
-            else
-            {
-                SrvcLogger.Info("{work}", "файлов для импорта не найдено");
+                var order = OrdersCreator()[0];
+                writer.Serialize(file, order);
             }
         }
 
-        /// <summary>
-        /// Удаляет файлы с предыдущего импорта
-        /// </summary>
-        /// <param name="files"></param>
-        private static void DropFiles(FileInfo[] files)
+        private static OrdersXMLModel[] OrdersCreator()
         {
-            try
+            List<OrdersXMLModel> list = new List<OrdersXMLModel>();
+            for (int i = 0; i < 100; i++)
             {
-                SrvcLogger.Info("{work}", "удаление файлов с предыдущего импорта");
-                foreach (var file in files)
+                OrdersXMLModel order = new OrdersXMLModel
                 {
-                    if (file.Exists)
+                    Num = i,
+                    Date = DateTime.Now,
+                    UserName = $"username{i}",
+                    Organization = $"organization{i}",
+                    Email = $"email{i}",
+                    Phone = $"phone{i}",
+                    Address = $"address{i}",
+                    Comment = $"comment{i}",
+                    Details = new XMLOrderDetails[] 
                     {
-                        file.Delete();
+                        new XMLOrderDetails
+                        {
+                            Code = i.ToString(),
+                            Count = i
+                        },
+                        new XMLOrderDetails
+                        {
+                            Code = (i + 1).ToString(),
+                            Count = i + 1
+                        }
                     }
-                }
+                };
+                list.Add(order);
             }
-            catch (Exception e)
-            {
-                SrvcLogger.Error("{error}", e.ToString());
-            }
+            return list.ToArray();
         }
     }
 }

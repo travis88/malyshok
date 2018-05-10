@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Disly.Models
+namespace Import.Cmd
 {
+    /// <summary>
+    /// Заказ, экспортируемый в xml
+    /// </summary>
     [XmlRoot("Order")]
     public class OrdersXMLModel
     {
@@ -33,25 +36,25 @@ namespace Disly.Models
         /// <summary>
         /// Контактный Email
         /// </summary>
-        [XmlAttribute("")]
+        [XmlAttribute("Email")]
         public string Email { get; set; }
 
         /// <summary>
         /// Контактный телефон
         /// </summary>
-        [XmlAttribute("")]
+        [XmlAttribute("Phone")]
         public string Phone { get; set; }
 
         /// <summary>
         /// Адрес доставки
         /// </summary>
-        [XmlAttribute("")]
+        [XmlAttribute("Address")]
         public string Address { get; set; }
 
         /// <summary>
         /// Комментарий пользователя
         /// </summary>
-        [XmlAttribute("")]
+        [XmlAttribute("Comment")]
         public string Comment { get; set; }
 
         /// <summary>

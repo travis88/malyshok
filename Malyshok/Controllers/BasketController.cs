@@ -99,10 +99,11 @@ namespace Disly.Controllers
             {
                 Directory.CreateDirectory(path);
             }
-            DataContractSerializer serializer = new DataContractSerializer(typeof(OrdersXMLModel));
-            using (FileStream writer = new FileStream($"{path}order_{OrderNum}.xml", FileMode.Create))
+            //DataContractSerializer serializer = new DataContractSerializer(typeof(OrdersXMLModel));
+            XmlSerializer writer = new XmlSerializer(typeof(OrdersXMLModel));
+            using (FileStream file = new FileStream($"{path}order_{OrderNum}.xml", FileMode.Create))
             {
-                serializer.WriteObject(writer, xmlData);
+                writer.Serialize(file, xmlData);
             }
             #endregion
 

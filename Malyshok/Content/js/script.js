@@ -82,6 +82,8 @@ $(document).ready(function () {
     ProdPager_init();
     // Инициализация кнопки "Сертификаты"
     certificatesBtn_init();
+    // Инициализация картинок для предпросмотра
+    imagePreview_init();
     // Инициализация фотогалереи
     if ($('.show_original,.swipebox').length > 0) {
         $('.show_original').swipebox();
@@ -108,24 +110,7 @@ $(document).ready(function () {
 
 
     // Распределение каталога продукции по колонкам
-    //$('.catalog-list').slideToggle(300);
     $('.catalog-list').css('display', 'block');
-    //var CatalogLength = $('.catalog-item').length;
-    //var Ost = CatalogLength % 2;
-    //var RowLength = (Ost != 0) ? Math.floor(CatalogLength / 2) + 1 : Math.floor(CatalogLength / 2);
-    
-    //var $Left = $("<div/>", { "class": "col-left" });
-    //$Left.append($('.catalog-item').slice(0, RowLength).clone());
-
-    //var $Right = $("<div/>", { "class": "col-right" });
-    //$Right.append($('.catalog-item').slice(RowLength, CatalogLength).clone());
-
-    //$('.catalog-tree .row').empty().append($Left).append($Right);
-
-    //original photo
-    //$('.swipebox').each(function () {
-    //    $(this).swipebox();
-    //});
 });
 
 // Актуализирует данные о количестве и стоимости товаров в корзине
@@ -185,7 +170,7 @@ function sendProdCount(_ID, _count) {
     });
 }
 
-// Отправляет запрос на получения списка продукции
+// Отправляет запрос на получение списка продукции
 // Передает параметры сортировки
 // Получает список продукции
 function getProdList(Link) {
@@ -214,8 +199,8 @@ function getProdList(Link) {
             ProdPager_init();
             // Инициализация кнопки "Сертификаты"
             certificatesBtn_init();
-            // инициализация фотогалереи
-            $(".swipebox").swipebox();
+            // Инициализация картинок для предпросмотра
+            imagePreview_init();
 
             try {
                 history.pushState(null, null, $('.info-from').attr('href'));
@@ -273,6 +258,10 @@ function ProdInput_init() {
                                 .append('В корзине')
                                 .focus();
                         });
+
+                        $.each($('.chenge-input ~ button'), function () {
+                            $(this).trigger('click');
+                        })
                     }
                 });
             }
@@ -328,6 +317,8 @@ function ProdButtons_init() {
                 error: function () {
                 },
                 success: function (data) {
+                    changeBasketInfo(data.Count, data.Cost);
+
                     $Btn.animate({ backgroundColor: "#ffffff" }, 600, function () {
                         $(this).removeClass('btn-blue')
                             .addClass('btn-invers')
@@ -336,7 +327,9 @@ function ProdButtons_init() {
                             .append('В корзине');
                     });
 
-                    changeBasketInfo(data.Count, data.Cost);
+                    $.each($('.chenge-input ~ button'), function () {
+                        $(this).trigger('click');
+                    });
                 }
             });
         }
@@ -441,6 +434,31 @@ function ProdPager_init() {
             _Link = _Link.replace('catalog', 'prod-list');
 
             getProdList(_Link);
+            return false;
+        }
+    });
+}
+
+// 
+function imagePreview_init() {
+    $('.image-gallery').bind({
+        click: function () {
+            var $Panel = $("<div/>", { "class": "popup-bg" });
+            var $GaleryContent = $("<div/>", { "class": "gallery-content" });
+            var $Img = $("<img/>", { "class": "gallery-img", "src": $(this).attr('href') });
+            $GaleryContent.append($Img);
+
+            $Panel
+                .append($GaleryContent)
+                .bind({
+                    click: function () {
+                        $Panel.remove();
+                        $GaleryContent.remove();
+                    }
+                });
+
+            $('body').append($Panel);
+
             return false;
         }
     });

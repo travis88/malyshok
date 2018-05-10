@@ -322,22 +322,24 @@ a.catalog-btn,
             text-decoration: none;
             border-bottom: solid 1px #337ab7;
         }
-.body-right .new-prod-item {
+/*.body-right .new-prod-item {
     display: none;
-}
-.new-prod-item {
+}*/
+.new-prod-list {
+    overflow: hidden;
     border: solid 1px #d9d9d9;
     background: #ffffff;
-    padding: 20px;
-    margin-bottom: 30px;
+    padding: 5px;
 }
-    .new-prod-item:hover {
-        box-shadow: 2px 3px 20px #cccccc;
-    }
+.new-prod-item {
+    float: left;
+    width: 50%;
+    padding: 5px;
+}
     .new-prod-item a {
         display: block;
-        width: 230px;
-        height: 230px;
+        width: 119px;
+        height: 119px;
         background: url('/Content/img/_nofoto.png') center no-repeat;
         background-clip: content-box;
         background-size: contain;
@@ -1201,9 +1203,49 @@ a.btn-red {
     text-align: center;
 }
 /* //-- Страница.Orders */
+
+/* Галерея */
+.popup-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.60);
+    z-index: 99999;
+    cursor: pointer;
+}
+.gallery-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: inline-block;
+}
+    .gallery-content:before {
+        content: "";
+        display: inline-block;
+        height: 50%;
+        width: 1px;
+        margin-right: -1px;
+    }
+.gallery-img {
+    display: inline-block;
+    max-height: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 10px;
+    width: auto;
+    height: auto;
+    vertical-align: middle;
+    background: #ffffff;
+    user-select: none;
+}
+/* //-- Галерея */
 /* //-- Контент */
 /* //-- Центральная часть */
-
 /* Подвал */
 .footer {
     overflow: hidden;

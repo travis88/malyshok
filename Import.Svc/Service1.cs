@@ -135,8 +135,8 @@ namespace Import.Svc
                                        .Take(3)
                                        .ToArray();
 
-                FileInfo[] filesToDrop = info.GetFiles("*.xml");
-                DropFiles(filesToDrop);
+                //FileInfo[] filesToDrop = info.GetFiles("*.xml");
+                //DropFiles(filesToDrop);
 
                 SrvcLogger.Info("{preparing}", "запуск ядра импорта");
                 SrvcLogger.Info("{work}", $"директория: {helperParams.DirName}");

@@ -12,5 +12,6 @@ Web.Release.config
 Web.Debug.config
 Malyshok/node_modules/
 Malyshok/ProdContent/
+Malyshok/Certificates/
 Malyshok/Userfiles/import/
 Malyshok/Import/

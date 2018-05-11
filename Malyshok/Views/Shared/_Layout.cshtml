@@ -87,7 +87,7 @@ else
         <div class="container">
                 <div class="body-right">
                     @{ Html.RenderAction("Catalog", "Partials"); }
-                    @{ Html.RenderAction("Novelties", "Partials"); }
+                    @{ Html.RenderAction("Novelties", "Partials", new { Count = 4 }); }
                 </div>
                 <div class="body-content">
                     @RenderBody()

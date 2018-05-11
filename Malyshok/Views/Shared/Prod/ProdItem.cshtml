@@ -26,10 +26,10 @@
         </div>
     </div>
     <div class="prod-img">
-        @if (@ProdImg != "")
+        @if (!String.IsNullOrEmpty(ProdImg))
         {
             <span class="loop"></span>
-            <a class="swipebox" title="@Html.Raw(Model.Title.Replace(",", ", ")) (@Model.Barcode)" href="@bigImg"><img src="@ProdImg" /></a>
+            <a class="image-gallery" title="@Html.Raw(Model.Title.Replace(",", ", ")) (@Model.Barcode)" href="@bigImg"><img src="@ProdImg" /></a>
         }
         @if (isNew)
         {

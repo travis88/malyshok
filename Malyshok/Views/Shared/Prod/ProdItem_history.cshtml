@@ -2,10 +2,17 @@
 
 @{
     var ProdImg = Model.Photo != null ? Settings.ProdContent + Model.Barcode + "/" + Model.Photo.Replace(".jpg", "_mini.jpg") : "";
+    var bigImg = Settings.ProdContent + Model.Barcode + "/" + Model.Photo;
     ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
 }
 <div class="order-details_item shadow-block">
-    <div class="basket-img"><img src="@ProdImg" /></div>
+    <div class="basket-img">
+        @if (!String.IsNullOrEmpty(ProdImg))
+        {
+            <span class="loop"></span>
+            <a class="image-gallery" title="@Html.Raw(Model.Title.Replace(",", ", ")) (@Model.Barcode)" href="@bigImg"><img src="@ProdImg" /></a>
+        }
+    </div>
     <div class="item-info">
         <div class="title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
         <div style="display: inline-block; width:40%">

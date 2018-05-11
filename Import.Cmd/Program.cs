@@ -1,7 +1,9 @@
-﻿using Import.Core.Helpers;
+﻿using Import.Core;
+using Import.Core.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Import.Cmd
@@ -11,13 +13,22 @@ namespace Import.Cmd
         static void Main(string[] args)
         {
             ReceiverParamsHelper helperParams = new ReceiverParamsHelper();
-            XmlSerializer writer = new XmlSerializer(typeof(OrdersXMLModel));
-            var path = $"{helperParams.DirName}order.xml";
-            using (FileStream file = File.Create(path))
-            {
-                var order = OrdersCreator()[0];
-                writer.Serialize(file, order);
-            }
+
+            DirectoryInfo info = new DirectoryInfo(helperParams.DirName);
+            FileInfo[] files = info.GetFiles("*.zip")
+                                   .OrderByDescending(p => p.LastWriteTime)
+                                   .Take(3)
+                                   .ToArray();
+
+            Importer.DoImport(files);
+
+            //XmlSerializer writer = new XmlSerializer(typeof(OrdersXMLModel));
+            //var path = $"{helperParams.DirName}order.xml";
+            //using (FileStream file = File.Create(path))
+            //{
+            //    var order = OrdersCreator()[0];
+            //    writer.Serialize(file, order);
+            //}
         }
 
         private static OrdersXMLModel[] OrdersCreator()

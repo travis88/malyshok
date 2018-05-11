@@ -160,81 +160,95 @@ namespace Import.Core
                 Step++;
                 files = files.Where(w => w != null).ToArray();
                 var _files = FilesOrdering(files);
-
-                if (_files.Any(a => a.Name.Contains(".xml")))
+                SrvcLogger.Info("{preparing}", $"кол-во файлов: {_files.Count()}");
+                string ff = String.Empty;
+                foreach (var f in _files)
                 {
-                    if (_files.Any(a => a.Name.Contains(".zip")))
-                    {
-                        SetSteps(3);
-                    }
-                    else
-                    {
-                        SetSteps(1);
-                    }
-                }
-                else if (_files.Any(a => a.Name.Contains(".zip")))
-                {
-                    SetSteps(2);
+                    ff += f.ToString() + "; ";
                 }
 
-                UpdateCurrentStep();
+                SrvcLogger.Info("{preparing}", $"файлы: {ff}");
 
-                using (var db = new dbModel(CONNECTION))
+                try
                 {
-                    foreach (var file in _files)
+                    if (_files.Any(a => a.FullName.Contains(".xml")))
                     {
-                        if (file != null)
+                        if (_files.Any(a => a.FullName.Contains(".zip")))
                         {
-                            SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
-                            Log.Insert(0, $"Чтение данных: {file.Name}");
+                            SetSteps(3);
+                        }
+                        else
+                        {
+                            SetSteps(1);
+                        }
+                    }
+                    else if (_files.Any(a => a.FullName.Contains(".zip")))
+                    {
+                        SetSteps(2);
+                    }
 
-                            using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
+                    UpdateCurrentStep();
+                    using (var db = new dbModel(CONNECTION))
+                    {
+                        foreach (var file in _files)
+                        {
+                            if (file != null)
                             {
-                                SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
-                                Log.Insert(0, "Данные прочитаны");
+                                SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
+                                Log.Insert(0, $"Чтение данных: {file.Name}");
 
-                                var helper = new InsertHelper
+                                using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                                 {
-                                    FileStream = fileStream,
-                                    Db = db,
-                                    Entity = Entity.Catalogs
-                                };
+                                    SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
+                                    Log.Insert(0, "Данные прочитаны");
 
-                                if (file.FullName.Contains("cat"))
-                                {
-                                    InsertWithLogging(helper);
-                                }
-                                else if (file.FullName.Contains("prod"))
-                                {
-                                    foreach (Entity entity in Enum.GetValues(typeof(Entity)))
+                                    var helper = new InsertHelper
                                     {
-                                        if (!entity.Equals(Entity.Catalogs))
-                                        {
-                                            helper.Entity = entity;
-                                            InsertWithLogging(helper);
-                                        }
-                                    }
-                                    Step++;
+                                        FileStream = fileStream,
+                                        Db = db,
+                                        Entity = Entity.Catalogs
+                                    };
 
-                                    SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
-                                    Log.Insert(0, "Перенос данных из буферных таблиц");
-                                    Finalizer(db);
-                                    Step++;
-                                }
-                                else if (file.FullName.Contains(".zip"))
-                                {
-                                    ImageService imageService = new ImageService(receiverParams);
-                                    imageService.Execute(file);
+                                    if (file.FullName.StartsWith("cat"))
+                                    {
+                                        InsertWithLogging(helper);
+                                    }
+                                    else if (file.FullName.StartsWith("prod"))
+                                    {
+                                        foreach (Entity entity in Enum.GetValues(typeof(Entity)))
+                                        {
+                                            if (!entity.Equals(Entity.Catalogs))
+                                            {
+                                                helper.Entity = entity;
+                                                InsertWithLogging(helper);
+                                            }
+                                        }
+                                        Step++;
+
+                                        SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
+                                        Log.Insert(0, "Перенос данных из буферных таблиц");
+                                        Finalizer(db);
+                                        Step++;
+                                    }
+                                    else if (file.FullName.Contains(".zip"))
+                                    {
+                                        ImageService imageService = new ImageService(receiverParams);
+                                        imageService.Execute(file);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    stopwatch.Stop();
-                    emailBody += ResultLogging(stopwatch);
-                    SendEmail(emailBody, db);
-                    CreateXmlExport(receiverParams.DirName);
-                    DropImportFiles(_files);
+                        stopwatch.Stop();
+                        emailBody += ResultLogging(stopwatch);
+                        SendEmail(emailBody, db);
+                        CreateXmlExport(receiverParams.DirName);
+                        DropImportFiles(_files);
+                    }
+                }
+                catch (Exception e)
+                {
+                    SrvcLogger.Error("{error}", e.ToString());
                 }
             }
             else
@@ -688,36 +702,27 @@ namespace Import.Core
             try
             {
                 SrvcLogger.Info("{work}", $"распаковка архива: {archive.Name}");
+                SrvcLogger.Info("{work}", $"директория: {archive.DirectoryName}");
                 ZipFile.ExtractToDirectory(archive.FullName, archive.DirectoryName);
 
                 DirectoryInfo di = new DirectoryInfo(archive.DirectoryName);
                 if (di != null)
                 {
-                    FileInfo[] temp = null;
-
-                    if (di.GetDirectories().Count() > 0)
-                    {
-                        List<FileInfo> files = new List<FileInfo>();
-                        foreach (var dir in di.GetDirectories())
-                        {
-                            files.AddRange(dir.GetFiles());
-                        }
-                        temp = files.ToArray();
-                    }
-                    else
-                    {
-                        temp = di.GetFiles();
-                    }
-                    temp = temp
+                    FileInfo[] temp = di.GetFiles()
                         .Where(w => !w.Name.ToLower().Contains(".zip"))
                         .ToArray();
 
-                    FileInfo[] result = { temp.Where(w => w.Name.ToLower().Contains(".xml"))
+                    var cat = temp.Where(w => w.Name.ToLower().Contains(".xml"))
                                               .Where(w => w.Name.ToLower().Contains("cat"))
-                                              .FirstOrDefault(),
-                                          temp.Where(w => w.Name.ToLower().Contains(".xml"))
+                                              .SingleOrDefault();
+                    SrvcLogger.Info("{work}", $"категории: {cat.Name}");
+
+                    var prod = temp.Where(w => w.Name.ToLower().Contains(".xml"))
                                               .Where(w => w.Name.ToLower().Contains("prod"))
-                                              .FirstOrDefault() };
+                                              .SingleOrDefault();
+                    SrvcLogger.Info("{work}", $"продукция: {prod.Name}");
+
+                    FileInfo[] result = { cat, prod };
                     return result;
                 }
             }
@@ -744,13 +749,24 @@ namespace Import.Core
                     var prodArchive = files.Where(a => a.Name.ToLower().Contains("prod")
                                                     && a.Name.ToLower().Contains(".zip"))
                                            .SingleOrDefault();
+                    SrvcLogger.Info("{work}", $"архив с файлами xml: {prodArchive.Name}");
                     result.AddRange(ExtractArchive(prodArchive));
                 }
-                var imgArchive = files.Where(w => !w.Name.ToLower().Contains("prod"))
+                var imgArchive = files.Where(w => w.Name.ToLower().Contains("im")
+                                                && w.Name.ToLower().Contains(".zip"))
                                       .SingleOrDefault();
                 if (imgArchive != null)
                 {
+                    SrvcLogger.Info("{work}", $"{imgArchive.Name} добавлен");
                     result.Add(imgArchive);
+                }
+                var certificatesArchice = files.Where(w => w.Name.ToLower().Contains("certi")
+                                                        && w.Name.ToLower().Contains(".zip"))
+                                               .SingleOrDefault();
+                if (certificatesArchice != null)
+                {
+                    SrvcLogger.Info("{work}", $"{certificatesArchice.Name} добавлен");
+                    result.Add(certificatesArchice);
                 }
             }
 

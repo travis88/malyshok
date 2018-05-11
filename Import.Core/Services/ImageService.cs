@@ -26,11 +26,26 @@ namespace Import.Core.Services
         }
 
         /// <summary>
+        /// Префикс для названия директории для сохранения
+        /// </summary>
+        private string prefixFolder = @"ProdContent\";
+
+        /// <summary>
+        /// Архив для сохранения изображений продукции
+        /// </summary>
+        private bool isImages = true;
+
+        /// <summary>
         /// Обрабатывает изображения
         /// </summary>
         public void Execute(FileInfo archive)
         {
-            string tempPath = $"{ParamsHelper.SaveDirName}temp\\";
+            if (archive.Name.ToLower().Contains("certi"))
+            {
+                prefixFolder = @"Certificates\";
+                isImages = false;
+            }
+            string tempPath = $"{ParamsHelper.SaveDirName}{prefixFolder}temp\\";
             if (!Directory.Exists(tempPath))
             {
                 Directory.CreateDirectory(tempPath);
@@ -133,31 +148,56 @@ namespace Import.Core.Services
                 {
                     if (ParamsHelper.AllowedPicTypes.Contains(img.Extension.ToLower()))
                     {
-                        string barcode = img.Name.Substring(0, img.Name.LastIndexOf("_"));
-                        string imageName = img.Name.Substring(0, img.Name.LastIndexOf("."));
-                        string saveImgPath = $"{ParamsHelper.SaveDirName}{barcode}";
-
-                        if (!Directory.Exists(saveImgPath))
-                        {
-                            Directory.CreateDirectory(saveImgPath);
-                        }
-
-                        ImageItemHelper[] imageSizes = new ImageItemHelper[]
-                        {
-                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_mini.jpg",
-                                                 200, 200, "center", "center", null),
-                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_preview.jpg",
-                                                 400, 400, "center", "center", null),
-                            new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}.jpg",
-                                                 1150, 600, null, null, "width")
-                        };
-                        imageCreator.SaveImages(imageSizes);
+                        imageCreator.SaveImages(GetImageHelpers(img));
                     }
                 }
                 catch (Exception e)
                 {
                     SrvcLogger.Error("{error}", e.ToString());
                 }
+            }
+        }
+
+        /// <summary>
+        /// Возвращает эл-ты необходимые для сохранения
+        /// </summary>
+        /// <param name="img"></param>
+        /// <returns></returns>
+        private ImageItemHelper[] GetImageHelpers(FileInfo img)
+        {
+            if (isImages)
+            {
+                string barcode = img.Name.Substring(0, img.Name.LastIndexOf("_"));
+                string imageName = img.Name.Substring(0, img.Name.LastIndexOf("."));
+                string saveImgPath = $"{ParamsHelper.SaveDirName}{prefixFolder}{barcode}";
+                if (!Directory.Exists(saveImgPath))
+                {
+                    Directory.CreateDirectory(saveImgPath);
+                }
+
+                return new ImageItemHelper[]
+                {
+                    new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_mini.jpg",
+                                        200, 200, "center", "center", null),
+                    new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}_preview.jpg",
+                                        400, 400, "center", "center", null),
+                    new ImageItemHelper(img.FullName, $"{saveImgPath}\\{imageName}.jpg",
+                                        1150, 600, null, null, "width")
+                };
+            }
+            else
+            {
+                string saveImgPath = $"{ParamsHelper.SaveDirName}{prefixFolder}";
+                if (!Directory.Exists(saveImgPath))
+                {
+                    Directory.CreateDirectory(saveImgPath);
+                }
+
+                return new ImageItemHelper[]
+                {
+                    new ImageItemHelper(img.FullName, $"{saveImgPath}\\{img.Name}",
+                                        1240, 1754, null, null, "height")
+                };
             }
         }
     }

@@ -132,7 +132,7 @@ namespace Import.Svc
                 DirectoryInfo info = new DirectoryInfo(helperParams.DirName);
                 FileInfo[] files = info.GetFiles("*.zip")
                                        .OrderByDescending(p => p.LastWriteTime)
-                                       .Take(2)
+                                       .Take(3)
                                        .ToArray();
 
                 FileInfo[] filesToDrop = info.GetFiles("*.xml");

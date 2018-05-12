@@ -188,6 +188,8 @@ namespace cms.dbase
                             Phone = s.c_phone,
                             Fax = s.c_fax,
                             Email = s.c_email,
+                            TechEmail = s.c_tech_email,
+                            OrderEmail = s.c_order_email,
                             Site = s.c_url,
                             Worktime = s.c_worktime,
                             Logo = new Photo
@@ -229,6 +231,8 @@ namespace cms.dbase
                     .Set(s => s.c_phone, item.Phone)
                     .Set(s => s.c_fax, item.Fax)
                     .Set(s => s.c_email, item.Email)
+                    .Set(s => s.c_tech_email, item.TechEmail)
+                    .Set(s => s.c_order_email, item.OrderEmail)
                     .Set(s => s.c_url, item.Site)
                     .Set(s => s.c_worktime, item.Worktime)
                     .Set(u => u.c_scripts, item.Scripts)

@@ -629,7 +629,7 @@ namespace Import.Core
             try
             {
                 string email = db.cms_sitess
-                    .Select(s => s.c_email).FirstOrDefault();
+                    .Select(s => s.c_tech_email).FirstOrDefault();
 
                 return email.Split('|')
                     .Select(s => s.Trim()).ToList();

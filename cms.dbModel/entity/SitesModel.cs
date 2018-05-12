@@ -87,6 +87,16 @@ namespace cms.dbModel.entity
         public string Email { get; set; }
 
         /// <summary>
+        /// Адрес для технический оповещений
+        /// </summary>
+        public string TechEmail { get; set; }
+
+        /// <summary>
+        /// Адрес для оповещений о заказах
+        /// </summary>
+        public string OrderEmail { get; set; }
+
+        /// <summary>
         /// Ссылка на сайт
         /// </summary>
         public string Site { get; set; }

@@ -53,8 +53,10 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Index(SitesViewModel backModel, HttpPostedFileBase upload, HttpPostedFileBase uploadBack)
         {
-            ErrorMessage userMassege = new ErrorMessage();
-            userMassege.title = "Информация";
+            ErrorMessage userMassege = new ErrorMessage
+            {
+                title = "Информация"
+            };
             
             if (ModelState.IsValid)
             {

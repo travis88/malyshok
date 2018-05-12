@@ -17,15 +17,24 @@
 
     <div class="group-block open" title="Контакты">
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-4">
                 @Html.TextBoxFor(m => Model.Item.Phone, new { @class = "uc_input", @title = "Телефон организации", @placeholder = "Телефон организации", @MaxLength = "64" })
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-4">
                 @Html.TextBoxFor(m => Model.Item.Fax, new { @class = "uc_input", @title = "Факс", @placeholder = "Факс", @MaxLength = "64" })
             </div>
         </div>
-
-        @Html.TextBoxFor(m => Model.Item.Email, new { @class = "uc_input", @title = "Адрес Email", @placeholder = "Адрес Email", @MaxLength = "64" })
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => Model.Item.Email, new { @class = "uc_input", @title = "Контактный email", @placeholder = "Контактный email", @MaxLength = "64" })
+            </div>
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => Model.Item.TechEmail, new { @class = "uc_input", @title = "Email для технических оповещений", @placeholder = "Email для технических оповещений", @MaxLength = "64" })
+            </div>
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => Model.Item.OrderEmail, new { @class = "uc_input", @title = "Email для уведомлений о заказах", @placeholder = "Email для уведомлений о заказах", @MaxLength = "64" })
+            </div>
+        </div>
         @Html.TextBoxFor(m => Model.Item.Site, new { @class = "uc_input", @title = "Адрес сайта", @placeholder = "Адрес сайта", @MaxLength = "128" })
         @Html.TextBoxFor(m => Model.Item.Worktime, new { @class = "uc_input", @title = "Режим работы", @placeholder = "Режим работы", @MaxLength = "512" })
 

@@ -4,7 +4,8 @@
     @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
 
-    <h1>Поиск</h1>
+    <h1>Результаты поиска</h1>
+    <h3>Вы искали «@ViewBag.SearchText»</h3>
 
     <div class="page-text">
         @if (Model.List != null)

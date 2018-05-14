@@ -75,6 +75,8 @@ namespace cms.dbase
                         Phone = s.c_phone,
                         Fax = s.c_fax,
                         Email = s.c_email,
+                        TechEmail = s.c_tech_email,
+                        OrderEmail = s.c_order_email,
                         Site = s.c_url,
                         Worktime = s.c_worktime,
                         Logo = new Photo

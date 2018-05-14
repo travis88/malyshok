@@ -55,7 +55,7 @@ namespace Disly.Controllers
 
             model.List = _repository.getProdList(filter);
 
-
+            ViewBag.SearchText = Request.QueryString["searchtext"];
 
             return View(model);
         }

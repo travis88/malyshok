@@ -45,7 +45,7 @@ namespace Import.Core
         /// <summary>
         /// Текст письма
         /// </summary>
-        private static string emailBody = null;
+        public static string EmailBody = null;
 
         /// <summary>
         /// Словарь для логирования
@@ -240,8 +240,8 @@ namespace Import.Core
                         }
 
                         stopwatch.Stop();
-                        emailBody += ResultLogging(stopwatch);
-                        SendEmail(emailBody, db);
+                        EmailBody += ResultLogging(stopwatch);
+                        SendEmail(EmailBody, db);
                         CreateXmlExport(receiverParams.DirName);
                         DropImportFiles(_files);
                     }
@@ -271,7 +271,7 @@ namespace Import.Core
 
                 distinctProducts = null;
                 emailHelper = new EmailParamsHelper();
-                emailBody = String.Empty;
+                EmailBody = String.Empty;
                 CountSuccess = CountFalse = 0;
                 Total = "0 час. 0 мин. 0 сек. 0 мс.";
                 Log = new List<string>();
@@ -305,6 +305,7 @@ namespace Import.Core
             try
             {
                 SrvcLogger.Info("{work}", $"{dictionary[title]} начало");
+                EmailBody += $"<p><b>{dictionary[title]}</b> начало</p>";
 
                 switch (insert.Entity)
                 {
@@ -326,12 +327,13 @@ namespace Import.Core
                 }
 
                 SrvcLogger.Info("{work}", $"{dictionary[title]} конец");
+                EmailBody += $"<p><b>{dictionary[title]}</b> конец</p>";
                 UpdateCurrentStep();
             }
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                emailBody += $"<p>{errorMessage}</p>";
+                EmailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", $"ошибка при импорте {dictionary[title]}");
                 SrvcLogger.Error("{error}", errorMessage);
                 CountFalse++;
@@ -348,6 +350,7 @@ namespace Import.Core
         {
             SrvcLogger.Info("{work}", $"{dictionary[entity.Title]} кол-во: {entity.List.Count()}");
             Log.Insert(0, $"Кол-во {dictionary[entity.Title]}: {entity.List.Count()}");
+            EmailBody += $"<p><b>{dictionary[entity.Title]}</b> кол-во: {entity.List.Count()}</p>";
 
             try
             {
@@ -360,7 +363,7 @@ namespace Import.Core
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                emailBody += $"<p>{errorMessage}</p>";
+                EmailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", errorMessage);
             }
         }
@@ -543,7 +546,7 @@ namespace Import.Core
             catch (Exception e)
             {
                 string errorMessage = e.ToString();
-                emailBody += $"<p>{errorMessage}</p>";
+                EmailBody += $"<p>{errorMessage}</p>";
                 SrvcLogger.Error("{error}", errorMessage);
                 CountFalse++;
             }

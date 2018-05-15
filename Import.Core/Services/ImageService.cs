@@ -56,6 +56,7 @@ namespace Import.Core.Services
             if (files != null && files.Count() > 0)
             {
                 Importer.Log.Insert(0, $"Кол-во изображений в архиве: {files.Count()}");
+                Importer.EmailBody += $"<p>кол-во изображений в архиве <b>{archive.Name}</b>: {files.Count()}</p>";
                 ResizingImages(files);
                 Importer.Step++;
                 Importer.UpdateCurrentStep();
@@ -63,6 +64,7 @@ namespace Import.Core.Services
             else
             {
                 SrvcLogger.Info("{work}", $"распаковка {archive.Name} не дала результатов");
+                Importer.EmailBody += $"<p>распаковка <b>{archive.Name}</b> не дала результатов</p>";
                 Importer.CountFalse++;
             }
 
@@ -102,6 +104,7 @@ namespace Import.Core.Services
             try
             {
                 SrvcLogger.Info("{work}", $"распаковка архива: {archive.Name}");
+                Importer.EmailBody += $"<p>распаковка архива: <b>{archive.Name}</b></p>";
                 ZipFile.ExtractToDirectory(archive.FullName, tempPath);
 
                 DirectoryInfo di = new DirectoryInfo(tempPath);

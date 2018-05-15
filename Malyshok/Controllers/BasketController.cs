@@ -131,7 +131,7 @@ namespace Disly.Controllers
             Massege = "<p>На сайте оформлен заказ <b>№" + OrderNum.ToString() + "</b>.</p>";
             Massege += "<p>Сведения о заказчике:<br/>";
             Massege += "<b>Имя:</b> <i>"+ BackModel.UserName + "</i>";
-            if (BackModel.UserType) Massege += ", является представителем ЮЛ (ИП) <b><i>" + BackModel.Organization + "</i></b>";
+            if (!BackModel.UserType) Massege += ", является представителем ЮЛ (ИП) <b><i>" + BackModel.Organization + "</i></b>";
             Massege += "<br/><b>Телефон:</b> <i>" + BackModel.Phone + "</i><br>";
             Massege += "<b>E-Mail</b> <i>" + BackModel.Email + "</i><br>";
             if (!BackModel.Delivery) Massege += "<b>Доставка по адресу:</b>  <i>" + BackModel.Address + "</i><br>";
@@ -147,8 +147,7 @@ namespace Disly.Controllers
             Massege += OrderDetail;
 
             Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
-            Letter.MailTo = Settings.mailTo;
-            Letter.Dublicate = "Dmitry@boriskiny.ru";
+            Letter.MailTo = model.SitesInfo.OrderEmail;
             Letter.Text = Massege;
             ErrorText = Letter.SendMail();
             #endregion

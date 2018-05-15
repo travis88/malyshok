@@ -634,8 +634,10 @@ namespace Import.Core
                 string email = db.cms_sitess
                     .Select(s => s.c_tech_email).FirstOrDefault();
 
-                return email.Split('|')
-                    .Select(s => s.Trim()).ToList();
+                return email.Split(';')
+                    .Select(s => s.Trim())
+                    .Where(w => !String.IsNullOrWhiteSpace(w))
+                    .ToList();
             }
             catch (Exception e)
             {

@@ -19,6 +19,7 @@ public class Settings
     public static string OrgDir = ConfigurationManager.AppSettings["OrgDir"];
     public static string SiteMapDir = ConfigurationManager.AppSettings["SiteMapDir"];
     public static string ProdContent = ConfigurationManager.AppSettings["ProdContent"];
+    public static string Certificates = ConfigurationManager.AppSettings["Certificates"];
 
     public static  int ProdListSize = Convert.ToInt32(ReadAppSetting("ProdListSize"));
     public static int NoveltiesDay = Convert.ToInt32(ReadAppSetting("NoveltiesDay"));

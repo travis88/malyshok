@@ -221,5 +221,17 @@ namespace cms.dbase
                     .Delete() > 0;
             }
         }
+
+        /// <summary>
+        /// Удаляет всю продукцию
+        /// </summary>
+        /// <returns></returns>
+        public override bool deleteAllProducts()
+        {
+            using (var db = new CMSdb(_context))
+            {
+                return db.content_productss.Delete() > 0;
+            }
+        }
     }
 }

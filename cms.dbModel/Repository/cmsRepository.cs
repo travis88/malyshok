@@ -172,6 +172,7 @@ namespace cms.dbModel
         public abstract bool updateProduct(ProductModel item);
         public abstract bool insertProduct(ProductModel item);
         public abstract bool deleteProduct(Guid id);
+        public abstract bool deleteAllProducts();
 
         // пользователи
         public abstract UsersList getCustomers(FilterParams filtr);

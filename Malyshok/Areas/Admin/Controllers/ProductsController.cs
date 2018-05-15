@@ -2,6 +2,7 @@
 using Disly.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -273,6 +274,32 @@ namespace Disly.Areas.Admin.Controllers
             model.ErrorInfo = userMessage;
 
             return View(model);
+        }
+
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-all-btn")]
+        public ActionResult DeleteAll()
+        {
+            _cmsRepository.deleteAllProducts();
+
+            DirectoryInfo[] dirsToDrop = {
+                new DirectoryInfo(Server.MapPath(Settings.ProdContent)),
+                new DirectoryInfo(Server.MapPath(Settings.Certificates))
+            };
+
+            foreach (var dirToDrop in dirsToDrop)
+            {
+                foreach (FileInfo file in dirToDrop.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in dirToDrop.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

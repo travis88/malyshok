@@ -1,7 +1,8 @@
 ﻿@model ProdViewModel
 @{ 
     var item = Model.Item;
-    var ProdImg = @item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_preview.jpg") : "";
+    var ProdImg = item.Photo != null ? Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_preview.jpg") : "";
+    var bigImg = Settings.ProdContent + item.Barcode + "/" + item.Photo;
     ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
     var split = "";
 }
@@ -15,7 +16,8 @@
     <div class="page-text">
         <h3>@Html.Raw(item.Title.Replace(",",", "))</h3>
         <div class="prod-preview">
-            <img class="preview-img" src="@ProdImg" />
+            <span class="loop"></span>
+            <a class="image-gallery" title="@Html.Raw(item.Title.Replace(",", ", ")) (@item.Barcode)" href="@bigImg"><img class="preview-img" src="@ProdImg" /></a>
             <div class="prod-gallery"></div>
         </div>
         <div class="prod-desc">

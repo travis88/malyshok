@@ -89,7 +89,7 @@ $(document).ready(function () {
         $('.show_original').swipebox();
         $(".swipebox").swipebox();
     }
-    $('.prod-img .loop').bind({
+    $('.loop').bind({
         click: function () {
             $(this).parent().find('img').trigger('click');
         }
@@ -406,7 +406,7 @@ function certificatesBtn_init() {
                 success: function (data) {
                     for (var i = 0; i < data.Certificates.length; i = i + 1) {
                         var item = data.Certificates[i];
-                        $PanelBody.append('<div class="cert-link" data-link="' + item.value + '">' + item.text + '</div>');
+                        $PanelBody.append('<div class="cert-link" data-link="' + item.value + '"><a target="_blanck" href="/certificates/' + item.text+'.jpg">' + item.text + '</div>');
                     }
 
                     if (data.Certificates.length == 0) {
@@ -426,15 +426,53 @@ function ProdPager_init() {
     $('.prod-list .pagination a').bind({
         click: function () {
             var _Link = $(this).attr('href');
-            if (location.href.indexOf('?') > 0)
-                _Link = location.href.substring(0, location.href.indexOf('?')) + _Link;
-            else
-                _Link = location.href + _Link;
+            
+            if (_Link == '') {
+                if (location.href.indexOf('?') > 0)
+                    _Link = location.href.substring(0, location.href.indexOf('?'));
+                else
+                    _Link = location.href;
 
-            _Link = _Link.replace('catalog', 'prod-list');
+                _Link = _Link.replace('catalog', 'prod-list') + $(this).closest('.pagination').attr('data-base') + 'page=';
 
-            getProdList(_Link);
-            return false;
+                var $PageInput = $("<input name='size' />");
+                $PageInput.bind({
+                    keydown: function (e) {
+                        //alert(e.keyCode);
+                        if ((e.keyCode > 47 & e.keyCode < 59) || (e.keyCode > 95 & e.keyCode < 106) || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 8 || e.keyCode === 46) {
+                            // Цифры, стрелки "Вправо" и "Влево", Кнопки "Удалить"
+                        }
+                        else if (e.keyCode === 13 && $(this).val() > 0) {
+                            // Кнопка "Enter"
+                            _Link = _Link + $(this).val();
+                            
+                            getProdList(_Link);
+                        }
+                        else {
+                            return false;
+                        }
+                    },
+                    blur: function () {
+                        $(this).after("...");
+                        $(this).remove();
+                    }
+                });
+                $(this).empty().append($PageInput);
+                $PageInput.focus();
+                
+                return false;
+            }
+            else {
+                if (location.href.indexOf('?') > 0)
+                    _Link = location.href.substring(0, location.href.indexOf('?')) + _Link;
+                else
+                    _Link = location.href + _Link;
+
+                _Link = _Link.replace('catalog', 'prod-list');
+
+                getProdList(_Link);
+                return false;
+            }
         }
     });
 }

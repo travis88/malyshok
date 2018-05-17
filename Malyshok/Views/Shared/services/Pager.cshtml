@@ -18,7 +18,7 @@
             }
             @if (Model.Length > 1)
             {
-                <ul class="pagination">
+                <ul class="pagination" data-base="@Model[0].url.Replace("page=1","")">
                     @foreach (PagerFront item in Model)
                     {
                         string active = (@item.isChecked) ? "PagerNow active" : "";

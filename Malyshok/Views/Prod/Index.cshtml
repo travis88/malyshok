@@ -34,7 +34,6 @@
                         </select>
                     </div>
                     <div class="">
-                        Показывать: 
                         <select id="available" name="available" class="sort_select">
                             @if (Model.availableParams != null)
                             {
@@ -58,10 +57,7 @@
                     {
                         Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
                     }
-                    foreach (var item in Model.List.Data)
-                    {
-                        @Html.Partial("Prod/ProdItem", item)
-                    }
+                    @Html.Partial("Prod/ProdItem", Model.List.Data)
                 }
                 else
                 {

@@ -904,6 +904,8 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\User\MergeUsers.cshtml" />
     <Content Include="Views\Prod\Novelties.cshtml" />
+    <Content Include="Views\Shared\Prod\ProdItem_Average.cshtml" />
+    <Content Include="Views\Shared\Prod\ProdItem_Small.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

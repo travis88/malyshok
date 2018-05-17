@@ -433,7 +433,7 @@ function ProdPager_init() {
                 else
                     _Link = location.href;
 
-                _Link = _Link.replace('catalog', 'prod-list') + $(this).closest('.pagination').attr('data-base') + 'page=';
+                _Link = _Link.replace('catalog', 'prod-list').replace('Novelties', 'prod-list') + $(this).closest('.pagination').attr('data-base') + 'page=';
 
                 var $PageInput = $("<input name='size' />");
                 $PageInput.bind({
@@ -468,7 +468,7 @@ function ProdPager_init() {
                 else
                     _Link = location.href + _Link;
 
-                _Link = _Link.replace('catalog', 'prod-list');
+                _Link = _Link.replace('catalog', 'prod-list').replace('Novelties', 'prod-list');
 
                 getProdList(_Link);
                 return false;

@@ -171,9 +171,9 @@ namespace Import.Core
 
                 try
                 {
-                    if (_files.Any(a => a.FullName.Contains(".xml")))
+                    if (_files.Any(a => a.Name.Contains(".xml")))
                     {
-                        if (_files.Any(a => a.FullName.Contains(".zip")))
+                        if (_files.Any(a => a.Name.Contains(".zip")))
                         {
                             SetSteps(3);
                         }
@@ -182,7 +182,7 @@ namespace Import.Core
                             SetSteps(1);
                         }
                     }
-                    else if (_files.Any(a => a.FullName.Contains(".zip")))
+                    else if (_files.Any(a => a.Name.Contains(".zip")))
                     {
                         SetSteps(2);
                     }
@@ -209,11 +209,11 @@ namespace Import.Core
                                         Entity = Entity.Catalogs
                                     };
 
-                                    if (file.FullName.StartsWith("cat"))
+                                    if (file.Name.StartsWith("cat"))
                                     {
                                         InsertWithLogging(helper);
                                     }
-                                    else if (file.FullName.StartsWith("prod"))
+                                    else if (file.Name.StartsWith("prod"))
                                     {
                                         foreach (Entity entity in Enum.GetValues(typeof(Entity)))
                                         {
@@ -230,7 +230,7 @@ namespace Import.Core
                                         Finalizer(db);
                                         Step++;
                                     }
-                                    else if (file.FullName.Contains(".zip"))
+                                    else if (file.Name.Contains(".zip"))
                                     {
                                         ImageService imageService = new ImageService(receiverParams);
                                         imageService.Execute(file);

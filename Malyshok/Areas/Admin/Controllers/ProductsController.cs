@@ -64,14 +64,7 @@ namespace Disly.Areas.Admin.Controllers
                     Date = DateTime.Now
                 };
             }
-
-            //if (model.Item.Photo != null && model.Item.Photo != null && !String.IsNullOrEmpty(model.Item.Photo.Url))
-            //{
-            //    var photo = model.Item.Photo;
-            //    model.Item.Photo = Files.getInfoImage(photo);
-            //    model.Item.Photo = photo;
-            //}
-
+            
             return View(model);
         }
 
@@ -176,12 +169,6 @@ namespace Disly.Areas.Admin.Controllers
             }
 
             model.Item = _cmsRepository.getProduct(id);
-            //if (model.Item != null && model.Item.Photo != null && !string.IsNullOrEmpty(model.Item.Photo.Url))
-            //{
-            //    var photo = model.Item.Photo;
-            //    model.Item.Photo = Files.getInfoImage(model.Item.Photo.Url);
-            //    model.Item.Photo.Source = photo.Source;
-            //}
             model.ErrorInfo = userMessage;
 
             return View("Item", model);
@@ -282,22 +269,22 @@ namespace Disly.Areas.Admin.Controllers
         {
             _cmsRepository.deleteAllProducts();
 
-            DirectoryInfo[] dirsToDrop = {
-                new DirectoryInfo(Server.MapPath(Settings.ProdContent)),
-                new DirectoryInfo(Server.MapPath(Settings.Certificates))
-            };
+            //DirectoryInfo[] dirsToDrop = {
+            //    new DirectoryInfo(Server.MapPath(Settings.ProdContent)),
+            //    new DirectoryInfo(Server.MapPath(Settings.Certificates))
+            //};
 
-            foreach (var dirToDrop in dirsToDrop)
-            {
-                foreach (FileInfo file in dirToDrop.GetFiles())
-                {
-                    file.Delete();
-                }
-                foreach (DirectoryInfo dir in dirToDrop.GetDirectories())
-                {
-                    dir.Delete(true);
-                }
-            }
+            //foreach (var dirToDrop in dirsToDrop)
+            //{
+            //    foreach (FileInfo file in dirToDrop.GetFiles())
+            //    {
+            //        file.Delete();
+            //    }
+            //    foreach (DirectoryInfo dir in dirToDrop.GetDirectories())
+            //    {
+            //        dir.Delete(true);
+            //    }
+            //}
 
             return RedirectToAction("Index");
         }

@@ -198,7 +198,6 @@ namespace Import.Core
                                 if (file != null)
                                 {
                                     bool resultEx = false;
-
                                     resultEx = FileProcessing(file, db, receiverParams);
                                     if (!resultEx)
                                     {

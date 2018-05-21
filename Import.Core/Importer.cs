@@ -232,8 +232,15 @@ namespace Import.Core
                                     }
                                     else if (file.Name.Contains(".zip"))
                                     {
-                                        ImageService imageService = new ImageService(receiverParams);
-                                        imageService.Execute(file);
+                                        try
+                                        {
+                                            ImageService imageService = new ImageService(receiverParams);
+                                            imageService.Execute(file);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            SrvcLogger.Error("{error}", e.ToString());
+                                        }
                                     }
                                 }
                             }

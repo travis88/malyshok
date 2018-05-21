@@ -100,14 +100,14 @@ namespace Disly.Areas.Admin.Controllers
                 ViewBag.DataPath = ViewBag.DataPath + model.Item.Path + "/" + model.Item.Alias + "/";
             }
             ViewBag.DataPath = ViewBag.DataPath.Replace("//", "/");
-            var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item?.MenuGroups);
             ViewBag.GroupMenu = mg;
 
             var aviable = (model.MenuTypes != null) ?
                         (model.MenuTypes.Where(p => p.available).Any()) ?
                                     model.MenuTypes.Where(p => p.available).ToArray() : new Catalog_list[] { }
                                         : new Catalog_list[] { };
-            var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            var mgAviable = new MultiSelectList(aviable, "value", "text", model.Item?.MenuGroups);
             ViewBag.GroupMenuAviable = mgAviable;
 
 
@@ -144,8 +144,10 @@ namespace Disly.Areas.Admin.Controllers
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
         public ActionResult Item(Guid id, SiteMapViewModel back_model, HttpPostedFileBase upload)
         {
-            ErrorMessage userMessage = new ErrorMessage();
-            userMessage.title = "Информация";
+            ErrorMessage userMessage = new ErrorMessage
+            {
+                title = "Информация"
+            };
             
             #region Данные необходимые для сохранения
             back_model.Item.Id = id;
@@ -190,7 +192,7 @@ namespace Disly.Areas.Admin.Controllers
                 // хлебные крошки
                 model.BreadCrumbs = _cmsRepository.getSiteMapBreadCrumbs(back_model.Item.ParentId);
                 model.Item.ParentId = back_model.Item.ParentId;
-                var _mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+                var _mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item?.MenuGroups);
                 ViewBag.GroupMenu = _mg;
                 return View("Item", model);
             }
@@ -309,7 +311,7 @@ namespace Disly.Areas.Admin.Controllers
             }
             model.Item = _cmsRepository.getSiteMapItem(id);
 
-            var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item != null ? model.Item.MenuGroups : null);
+            var mg = new MultiSelectList(model.MenuTypes, "value", "text", model.Item?.MenuGroups);
             ViewBag.GroupMenu = mg;
 
             var aviable = (model.MenuTypes != null) ?

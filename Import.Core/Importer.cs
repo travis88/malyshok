@@ -192,57 +192,57 @@ namespace Import.Core
                     {
                         foreach (var file in _files)
                         {
-                            if (file != null)
+                            try
                             {
-                                SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
-                                Log.Insert(0, $"Чтение данных: {file.Name}");
-
-                                using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
+                                if (file != null)
                                 {
-                                    SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
-                                    Log.Insert(0, "Данные прочитаны");
+                                    SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
+                                    Log.Insert(0, $"Чтение данных: {file.Name}");
 
-                                    var helper = new InsertHelper
+                                    using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
                                     {
-                                        FileStream = fileStream,
-                                        Db = db,
-                                        Entity = Entity.Catalogs
-                                    };
+                                        SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
+                                        Log.Insert(0, "Данные прочитаны");
 
-                                    if (file.Name.StartsWith("cat"))
-                                    {
-                                        InsertWithLogging(helper);
-                                    }
-                                    else if (file.Name.StartsWith("prod"))
-                                    {
-                                        foreach (Entity entity in Enum.GetValues(typeof(Entity)))
+                                        var helper = new InsertHelper
                                         {
-                                            if (!entity.Equals(Entity.Catalogs))
-                                            {
-                                                helper.Entity = entity;
-                                                InsertWithLogging(helper);
-                                            }
-                                        }
-                                        Step++;
+                                            FileStream = fileStream,
+                                            Db = db,
+                                            Entity = Entity.Catalogs
+                                        };
 
-                                        SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
-                                        Log.Insert(0, "Перенос данных из буферных таблиц");
-                                        Finalizer(db);
-                                        Step++;
-                                    }
-                                    else if (file.Name.Contains(".zip"))
-                                    {
-                                        try
+                                        if (file.Name.StartsWith("cat"))
+                                        {
+                                            InsertWithLogging(helper);
+                                        }
+                                        else if (file.Name.StartsWith("prod"))
+                                        {
+                                            foreach (Entity entity in Enum.GetValues(typeof(Entity)))
+                                            {
+                                                if (!entity.Equals(Entity.Catalogs))
+                                                {
+                                                    helper.Entity = entity;
+                                                    InsertWithLogging(helper);
+                                                }
+                                            }
+                                            Step++;
+
+                                            SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
+                                            Log.Insert(0, "Перенос данных из буферных таблиц");
+                                            Finalizer(db);
+                                            Step++;
+                                        }
+                                        else if (file.Name.Contains(".zip"))
                                         {
                                             ImageService imageService = new ImageService(receiverParams);
                                             imageService.Execute(file);
                                         }
-                                        catch (Exception e)
-                                        {
-                                            SrvcLogger.Error("{error}", e.ToString());
-                                        }
                                     }
                                 }
+                            }
+                            catch (Exception e)
+                            {
+                                SrvcLogger.Error("{error}", e.ToString());
                             }
                         }
 

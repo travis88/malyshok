@@ -886,20 +886,7 @@ namespace Import.Core
                 SrvcLogger.Error("{work}", e.ToString());
             }
         }
-
-        /// <summary>
-        /// Продукция для обратной совместимости с 1с
-        /// </summary>
-        [DataContract]
-        private class ProductExport
-        {
-            /// <summary>
-            /// Идентификатор
-            /// </summary>
-            [DataMember]
-            public string Code { get; set; }
-        }
-
+        
         /// <summary>
         /// Сохраняем backup файлов
         /// </summary>
@@ -928,6 +915,19 @@ namespace Import.Core
             {
                 file.CopyTo($"{backupPath}{file.Name}");
             }
+        }
+
+        /// <summary>
+        /// Продукция для обратной совместимости с 1с
+        /// </summary>
+        [DataContract]
+        private class ProductExport
+        {
+            /// <summary>
+            /// Идентификатор
+            /// </summary>
+            [DataMember]
+            public string Code { get; set; }
         }
     }
 }

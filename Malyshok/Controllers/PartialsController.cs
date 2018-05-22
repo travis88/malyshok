@@ -105,6 +105,7 @@ namespace Disly.Controllers
             int DaysCount = (-1) * Settings.NoveltiesDay;
             Random rnd = new Random();
             var filter = getFilter();
+            filter.SearchText = String.Empty;
             filter.Date =  DateTime.Now.AddDays(DaysCount);
             filter.Size = 100;
             var List = _repository.getProdList(filter);

@@ -473,6 +473,23 @@ a .new-prod-title {
     .type-page .breadcrumb a:hover {
         color: #65acda;
     }
+
+.child_sitemap {
+    overflow: auto;
+    box-shadow: 0 0 10px #dadada;
+    padding: 15px 40px;
+    margin-bottom: 15px;
+}
+.child_sitemap_link {
+    float: left;
+    width: 46%;
+    margin: 5px 0;
+}
+    .child_sitemap_link:before {
+        content: "—";
+        display: inline-block;
+    }
+
 .body_block h1 {
     font-size: 44px;
     font-family: 'Times New Roman';
@@ -721,6 +738,15 @@ a .new-prod-title {
     min-width: 400px;
 }
 /* //-- Страница.Prod */
+
+/* Страница.Contacts */
+#map {
+    background: #dadada;
+    border: solid 1px #cccccc;
+    margin: 10px 0;
+    height: 470px;
+}
+/* //-- Страница.Contacts */
 
 /* Блоки.Продукция */
 .item_prod {

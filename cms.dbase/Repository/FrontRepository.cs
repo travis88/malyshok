@@ -1175,7 +1175,7 @@ namespace cms.dbase
                         Id = s.id,
                         Date = s.d_date,
                         Product = new ProductModel {
-                            Id = (Guid)s.f_prod_id,
+                            Id = s.f_prod_id==null? Guid.Empty : (Guid)s.f_prod_id,
                             Title =s.c_caption,
                             Barcode = s.c_barcode,
                             Code = s.c_code,
@@ -1385,7 +1385,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 return db.content_order_detailss
-                    .Where(w => w.f_order.Equals(OrderId))
+                    .Where(w => w.f_order.Equals(OrderId) && w.f_prod_id != null)
                     .OrderByDescending(o => o.d_date)
                     .Select(s => new ProductModel
                     {
@@ -1401,6 +1401,26 @@ namespace cms.dbase
             }
         }
 
+        //public override ProductModel[] getBasketItems(Guid OrderId)
+        //{
+        //    using (var db = new CMSdb(_context))
+        //    {
+        //        return db.content_order_detailss
+        //            .Where(w => w.f_order.Equals(OrderId) && w.f_prod_id != null)
+        //            .OrderByDescending(o => o.d_date)
+        //            .Select(s => new ProductModel
+        //            {
+        //                Id = s.contentorderdetailscontentproducts.id,
+        //                Title = s.contentorderdetailscontentproducts.c_title,
+        //                Code = s.contentorderdetailscontentproducts.c_code,
+        //                Barcode = s.contentorderdetailscontentproducts.c_barcode,
+        //                Price = (decimal)s.contentorderdetailscontentproducts.m_price,
+        //                Standart = s.contentorderdetailscontentproducts.c_standart,
+        //                Count = s.n_count,
+        //                Photo = s.c_photo
+        //            }).ToArray();
+        //    }
+        //}
 
         public override Catalog_list[] getfiltrParams(string type)
         {

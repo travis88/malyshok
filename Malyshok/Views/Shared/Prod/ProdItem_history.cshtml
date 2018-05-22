@@ -1,27 +1,43 @@
-﻿@model ProductModel
+﻿@model OrderDetails[]
 
-@{
-    var ProdImg = Model.Photo != null ? Settings.ProdContent + Model.Barcode + "/" + Model.Photo.Replace(".jpg", "_mini.jpg") : "";
-    var bigImg = Settings.ProdContent + Model.Barcode + "/" + Model.Photo;
-    ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        var ProdImg = item.Product.Photo != null ? Settings.ProdContent + item.Product.Barcode + "/" + item.Product.Photo.Replace(".jpg", "_mini.jpg") : "";
+        var bigImg = Settings.ProdContent + item.Product.Barcode + "/" + item.Product.Photo;
+        ProdImg = File.Exists(Server.MapPath(ProdImg)) ? ProdImg : "";
+
+        var prodLink = item.Product.Id != Guid.Empty ? "/prod/" + item.Product.Id + "/" : String.Empty;
+
+        <div class="order-details_item shadow-block">
+            <div class="basket-img">
+                @if (!String.IsNullOrEmpty(ProdImg))
+                {
+                    <span class="loop"></span>
+                    <a class="image-gallery" title="@Html.Raw(item.Product.Title.Replace(",", ", ")) (@item.Product.Barcode)" href="@bigImg"><img src="@ProdImg" /></a>
+                }
+            </div>
+            <div class="item-info">
+                <div class="title">
+                    @if (String.IsNullOrEmpty(prodLink))
+                    {
+                        @Html.Raw(item.Product.Title)
+                    }
+                    else
+                    {
+                        <a href="@prodLink">@Html.Raw(item.Product.Title)</a>
+                    }
+                </div>
+                <div style="display: inline-block; width:40%">
+                    <div><span>Код:</span> @item.Product.Code</div>
+                    <div><span>Штрих-код:</span> @item.Product.Barcode</div>
+                </div>
+                <div style="display: inline-block; width:40%">
+                    <div><span>Количество:</span> @item.Product.Count</div>
+                    <div class="price"><span>ЦЕНА:</span><b> @item.Product.Price.ToString("# ###.00#")</b> руб.</div>
+                </div>
+            </div>
+        </div>
+    }
 }
-<div class="order-details_item shadow-block">
-    <div class="basket-img">
-        @if (!String.IsNullOrEmpty(ProdImg))
-        {
-            <span class="loop"></span>
-            <a class="image-gallery" title="@Html.Raw(Model.Title.Replace(",", ", ")) (@Model.Barcode)" href="@bigImg"><img src="@ProdImg" /></a>
-        }
-    </div>
-    <div class="item-info">
-        <div class="title"><a href="/prod/@Model.Id/">@Html.Raw(Model.Title)</a></div>
-        <div style="display: inline-block; width:40%">
-            <div><span>Код:</span> @Model.Code</div>
-            <div><span>Штрих-код:</span> @Model.Barcode</div>
-        </div>
-        <div style="display: inline-block; width:40%">
-            <div><span>Количество:</span> @Model.Count</div>
-            <div class="price"><span>ЦЕНА:</span><b> @Model.Price.ToString("# ###.00#")</b> руб.</div>
-        </div>
-    </div>
-</div>

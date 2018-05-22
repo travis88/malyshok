@@ -90,6 +90,15 @@
         margin-left: 2%;
     }
     /* //-- Страница.Default */
+    
+    /* Страница.Page */
+    .child_sitemap_link {
+        float: none;
+        width: auto;
+        margin: 5px 0;
+    }
+    /* //-- Страница.Page */
+
 
     /* Страница.Prod */
     .prod-preview {
@@ -577,6 +586,18 @@
         display: block;
     }
     /* //-- Страница.Default */
+    
+    /* Страница.Page */
+    .child_sitemap {
+        padding: 5px 10px;
+    }
+    .child_sitemap_link {
+        float: none;
+        width: auto;
+        margin: 5px 0;
+        font-size: 14px;
+    }
+    /* //-- Страница.Page */
 
     /* Страница.Prod */
     .prod-preview {

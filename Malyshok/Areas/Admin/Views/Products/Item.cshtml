@@ -26,6 +26,28 @@
                     @Html.TextAreaFor(m => m.Item.Description, new { type = "editor", title = "Описание", height = "300", data_dir = ViewBag.DataPath })
                 </div>
             </div>
+
+            @if (Model.Item.Certificates != null && Model.Item.Certificates.Count() > 0)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Гигиеничность</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cer in Model.Item.Certificates)
+                        {
+                            string higienic = cer.IsHygienic ? "Да" : "Нет";
+                            <tr>
+                                <td>@cer.Title</td>
+                                <td>@higienic</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
 
         <div class="dop_info-block">
@@ -34,7 +56,7 @@
                 <img src="@fileUrl" title="@Model.Item.Title" />
             </div>
             @Html.TextBoxFor(m => m.Item.Date, new { required = "", data_type = "datetime", title = "Дата", value = ViewBag.Date })
-            @Html.TextBoxFor(m => m.Item.Standart, new { required = "", type = "text", maxlength = "128", title = "Стандарт" })
+            @*@Html.TextBoxFor(m => m.Item.Standart, new { required = "", type = "text", maxlength = "128", title = "Стандарт" })*@
             @Html.TextBoxFor(m => m.Item.Code, new { required = "", type = "text", maxlength = "128", title = "Код" })
             @Html.TextBoxFor(m => m.Item.Barcode, new { required = "", type = "text", maxlength = "128", title = "Штрих-код" })
             @Html.TextBoxFor(m => m.Item.Count, new { required = "", type = "number", maxlength = "128", title = "Кол-во" })
@@ -44,12 +66,12 @@
                 <label for="itemGroups-select">Категории продукции:</label>
                 <select name="Item.Categories" id="itemGroups-select" class="form-control select2" multiple>
                     @if (Model.Item != null)
-            {
-                foreach (var category in Model.Categories)
-                {
-                    <option value="@category.Id" @(Model.Item != null && Model.Item.Categories != null && Model.Item.Categories.Any(s => s.Id.Equals(category.Id)) ? "selected" : null)>@category.Title</option>
-        }
-    }
+                    {
+                        foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.Id" @(Model.Item != null && Model.Item.Categories != null && Model.Item.Categories.Any(s => s.Id.Equals(category.Id)) ? "selected" : null)>@category.Title</option>
+                        }
+                    }
                 </select>
             </div>
             <div class="group-block open topIndent-20" title="Мета теги">

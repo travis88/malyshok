@@ -42,6 +42,7 @@
                         <span>Код: </span>@item.Code<br />
                         <span>Штрих-код: </span>@item.Barcode<br />
                         <span>Категории: </span>@String.Join(", ", item.Categories.Select(s => s.Title))<br />
+                        <span>Кол-во сертификатов: </span>@item.Certificates.Count()
                     </div>
                 </div>
             }

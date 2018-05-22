@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 
 namespace Import.Core.Services
 {
@@ -105,7 +106,7 @@ namespace Import.Core.Services
             {
                 SrvcLogger.Info("{work}", $"распаковка архива: {archive.Name}");
                 Importer.EmailBody += $"<p>распаковка архива: <b>{archive.Name}</b></p>";
-                ZipFile.ExtractToDirectory(archive.FullName, tempPath);
+                ZipFile.ExtractToDirectory(archive.FullName, tempPath, Encoding.UTF8);
 
                 DirectoryInfo di = new DirectoryInfo(tempPath);
                 if (di != null)

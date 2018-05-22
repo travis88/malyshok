@@ -155,6 +155,7 @@ namespace Import.Core
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             Preparing();
+            BackUpFiles(files, receiverParams);
 
             if (files != null && files.Any(a => a != null))
             {
@@ -883,6 +884,36 @@ namespace Import.Core
             catch (Exception e)
             {
                 SrvcLogger.Error("{work}", e.ToString());
+            }
+        }
+        
+        /// <summary>
+        /// Сохраняем backup файлов
+        /// </summary>
+        /// <param name="files"></param>
+        private static void BackUpFiles(FileInfo[] files, ReceiverParamsHelper receiverParams)
+        {
+            string backupPath = $@"{receiverParams.DirName}backup\";
+            DirectoryInfo dir = new DirectoryInfo(backupPath);
+            if (!dir.Exists)
+            {
+                Directory.CreateDirectory(backupPath);
+            }
+            else
+            {
+                var filesToDrop = dir.GetFiles();
+                if (filesToDrop != null)
+                {
+                    foreach (var file in filesToDrop)
+                    {
+                        file.Delete();
+                    }
+                }
+            }
+
+            foreach (var file in files)
+            {
+                file.CopyTo($"{backupPath}{file.Name}");
             }
         }
 

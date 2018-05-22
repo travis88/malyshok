@@ -20,7 +20,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                IQueryable<content_products> query = db.content_productss;
+                var query = db.content_productss.AsQueryable();
 
                 if (!String.IsNullOrWhiteSpace(filter.Category))
                 {
@@ -29,6 +29,29 @@ namespace cms.dbase
                                         .Any(a => a.contentproductcategorieslinkscontentcategories1.id
                                                 .Equals(Guid.Parse(filter.Category))));
                 }
+                if (!String.IsNullOrWhiteSpace(filter.SearchText))
+                {
+                    string[] search = filter.SearchText.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (search != null && search.Count() > 0)
+                    {
+                        foreach (string p in filter.SearchText.Split(' '))
+                        {
+                            if (!String.IsNullOrWhiteSpace(p))
+                            {
+                                query = query.Where(w => w.c_title.Contains(p));
+                            }
+                        }
+                    }
+                }
+                if (filter.Date.HasValue)
+                {
+                    query = query.Where(w => w.d_date >= filter.Date.Value);
+                }
+                if (filter.DateEnd.HasValue)
+                {
+                    query = query.Where(w => w.d_date <= filter.DateEnd.Value);
+                }
+
                 int itemCount = query.Count();
 
                 var list = query

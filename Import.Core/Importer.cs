@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace Import.Core
@@ -192,50 +193,22 @@ namespace Import.Core
                     {
                         foreach (var file in _files)
                         {
-                            if (file != null)
+                            try
                             {
-                                SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
-                                Log.Insert(0, $"Чтение данных: {file.Name}");
-
-                                using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
+                                if (file != null)
                                 {
-                                    SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
-                                    Log.Insert(0, "Данные прочитаны");
-
-                                    var helper = new InsertHelper
+                                    bool resultEx = false;
+                                    resultEx = FileProcessing(file, db, receiverParams);
+                                    if (!resultEx)
                                     {
-                                        FileStream = fileStream,
-                                        Db = db,
-                                        Entity = Entity.Catalogs
-                                    };
-
-                                    if (file.Name.StartsWith("cat"))
-                                    {
-                                        InsertWithLogging(helper);
-                                    }
-                                    else if (file.Name.StartsWith("prod"))
-                                    {
-                                        foreach (Entity entity in Enum.GetValues(typeof(Entity)))
-                                        {
-                                            if (!entity.Equals(Entity.Catalogs))
-                                            {
-                                                helper.Entity = entity;
-                                                InsertWithLogging(helper);
-                                            }
-                                        }
-                                        Step++;
-
-                                        SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
-                                        Log.Insert(0, "Перенос данных из буферных таблиц");
-                                        Finalizer(db);
-                                        Step++;
-                                    }
-                                    else if (file.Name.Contains(".zip"))
-                                    {
-                                        ImageService imageService = new ImageService(receiverParams);
-                                        imageService.Execute(file);
+                                        Thread.Sleep(1000 * 60 * 5);
+                                        FileProcessing(file, db, receiverParams);
                                     }
                                 }
+                            }
+                            catch (Exception e)
+                            {
+                                SrvcLogger.Error("{error}", e.ToString());
                             }
                         }
 
@@ -292,6 +265,65 @@ namespace Import.Core
             catch (Exception e)
             {
                 SrvcLogger.Error("{error}", e.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Работа с файлами импорта
+        /// </summary>
+        /// <param name="file"></param>
+        private static bool FileProcessing(FileInfo file, dbModel db, ReceiverParamsHelper receiverParams)
+        {
+            try
+            {
+                SrvcLogger.Info("{preparing}", $"импорт данных из: '{file.Name}'");
+                Log.Insert(0, $"Чтение данных: {file.Name}");
+
+                using (FileStream fileStream = new FileStream(file.FullName, FileMode.Open))
+                {
+                    SrvcLogger.Info("{preparing}", $"данные прочитаны из файла: {file.Name}");
+                    Log.Insert(0, "Данные прочитаны");
+
+                    var helper = new InsertHelper
+                    {
+                        FileStream = fileStream,
+                        Db = db,
+                        Entity = Entity.Catalogs
+                    };
+
+                    if (file.Name.StartsWith("cat"))
+                    {
+                        InsertWithLogging(helper);
+                    }
+                    else if (file.Name.StartsWith("prod"))
+                    {
+                        foreach (Entity entity in Enum.GetValues(typeof(Entity)))
+                        {
+                            if (!entity.Equals(Entity.Catalogs))
+                            {
+                                helper.Entity = entity;
+                                InsertWithLogging(helper);
+                            }
+                        }
+                        Step++;
+
+                        SrvcLogger.Info("{work}", "перенос данных из буферных таблиц");
+                        Log.Insert(0, "Перенос данных из буферных таблиц");
+                        Finalizer(db);
+                        Step++;
+                    }
+                    else if (file.Name.Contains(".zip"))
+                    {
+                        ImageService imageService = new ImageService(receiverParams);
+                        imageService.Execute(file);
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                SrvcLogger.Error("{error}", e.ToString());
+                return false;
             }
         }
 

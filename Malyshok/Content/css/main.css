@@ -751,7 +751,7 @@ a .new-prod-title {
 /* Блоки.Продукция */
 .item_prod {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     min-height: 230px;
 }
 .mobile-prod_title {
@@ -796,14 +796,14 @@ a .new-prod-title {
     overflow: hidden;
 }
 .item_prod .prod-title {
-    font-size: 19px;
+    font-size: 18px;
     margin-bottom: 10px;
 }
 .type-page .prod-title a {
     color: #4d4d4d;
 }
 .prod-catalog-link {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     overflow: hidden;
 }
     .prod-catalog-link::after {
@@ -1433,6 +1433,82 @@ a.btn-red {
         overflow: auto;
     }
 /* //-- Подвал */
+
+/* фотогаллерея */
+.gallery__list {
+    display: inline-block;
+}
+
+iframe.photo-gallery {
+    display: none;
+}
+
+.swip_wr {
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+
+    .swip_wr a {
+        background: 50% 50% no-repeat;
+        background-size: cover;
+        display: block;
+        width: 130px;
+        height: 130px;
+    }
+
+#swipebox-original {
+    display: block;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 50%;
+    margin-left: -25px;
+    top: 14px;
+    z-index: 999;
+}
+
+    #swipebox-original:before {
+        font-family: fontello;
+        content: '\ea6d';
+        color: #fff;
+        font-size: 21px;
+        position: relative;
+        left: 14px;
+    }
+
+
+.structur_phons {
+    padding: 10px 0 20px;
+}
+
+.vacnacy-list {
+    margin: 30px 0 0;
+}
+
+.vacnacy_item {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 0 0 20px;
+    margin: 0 0 20px;
+}
+
+.vacnacy_item_date {
+    font-size: 12px;
+    color: #999;
+}
+
+.vacancy-single-desc {
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.gs-background {
+    margin: 0 auto;
+    background-color: #003399;
+    display: inline-block;
+    padding: 1px;
+}
+
 
 /* ----------- Элементы формы ----------- */
 .body_block input:not([type=checkbox]),

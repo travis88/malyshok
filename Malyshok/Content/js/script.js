@@ -501,3 +501,8 @@ function imagePreview_init() {
         }
     });
 }
+
+//
+function PhGall() {
+    $(".swipebox").swipebox();
+}

@@ -20,7 +20,6 @@
     <script src="/Content/plugins/jquery/jquery.js"></script>
     <script src="/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="/Content/plugins/jquery/jquery.ui.js"></script>
-    <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>
 </head>
 
 <body>
@@ -65,13 +64,13 @@
             <a class="catalog-btn" href="/catalog/">Каталог</a>
             <div class="login-block">
                 @if (Model.UserInfo == null)
-        {
-            <a href="/user/login">Вход</a><a class="hidden-sm">/</a><a class="hidden-sm" href="/user/reg">Регистрация</a>
-}
-else
-{
-        <a href="/user/" class="hidden-sm">@Model.UserInfo.FIO</a><a class="hidden-sm">/</a><a href="/user/logout">Выход</a>
-}
+                {
+                    <a href="/user/login">Вход</a><a class="hidden-sm">/</a><a class="hidden-sm" href="/user/reg">Регистрация</a>
+                }
+                else
+                {
+                    <a href="/user/" class="hidden-sm">@Model.UserInfo.FIO</a><a class="hidden-sm">/</a><a href="/user/logout">Выход</a>
+                }
             </div>
             @{ Html.RenderAction("AdminMenu", "Partials"); }
         </div>
@@ -85,13 +84,13 @@ else
     </div>
     <div class="body_block">
         <div class="container">
-                <div class="body-right">
-                    @{ Html.RenderAction("Catalog", "Partials"); }
-                    @{ Html.RenderAction("Novelties", "Partials", new { Count = 4 }); }
-                </div>
-                <div class="body-content">
-                    @RenderBody()
-                </div>
+            <div class="body-right">
+                @{ Html.RenderAction("Catalog", "Partials"); }
+                @{ Html.RenderAction("Novelties", "Partials", new { Count = 4 }); }
+            </div>
+            <div class="body-content">
+                @RenderBody()
+            </div>
         </div>
     </div>
     <div class="footer">
@@ -146,6 +145,7 @@ else
     @Html.Raw(Model.SitesInfo.Scripts)
 
     @RenderSection("scripts", false)
+    <script src="/Content/plugins/mobileGallery/js/jquery.swipebox.js"></script>
     <script src="/Content/js/script.js"></script>
 </body>
 

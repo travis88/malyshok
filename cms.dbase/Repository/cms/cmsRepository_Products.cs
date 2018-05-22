@@ -38,7 +38,9 @@ namespace cms.dbase
                         {
                             if (!String.IsNullOrWhiteSpace(p))
                             {
-                                query = query.Where(w => w.c_title.Contains(p));
+                                query = query.Where(w => w.c_title.Contains(p)
+                                                        || w.c_barcode.Contains(p)
+                                                        || w.c_code.Contains(p));
                             }
                         }
                     }
@@ -71,6 +73,11 @@ namespace cms.dbase
                             {
                                 Id = d.contentproductcategorieslinkscontentcategories1.id,
                                 Title = d.contentproductcategorieslinkscontentcategories1.c_title
+                            }).ToArray(),
+                        Certificates = s.contentcertificatescontentproductss
+                            .Select(c => new CertificateModel
+                            {
+                                Id = c.id
                             }).ToArray()
                     }).ToArray();
 
@@ -124,6 +131,13 @@ namespace cms.dbase
                             {
                                 Id = d.contentproductcategorieslinkscontentcategories1.id,
                                 Title = d.contentproductcategorieslinkscontentcategories1.c_title
+                            }).ToArray(),
+                        Certificates = s.contentcertificatescontentproductss
+                            .Select(c => new CertificateModel
+                            {
+                                Id = c.id,
+                                Title = c.c_title,
+                                IsHygienic = c.b_hygienic
                             }).ToArray()
                     }).SingleOrDefault();
             }

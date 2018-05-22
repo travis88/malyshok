@@ -77,9 +77,14 @@ namespace cms.dbModel.entity
         public CategoryModel[] Categories { get; set; }
 
         /// <summary>
-        /// 
+        /// Кол-во в корзине
         /// </summary>
         public int inBasket { get; set; }
+
+        /// <summary>
+        /// Сертификаты
+        /// </summary>
+        public CertificateModel[] Certificates { get; set; }
     }
 
     /// <summary>

@@ -13,10 +13,7 @@
             if (Model.List.Data.Any())
             {
                 Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
-                foreach (var item in Model.List.Data)
-                {
-                    @Html.Partial("Prod/ProdItem", item)
-                }
+                @Html.Partial("Prod/ProdItem", Model.List.Data)
             }
             Html.RenderAction("Pager", "Service", new { @Model = Model.List.Pager });
         }

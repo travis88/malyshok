@@ -182,7 +182,7 @@ namespace cms.dbase
                         .Set(s => s.n_count, item.Count)
                         .Set(s => s.c_photo, item.Photo)
                         .Set(s => s.d_date, item.Date)
-                        .Set(s => s.c_standart, item.Standart)
+                        //.Set(s => s.c_standart, item.Standart)
                         .Set(s => s.m_price, item.Price)
                         .Update() > 0;
 
@@ -218,7 +218,7 @@ namespace cms.dbase
                         .Value(v => v.n_count, item.Count)
                         .Value(v => v.m_price, item.Price)
                         .Value(v => v.d_date, item.Date)
-                        .Value(v => v.c_standart, item.Standart)
+                        //.Value(v => v.c_standart, item.Standart)
                         .Insert() > 0;
 
                     dbUpdateProductCategories(db, item.Id, item.Categories.Select(s => s.Id).ToArray());

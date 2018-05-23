@@ -5,8 +5,8 @@
     {
         <div class="content">
             <h1>Заказ №@Model.Item.Num от @Model.Item.Date.ToString("dd.MM.yyyy")</h1>
-            @Html.TextAreaFor(m => m.Item.UserComment, new { type = "text", title = "Комментарий Пользователя", @readonly="readonly" })
             @Html.TextAreaFor(m => m.Item.AdminComment, new { type = "text", title = "Комментарий Администратора" })
+            @Html.TextAreaFor(m => m.Item.UserComment, new { type = "text", title = "Комментарий Пользователя", @readonly="readonly" })
             <br />
             <div class="form-group">
                 <div class="row">

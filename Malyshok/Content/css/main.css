@@ -737,8 +737,12 @@ a .new-prod-title {
     top: 50px;
     min-width: 400px;
 }
-/* //-- Страница.Prod */
+.cert-title {
+    margin: 10px 0 0;
+    font-weight: bold;
+}
 
+/* //-- Страница.Prod */
 /* Страница.Contacts */
 #map {
     background: #dadada;

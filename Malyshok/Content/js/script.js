@@ -404,13 +404,26 @@ function certificatesBtn_init() {
                     $PanelBody.append('<div>Нет данных о сертификатах</div>');
                 },
                 success: function (data) {
-                    for (var i = 0; i < data.Certificates.length; i = i + 1) {
-                        var item = data.Certificates[i];
-                        $PanelBody.append('<div class="cert-link" data-link="' + item.value + '"><a target="_blanck" href="/certificates/' + item.text+'.jpg">' + item.text + '</div>');
-                    }
+                    var hygienic = 'no';
 
                     if (data.Certificates.length == 0) {
                         $PanelBody.append('<div>Нет данных о сертификатах</div>');
+                    }
+
+                    for (var i = 0; i < data.Certificates.length; i = i + 1) {
+                        var item = data.Certificates[i];
+                        var cert_name = item.text;
+
+                        if (hygienic != item.available) {
+                            hygienic = item.available;
+
+                            if (item.available == true)
+                                $PanelBody.append('<div class="cert-title">Гигиенические сертификаты</div>');
+                            else 
+                                $PanelBody.append('<div class="cert-title">Сертификаты</div>');
+                        }
+
+                        $PanelBody.append('<div class="cert-link"><a target="_blanck" href="/certificates/' + cert_name + '.jpg">' + cert_name + '</div>');
                     }
                 }
             });

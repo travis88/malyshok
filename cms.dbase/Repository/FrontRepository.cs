@@ -827,6 +827,7 @@ namespace cms.dbase
             {
                 return db.content_certificatess
                     .Where(w => w.f_product == ProdId)
+                    .OrderBy(o => o.b_hygienic)
                     .Select(s => new Catalog_list
                     {
                         text = s.c_title,

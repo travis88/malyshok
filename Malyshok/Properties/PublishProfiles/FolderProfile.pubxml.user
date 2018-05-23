@@ -64,7 +64,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/23/2018 06:35:19</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Item.cshtml">
-      <publishTime>03/23/2018 06:35:19</publishTime>
+      <publishTime>05/23/2018 07:58:45</publishTime>
     </File>
     <File Include="Areas/Admin/Views/Materials/Orgs.cshtml">
       <publishTime>03/23/2018 06:35:19</publishTime>

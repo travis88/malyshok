@@ -13,11 +13,11 @@
                 <div class="col-lg-7">@Html.TextBoxFor(m => m.Item.Title, new { required = "", type = "text", maxlength = "128", title = "Заголовок" })</div>
                 <div class="col-lg-5">@Html.TextBoxFor(m => m.Item.Alias, new { type = "text", title = "Название страницы", placeholder = "news-name", MaxLength = "128", data_help = "описание" })</div>
             </div>
-            <div class="row">
+            @*<div class="row">
                 <div class="col-lg-12">
                    @Html.TextBoxFor(m => m.Item.PreviewImage.Url, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", data_help = "Размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3", accept = ".jpg,.jpeg,.png,.gif" })
                 </div>
-            </div>
+            </div>*@
             <div class="row">
                 <div class="col-lg-12">
                     @Html.TextBoxFor(m => m.Item.PreviewImage.Source, new { type = "text", title = "Источник фото/картинки", placeholder = "Фото с сайта www.shutterstock.com", MaxLength = "128" })
@@ -28,14 +28,14 @@
                     @Html.TextAreaFor(m => m.Item.Text, new { type = "editor", title = "Текст", height = "300",data_dir= ViewBag.DataPath })
                 </div>
             </div>
-            <div class="row">
+            @*<div class="row">
                 <div class="col-lg-5">
                     @Html.TextBoxFor(m => m.Item.UrlName, new { type = "text", title = "Название первоисточника" })
                 </div>
                 <div class="col-lg-offset-1 col-lg-6">
                     @Html.TextBoxFor(m => m.Item.Url, new { type = "text", title = "Ссылка на первоисточник", placeholder = "http://", MaxLength = "128" })
                 </div>
-            </div>
+            </div>*@
         </div>
 
         <div class="dop_info-block">

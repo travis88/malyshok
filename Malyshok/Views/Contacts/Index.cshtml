@@ -59,11 +59,11 @@
                     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;load=package.full" type="text/javascript"></script>
                     <script>
                         ymaps.ready(function () {
+                            var _x = @Model.SitesInfo.CoordX.ToString().Replace(",", ".");
+                            var _y = @Model.SitesInfo.CoordY.ToString().Replace(",", ".");
 
-                            var _x = '47.253872';
-                            var _y = '56.099285';
                             var myMap = new ymaps.Map("map", {
-                                center: [_y, _x],
+                                center: [_x,_y],
                                 zoom: 16,
                                 controls: ["geolocationControl"]
                             });
@@ -72,7 +72,7 @@
                             myMap.controls.add('zoomControl', { size: "small", top: 35 });
                             myMap.behaviors.disable('scrollZoom');
 
-                            var myPlacemark = new ymaps.Placemark([_y, _x]);
+                            var myPlacemark = new ymaps.Placemark([_x, _y]);
 
                             myMap.geoObjects.add(myPlacemark);
                         });

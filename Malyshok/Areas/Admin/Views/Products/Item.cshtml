@@ -18,11 +18,6 @@
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    @*@Html.TextBoxFor(m => m.Item.Photo, new { type = "file", data_posted_name = "upload", data_url = fileUrl, title = "Картинка для предпросмотра", data_help = "Размер фотографии должен быть не менне 400 точек по ширине и пропорции картинки - 4х3", accept = ".jpg,.jpeg,.png,.gif" })*@
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
                     @Html.TextAreaFor(m => m.Item.Description, new { type = "editor", title = "Описание", height = "300", data_dir = ViewBag.DataPath })
                 </div>
             </div>
@@ -57,7 +52,6 @@
                 <img src="@fileUrl" title="@Model.Item.Title" />
             </div>
             @Html.TextBoxFor(m => m.Item.Date, new { required = "", data_type = "datetime", title = "Дата", value = ViewBag.Date })
-            @*@Html.TextBoxFor(m => m.Item.Standart, new { required = "", type = "text", maxlength = "128", title = "Стандарт" })*@
             @Html.TextBoxFor(m => m.Item.Code, new { required = "", type = "text", maxlength = "128", title = "Код" })
             @Html.TextBoxFor(m => m.Item.Barcode, new { required = "", type = "text", maxlength = "128", title = "Штрих-код" })
             @Html.TextBoxFor(m => m.Item.Count, new { required = "", type = "number", maxlength = "128", title = "Кол-во" })
@@ -65,7 +59,7 @@
 
             <div class="form-group">
                 <label for="itemGroups-select">Категории продукции:</label>
-                <select name="Item.Categories" id="itemGroups-select" class="form-control select2" multiple>
+                <select name="Item.CategoriesIds" id="itemGroups-select" class="form-control select2" multiple>
                     @if (Model.Item != null)
                     {
                         foreach (var category in Model.Categories)

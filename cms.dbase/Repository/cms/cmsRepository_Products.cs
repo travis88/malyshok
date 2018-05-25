@@ -200,7 +200,7 @@ namespace cms.dbase
                         .Set(s => s.m_price, item.Price)
                         .Update() > 0;
 
-                    dbUpdateProductCategories(db, item.Id, item.Categories.Select(s => s.Id).ToArray());
+                    dbUpdateProductCategories(db, item.Id, item.CategoriesIds);
 
                     tr.Commit();
 

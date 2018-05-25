@@ -168,7 +168,7 @@ namespace Disly.Areas.Admin.Controllers
         public ActionResult GroupClaims(string id)
         {
             GroupModel model = _cmsRepository.getGroup(id);
-
+            ViewBag.Group = id;
             return PartialView("GroupClaims", model);
         }
 
@@ -217,9 +217,9 @@ namespace Disly.Areas.Admin.Controllers
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "delete-group-btn")]
-        public ActionResult DeleteGroup(string id)
+        public ActionResult DeleteGroup(string group)
         {
-            var res = _cmsRepository.deleteGroup(id);
+            var res = _cmsRepository.deleteGroup(group);
             if (res)
                 return PartialView("Modal/Success");
 

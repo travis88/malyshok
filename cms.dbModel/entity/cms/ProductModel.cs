@@ -85,6 +85,11 @@ namespace cms.dbModel.entity
         /// Сертификаты
         /// </summary>
         public CertificateModel[] Certificates { get; set; }
+
+        /// <summary>
+        /// Идентификаторы категорий
+        /// </summary>
+        public Guid[] CategoriesIds { get; set; }
     }
 
     /// <summary>

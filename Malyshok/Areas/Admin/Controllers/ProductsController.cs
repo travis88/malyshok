@@ -71,7 +71,7 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "save-btn")]
-        public ActionResult Save(Guid id, ProductViewModel bindData, HttpPostedFileBase upload)
+        public ActionResult Save(Guid id, ProductViewModel bindData)
         {
             ErrorMessage userMessage = new ErrorMessage()
             {
@@ -87,44 +87,37 @@ namespace Disly.Areas.Admin.Controllers
                 bindData.Item.Id = id;
 
                 #region Сохранение изображения
-                var width = 0;
-                var height = 0;
-                var defaultPreviewSizes = new string[] { "540", "360" };
+                //var width = 0;
+                //var height = 0;
+                //var defaultPreviewSizes = new string[] { "540", "360" };
 
                 // путь для сохранения изображения //Preview image
-                string savePath = Settings.UserFiles + Domain + Settings.ProductsDir;
-                if (upload != null && upload.ContentLength > 0)
-                {
-                    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
+                //string savePath = Settings.UserFiles + Domain + Settings.ProductsDir;
+                //if (upload != null && upload.ContentLength > 0)
+                //{
+                //    string fileExtension = upload.FileName.Substring(upload.FileName.LastIndexOf(".")).ToLower();
 
-                    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
-                    if (!validExtension.Contains(fileExtension.Replace(".", "")))
-                    {
-                        model.Item = _cmsRepository.getProduct(id);
+                //    var validExtension = (!string.IsNullOrEmpty(Settings.PicTypes)) ? Settings.PicTypes.Split(',') : "jpg,jpeg,png,gif".Split(',');
+                //    if (!validExtension.Contains(fileExtension.Replace(".", "")))
+                //    {
+                //        model.Item = _cmsRepository.getProduct(id);
 
-                        model.ErrorInfo = new ErrorMessage()
-                        {
-                            title = "Ошибка",
-                            info = "Вы не можете загружать файлы данного формата",
-                            buttons = new ErrorMassegeBtn[]
-                            {
-                             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
-                            }
-                        };
-                        return View("Item", model);
-                    }
+                //        model.ErrorInfo = new ErrorMessage()
+                //        {
+                //            title = "Ошибка",
+                //            info = "Вы не можете загружать файлы данного формата",
+                //            buttons = new ErrorMassegeBtn[]
+                //            {
+                //             new ErrorMassegeBtn { url = "#", text = "ок", action = "false", style="primary" }
+                //            }
+                //        };
+                //        return View("Item", model);
+                //    }
 
-                    var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
-                    int.TryParse(sizes[0], out width);
-                    int.TryParse(sizes[1], out height);
-                    //bindData.Item.Photo = new Photo()
-                    //{
-                    //    Name = id.ToString() + fileExtension,
-                    //    Size = Files.FileAnliz.SizeFromUpload(upload),
-                    //    Url = Files.SaveImageResizeRename(upload, savePath, id.ToString(), width, height),
-                    //    Source = bindData.Item.Photo.Source
-                    //};
-                }
+                //    var sizes = (!string.IsNullOrEmpty(Settings.MaterialPreviewImgSize)) ? Settings.MaterialPreviewImgSize.Split(',') : defaultPreviewSizes;
+                //    int.TryParse(sizes[0], out width);
+                //    int.TryParse(sizes[1], out height);
+                //}
                 #endregion
 
                 //Определяем Insert или Update

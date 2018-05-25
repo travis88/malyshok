@@ -385,6 +385,7 @@ function certificatesBtn_init() {
         click: function () {
             $('.cert-panel').remove();
             var _Id = $(this).parent().find('input').attr('data-id');
+            if (_Id == undefined) _Id = $(this).closest('.prod-desc').find('input').attr('data-id');
 
             var $Panel = $("<div/>", { "class": "cert-panel" });
             var $PanelBody = $("<div/>", { "class": "cert-panel_body" });
@@ -404,13 +405,30 @@ function certificatesBtn_init() {
                     $PanelBody.append('<div>Нет данных о сертификатах</div>');
                 },
                 success: function (data) {
-                    for (var i = 0; i < data.Certificates.length; i = i + 1) {
-                        var item = data.Certificates[i];
-                        $PanelBody.append('<div class="cert-link" data-link="' + item.value + '"><a target="_blanck" href="/certificates/' + item.text+'.jpg">' + item.text + '</div>');
-                    }
+                    var hygienic = 'no';
 
                     if (data.Certificates.length == 0) {
                         $PanelBody.append('<div>Нет данных о сертификатах</div>');
+                    }
+
+                    for (var i = 0; i < data.Certificates.length; i = i + 1) {
+                        var item = data.Certificates[i];
+                        var cert_name = item.text;
+                        var isLink = item.selected;
+
+                        if (hygienic != item.available) {
+                            hygienic = item.available;
+
+                            if (item.available)
+                                $PanelBody.append('<div class="cert-title">Гигиенические сертификаты</div>');
+                            else
+                                $PanelBody.append('<div class="cert-title">Сертификаты</div>');
+                        }
+
+                        if (isLink == 'true')
+                            $PanelBody.append('<div class="cert-link"><a target="_blanck" href="/certificates/' + cert_name + '.jpg">' + cert_name + '</a></div>');
+                        else
+                            $PanelBody.append('<div class="cert-link">' + cert_name + '</div>');
                     }
                 }
             });

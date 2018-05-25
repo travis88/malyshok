@@ -128,6 +128,28 @@ namespace Disly.Controllers
             {
                 Catalog_list[] certList = _repository.getCertificates(Id);
 
+                for (int i=1; i< certList.Length;i++)
+                {
+
+                    if (System.IO.File.Exists(Server.MapPath("/Certificates/" + certList[i].text + ".jpg")))
+                    {
+                        certList[i].selected = "true";
+                    }
+                    else
+                    {
+                        certList[i].selected = "false";
+                    }
+                }
+                //certList = certList
+                //    .Where(w => w.selected == true.ToString())
+                //    .Select(s => new Catalog_list
+                //    {
+                //        text = s.text,
+                //        value = s.value,
+                //        available = s.available
+                //    })
+                //    .ToArray();
+
                 return Json(new { Result = "Список сертификатов", Certificates = certList }, JsonRequestBehavior.AllowGet);
             }
             else

@@ -16,6 +16,7 @@
                     {
                         var thisAlias = (Request.Path.Split('/').Last()).ToLower();
                         var thisPath = String.Join("/", Request.Path.Replace("/catalog", "").Split('/')).ToLower();
+                        if (String.IsNullOrEmpty(thisPath)) { thisPath = "/"; }
                         thisPath = thisPath.Substring(thisPath.IndexOf("/"), thisPath.LastIndexOf("/") + 1);
 
                         var url = "/catalog" + child_l1.Path + child_l1.Alias;

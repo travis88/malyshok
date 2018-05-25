@@ -14,9 +14,9 @@ form {
     padding: 0;
 }
 
-.container {
+/*.container {
     overflow: hidden;
-}
+}*/
 
 /* Статичное меню при прокрутке */
 .scroll-menu {
@@ -361,8 +361,9 @@ a .new-prod-title {
 
 /* Контент */
 .body-content {
-    overflow: auto;
+    float: left;
     padding: 0 1px 20px 29px;
+    width: 870px;
 }
 .shadow-block {
     box-shadow: 0 0 10px #dadada;
@@ -737,8 +738,12 @@ a .new-prod-title {
     top: 50px;
     min-width: 400px;
 }
-/* //-- Страница.Prod */
+.cert-title {
+    margin: 10px 0 0;
+    font-weight: bold;
+}
 
+/* //-- Страница.Prod */
 /* Страница.Contacts */
 #map {
     background: #dadada;

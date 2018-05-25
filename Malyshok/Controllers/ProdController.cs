@@ -195,7 +195,7 @@ namespace Disly.Controllers
         public ActionResult Item(Guid id)
         {
             model.Item = _repository.getProdItem(id, (Guid)OrderId);
-            ViewBag.Category = model.Item.CatalogPath;
+            ViewBag.Category = model.Item.Catalog;
 
             #region Заголовок страницы
             if (currentPage != null)

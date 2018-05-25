@@ -72,6 +72,8 @@ namespace cms.dbase
                         LongTitle = s.c_name_long,
                         Alias = s.c_alias,
                         Adress = s.c_adress,
+                        CoordX = (double)s.d_coord_x,
+                        CoordY = (double)s.d_coord_y,
                         Phone = s.c_phone,
                         Fax = s.c_fax,
                         Email = s.c_email,
@@ -799,7 +801,7 @@ namespace cms.dbase
             {
                 var BasketList = db.content_order_detailss.Where(w => w.f_order == Order);
 
-                var ProdItem = db.content_productss.Where(w => w.id == id);
+                var ProdItem = db.sv_productss.Where(w => w.id == id);
 
                 var Prod = (from p in ProdItem
                             join b in BasketList on p.id equals b.f_prod_id into ps
@@ -815,8 +817,10 @@ namespace cms.dbase
                                 Standart = s.p.c_standart,
                                 Count = (int)s.p.n_count,
                                 inBasket = s.n_count,
-                                Photo = s.p.c_photo
-                            }).FirstOrDefault();
+                                Photo = s.p.c_photo,
+                                Catalog  = s.p.f_category_path
+                            })
+                            .FirstOrDefault();
 
                 return Prod;
             }

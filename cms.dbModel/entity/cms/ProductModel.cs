@@ -65,6 +65,11 @@ namespace cms.dbModel.entity
         /// Стандарт 
         /// </summary>
         public string Standart { get; set; }
+        
+        /// <summary>
+        /// Строка категорий в которых отображается продукт
+        /// </summary>
+        public string Catalog { get; set; }
 
         /// <summary>
         /// Массив категорий в которых отображается продукт

@@ -37,56 +37,61 @@ namespace Disly.Areas.Admin.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult ChangePass(Guid id)
+        public ActionResult ChangePass(Guid id, string type)
         {
-            PortalUsersViewModel model = new PortalUsersViewModel()
+            if (!String.IsNullOrWhiteSpace(type) && type == "site")
             {
-                UserResolution = UserResolutionInfo,
-                Item = _cmsRepository.getUser(id)
-            };
-            return PartialView("ChangePass", model);
+                PortalUsersViewModel model = new PortalUsersViewModel()
+                {
+                    UserResolution = UserResolutionInfo,
+                    Item = _cmsRepository.getCustomer(id)
+                };
+                return PartialView("ChangePass", model);
+            }
+            else
+            {
+                PortalUsersViewModel model = new PortalUsersViewModel()
+                {
+                    UserResolution = UserResolutionInfo,
+                    Item = _cmsRepository.getUser(id)
+                };
+                return PartialView("ChangePass", model);
+            }
         }
 
         [HttpPost]
         [MultiButton(MatchFormKey = "action", MatchFormValue = "password-update")]
-        public ActionResult ChangePass(Guid id, PortalUsersViewModel model)
+        public ActionResult ChangePass(Guid id, PortalUsersViewModel model, string type)
         {
             if (ModelState.IsValid)
             {
                 string NewPass = model.Password.Password;
-
                 Cripto pass = new Cripto(NewPass.ToCharArray());
                 string NewSalt = pass.Salt;
                 string NewHash = pass.Hash;
-                _cmsRepository.changePassword(id, NewSalt, NewHash); //, AccountInfo.id, RequestUserInfo.IP
+
+                if (!String.IsNullOrWhiteSpace(type) && type == "site")
+                {
+                    _cmsRepository.ChangePasswordUserSite(id, NewSalt, NewHash);
+                    model = new PortalUsersViewModel()
+                    {
+                        UserResolution = UserResolutionInfo,
+                        Item = _cmsRepository.getCustomer(id)
+                    };
+                }
+                else
+                {
+                    _cmsRepository.changePassword(id, NewSalt, NewHash);
+                    model = new PortalUsersViewModel()
+                    {
+                        UserResolution = UserResolutionInfo,
+                        Item = _cmsRepository.getUser(id)
+                
+                    };
+                }
                 ViewBag.SuccesAlert = "Пароль изменен";
-                #region оповещение на e-mail
-                //string ErrorText = "";
-                //string Massege = String.Empty;
-                //Mailer Letter = new Mailer();
-                //Letter.Theme = "Изменение пароля";
-
-
-                //bool sex = true;
-                //if (model.User.B_Sex.HasValue) { if (!(bool)model.User.B_Sex) sex = false; }
-                //Massege = (sex) ? "<p>Уважаемый " : "<p>Уважаемая ";
-                //Massege += model.User.C_Surname + " " + model.User.C_Name + "</p>";
-                //Massege += "<p>Ваш пароль на сайте <b>" + model.Settings.Title + "</b> был изменен</p>";
-                //Massege += "<p>Ваш новый пароль:<b>" + NewPass + "</b></p>";
-                //Massege += "<p>С уважением, администрация портала!</p>";
-                //Massege += "<hr><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</span>";
-                //Letter.MailTo = model.User.C_EMail;
-                //Letter.Text = Massege;
-                //ErrorText = Letter.SendMail();
-                #endregion
             }
 
-            model = new PortalUsersViewModel()
-            {
-                UserResolution = UserResolutionInfo,
-                Item = _cmsRepository.getUser(id)
-                
-            };
 
             return PartialView("ChangePass", model);
         }

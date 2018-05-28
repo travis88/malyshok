@@ -546,6 +546,47 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Изменяет пароль пользователя сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="salt"></param>
+        /// <param name="hash"></param>
+        public override void ChangePasswordUserSite(Guid id, string salt, string hash)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    var user = db.content_userss.Where(w => w.id == id);
+                    if (user.Any())
+                    {
+                        string userName = user.Select(s => string.Format("{0} {1}", s.c_surname, s.c_name))
+                            .SingleOrDefault();
+
+                        user.Set(p => p.c_salt, salt)
+                            .Set(p => p.c_hash, hash)
+                            .Update();
+
+                        // логирование
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Users,
+                            Action = LogAction.change_pass,
+                            PageId = id,
+                            PageName = userName,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tr.Commit();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Прикрепление пользователям доступных сайтов
         /// </summary>
         /// <param name="data"></param>

@@ -46,7 +46,7 @@
         </div>
         @if (Model.Item != null)
         {
-            @Html.ActionLink("Изменить пароль", "ChangePass", "services", new { @id = Model.Item.Id }, new { @id = "ChengePass", @class = "button pop-up_frame icon-key-1", @data_class = "ChengePass", @title = "Изменить пароль" })
+            @Html.ActionLink("Изменить пароль", "ChangePass", "services", new { @id = Model.Item.Id, @type = "site" }, new { @id = "ChengePass", @class = "button pop-up_frame icon-key-1", @data_class = "ChengePass", @title = "Изменить пароль" })
         }
     </div>
 }

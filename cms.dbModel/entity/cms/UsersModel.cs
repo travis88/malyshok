@@ -48,7 +48,6 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Группа
         /// </summary>
-        [Required(ErrorMessage = "Поле «Группа» не должно быть пустым.")]
         public string Group { get; set; }
 
         /// <summary>
@@ -79,13 +78,11 @@ namespace cms.dbModel.entity
         /// <summary>
         /// Фамилия
         /// </summary>
-        [Required(ErrorMessage = "Поле «Фамилия» не должно быть пустым.")]
         public string Surname { get; set; }
 
         /// <summary>
         /// Имя
         /// </summary>
-        [Required(ErrorMessage = "Поле «Имя» не должно быть пустым.")]
         public string Name { get; set; }
 
         /// <summary>

@@ -66,7 +66,11 @@ namespace Disly.Controllers
             foreach (var item in model.Items)
             {
                 OrderDetail += "<div style=\"margin-bottom: 10px; overflow: auto; border-bottom: solid 1px #dadada; padding: 10px;\">";
-                OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"http://" + Settings.BaseURL + "/" + Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") + "\" />";
+                if (!String.IsNullOrEmpty(item.Photo))
+                    OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"http://" + Settings.BaseURL + "/" + Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") + "\" />";
+                else
+                    OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"\" />";
+
                 OrderDetail += "<div style=\"overflow: auto;\">";
                 OrderDetail += "<a href=\"" + Settings.BaseURL + "/prod/" + item.Id + "/\"> " + item.Title + "</a>";
                 OrderDetail += "<div><span>Код:</span> " + item.Standart + "</div>";

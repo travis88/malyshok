@@ -16,19 +16,19 @@
             </div>
         </div><br />
         <div class="group-block rules open" title="Контакты">
-            @Html.TextBoxFor(m => m.Item.Address, new { @placeholder = "Адрес" })
+            @Html.TextBoxFor(m => m.Item.Address, new { @placeholder = "Адрес", @Title = "Адрес" })
             <div class="row">
                 <div class="col-xs-6">
-                    @Html.TextBoxFor(m => m.Item.Phone, new { maxlength = "64", @placeholder = "Телефон" })
+                    @Html.TextBoxFor(m => m.Item.Phone, new { maxlength = "64", @placeholder = "Телефон", @Title = "Телефон" })
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    @Html.TextBoxFor(m => m.Item.Vk, new { maxlength = "128", @placeholder = "Вконтакте" })
+                    @Html.TextBoxFor(m => m.Item.Vk, new { maxlength = "128", @placeholder = "Вконтакте", @Title = "Вконтакте" })
 
                 </div>
                 <div class="col-md-6">
-                    @Html.TextBoxFor(m => m.Item.Facebook, new { maxlength = "128", @placeholder = "Facebook" })
+                    @Html.TextBoxFor(m => m.Item.Facebook, new { maxlength = "128", @placeholder = "Facebook", @Title = "Facebook" })
                 </div>
             </div>
         </div>

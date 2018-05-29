@@ -1187,7 +1187,13 @@ namespace cms.dbase
                             Photo = s.c_photo,
                             Price = s.m_price,
                             Count = s.n_count
-                        }
+                        },
+                        ProdName = s.c_caption,
+                        ProdImage = s.c_photo,
+                        ProdCode = s.c_code,
+                        ProdBarcode = s.c_barcode,
+                        Price = s.m_price,
+                        Count = s.n_count
                     })
                     .OrderByDescending(o => o.Date);
 

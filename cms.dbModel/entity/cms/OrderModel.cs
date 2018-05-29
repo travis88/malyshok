@@ -134,6 +134,26 @@ namespace cms.dbModel.entity
         public DateTime Date { get; set; }
 
         /// <summary>
+        /// Название продукта
+        /// </summary>
+        public string ProdName { get; set; }
+
+        /// <summary>
+        /// Изображение продукта
+        /// </summary>
+        public string ProdImage { get; set; }
+
+        /// <summary>
+        /// Код продукта
+        /// </summary>
+        public string ProdCode { get; set; }
+
+        /// <summary>
+        /// Штрих-код продукта
+        /// </summary>
+        public string ProdBarcode { get; set; }
+
+        /// <summary>
         /// Цена
         /// </summary>
         public decimal Price { get; set; }

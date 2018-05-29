@@ -22,15 +22,8 @@
             <div class="basket-result">
                 <h3>В заказе №@Model.Item.Num <span>@Model.Item.ProdCount  @ProdCount</span> на общую сумму <span>@Model.Item.Total.ToString("# ###.00#") руб.</span></h3>
             </div>
-            if (Model.Item.Details != null)
-            {
-                foreach (var item in Model.Item.Details)
-                {
 
-                    @Html.Partial("Prod/ProdItem_history", item.Product)
-
-                }
-            }
+            @Html.Partial("Prod/ProdItem_history", Model.Item.Details)
         }
-    </div>
+    </div>    
 </div>

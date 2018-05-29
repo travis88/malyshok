@@ -37,7 +37,7 @@
     <div class="dop_info-block">
         <div class="dop-caption">Настройки</div>
         <div class="group-block rules open" title="Права авторизации">
-            @Html.TextBoxFor(m => m.Item.EMail, new { required = "", type = "email", maxlength = "128", autocomplete = "off", title = "Email адрес", @data_help = "123" })
+            @Html.TextBoxFor(m => m.Item.EMail, new { type = "email", maxlength = "128", autocomplete = "off", title = "Email адрес", @data_help = "123" })
             @if (Model.Item == null)
             {
                 @Html.TextBoxFor(m => Model.Password.Password, new { @required = "", type = "password", minlength = "6", maxlength = "16", autocomplete = "off", @title = "Пароль", @data_help = "Пароль должен содержать латинские буквы и не менее одной цифры. Длина пароля должна быть от 6 до 16 символов" })
@@ -46,7 +46,7 @@
         </div>
         @if (Model.Item != null)
         {
-            @Html.ActionLink("Изменить пароль", "ChangePass", "services", new { @id = Model.Item.Id }, new { @id = "ChengePass", @class = "button pop-up_frame icon-key-1", @data_class = "ChengePass", @title = "Изменить пароль" })
+            @Html.ActionLink("Изменить пароль", "ChangePass", "services", new { @id = Model.Item.Id, @type = "site" }, new { @id = "ChengePass", @class = "button pop-up_frame icon-key-1", @data_class = "ChengePass", @title = "Изменить пароль" })
         }
     </div>
 }

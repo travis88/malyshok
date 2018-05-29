@@ -5,7 +5,7 @@
     string fileUrl = (Model.Album != null && Model.Album.PreviewImage != null) ? Model.Album.PreviewImage.Url : null;
 }
 
-    @if (Model.Account.Group.ToLower().Equals("developer") || Model.Account.Group.ToLower().Equals("administrator"))
+    @if (Model.UserResolution.Write)
     {
         <div class="content">
             <h1>@ViewBag.Title</h1>

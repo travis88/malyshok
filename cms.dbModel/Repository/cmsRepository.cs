@@ -62,6 +62,7 @@ namespace cms.dbModel
         public abstract bool check_user(string email);
         public abstract void check_usergroup(Guid id, string group);
         public abstract void changePassword(Guid id, string Salt, string Hash);
+        public abstract void ChangePasswordUserSite(Guid id, string Salt, string Hash);
         public abstract bool updateUserSiteLinks(ContentLinkModel link);
         //Все доступные группы на портале - справочник
         public abstract Catalog_list[] getUsersGroupList();

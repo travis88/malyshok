@@ -101,7 +101,7 @@ namespace cms.dbase
                 {
 
                     query = query.Where(s => s.fklinkusertosites.Any(t => t.f_site == filtr.Domain))
-                                 .Where(s => (s.f_group.ToLower()!= "developer" && s.f_group.ToLower() != "administrator"));
+                                 .Where(s => (s.f_group.ToLower() != "developer" && s.f_group.ToLower() != "administrator"));
                 }
 
                 if (filtr.Disabled.HasValue)
@@ -243,20 +243,16 @@ namespace cms.dbase
                             IP = _ip,
                         };
                         insertLog(log);
-                        
-                        //цепление к сайтам если создается администратор портала или разработчик
-                        if(Item.Group== "administrator" || Item.Group.ToLower() == "developer")
+
+                        string[] allsitesdomain = db.cms_sitess.Select(s => s.c_alias).ToArray();
+                        foreach (var singldomain in allsitesdomain)
                         {
-                            string[] allsitesdomain = db.cms_sitess.Select(s => s.c_alias).ToArray();
-                            foreach (var singldomain in allsitesdomain)
-                            {
-                                db.cms_user_site_links
-                                  .Value(v => v.f_user, id)
-                                  .Value(v => v.f_site, singldomain)
-                                  .Insert();
-                            }
+                            db.cms_user_site_links
+                              .Value(v => v.f_user, id)
+                              .Value(v => v.f_site, singldomain)
+                              .Insert();
                         }
-                        
+
 
                         // Назначение прав по шаблону группы
                         ResolutionsModel[] GroupResolution = db.cms_resolutions_templatess.
@@ -550,6 +546,47 @@ namespace cms.dbase
         }
 
         /// <summary>
+        /// Изменяет пароль пользователя сайта
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="salt"></param>
+        /// <param name="hash"></param>
+        public override void ChangePasswordUserSite(Guid id, string salt, string hash)
+        {
+            using (var db = new CMSdb(_context))
+            {
+                using (var tr = db.BeginTransaction())
+                {
+                    var user = db.content_userss.Where(w => w.id == id);
+                    if (user.Any())
+                    {
+                        string userName = user.Select(s => string.Format("{0} {1}", s.c_surname, s.c_name))
+                            .SingleOrDefault();
+
+                        user.Set(p => p.c_salt, salt)
+                            .Set(p => p.c_hash, hash)
+                            .Update();
+
+                        // логирование
+                        var log = new LogModel()
+                        {
+                            Site = _domain,
+                            Section = LogSection.Users,
+                            Action = LogAction.change_pass,
+                            PageId = id,
+                            PageName = userName,
+                            UserId = _currentUserId,
+                            IP = _ip,
+                        };
+                        insertLog(log);
+
+                        tr.Commit();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Прикрепление пользователям доступных сайтов
         /// </summary>
         /// <param name="data"></param>
@@ -569,10 +606,10 @@ namespace cms.dbase
                         var linkExist = db.cms_user_site_links
                             .Where(l => l.f_user == data.ObjctId)
                             .Where(l => l.f_site == alias);
-                             
+
                         if (linkExist.Any())
                         {
-                            if(!data.Checked)
+                            if (!data.Checked)
                             {
                                 linkExist.Delete();
                             }
@@ -602,7 +639,7 @@ namespace cms.dbase
                             IP = _ip,
                         };
                         insertLog(log);
-                        
+
                         tran.Commit();
                         return true;
                     }
@@ -642,7 +679,7 @@ namespace cms.dbase
             using (var db = new CMSdb(_context))
             {
                 var data = db.cms_users_groups
-                            .Where(w=>(w.c_alias!= "administrator" && w.c_alias.ToLower()!= "developer"))
+                            .Where(w => (w.c_alias != "administrator" && w.c_alias.ToLower() != "developer"))
                             .Select(s => new Catalog_list
                             {
                                 text = s.c_title,
@@ -723,7 +760,7 @@ namespace cms.dbase
                     if (getGroup.Any())
                     {
                         var cdGroup = getGroup.SingleOrDefault();
-                        
+
                         cdGroup.c_title = group.GroupName;
                         db.Update(cdGroup);
 
@@ -845,7 +882,7 @@ namespace cms.dbase
                     var groupUsers = db.cms_userss
                                         .Where(p => p.f_group != null)
                                         .Where(p => p.f_group == groupClaim.GroupAlias);
-                    if(groupUsers.Any())
+                    if (groupUsers.Any())
                     {
                         foreach (var user in groupUsers.ToArray())
                         {
@@ -908,7 +945,7 @@ namespace cms.dbase
                         case ClaimType.delete:
                             cdUserClaim.b_delete = claim.Checked;
                             break;
-                        }
+                    }
 
                     if (!query.Any())
                         db.Insert(cdUserClaim);
@@ -932,11 +969,13 @@ namespace cms.dbase
             {
                 using (var tran = db.BeginTransaction())
                 {
-                    var getGroup = db.cms_users_groups.
-                        Where(g => g.c_alias.ToLower() == alias.ToLower());
+                    var getGroup = db.cms_users_groups
+                        .Where(g => g.c_alias.ToLower() == alias.ToLower());
 
-                    if (!getGroup.Any())
+                    if (getGroup == null || !getGroup.Any())
+                    {
                         return false;
+                    }
 
                     var cdGroup = getGroup.SingleOrDefault();
                     var groupId = cdGroup.id;

@@ -67,13 +67,13 @@ namespace Disly.Controllers
             {
                 OrderDetail += "<div style=\"margin-bottom: 10px; overflow: auto; border-bottom: solid 1px #dadada; padding: 10px;\">";
                 if (!String.IsNullOrEmpty(item.Photo))
-                    OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"http://" + Settings.BaseURL + "/" + Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") + "\" />";
+                    OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"https://" + Settings.BaseURL + "/" + Settings.ProdContent + item.Barcode + "/" + item.Photo.Replace(".jpg", "_mini.jpg") + "\" />";
                 else
                     OrderDetail += "<img style=\"float: left; width: 100px; margin: 0 10px 10px; border: solid 1px grey; \" src=\"\" />";
 
                 OrderDetail += "<div style=\"overflow: auto;\">";
                 OrderDetail += "<a href=\"" + Settings.BaseURL + "/prod/" + item.Id + "/\"> " + item.Title + "</a>";
-                OrderDetail += "<div><span>Код:</span> " + item.Standart + "</div>";
+                OrderDetail += "<div><span>Код:</span> " + item.Code + "</div>";
                 OrderDetail += "<div><span>Цена:</span> " + item.Price.ToString("# ###.00#") + "</div>";
                 OrderDetail += "<div><span>Количество:</span> " + item.Count + "шт.</div>";
                 OrderDetail += "</div></div>";
@@ -131,7 +131,7 @@ namespace Disly.Controllers
             #region Оповещение Администратора
             Massege = String.Empty;
             Letter = new Mailer();
-            Letter.Theme = "Заказа №" + OrderNum.ToString() + " с сайта";
+            Letter.Theme = "ORDER №" + OrderNum.ToString();
             Massege = "<p>На сайте оформлен заказ <b>№" + OrderNum.ToString() + "</b>.</p>";
             Massege += "<p>Сведения о заказчике:<br/>";
             Massege += "<b>Имя:</b> <i>"+ BackModel.UserName + "</i>";

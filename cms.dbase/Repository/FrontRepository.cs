@@ -1270,7 +1270,7 @@ namespace cms.dbase
         {
             using (var db = new CMSdb(_context))
             {
-                int Num = db.content_orderss.Where(w => w.n_num != null).Count();
+                int Num = db.content_orderss.Where(w => w.n_num != null).Max(x => (int)x.n_num) + 1;
 
                 var data = db.content_orderss.Where(w => w.id == OrderInfo.Id);
                 if (data.Any())

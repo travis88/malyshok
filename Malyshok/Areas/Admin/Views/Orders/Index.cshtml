@@ -27,9 +27,10 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="/admin/users/item/@item.User.Id" target="_blank">
+                                @*<a href="/admin/users/item/@item.User.Id" target="_blank">
                                     @item.User.EMail
-                                </a>
+                                </a>*@
+                                @item.User.EMail
                             </td>
                             <td>@item.Date.ToString("dd.MM.yyyy HH:mm:ss")</td>
                             <td>@item.Total.ToString("0.##")</td>

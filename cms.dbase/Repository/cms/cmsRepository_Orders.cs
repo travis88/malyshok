@@ -46,7 +46,8 @@ namespace cms.dbase
                 int itemCount = list.Count();
 
                 var data = list
-                            .OrderByDescending(o => o.n_num)
+                            .OrderBy(o => o.f_status)
+                            .ThenByDescending(o => o.d_date)
                             .Skip(filter.Size * (filter.Page - 1))
                             .Take(filter.Size)
                             .Select(s => new OrderModel
@@ -60,8 +61,9 @@ namespace cms.dbase
                                 },
                                 User = new UsersModel
                                 {
-                                    Id = s.contentorderscontentusers.id,
-                                    EMail = s.contentorderscontentusers.c_email
+                                    //Id = s.contentorderscontentusers.id,
+                                    //EMail = s.contentorderscontentusers.c_email
+                                    EMail = s.c_email
                                 },
                                 Total = s.contentorderdetailscontentorderss
                                             .Sum(d => d.m_price * d.n_count)

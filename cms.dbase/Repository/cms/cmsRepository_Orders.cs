@@ -114,12 +114,15 @@ namespace cms.dbase
                         },
                         User = new UsersModel
                         {
-                            Id = s.contentorderscontentusers.id,
-                            Name = s.contentorderscontentusers.c_name,
-                            Patronymic = s.contentorderscontentusers.c_patronymic,
-                            Surname = s.contentorderscontentusers.c_surname,
-                            Phone = s.contentorderscontentusers.c_phone,
-                            Address = s.contentorderscontentusers.c_address,
+                            //Id = s.contentorderscontentusers.id,
+                            //Name = s.contentorderscontentusers.c_name,
+                            //Patronymic = s.contentorderscontentusers.c_patronymic,
+                            //Surname = s.contentorderscontentusers.c_surname,
+                            Name = s.c_user_name,
+                            //Phone = s.contentorderscontentusers.c_phone,
+                            Phone = s.c_phone,
+                            //Address = s.contentorderscontentusers.c_address,
+                            Address = s.c_address,
                             Birthday = s.contentorderscontentusers.d_register_date
                         },
                         Details = s.contentorderdetailscontentorderss

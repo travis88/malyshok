@@ -61,7 +61,7 @@ namespace cms.dbase
                                 },
                                 User = new UsersModel
                                 {
-                                    //Id = s.contentorderscontentusers.id,
+                                    Id = s.contentorderscontentusers.id,
                                     //EMail = s.contentorderscontentusers.c_email
                                     EMail = s.c_email
                                 },
@@ -114,7 +114,7 @@ namespace cms.dbase
                         },
                         User = new UsersModel
                         {
-                            //Id = s.contentorderscontentusers.id,
+                            Id = s.contentorderscontentusers.id,
                             //Name = s.contentorderscontentusers.c_name,
                             //Patronymic = s.contentorderscontentusers.c_patronymic,
                             //Surname = s.contentorderscontentusers.c_surname,

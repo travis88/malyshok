@@ -171,7 +171,9 @@ namespace Import.Core.Services
         {
             if (isImages)
             {
-                string barcode = img.Name.Substring(0, img.Name.LastIndexOf("_"));
+                string barcode = img.Name.Contains("_") ? 
+                        img.Name.Substring(0, img.Name.LastIndexOf("_")) :
+                        img.Name.Substring(0, img.Name.LastIndexOf("."));
                 string imageName = img.Name.Substring(0, img.Name.LastIndexOf("."));
                 string saveImgPath = $"{ParamsHelper.SaveDirName}{prefixFolder}{barcode}";
                 if (!Directory.Exists(saveImgPath))

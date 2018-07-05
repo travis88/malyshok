@@ -245,17 +245,15 @@ namespace Disly.Controllers
                     Result = "<div>" + json + "</div>";
 
                     // Получаем данные пользователя
-                    string GetUserInfo_Url = $"https://api.vk.com/method/users.get?user_id={vkEnterUser.user_id}" +
+                    string GetUserInfo_Url = $"https://api.vk.com/method/users.get"+
+                        $"?user_id={vkEnterUser.user_id}&access_token={vkEnterUser.access_token}" +
                         $"&fields=domain,nickname,country,city,contacts&v=5.69";
                 
                     client = new WebClient()
                     {
                         Encoding = Encoding.UTF8
                     };
-                    json = client.DownloadString(GetUserInfo_Url);
-                    Result += "---<br /><div>" + json + "</div>";
 
-                    ViewBag.Result = Result;
                     VkUserInfo vkUser = JsonConvert.DeserializeObject<VkUserInfo>(json);
                     var userResponse = vkUser.response[0];
 

@@ -203,7 +203,7 @@ namespace Disly.Controllers
         /// <returns></returns>
         public ActionResult LogIn_vk(string code)
         {
-            string _BaseUrl = $"http://{Settings.BaseURL}/user/LogIn_vk";
+            string _BaseUrl = $"https://{Settings.BaseURL}/user/LogIn_vk";
 
             string Result = String.Empty;
 

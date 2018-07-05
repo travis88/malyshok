@@ -1,6 +1,7 @@
 ﻿using cms.dbModel.entity;
 using Disly.Areas.Admin.Models;
 using Import.Core;
+using Portal.Code;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -81,8 +82,10 @@ namespace Disly.Areas.Admin.Controllers
         [HttpPost]
         public void FileUpload(IEnumerable<HttpPostedFileBase> upload)
         {
+            AppLogger.Debug("start import", null);
             if (upload != null)
             {
+                AppLogger.Debug($"кол-во файлов: {upload.Count()}", null);
                 string importDir = Server.MapPath(Settings.UserFiles + Settings.ImportDir);
 
                 // чистим папку от предыдущих файлов

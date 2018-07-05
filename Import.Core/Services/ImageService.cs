@@ -47,6 +47,10 @@ namespace Import.Core.Services
                 isImages = false;
             }
             string tempPath = $"{ParamsHelper.SaveDirName}{prefixFolder}temp\\";
+            if (Directory.Exists(tempPath))
+            {
+                Directory.Delete(tempPath, true);
+            }
             if (!Directory.Exists(tempPath))
             {
                 Directory.CreateDirectory(tempPath);

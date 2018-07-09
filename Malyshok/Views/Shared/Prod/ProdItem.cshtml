@@ -78,9 +78,20 @@
                         <div>
                             <span>Остаток</span>
                             @if (item.Count > 0)
-                            {@Html.Raw("есть в наличии") }
-                        else
-                        { @Html.Raw("нет в наличии")}
+                            {
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    @Html.Raw(item.Count+" шт.")
+                                }
+                                else {
+                                    @Html.Raw("есть в наличии") 
+                                }
+
+                            }
+                            else
+                            {
+                                @Html.Raw("нет в наличии")
+                            }
                         </div>
                     </div>
                 </div>

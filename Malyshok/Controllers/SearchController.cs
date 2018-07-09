@@ -51,6 +51,7 @@ namespace Disly.Controllers
             if (OrderId != null)
             {
                 filter.Order = (Guid)OrderId;
+                filter.Available = "all";
             }
 
             model.List = _repository.getProdList(filter);

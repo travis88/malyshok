@@ -3,7 +3,7 @@
 <div class="type-page">
     @{ Html.RenderAction("BreadCrumb", "Partials"); }
 
-    @{ string sendEmail = "mailto:" + Model.UserInfo.EMail; }
+    @{ string sendEmail = (Model.UserInfo.EMail != null) ? "mailto:" + Model.UserInfo.EMail : ""; }
 
     <h1>Личный кабинет</h1>
     <div class="page-text">

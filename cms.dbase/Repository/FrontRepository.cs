@@ -651,6 +651,8 @@ namespace cms.dbase
                         query = query.Where(w => w.n_count > 0);
                     else if (filter.Available == "no")
                         query = query.Where(w => w.n_count < 1);
+                    else if (filter.Available == "all")
+                        query = query.Where(w => w.n_count >= 0);
 
                     if (String.IsNullOrEmpty(filter.Sort))
                         query = query.OrderByDescending(w => new { w.d_date });

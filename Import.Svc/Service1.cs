@@ -53,8 +53,8 @@ namespace Import.Svc
         /// </summary>
         protected override void OnStop()
         {
-            enableIntegration = false;
-            integrationWorker.Abort();
+            //enableIntegration = false;
+            //integrationWorker.Abort();
         }
 
         /// <summary>

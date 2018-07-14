@@ -647,6 +647,7 @@ namespace cms.dbase
                         }
                     }
 
+
                     if (String.IsNullOrEmpty(filter.Available))
                         query = query.Where(w => w.n_count > 0);
                     else if (filter.Available == "no")
@@ -669,6 +670,7 @@ namespace cms.dbase
                     else if (filter.Sort == "category")
                         query = query.OrderBy(w => new { w.f_category_names });
 
+                    query = query.OrderBy(o => o.n_count);
 
                     itemCount = query.Count();
 
@@ -711,6 +713,7 @@ namespace cms.dbase
                     var prodQuery = query
                         .Join(db.sv_productss, c => c.id, p => p.f_category, (c, p) => p);
 
+
                     if (filter.Date != null)
                         prodQuery = prodQuery.Where(w => w.d_date >= filter.Date);
 
@@ -733,6 +736,8 @@ namespace cms.dbase
                         prodQuery = prodQuery.OrderBy(w => new { w.c_title });
                     else if (filter.Sort == "category")
                         prodQuery = prodQuery.OrderBy(w => new { w.f_category_names });
+
+                    prodQuery = prodQuery.OrderByDescending(o => o.n_count);
 
                     itemCount = prodQuery.Count();
 

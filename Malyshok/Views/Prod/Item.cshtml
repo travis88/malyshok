@@ -32,7 +32,7 @@
                     <span>Остаток</span> @if (@item.Count > 0)
                     { @Html.Raw("есть в наличии")  }
                     else
-                    { @Html.Raw("нет в наличии")  }
+                    { @Html.Raw("<span style=\"color:#e1706f;\">нет в наличии</span>")  }
                 </div>
                 <div><span>Цена</span><b> @item.Price.ToString("# ###.00#")</b> руб.</div>
             </div>

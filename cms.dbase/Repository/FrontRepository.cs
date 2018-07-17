@@ -631,7 +631,8 @@ namespace cms.dbase
 
                 if (String.IsNullOrEmpty(filter.Category))
                 {
-                    var query = db.sv_productss.Where(w => w.id !=null);
+                    var query = db.sv_productss.Where(w => w.id != null);
+                    query = query.OrderByDescending(o => o.b_having);
 
                     if (filter.Date != null)
                         query = query.Where(w => w.d_date >= filter.Date);
@@ -656,22 +657,34 @@ namespace cms.dbase
                         query = query.Where(w => w.n_count >= 0);
 
                     if (String.IsNullOrEmpty(filter.Sort))
-                        query = query.OrderByDescending(w => new { w.d_date });
+                        query = query
+                            .OrderByDescending(o => o.b_having)
+                            .ThenByDescending(w => w.d_date);
                     else if (filter.Sort == "date_desc")
-                        query = query.OrderBy(w => new { w.d_date });
+                        query = query
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w => w.d_date);
                     else if (filter.Sort == "price")
-                        query = query.OrderByDescending(w => new { w.m_price });
+                        query = query
+                            .OrderByDescending(o => o.b_having)
+                            .ThenByDescending(w =>  w.m_price);
                     else if (filter.Sort == "price_desc")
-                        query = query.OrderBy(w => new { w.m_price });
+                        query = query
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w =>  w.m_price);
                     else if (filter.Sort == "code")
-                        query = query.OrderBy(w => new { w.c_code });
+                        query = query
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w => w.c_code);
                     else if (filter.Sort == "name")
-                        query = query.OrderBy(w => new { w.c_title });
+                        query = query
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w => w.c_title);
                     else if (filter.Sort == "category")
-                        query = query.OrderBy(w => new { w.f_category_names });
-
-                    query = query.OrderBy(o => o.n_count);
-
+                        query = query
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w => w.f_category_names);
+                    
                     itemCount = query.Count();
 
                     var ProdList = query
@@ -713,6 +726,7 @@ namespace cms.dbase
                     var prodQuery = query
                         .Join(db.sv_productss, c => c.id, p => p.f_category, (c, p) => p);
 
+                    prodQuery = prodQuery.OrderByDescending(o => o.b_having);
 
                     if (filter.Date != null)
                         prodQuery = prodQuery.Where(w => w.d_date >= filter.Date);
@@ -723,22 +737,34 @@ namespace cms.dbase
                         prodQuery = prodQuery.Where(w => w.n_count < 1);
 
                     if (String.IsNullOrEmpty(filter.Sort))
-                        prodQuery = prodQuery.OrderByDescending(w => new { w.d_date });
+                        prodQuery = prodQuery
+                            .OrderByDescending(o => o.b_having)
+                            .ThenByDescending(w => w.d_date);
                     else if (filter.Sort == "date_desc")
-                        prodQuery = prodQuery.OrderBy(w => new { w.d_date });
+                        prodQuery = prodQuery
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w => w.d_date);
                     else if (filter.Sort == "price")
-                        prodQuery = prodQuery.OrderBy(w => new { w.m_price });
+                        prodQuery = prodQuery
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w =>  w.m_price);
                     else if (filter.Sort == "price_desc")
-                        prodQuery = prodQuery.OrderByDescending(w => new { w.m_price });
+                        prodQuery = prodQuery
+                            .OrderByDescending(o => o.b_having)
+                            .ThenByDescending(w => w.m_price);
                     else if (filter.Sort == "code")
-                        prodQuery = prodQuery.OrderBy(w => new { w.c_code });
+                        prodQuery = prodQuery
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w => w.c_code);
                     else if (filter.Sort == "name")
-                        prodQuery = prodQuery.OrderBy(w => new { w.c_title });
+                        prodQuery = prodQuery
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w => w.c_title);
                     else if (filter.Sort == "category")
-                        prodQuery = prodQuery.OrderBy(w => new { w.f_category_names });
-
-                    prodQuery = prodQuery.OrderByDescending(o => o.n_count);
-
+                        prodQuery = prodQuery
+                            .OrderByDescending(o => o.b_having)
+                            .ThenBy(w => w.f_category_names);
+                    
                     itemCount = prodQuery.Count();
 
                     var ProdList = prodQuery

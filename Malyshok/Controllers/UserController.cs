@@ -506,7 +506,7 @@ namespace Disly.Controllers
                                 Massege = "<p>Уважаемый " + UserInfo.FIO + ", на сайте " + Request.Url.Host + " было 5 неудачных попыток ввода пароля.<br />В целях безопасности, ваш аккаунт заблокирован.</p>";
                                 Massege += "<p>Для восстановления прав доступа мы сформировали для Вас ссылку, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта и учетная запись будет разблокирована.</p>";
                                 Massege += "<p>Если вы вспомнили пароль и хотите ещё раз пропробовать авторизоваться, то подождите 15 минут. Спустя это время, система позволит Вам сделать ещё попытку.</p>";
-                                Massege += "<p><a href=\"http://" + Request.Url.Host + "/User/ChangePass/" + RestoreCode + "/\">http://" + Request.Url.Host + "/User/ChangePass/" + RestoreCode + "/</a></p>";
+                                Massege += "<p><a href=\"https://" + Request.Url.Host + "/User/ChangePass/" + RestoreCode + "/\">https://" + Request.Url.Host + "/User/ChangePass/" + RestoreCode + "/</a></p>";
                                 Massege += "<p>С уважением, администрация сайта!</p>";
                                 Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
                                 Letter.MailTo = UserInfo.EMail;
@@ -588,7 +588,7 @@ namespace Disly.Controllers
                             Massege = "<p>Здравствуйте, " + User.FIO + "</p>";
                             Massege += "<p>Благодарим Вас за регистрацию на сайте " + Settings.SiteTitle + ". Для подтверждения регистрация и активации вашего аккаунта, пожалуйста, перейдите по ссылке.</p>";
                             Massege += "<p>Если ваша почтовая программа не поддерживает прямые переходы, Вы можете скопировать данную ссылку в адресную строку браузера.</p>";
-                            Massege += "<p><a href=\"http://" + Settings.BaseURL + "/User/ConfirmMail/" + User.Id + "/\">http://" + Settings.BaseURL + "/User/ConfirmMail/" + User.Id + "/</a></p>";
+                            Massege += "<p><a href=\"https://" + Settings.BaseURL + "/User/ConfirmMail/" + User.Id + "/\">https://" + Settings.BaseURL + "/User/ConfirmMail/" + User.Id + "/</a></p>";
                             Massege += "<p>Если Вы не проходили регистрацию на сайте " + Settings.BaseURL + " и получили это письмо случайно, пожалуйста, удалите его.</p>";
                             Massege += "<p>С уважением,<br />Администрация сайта " + Settings.BaseURL + "</p>";
                             Massege += "<hr><i><span style=\"font-size:12px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
@@ -676,7 +676,7 @@ namespace Disly.Controllers
                     };
                     Massege = "<p>Уважаемый " + UserInfo.FIO + ", Вы отправили запрос на смену пароля на сайте " + Request.Url.Host + ".</p>";
                     Massege += "<p>Для вас сформирована ссылка, перейдя по которой, Вы сможете ввести новый пароль для вашего аккаунта.</p>";
-                    Massege += "<p><a href=\"http://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/\">http://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/</a></p>";
+                    Massege += "<p><a href=\"https://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/\">https://" + Request.Url.Host + "/user/ChangePass/" + RestoreCode + "/</a></p>";
                     Massege += "<p>С уважением, администрация сайта!</p>";
                     Massege += "<hr><i><span style=\"font-size:11px\">Это сообщение отпралено роботом, на него не надо отвечать</i></span>";
                     Letter.MailTo = UserInfo.EMail;

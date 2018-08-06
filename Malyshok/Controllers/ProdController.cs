@@ -128,9 +128,8 @@ namespace Disly.Controllers
             {
                 Catalog_list[] certList = _repository.getCertificates(Id);
 
-                for (int i=1; i< certList.Length;i++)
+                for (int i = 0; i < certList.Length; i++)
                 {
-
                     if (System.IO.File.Exists(Server.MapPath("/Certificates/" + certList[i].text + ".jpg")))
                     {
                         certList[i].selected = "true";
@@ -140,6 +139,10 @@ namespace Disly.Controllers
                         certList[i].selected = "false";
                     }
                 }
+
+                //Response.Write("stop");
+
+                //Response.End();
                 //certList = certList
                 //    .Where(w => w.selected == true.ToString())
                 //    .Select(s => new Catalog_list

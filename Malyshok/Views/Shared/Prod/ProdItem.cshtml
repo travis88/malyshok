@@ -81,10 +81,11 @@
                             {
                                 if (User.Identity.IsAuthenticated)
                                 {
-                                    @Html.Raw(item.Count+" шт.")
+                                    @Html.Raw(item.Count + " шт.")
                                 }
-                                else {
-                                    @Html.Raw("есть в наличии") 
+                                else
+                                {
+                                    @Html.Raw("есть в наличии")
                                 }
 
                             }
@@ -93,6 +94,10 @@
                                 @Html.Raw("<span style=\"color:#e1706f;\">нет в наличии</span>")
                             }
                         </div>
+                        @if (User.Identity.IsAuthenticated && @item.prevOrderCount>0)
+                        {
+                        <div><span>Вы заказывали</span> @item.prevOrderCount&nbsp;шт.&nbsp;@item.prevOrderDate.ToString("dd.MM.yyyy")</div>
+                        }
                     </div>
                 </div>
                 <div class="prod-basket-block">
@@ -100,16 +105,19 @@
                     <div class="prod-cert">
                         Сертификаты
                     </div>
-                    <div class="basket-form">
-                        @{
-                            var count = item.inBasket;
-                            string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
-                            string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
-                            string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
-                        }
-                        <input data-id="@item.Id" value="@inputVal" /> шт.
-                        <button type="button" class="in-basket @btnStyle">@btnName</button>
-                    </div>
+                    @if (item.Count > 0)
+                    {
+                        <div class="basket-form">
+                            @{
+                                var count = item.inBasket;
+                                string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
+                                string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
+                                string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
+                            }
+                            <input data-id="@item.Id" value="@inputVal" /> шт.
+                            <button type="button" class="in-basket @btnStyle">@btnName</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

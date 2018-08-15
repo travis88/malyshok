@@ -14,7 +14,7 @@
     <h1>Продукт</h1>
 
     <div class="page-text">
-        <h3>@Html.Raw(item.Title.Replace(",",", "))</h3>
+        <h3>@Html.Raw(item.Title.Replace(",", ", "))</h3>
         <div class="prod-preview">
             <span class="loop"></span>
             <a class="image-gallery" title="@Html.Raw(item.Title.Replace(",", ", ")) (@item.Barcode)" href="@bigImg"><img class="preview-img" src="@ProdImg" /></a>
@@ -30,25 +30,27 @@
             <div class="prod-property">
                 <div>
                     <span>Остаток</span> @if (@item.Count > 0)
-                    { @Html.Raw("есть в наличии")  }
-                    else
-                    { @Html.Raw("<span style=\"color:#e1706f;\">нет в наличии</span>")  }
+                    {@Html.Raw("есть в наличии") }
+                else
+                { @Html.Raw("<span style=\"color:#e1706f;\">нет в наличии</span>")}
                 </div>
                 <div><span>Цена</span><b> @item.Price.ToString("# ###.00#")</b> руб.</div>
             </div>
-            <div class="basket-form">
-                @{
-                    var count = item.inBasket;
-                    string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
-                    string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
-                    string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
-                }
-                <div class="basket-form_cell">
-                    <input data-id="@item.Id" value="@inputVal" /> шт.
+            @if (item.Count > 0)
+            {
+                <div class="basket-form">
+                    @{
+                        var count = item.inBasket;
+                        string inputVal = (item.inBasket > 0) ? item.inBasket.ToString() : "";
+                        string btnStyle = (item.inBasket > 0) ? "btn-invers" : "btn-blue";
+                        string btnName = (item.inBasket > 0) ? "В корзине" : "В корзину";
+                    }
+                    <div class="basket-form_cell">
+                        <input data-id="@item.Id" value="@inputVal" /> шт.
+                    </div>
+                    <button type="button" class="in-basket @btnStyle">@btnName</button>
                 </div>
-                <button type="button" class="in-basket @btnStyle">@btnName</button>
-            </div>
-
+            }
             <div class="cert-block">
                 <div class="item_prod">
                     <div class="prod-cert">

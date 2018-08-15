@@ -87,6 +87,16 @@ namespace cms.dbModel.entity
         public int inBasket { get; set; }
 
         /// <summary>
+        /// дата последнего заказа
+        /// </summary>
+        public DateTime prevOrderDate { get; set; }
+
+        /// <summary>
+        /// Кол-во в последнем заказе
+        /// </summary>
+        public int prevOrderCount { get; set; }
+
+        /// <summary>
         /// Сертификаты
         /// </summary>
         public CertificateModel[] Certificates { get; set; }

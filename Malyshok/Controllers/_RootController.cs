@@ -156,7 +156,8 @@ namespace Disly.Controllers
                 SearchText = (String.IsNullOrEmpty(Request.QueryString["searchtext"])) ? String.Empty : Request.QueryString["searchtext"],
                 Sort = (String.IsNullOrEmpty(Request.QueryString["sort"])) ? String.Empty : Request.QueryString["sort"],
                 Available = (String.IsNullOrEmpty(Request.QueryString["available"])) ? String.Empty : Request.QueryString["available"],
-                Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"])
+                Disabled = (String.IsNullOrEmpty(Request.QueryString["disabled"])) ? false : Convert.ToBoolean(Request.QueryString["disabled"]),
+                User = (User.Identity.IsAuthenticated) ? new Guid(User.Identity.Name): Guid.Empty
             };
             
             return result;

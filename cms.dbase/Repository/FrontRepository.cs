@@ -707,7 +707,9 @@ namespace cms.dbase
                                     inBasket = s.n_count,
                                     Photo = s.p.c_photo,
                                     Date = s.p.d_date,
-                                    CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
+                                    CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names),
+                                    prevOrderDate = db.sv_orders_detailss.Where(w => w.f_prod_id == s.p.id && w.f_user == filter.User).OrderByDescending(or => or.d_date).FirstOrDefault().d_date,
+                                    prevOrderCount = db.sv_orders_detailss.Where(w => w.f_prod_id == s.p.id && w.f_user == filter.User).OrderByDescending(or => or.d_date).FirstOrDefault().n_count
                                 }).ToArray();
 
                 }
@@ -772,9 +774,9 @@ namespace cms.dbase
                         .Take(filter.Size);
 
                     Prod = (from p in ProdList
-                                join b in BasketList on p.id equals b.f_prod_id into ps
-                                from b in ps.DefaultIfEmpty()
-                                select new { p, b.n_count })
+                            join b in BasketList on p.id equals b.f_prod_id into ps
+                            from b in ps.DefaultIfEmpty()
+                            select new { p, b.n_count })
                                 .Select(s => new ProductModel
                                 {
                                     Id = s.p.id,
@@ -787,7 +789,9 @@ namespace cms.dbase
                                     inBasket = s.n_count,
                                     Photo = s.p.c_photo,
                                     Date = s.p.d_date,
-                                    CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names)
+                                    CatalogPath = getProdCategorys(s.p.f_category_path, s.p.f_category_names),
+                                    prevOrderDate = db.sv_orders_detailss.Where(w => w.f_prod_id == s.p.id && w.f_user == filter.User).OrderByDescending(or => or.d_date).FirstOrDefault().d_date,
+                                    prevOrderCount = db.sv_orders_detailss.Where(w => w.f_prod_id == s.p.id && w.f_user == filter.User).OrderByDescending(or => or.d_date).FirstOrDefault().n_count
                                 }).ToArray();
                 }
 
